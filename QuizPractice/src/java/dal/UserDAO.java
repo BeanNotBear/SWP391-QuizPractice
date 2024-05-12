@@ -4,10 +4,28 @@
  */
 package dal;
 
+import context.DBContext;
+
 /**
  *
  * @author nghin
  */
-public class UserDAO {
-    
+public class UserDAO extends DBContext {
+
+    private static UserDAO instance;
+    private static Object lockPad = new Object();
+
+    private UserDAO() {
+    }
+
+    public static UserDAO getInstance() {
+        if (instance == null) {
+            synchronized (lockPad) {
+                if (instance == null) {
+                    instance = new UserDAO();
+                }
+            }
+        }
+        return instance;
+    }
 }
