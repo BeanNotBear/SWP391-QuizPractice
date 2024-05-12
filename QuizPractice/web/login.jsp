@@ -37,7 +37,7 @@
 
       <div class="profile">
          <img src="images/pic-1.jpg" class="image" alt="">
-         <h3 class="name">shaikh anas</h3>
+         <h3 class="name">shaikh anasa</h3>
          <p class="role">studen</p>
          <a href="profile.html" class="btn">view profile</a>
          <div class="flex-btn">
