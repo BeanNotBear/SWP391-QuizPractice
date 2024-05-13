@@ -69,9 +69,4 @@ public class Mail {
             return false;
         }
     }
-
-    public static void main(String[] args) {
-        Mail.sendEmail("vannghibg03@gmail.com", "Test", "TEST");
-    }
-
 }
