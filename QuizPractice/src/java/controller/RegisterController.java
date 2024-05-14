@@ -1,24 +1,17 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller;
 
+import dto.RegisterUserDto;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import util.security.Security;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import util.validation.Validation;
 
-/**
- *
- * @author nghin
- */
 public class RegisterController extends HttpServlet {
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -53,23 +46,83 @@ public class RegisterController extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String cfPassword = request.getParameter("cf-password");
-
+        boolean isValidInformation = true;
         Validation validation = Validation.getInstance();
-        if (email == null || email.isEmpty() || !validation.CheckFormatEmail(email)) {
-            throw new NullPointerException("Null or empty");
+        if (firstName == null || firstName.isEmpty()) {
+            request.setAttribute("firstName_err",
+                    "You must fill first name!");
+            isValidInformation = false;
         }
-        try {
-
-        } catch (Exception e) {
+        if (lastName == null || lastName.isEmpty()) {
+            request.setAttribute("lastName_err",
+                    "You must fill last name!");
+            isValidInformation = false;
+        }
+        if (!validation.CheckFormatEmail(email)) {
+            request.setAttribute("email_err",
+                    "Email is incorrect format!");
+            isValidInformation = false;
+        }
+        if (!validation.CheckFormatPhone(phone)) {
+            request.setAttribute("phone_err",
+                    "Phone number is incorrect format!");
+            isValidInformation = false;
+        }
+        if (dob == null || dob.isEmpty()) {
+            request.setAttribute("dob_err",
+                    "You must fill date of birth!");
+            isValidInformation = false;
+        }
+        if (gender == null || gender.isEmpty()) {
+            request.setAttribute("gender_err",
+                    "You must select gender!");
+            isValidInformation = false;
+        }
+        if (username == null || username.isEmpty()) {
+            request.setAttribute("username_err",
+                    "You must fill username!");
+            isValidInformation = false;
+        }
+        if (!validation.CheckFormatPassword(password)) {
+            request.setAttribute("passowrd_err",
+                    "Password is incorrect format!");
+            isValidInformation = false;
+        }
+        if (!password.equals(cfPassword)) {
+            request.setAttribute("cfPassowrd_err",
+                    "Passowrd and confirm password do not match!");
+            isValidInformation = false;
+        }
+        if (!isValidInformation) {
+            request.setAttribute("firstName", firstName);
+            request.setAttribute("lastName", lastName);
+            request.setAttribute("email", email);
+            request.setAttribute("phone", phone);
+            request.setAttribute("dob", dob);
+            request.setAttribute("gender", gender);
+            request.setAttribute("username", username);
+            request.setAttribute("password", password);
+            request.setAttribute("cfPassword", cfPassword);
+            request.getRequestDispatcher("register.jsp")
+                    .forward(request, response);
+        } else {
+            RegisterUserDto registerUserDto = new RegisterUserDto();
+            try {
+                registerUserDto.setFirstName(firstName);
+                registerUserDto.setLastName(lastName);
+                registerUserDto.setEmail(email);
+                registerUserDto.setPhoneNumber(phone);
+                registerUserDto.setGender(Boolean.getBoolean(gender));
+                SimpleDateFormat formatter = new SimpleDateFormat(
+                        "dd-MMM-yyyy");
+                Date date = formatter.parse(dob);
+                registerUserDto.setDob(date);
+                registerUserDto.setUsername(username);
+                registerUserDto.setPassword(password);
+            } catch (Exception e) {
+            }
         }
 
-        request.setAttribute("firstName", firstName);
-        request.setAttribute("lastName", lastName);
-        request.setAttribute("email", email);
-        request.setAttribute("phone", phone);
-        request.setAttribute("dob", dob);
-        request.setAttribute("gender", gender);
-        request.setAttribute("username", username);
     }
 
     /**
