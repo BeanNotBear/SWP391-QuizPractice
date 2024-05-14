@@ -1,13 +1,18 @@
 package controller;
 
+import dal.UserDAO;
 import dto.RegisterUserDto;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import model.User;
+import util.security.CodeVerify;
+import util.security.Security;
 import util.validation.Validation;
 
 public class RegisterController extends HttpServlet {
@@ -48,6 +53,8 @@ public class RegisterController extends HttpServlet {
         String cfPassword = request.getParameter("cf-password");
         boolean isValidInformation = true;
         Validation validation = Validation.getInstance();
+        UserDAO userDAO = UserDAO.getInstance();
+        HttpSession session = request.getSession();
         if (firstName == null || firstName.isEmpty()) {
             request.setAttribute("firstName_err",
                     "You must fill first name!");
@@ -81,6 +88,11 @@ public class RegisterController extends HttpServlet {
         if (username == null || username.isEmpty()) {
             request.setAttribute("username_err",
                     "You must fill username!");
+            isValidInformation = false;
+        }
+        if(userDAO.checkUserExsitedByUsername(username)) {
+            request.setAttribute("username_err", 
+                    "Username has been existed!");
             isValidInformation = false;
         }
         if (!validation.CheckFormatPassword(password)) {
@@ -118,7 +130,15 @@ public class RegisterController extends HttpServlet {
                 Date date = formatter.parse(dob);
                 registerUserDto.setDob(date);
                 registerUserDto.setUsername(username);
+                password = Security.encryptToSHA512(password);
                 registerUserDto.setPassword(password);
+                
+                User insertedUser = userDAO.insert(registerUserDto);
+                session.setAttribute("user", insertedUser);
+                session.setAttribute("token", 
+                        CodeVerify.generateVerificationCode());
+                request.getRequestDispatcher("active.jsp").forward(request, response);
+                
             } catch (Exception e) {
             }
         }

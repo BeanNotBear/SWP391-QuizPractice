@@ -23,7 +23,7 @@ public class User {
     private Date createdAt = new Date(System.currentTimeMillis()); // Timestamp of when the user was created
     private Date updatedAt; // Timestamp of the last update
     private int roleId = 1; // Role ID of the user (default is 1)
-    private int statusID = 0; // Status ID of the user (default is 0)
+    private int statusID = 1; // Status ID of the user (default is 1)
 
     /**
      * Default constructor for creating an empty User object.
