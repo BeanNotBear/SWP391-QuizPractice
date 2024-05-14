@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -57,7 +58,7 @@ public class ResetPasswordController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("forgotPassword.jsp").forward(request, response);
+        request.getRequestDispatcher("resetPassword.jsp").forward(request, response);
     }
 
     /**
@@ -71,7 +72,12 @@ public class ResetPasswordController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String email = request.getParameter("email");
+        UserDAO userDAO = UserDAO.getInstance();
+//        if (userDAO.checkExistEmail(email)){
+//            
+//        }
+        
     }
 
     /**

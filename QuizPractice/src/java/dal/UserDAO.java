@@ -5,6 +5,8 @@
 package dal;
 
 import context.DBContext;
+import model.User;
+
 
 /**
  *
@@ -14,7 +16,7 @@ public class UserDAO extends DBContext {
 
     private static UserDAO instance;
     private static Object lockPad = new Object();
-
+    
     private UserDAO() {
     }
 
@@ -27,5 +29,20 @@ public class UserDAO extends DBContext {
             }
         }
         return instance;
+    }
+    public boolean checkExistEmail(String email){
+        boolean duplicate = false;
+        String sql = "Select * From users where email =?";
+        try {
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, email);
+             rs = ps.executeQuery();
+            if (rs.next()) {
+                duplicate = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return duplicate;
     }
 }

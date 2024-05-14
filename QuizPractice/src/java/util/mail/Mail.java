@@ -16,7 +16,6 @@ public class Mail {
 
     private static final String from = "nghinv03@gmail.com";
     private static final String password = "jqpi dhev mrtr nmha";
-
     public static boolean sendEmail(String to, String subject, String content) {
         // Properties : declare properties
         Properties props = new Properties();
