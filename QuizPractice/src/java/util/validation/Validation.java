@@ -4,9 +4,6 @@
  */
 package util.validation;
 
-import exception.InvalidEmailFormatException;
-import exception.InvalidPhoneNumberFormatException;
-
 /**
  *
  * @author nghin
@@ -32,18 +29,12 @@ public class Validation {
     
     public boolean CheckFormatEmail(String email) {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-        if(!email.matches(emailRegex)) {
-            throw new InvalidEmailFormatException();
-        }
-        return true;
+        return email.matches(emailRegex);
     }
 
     public boolean CheckFormatPhone(String phone) {
         String phoneRegex = "^\\+?\\d{0,2}\\s?\\(?(\\d{3})\\)?[-.\\s]?\\d{3}[-.\\s]?\\d{4}$";
-        if(!phone.matches(phoneRegex)) {
-            throw new InvalidPhoneNumberFormatException();
-        }
-        return true;
+        return phone.matches(phoneRegex);
     }
     
     public boolean CheckFormatPassword(String password) {
@@ -53,6 +44,6 @@ public class Validation {
     
     public static void main(String[] args) {
         Validation v = getInstance();
-        System.out.println(v.CheckFormatPassword("Callmebean03@@@"));
+        System.out.println(v.CheckFormatPhone("++8463920299"));
     }
 }
