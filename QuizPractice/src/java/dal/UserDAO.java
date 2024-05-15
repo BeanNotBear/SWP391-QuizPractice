@@ -1,12 +1,7 @@
 package dal;
 
 import context.DBContext;
-import dto.RegisterUserDto;
-import jakarta.servlet.jsp.jstl.sql.Result;
-import mapper.UserMapper;
 import model.User;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
 /**
  * UserDAO is a Data Access Object (DAO) class that provides methods to interact
@@ -41,15 +36,7 @@ public class UserDAO extends DBContext {
         return instance;
     }
 
-    /**
-     * Inserts a new user into the database based on the provided
-     * RegisterUserDto.
-     *
-     * @param registerUserDto the data transfer object containing user
-     * registration details
-     * @return the number of rows affected by the insert operation
-     */
-    public User insert(RegisterUserDto registerUserDto) {
+    public User insert(User user) {
         // SQL query with placeholders for parameterized input
         String query = "INSERT INTO [dbo].[users]\n"
                 + "           ([first_name]\n"
@@ -68,12 +55,7 @@ public class UserDAO extends DBContext {
                 + "     VALUES\n"
                 + "           (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-        // Convert RegisterUserDto to User entity
-        User user = UserMapper.ConvertRegisterUserToUser(registerUserDto);
-        int rowAffected = 0; // Variable to store the number of rows affected
-
-        // Create a PreparedStatement object
-        PreparedStatement ps;
+        int rowAffected = 0; // Variable to store the number of rows affecteds
 
         try {
 
@@ -105,49 +87,75 @@ public class UserDAO extends DBContext {
             // Log the exception (if a logging framework is available)
             e.printStackTrace(); // Replace with logger in real application
         }
-
         return user;
     }
 
-    /**
-     * Checks if a user exists in the database by username.
-     *
-     * @param username the username to check for existence
-     * @return true if the username does not exist in the database, false
-     * otherwise
-     */
-    public boolean checkUserExsitedByUsername(String username) {
-        // SQL query to check for the existence of the username in the database
-        String query = "SELECT username\n"
-                + "FROM [dbo].[users]\n"
-                + "WHERE username = ?";
-
-        // Declaration of PreparedStatement and ResultSet
-        PreparedStatement ps;
-        ResultSet rs;
-
+    public boolean checkUserExistedByUsernameAndEmail(String username,
+            String email) {
+        String query = "SELECT email, username\n"
+                + "FROM users\n"
+                + "WHERE email = ? AND username = ?";
         try {
-            // Prepare the SQL query for execution
-            // The prepareStatement method creates a PreparedStatement object to send
-            // parameterized SQL statements to the database, preventing SQL injection
             ps = connection.prepareStatement(query);
-
-            // Set the username parameter in the query
-            ps.setString(1, username);
-
-            // Execute the query and get the result set
+            ps.setString(1, email);
+            ps.setString(2, username);
             rs = ps.executeQuery();
-
-            // If there is a result, the username exists, return false
             if (rs.next()) {
                 return false;
             }
         } catch (Exception e) {
-            // Log the exception (if a logging framework is available)
-            e.printStackTrace(); // Replace with logger in real application
         }
-
-        // If no result is found, return true indicating the username does not exist
         return true;
+    }
+
+    public int UpdateStatusByUsername(String username) {
+        String query = "UPDATE users\n"
+                + "SET status_id = 2\n"
+                + "WHERE username = ?";
+        int rowAffected = 0;
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, username);
+            rowAffected = ps.executeUpdate();
+        } catch (Exception e) {
+        }
+        return rowAffected;
+    }
+
+    public User findUserByEmailAndPassword(String email, String password) {
+        String query = "SELECT *\n"
+                + "FROM users\n"
+                + "WHERE email = ? AND [password] = ?";
+        User user = null;
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, email);
+            ps.setString(2, password);
+            rs = ps.executeQuery();
+            if(rs.next()) {
+                user = new User();
+                user.setUserId(rs.getInt(1));
+                user.setFirstName(rs.getString(2));
+                user.setEmail(rs.getString(3));
+                user.setPhoneNumber(rs.getString(4));
+                user.setGender(rs.getBoolean(5));
+                user.setDob(rs.getDate(6));
+                user.setProfileImg(rs.getString(7));
+                user.setUsername(rs.getString(8));
+                user.setPassword(rs.getString(9));
+                user.setCreatedAt(rs.getDate(10));
+                user.setUpdatedAt(rs.getDate(11));
+                user.setRoleId(rs.getInt(12));
+                user.setStatusID(rs.getInt(13));
+            }
+        } catch (Exception e) {
+        }
+        return user;
+    }
+    
+    public static void main(String[] args) {
+        UserDAO d = getInstance();
+        System.out.println(d.findUserByEmailAndPassword("vannghibg03@gmail.com", 
+                "6361614211bff9a6d7d432cc7c29a15b63f18e519aa846f6262e6771bb3fcf9a35bcece7ad325dc0d84bf6ab2781e37cbfc2bc1c2fcd27e4c8e62beecbf133b0"));
     }
 }
