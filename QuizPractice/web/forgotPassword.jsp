@@ -121,10 +121,9 @@
                                     class="form-text text-muted">Enter the registered email address . Then we'll
                                     email a OTP to this address.</small>
                                 <%
-if(request.getAttribute("message")!=null)
-{
-        out.print("<p class='text-danger ml-1'>"+request.getAttribute("message")+"</p>");
-}
+                                if(request.getAttribute("message")!=null){
+                                    out.print("<p class='text-danger ml-1'>"+request.getAttribute("message")+"</p>");
+                                }
 		  
                                 %>
                             </div>

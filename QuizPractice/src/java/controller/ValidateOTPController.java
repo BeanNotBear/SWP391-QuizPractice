@@ -11,13 +11,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
  * @author Acer
  */
 @WebServlet(name = "ValidateOTP", urlPatterns = {"/otp"})
-public class ValidateOTP extends HttpServlet {
+public class ValidateOTPController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,7 +37,7 @@ public class ValidateOTP extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ValidateOTP</title>");            
+            out.println("<title>Servlet ValidateOTP</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet ValidateOTP at " + request.getContextPath() + "</h1>");
@@ -57,7 +58,7 @@ public class ValidateOTP extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        request.getRequestDispatcher("enterOTP.jsp").forward(request, response);
     }
 
     /**
@@ -71,7 +72,20 @@ public class ValidateOTP extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String value = request.getParameter("otp");
+        HttpSession session = request.getSession();
+        String otp = (String) session.getAttribute("otp");
+
+        if (value.equals(otp)) {
+
+            request.setAttribute("email", request.getParameter("email"));
+            request.setAttribute("status", "Successfully");
+            request.getRequestDispatcher("resetPassword.jsp").forward(request, response);
+
+        } else {
+            request.setAttribute("message", "Wrong OTP!");
+            request.getRequestDispatcher("enterOTP.jsp").forward(request, response);
+        }
     }
 
     /**
