@@ -5,9 +5,7 @@
 package dal;
 
 import context.DBContext;
-import model.User;
-
-
+import java.sql.SQLException;
 /**
  *
  * @author nghin
@@ -16,7 +14,7 @@ public class UserDAO extends DBContext {
 
     private static UserDAO instance;
     private static Object lockPad = new Object();
-    
+
     private UserDAO() {
     }
 
@@ -30,13 +28,14 @@ public class UserDAO extends DBContext {
         }
         return instance;
     }
-    public boolean checkExistEmail(String email){
+
+    public boolean checkExistEmail(String email) {
         boolean duplicate = false;
         String sql = "Select * From users where email =?";
         try {
             ps = connection.prepareStatement(sql);
             ps.setString(1, email);
-             rs = ps.executeQuery();
+            rs = ps.executeQuery();
             if (rs.next()) {
                 duplicate = true;
             }
@@ -45,4 +44,19 @@ public class UserDAO extends DBContext {
         }
         return duplicate;
     }
+
+    public boolean updatePassword(String password, String email) {
+        String sql = "UPDATE users SET password = ? WHERE email = ?";
+        try {
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, password);
+            ps.setString(2, email);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
 }

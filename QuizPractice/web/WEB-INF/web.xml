@@ -4,8 +4,16 @@
         <servlet-name>RegisterController</servlet-name>
         <servlet-class>controller.RegisterController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>NewPasswordController</servlet-name>
+        <servlet-class>controller.NewPasswordController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterController</servlet-name>
         <url-pattern>/register</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NewPasswordController</servlet-name>
+        <url-pattern>/new-password</url-pattern>
     </servlet-mapping>
 </web-app>

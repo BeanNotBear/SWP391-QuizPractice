@@ -3,6 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/util/security/Security.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/filter/AuthenticationFilter.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/mapper/UserMapper.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/util/mail/Mail.java</file>
@@ -15,11 +16,13 @@
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/exception/InvalidEmailFormatException.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/dal/UserDAO.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/web/resetPassword.jsp</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/controller/ValidateOTPController.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/controller/ResetPasswordController.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/web/register.jsp</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/exception/InvalidPasswordFormatException.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/util/security/CodeVerify.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/model/User.java</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/controller/NewPasswordController.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/dto/LoginDTO.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/util/validation/Validation.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/controller/RegisterController.java</file>
