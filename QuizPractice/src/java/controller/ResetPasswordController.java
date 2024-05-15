@@ -20,7 +20,6 @@ import util.security.CodeVerify;
  *
  * @author Acer
  */
-@WebServlet(name = "ResetPasswordController", urlPatterns = {"/reset-password"})
 public class ResetPasswordController extends HttpServlet {
 
     /**
@@ -76,25 +75,26 @@ public class ResetPasswordController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String email = request.getParameter("email");
+        
         UserDAO userDAO = UserDAO.getInstance();
-        CodeVerify codeVerify = new CodeVerify();
-        Mail mail = new Mail();
+          
         String otpvalue = "";
         HttpSession mySession = request.getSession();
         if (userDAO.checkExistEmail(email)) {
-            otpvalue = codeVerify.generateVerificationCodeOTP();
-            if (mail.sendMailOTP(email, otpvalue)) {
+            otpvalue = CodeVerify.generateVerificationCodeOTP();
+            if (Mail.sendMailOTP(email, otpvalue)) {
                 request.setAttribute("message", "OTP is sent to your email id");
                 mySession.setAttribute("otp", otpvalue);
-                mySession.setAttribute("email", email);              
+                mySession.setAttribute("email", email);
+                request.getRequestDispatcher("enterOTP.jsp").forward(request, response);
             } else {
                 request.setAttribute("message", "Error email sending!");
+                request.getRequestDispatcher("forgotPassword.jsp").forward(request, response);
             }
         } else {
             request.setAttribute("message", "Email doesn't exist!");
             request.getRequestDispatcher("forgotPassword.jsp").forward(request, response);
         }
-         request.getRequestDispatcher("enterOTP.jsp").forward(request, response);
     }
 
     /**

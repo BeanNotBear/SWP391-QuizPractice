@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -64,38 +65,8 @@
             }
         </style>
     </head>
-    <header class="header" >
-
-        <section class="flex">
-
-            <a href="home.html" class="logo">Educa.</a>
-
-            <form action="search.html" method="post" class="search-form">
-                <input type="text" name="search_box" required placeholder="search courses..." maxlength="100">
-                <button type="submit" class="fas fa-search"></button>
-            </form>
-
-            <div class="icons">
-                <div id="menu-btn" class="fas fa-bars"></div>
-                <div id="search-btn" class="fas fa-search"></div>
-                <div id="user-btn" class="fas fa-user"></div>
-                <div id="toggle-btn" class="fas fa-sun"></div>
-            </div>
-
-            <div class="profile">
-                <img src="images/pic-1.jpg" class="image" alt="">
-                <h3 class="name">shaikh anasa</h3>
-                <p class="role">studen</p>
-                <a href="profile.html" class="btn">view profile</a>
-                <div class="flex-btn">
-                    <a href="login.html" class="option-btn">login</a>
-                    <a href="register.html" class="option-btn">register</a>
-                </div>
-            </div>
-
-        </section>
-
-    </header>
+    <%@include file="layout/header.jsp" %>
+    <%@include file="layout/sidebar.jsp" %>
     <body oncontextmenu='return false' class='snippet-body'>
         <div class="container padding-bottom-3x mb-2 mt-5">
             <div class="row justify-content-center">
@@ -120,12 +91,12 @@
                                     class="form-control" type="text" name="email" id="email-for-pass" required=""><small
                                     class="form-text text-muted">Enter the registered email address . Then we'll
                                     email a OTP to this address.</small>
-                                <%
-                                if(request.getAttribute("message")!=null){
-                                    out.print("<p class='text-danger ml-1'>"+request.getAttribute("message")+"</p>");
-                                }
+                                    <%
+                                    if(request.getAttribute("message")!=null){
+                                        out.print("<p class='text-danger ml-1'>"+request.getAttribute("message")+"</p>");
+                                    }
 		  
-                                %>
+                                    %>
                             </div>
                         </div>
                         <div class="card-footer">
@@ -144,10 +115,6 @@
         <script type='text/javascript' src=''></script>
         <script type='text/Javascript'></script>
     </body>
-    <footer class="footer">
-
-        &copy; copyright @ 2022 by <span>mr. web designer</span> | all rights reserved!
-
-    </footer>
+    <%@include file="layout/footer.jsp" %>
     <script src="js/script.js"></script>
 </html>

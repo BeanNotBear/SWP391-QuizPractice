@@ -17,7 +17,6 @@ import jakarta.servlet.http.HttpSession;
  *
  * @author Acer
  */
-@WebServlet(name = "ValidateOTP", urlPatterns = {"/otp"})
 public class ValidateOTPController extends HttpServlet {
 
     /**
@@ -73,9 +72,11 @@ public class ValidateOTPController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String value = request.getParameter("otp");
+        
         HttpSession session = request.getSession();
+        
         String otp = (String) session.getAttribute("otp");
-
+        
         if (value.equals(otp)) {
 
             request.setAttribute("email", request.getParameter("email"));

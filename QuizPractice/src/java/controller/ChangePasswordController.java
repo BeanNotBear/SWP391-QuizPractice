@@ -12,13 +12,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.User;
 import util.validation.Validation;
 
 /**
  *
  * @author Acer
  */
-public class NewPasswordController extends HttpServlet {
+public class ChangePasswordController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,10 +38,10 @@ public class NewPasswordController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet NewPasswordController</title>");
+            out.println("<title>Servlet ChangePasswordController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet NewPasswordController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ChangePasswordController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -58,7 +59,7 @@ public class NewPasswordController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("resetPassword.jsp").forward(request, response);
+        request.getRequestDispatcher("changePassword.jsp").forward(request, response);
     }
 
     /**
@@ -73,17 +74,19 @@ public class NewPasswordController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        
-        String newPassword = request.getParameter("newPassword");       
+
+        String oldPassword = request.getParameter("password");
+        String newPassword = request.getParameter("newPassword");
         String confirmPassword = request.getParameter("confirmPassword");
-        String email = (String) session.getAttribute("email");
         
         UserDAO userDAO = UserDAO.getInstance();
         
+        User user = (User) session.getAttribute("user");
+
         Validation validation = Validation.getInstance();
-        
-        if (newPassword != null && confirmPassword != null && newPassword.equals(confirmPassword) && validation.CheckFormatPassword(newPassword)) {
-            if (userDAO.updatePassword(newPassword, email)) {
+
+        if (oldPassword.equals(user.getPassword()) && oldPassword != null && newPassword != null && confirmPassword != null && newPassword.equals(confirmPassword) && validation.CheckFormatPassword(newPassword)) {
+            if (userDAO.updatePassword(newPassword, user.getEmail())) {
                 request.setAttribute("status", "Change password successfully");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
             } else {

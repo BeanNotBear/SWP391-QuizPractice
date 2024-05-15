@@ -44,8 +44,13 @@
         <%@include file="layout/header.jsp" %>
         <%@include file="layout/sidebar.jsp" %>
         <section class="form-container">
-            <form action="new-password" method="post">
-                <h3>Reset Password</h3>
+            <form action="change_password" method="post">
+                <h3>Change Password</h3>
+                <p>Old password <span>*</span></p>
+                <div class="password-container">
+                    <input type="password" id="new_password" name="password" placeholder="Enter your new password" required maxlength="50" class="box">
+                    <i class="fas fa-eye" id="toggleNewPassword" onclick="togglePassword('new_password', 'toggleNewPassword')"></i>
+                </div>
                 <p>New password <span>*</span></p>
                 <div class="password-container">
                     <input type="password" id="new_password" name="newPassword" placeholder="Enter your new password" required maxlength="50" class="box">
@@ -69,7 +74,6 @@
 
         <!-- custom js file link  -->
         <script src="js/script.js"></script>
-
         <script>
                         function togglePassword(inputId, toggleId) {
                             const passwordField = document.getElementById(inputId);
@@ -85,5 +89,6 @@
                             }
                         }
         </script>
+
     </body>
 </html>

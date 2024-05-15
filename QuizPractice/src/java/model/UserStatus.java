@@ -62,4 +62,3 @@ public class UserStatus {
         this.name = name;
     }
 }
-
