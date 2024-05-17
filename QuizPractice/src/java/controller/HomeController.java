@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 // Servlet class for handling requests to the home page
-public class HomeServlet extends HttpServlet {
+public class HomeController extends HttpServlet {
 
     // Handles GET requests
     @Override
