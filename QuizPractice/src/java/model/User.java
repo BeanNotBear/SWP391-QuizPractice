@@ -31,6 +31,7 @@ public class User {
     private Date updatedAt; // Timestamp of the last update
     private int roleId = 1; // Role ID of the user (default is 1)
     private int statusID = 1; // Status ID of the user (default is 1)
+    private String token;
     private Role role;
     private UserStatus status;
 
