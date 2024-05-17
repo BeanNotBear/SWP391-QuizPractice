@@ -1,0 +1,1629 @@
+# tactiq.io free youtube transcript
+# Essential Requirements Practices with Karl Wiegers & Candase Hokanson
+# https://www.youtube.com/watch/I3LCmtogG8Y
+
+00:00:00.120 foreign
+00:00:03.810 [Music]
+00:00:06.660 thanks very much Adrian and welcome
+00:00:08.820 everybody thank you all for joining us
+00:00:11.280 today from wherever you happen to be
+00:00:13.259 some places some you may actually be
+00:00:15.360 tomorrow or yesterday or something where
+00:00:16.980 we've got people here from all over the
+00:00:18.840 world
+00:00:19.640 so I'm very happy to have a chance for
+00:00:22.619 Candace and I to do this together we've
+00:00:24.420 both done this presentation for other
+00:00:26.180 venues uh previously but this is the
+00:00:29.039 first time we've done it together so
+00:00:30.420 this is going to be kind of fun for us
+00:00:32.040 we're going to take turns going back and
+00:00:34.140 forth to each presenting a few slides so
+00:00:36.120 you'll have a chance to hear from from
+00:00:37.739 both of us so I've been interested for a
+00:00:40.739 long time in how software teams can
+00:00:42.780 improve the way they develop and manage
+00:00:44.579 their requirements
+00:00:46.620 um this interest which I developed
+00:00:48.840 decades ago eventually led to me writing
+00:00:51.180 several books on requirements and doing
+00:00:53.100 a lot of training and Consulting in the
+00:00:54.780 area and as consultants both Candace and
+00:00:57.360 I have had a chance to look over the
+00:00:58.739 shoulders of a lot of people a lot of
+00:01:00.539 practicing Bas and and other people and
+00:01:03.000 teams and we could observe patterns of
+00:01:05.519 approaches that worked well well it also
+00:01:07.500 those that did not work so well
+00:01:10.080 and so this helps you figure out what
+00:01:12.060 are some of the common threads that we
+00:01:14.159 can all learn from and all do a better
+00:01:15.720 job
+00:01:16.860 so the Third Edition of my book titled
+00:01:19.320 software requirements which I
+00:01:21.060 co-authored with joy Beatty with nearly
+00:01:23.640 650 pages long this is a seriously big
+00:01:26.640 book
+00:01:27.659 but it turns out that busy business
+00:01:29.520 analysts product owners product managers
+00:01:32.580 might not have the time to read a big
+00:01:34.740 book although of course you can only
+00:01:36.180 read the parts you need to you don't
+00:01:37.680 have to read the whole thing
+00:01:39.240 well there's a lot of good stuff in that
+00:01:41.040 big book but I realized I could distill
+00:01:43.680 down the contents the dozens of
+00:01:46.259 requirements related practices that we
+00:01:48.420 talk about there into a core set of 20
+00:01:51.960 practices that every project team should
+00:01:55.140 perform so Candace and I wrote this much
+00:01:57.659 shorter book software requirements
+00:01:59.399 Essentials and you can you can see this
+00:02:01.860 is not a huge book but it's very
+00:02:03.840 concentrated there's a lot of
+00:02:05.040 information in there
+00:02:06.659 one thing that's I think really
+00:02:08.399 important here is that these practices
+00:02:10.080 apply regardless of the type of product
+00:02:12.239 that you're building regardless of the
+00:02:14.220 team's development life cycle
+00:02:16.260 and today we want to tell you about
+00:02:18.120 those core practices that we believe are
+00:02:20.340 essential to ba success now as we go
+00:02:23.640 along I suggest you think about the
+00:02:25.560 extent to which each of these practices
+00:02:27.480 applies to your situation and look for
+00:02:30.120 ways that you could apply them to
+00:02:32.220 improve your requirements or reduce
+00:02:33.959 project rest with these practices let me
+00:02:37.020 also point out the website for this book
+00:02:39.660 at the lower left here software Rex
+00:02:42.440 reqs.com I'll be mentioning that a few
+00:02:46.140 times as we go along
+00:02:48.360 um there you can read reviews of the
+00:02:50.220 book you can see some videos I recently
+00:02:52.920 launched a video series called the one
+00:02:54.900 minute analyst just a couple of hours
+00:02:56.580 ago I posted the latest in that series
+00:02:59.239 and you can also download some useful
+00:03:01.860 checklists templates and spreadsheet
+00:03:03.780 tools that we'll be mentioning as we go
+00:03:05.519 along
+00:03:06.540 so in order not to be a distraction here
+00:03:09.060 I am going to turn off my camera
+00:03:12.300 and we'll come back at the end so we can
+00:03:15.120 talk but this way you don't have to
+00:03:17.580 watch a talking head if you don't want
+00:03:19.920 to
+00:03:22.019 so the 20 practices are grouped into six
+00:03:24.300 categories first are five practices that
+00:03:27.120 lay a solid foundation for project
+00:03:29.040 success the other practices are grouped
+00:03:31.920 into the five subdivisions of
+00:03:33.659 requirements engineering
+00:03:35.400 there are four core practices on
+00:03:37.500 requirements elicitation followed by
+00:03:39.720 four more on requirements analysis
+00:03:41.760 another four on specification
+00:03:44.940 one on validating requirements and
+00:03:47.280 finally two critical requirements
+00:03:49.140 management practices now of course these
+00:03:51.900 are by no means the only techniques that
+00:03:54.180 a skilled ba should have in their
+00:03:55.799 toolkit there are many big books on
+00:03:58.319 requirements in business analysis that
+00:04:00.720 describe dozens of additional practices
+00:04:02.760 I think there's one that even has more
+00:04:04.739 than a hundred practices in it now these
+00:04:07.260 are all valuable in various situations
+00:04:09.180 but the 20 that we're going to talk
+00:04:11.040 about here today I believe are the most
+00:04:12.900 important and the most globally
+00:04:14.819 applicable
+00:04:16.260 in this short presentation we're not
+00:04:18.298 going to describe every practice in
+00:04:19.978 detail we'll we will show you all the
+00:04:22.800 practices in each category and then
+00:04:24.840 we'll drill down into one in each of
+00:04:27.000 these categories
+00:04:28.440 little point of terminology when we say
+00:04:30.979 requirements here we're referring to
+00:04:34.139 whatever kind of objects your project
+00:04:36.479 uses to represent information about
+00:04:38.900 stakeholder needs and to describe a
+00:04:42.000 Solutions capabilities and
+00:04:43.620 characteristics there's a lot of kinds
+00:04:46.139 of knowledge in this category we might
+00:04:47.940 call them business requirements some are
+00:04:50.100 use cases functional and non-functional
+00:04:52.620 requirements you might talk about users
+00:04:55.259 stories or features or whatever you use
+00:04:57.300 on your projects so rather than getting
+00:04:59.639 wrapped around the axle on terminology
+00:05:02.000 uh just do a mental translation if you
+00:05:04.800 don't like the word requirements into
+00:05:06.180 whatever you call these kinds of
+00:05:07.979 information in your world
+00:05:10.560 it turns out that every project has
+00:05:12.960 requirements as Adrian pointed out at
+00:05:14.880 the beginning here you're all dealing
+00:05:17.100 with requirements in one form or another
+00:05:19.560 the requirements might be stated or not
+00:05:22.620 they could be carefully considered or
+00:05:24.960 not they could be documented in some
+00:05:27.419 form or not
+00:05:29.220 but a good set of requirements lets you
+00:05:31.259 answer some important and Universal
+00:05:33.600 questions like these
+00:05:35.940 people might want to know why are we
+00:05:37.979 even working on this project that seems
+00:05:40.139 like a good place to start what are we
+00:05:42.240 trying to build
+00:05:43.919 who are we trying to satisfy
+00:05:46.740 what do we Implement first what do we
+00:05:48.960 work on after that and what do we maybe
+00:05:51.419 never get done and that's okay
+00:05:54.960 how can we tell if the solution we come
+00:05:57.419 up with is good enough
+00:05:59.580 and everyone would like to know how do
+00:06:01.740 we tell when we're done
+00:06:03.840 so you might ask yourself if someone
+00:06:05.460 asked you these questions about your
+00:06:07.680 project would you be able to give good
+00:06:09.600 answers I hope so
+00:06:12.240 so there are several actions that you
+00:06:14.160 can take early in an in an initiative to
+00:06:17.280 get the information that lets you answer
+00:06:19.020 these kinds of questions that
+00:06:21.479 understanding helps lay the foundation
+00:06:23.940 for a successful project
+00:06:26.100 to make sure the team addresses the
+00:06:28.020 right problem it helps align everyone
+00:06:30.060 toward common objectives it makes sure
+00:06:32.699 we Engage The Right participants and it
+00:06:35.160 keeps the team's efforts focused
+00:06:37.919 so I'm going to hand this over to
+00:06:39.300 Candace to talk now and she's going to
+00:06:40.800 tell you about those core practices to
+00:06:42.900 lay the foundation
+00:06:44.940 no worries thanks Carl so when we talk
+00:06:47.280 about laying the foundation those core
+00:06:48.840 practices there are five practices we
+00:06:51.000 recommend to help all projects lay a
+00:06:53.220 solid foundation for success
+00:06:55.199 first understand the problem before
+00:06:57.600 converging on a solution organizations
+00:06:59.880 launch initiatives to solve a business
+00:07:01.500 problem or exploit an opportunity
+00:07:03.300 however sometimes those problems are
+00:07:05.699 opportunities are not explicitly stated
+00:07:07.800 or documented don't presume that either
+00:07:10.080 a presented solution or a presented
+00:07:12.120 problem is necessarily correct instead
+00:07:14.940 do a little bit of root cause analysis
+00:07:16.560 to make sure the problem is well
+00:07:17.880 understood and that a proposed solution
+00:07:19.620 makes sense
+00:07:21.780 with number two defining the business
+00:07:23.639 objectives stakeholders need to
+00:07:25.500 understand why this initiative is being
+00:07:27.599 launched and its business objectives
+00:07:29.340 we'll talk more about this shortly
+00:07:32.400 when we move to number three defining
+00:07:33.960 the solution's boundaries anytime you
+00:07:36.180 start a new initiative you might not
+00:07:37.919 know exactly where to draw the line
+00:07:39.660 between what the solution should and
+00:07:41.819 should not include
+00:07:43.080 an important foundational practice is to
+00:07:45.300 establish that what's in what's out
+00:07:46.919 boundary it's a solution scoping action
+00:07:50.580 and number four identify and
+00:07:52.560 characterize stakeholders every project
+00:07:54.960 has individuals or groups who are
+00:07:57.180 actively involved in a project are
+00:07:58.919 affected by it or can influence its
+00:08:00.840 decision you need to cast a large net to
+00:08:03.300 identify many potential stakeholders
+00:08:05.099 then you can decide who can best
+00:08:06.780 represent the needs of each stakeholder
+00:08:08.520 group and how the team will engage with
+00:08:09.960 them
+00:08:10.680 and finally identify empowered
+00:08:13.020 stakeholders decision makers every
+00:08:15.720 project faces many requirements related
+00:08:17.520 decisions these include resolving
+00:08:19.500 conflicts both within and across user
+00:08:21.300 classes prioritizing requirements
+00:08:23.220 evaluating proposed requirements changes
+00:08:25.379 and many more it's important to
+00:08:27.840 determine who the decision makers will
+00:08:29.460 be for these requirements issues
+00:08:31.020 preferably before the group confronts
+00:08:33.659 their first significant decision each
+00:08:35.640 group also needs to choose a decision
+00:08:37.080 rule to apply when resolving issues now
+00:08:39.839 let's take a deeper dive into practice
+00:08:41.279 number two defining the business
+00:08:42.719 objectives
+00:08:45.000 as we look at defining business
+00:08:46.740 objectives understanding the business
+00:08:48.240 problem or opportunity is an essential
+00:08:50.339 first step toward product and project
+00:08:51.839 success
+00:08:53.040 the next step is then to describe
+00:08:55.019 exactly what the project sponsor or
+00:08:57.180 other important stakeholders expect the
+00:08:59.279 solution to accomplish the business
+00:09:00.959 objectives
+00:09:02.399 business objectives can be Financial or
+00:09:05.279 non-financial internal like operations
+00:09:07.500 or outward facing light products they
+00:09:10.200 can also be strategic or Tactical
+00:09:12.420 you also want to define success success
+00:09:14.760 metrics so you can tell if you have
+00:09:16.440 achieved or at least are on the path to
+00:09:18.540 achieving those objectives
+00:09:20.880 such business oriented requirements lead
+00:09:22.800 to us defining a solution concept that
+00:09:24.839 you're confident will satisfy the
+00:09:26.160 business objectives along with the scope
+00:09:28.320 and limitations that found the solution
+00:09:30.839 and all of that ultimately lets the team
+00:09:33.180 elicit the detailed requirements that
+00:09:35.399 describe the solution's capabilities and
+00:09:37.140 characteristics
+00:09:38.519 a clear set of business objectives helps
+00:09:41.339 the team to identify its key
+00:09:43.080 stakeholders who will work with the ba
+00:09:44.820 to understand their needs and to Define
+00:09:46.740 all the necessary solution functionality
+00:09:49.620 decision makers can then set the
+00:09:51.300 priorities of individual requirements
+00:09:53.160 and Define the contents of each
+00:09:54.959 development increment or product release
+00:09:57.300 to align with achieving the most
+00:09:58.860 important and most timely business
+00:10:00.240 objectives business objectives let you
+00:10:02.519 determine when the business problem is
+00:10:03.839 solved the need is fulfilled or the
+00:10:05.580 opportunity is exploited
+00:10:09.240 a business objectives model is a
+00:10:11.339 valuable tool for thorough analysis of
+00:10:13.620 complex problems in which multiple
+00:10:15.480 business problems and business
+00:10:16.620 objectives are intertwined the business
+00:10:19.320 objectives model visually links problems
+00:10:21.300 to objectives their Associated success
+00:10:23.220 metrics and the resultant solution
+00:10:24.899 concept let's look at a partial example
+00:10:27.300 for a proposed restaurant online
+00:10:28.980 ordering system
+00:10:30.660 first we'll start with our highest level
+00:10:32.160 business problem revenue from our target
+00:10:34.440 market is low that then leads us to an
+00:10:36.899 objective that we'd like to achieve how
+00:10:38.760 we know we've met our solve the problem
+00:10:40.800 so in this case we want to increase
+00:10:42.480 Revenue monthly revenue from the target
+00:10:44.820 market to 28 000 a month
+00:10:47.399 as we think through then why are we not
+00:10:49.560 achieving this today and think through
+00:10:51.420 that the business situation we uncover
+00:10:53.459 additional problems and corresponding
+00:10:55.200 objectives like perhaps most of our
+00:10:57.660 target market will only place orders
+00:10:59.279 online whether they don't come back
+00:11:00.839 because they're having a poor experience
+00:11:03.120 our analysis then leads us to conceive
+00:11:05.160 of a solution that would address all of
+00:11:07.079 those problems and hopefully achieve our
+00:11:09.839 desired business outcomes
+00:11:11.880 here you can see visually how to type
+00:11:13.860 major specific solution features to
+00:11:16.019 those individual business objectives
+00:11:17.339 such as that the online menu will
+00:11:19.320 clearly support ordering online
+00:11:21.959 this kind of analysis is much better
+00:11:23.579 than thinking of a cool looking solution
+00:11:25.260 first and then hoping it will give you
+00:11:26.880 the business outcomes you desire
+00:11:29.339 and I'll pass it back over to Carl
+00:11:34.560 all right well that's a really important
+00:11:36.660 set of activities that lay the
+00:11:38.399 foundation for any project I mean I
+00:11:40.980 can't imagine
+00:11:42.079 any project team that wouldn't find
+00:11:44.459 those sorts of activities valuable
+00:11:46.560 whether they're doing software or
+00:11:48.000 something else
+00:11:49.320 so the first step in dealing with the
+00:11:51.240 with requirements is to get some people
+00:11:53.940 often talk about Gathering requirements
+00:11:56.279 but I don't like that term very much and
+00:11:58.079 I try not to use it it's not just a
+00:12:00.600 simple collection process so I think a
+00:12:03.120 better term for this activity is a
+00:12:04.980 requirements elicitation certainly
+00:12:07.380 elicitation does include some collection
+00:12:09.660 but it also involves exploring
+00:12:12.300 discovering and even inventing
+00:12:14.279 requirements
+00:12:15.959 requirements can come from a lot of
+00:12:17.880 places the ba needs to look for
+00:12:20.040 requirements from various user
+00:12:21.899 representatives and other stakeholders
+00:12:23.579 maybe documentation about business
+00:12:25.560 processes or current systems perhaps
+00:12:28.440 competing products if you're out in the
+00:12:30.180 commercial Marketplace
+00:12:31.620 there are probably some applicable laws
+00:12:34.019 and business policies and lots of other
+00:12:36.120 opportunities to to find important
+00:12:38.279 knowledge
+00:12:39.180 so there are many places and ways to
+00:12:41.880 look for requirements the skilled ba has
+00:12:44.760 a lot of elicitation techniques in their
+00:12:46.920 toolkit they might conduct interviews or
+00:12:49.980 hold facilitated group workshops you can
+00:12:53.040 learn a lot by watching people do their
+00:12:54.959 work sometimes you'll see things that
+00:12:56.700 they wouldn't just tell you if you ask
+00:12:58.079 them to describe their work surveys and
+00:13:00.600 questionnaires are useful process
+00:13:02.339 modeling and many other methods that you
+00:13:04.380 can use picking up rocks looking for
+00:13:06.420 requirements hiding underneath them
+00:13:08.940 so here are four core requirements
+00:13:11.639 elicitation practices
+00:13:14.639 you know I wrote a book about a year and
+00:13:17.880 a half ago called software development
+00:13:19.740 pearls which describes
+00:13:22.019 60 lessons I've learned about software
+00:13:24.420 development in my sort of lengthy career
+00:13:26.760 I started programming in college in 1970
+00:13:29.579 which I find hard to believe
+00:13:31.740 but somebody asked me long not long ago
+00:13:33.899 what's the most important lesson you've
+00:13:36.240 learned and I think this is it
+00:13:37.560 understand what users need to do with
+00:13:40.320 the solution that was one of our Pearls
+00:13:43.440 of software development wisdom and it's
+00:13:45.779 certainly one of our core practices that
+00:13:47.700 we're going to talk a little bit more
+00:13:48.839 about here
+00:13:50.519 all systems react to various kinds of
+00:13:53.220 events that trigger some response there
+00:13:55.680 can be business events that launch a use
+00:13:57.660 case you might have signal events like
+00:14:00.000 inputs from a switch or a sensor you
+00:14:02.399 could have temporal or time triggered
+00:14:04.320 events all of which lead to some system
+00:14:06.420 Behavior so identifying events and
+00:14:08.639 responses is another way to go looking
+00:14:10.860 for requirements that might not come out
+00:14:12.720 of a of a usage oriented discussion
+00:14:16.920 all software systems process data so you
+00:14:19.800 must assess data Concepts and their
+00:14:21.660 relationships data modeling is a
+00:14:23.940 powerful technique for this purpose
+00:14:26.040 and besides functionality for every
+00:14:28.500 product you need to explore quality
+00:14:30.360 attributes these are a category of
+00:14:32.519 non-functional requirements there are
+00:14:34.920 often trade-offs between these quality
+00:14:36.839 characteristics such that you cannot
+00:14:39.000 optimize all of them at once and so it's
+00:14:41.399 important during elicitation to figure
+00:14:42.959 out which of these mini attributes are
+00:14:44.820 most important to product success so
+00:14:47.579 designers can make the best trade-off
+00:14:49.260 decisions
+00:14:51.779 suppose you were holding a requirement
+00:14:53.639 solicitation discussion with some users
+00:14:55.920 like this new user that we've shown here
+00:14:58.199 you know about some information system
+00:15:00.240 well which of these questions do you
+00:15:02.639 think would yield the greatest insights
+00:15:04.680 should we ask what do you want
+00:15:06.959 or maybe what are your requirements
+00:15:09.899 how about what do you want the system to
+00:15:11.820 do or should we ask what features they
+00:15:14.459 would like to see in the system
+00:15:16.620 well yeah we could ask all those
+00:15:18.060 questions but I think a better question
+00:15:20.220 is to ask what do you need to do with
+00:15:23.339 the solution
+00:15:24.660 that shifts the discussion from a focus
+00:15:27.000 on the product
+00:15:28.860 from to a focus on users and more
+00:15:31.800 specifically on usage people often talk
+00:15:34.380 about
+00:15:36.440 user-centric design or user-centric
+00:15:38.880 requirements but I think the real word
+00:15:40.800 is usage Centric so that's one of the
+00:15:44.220 most important things I've learned if
+00:15:46.440 you focus on features during elicitation
+00:15:49.019 that can lead the team to implement
+00:15:50.519 incomplete functionality that doesn't
+00:15:52.680 let users do all the things they have to
+00:15:54.779 do
+00:15:56.100 now the iiba you know has this three
+00:15:59.100 level model
+00:16:00.360 sorry I'm still getting over a cold here
+00:16:02.160 a little bit so please pardon my
+00:16:03.740 disgusting sounds the iiba talks about
+00:16:07.380 in their three level model business
+00:16:09.480 requirements at the top and stakeholder
+00:16:11.399 requirements in the middle but I don't
+00:16:14.040 really quite buy that because as far as
+00:16:16.079 I can tell I think pretty much all
+00:16:18.240 requirements come from some stakeholder
+00:16:20.220 so I like to put user requirements in
+00:16:23.279 the middle that three level model and
+00:16:25.199 here we're talking specifically about
+00:16:27.000 requirements from that subset of
+00:16:29.220 stakeholders who will actually use the
+00:16:31.860 solution in some way
+00:16:33.720 we want to make sure our user
+00:16:35.639 requirements align with achieving the
+00:16:37.440 Project's business objectives as Candice
+00:16:39.360 discussed of course that implies that
+00:16:41.699 you need to define those business
+00:16:43.019 objectives first as we just saw a few
+00:16:45.420 minutes ago
+00:16:46.740 now people very naturally focus on
+00:16:49.440 describing the way the system is going
+00:16:51.060 to function when all goes well sometimes
+00:16:53.339 called the happy path
+00:16:55.079 but as well as exploring those normal
+00:16:57.660 success scenarios you also need to
+00:17:00.420 consider alternative ways the user might
+00:17:02.820 accomplish a task as well as exceptions
+00:17:05.040 that might prevent successful completion
+00:17:08.339 so from this understanding of the user
+00:17:11.339 requirements the ba can identify the
+00:17:14.040 necessary functionality that the
+00:17:16.439 solution must include to let users get
+00:17:18.480 the job done
+00:17:19.799 also maybe some of you have had this
+00:17:22.079 experience if you make sure that the
+00:17:24.419 specified functionality aligns with
+00:17:27.299 known tasks you're less likely to waste
+00:17:29.640 time and effort implementing
+00:17:30.960 functionality that seemed like a good
+00:17:32.940 idea at the time but then goes unused I
+00:17:36.179 mean I've had that happen where people
+00:17:37.799 told me oh I need this particular
+00:17:39.240 capability so you dutifully build it
+00:17:42.120 and nobody uses it or almost nobody uses
+00:17:44.640 it and you know you work just as hard
+00:17:46.500 trying to get that functionality correct
+00:17:48.299 is on the stuff people really do use so
+00:17:51.000 that's pretty frustrating
+00:17:54.059 so two commonly used techniques for
+00:17:57.120 exploring user requirements or use cases
+00:17:59.520 and user stories
+00:18:01.679 use cases provide a nicely structured
+00:18:04.140 way to steer elicitation participants
+00:18:06.240 from thinking about product features to
+00:18:08.220 focusing on usage
+00:18:10.320 the name of the use case defines the
+00:18:12.179 goal a user is trying to accomplish
+00:18:14.760 as an example maybe somebody who posts
+00:18:16.980 article on a publication platform wants
+00:18:19.679 to view article statistics I have about
+00:18:21.960 a hundred articles on my medium.com
+00:18:24.120 account and I look at the statistics
+00:18:26.220 regularly so that becomes a use case
+00:18:28.380 name view article statistics
+00:18:31.260 here's a little tip whenever an
+00:18:33.179 elicitation participant says I want to
+00:18:35.700 do something or I need to be able to do
+00:18:38.280 something that do something likely is a
+00:18:40.980 use case
+00:18:42.600 a rich use case template contains
+00:18:44.880 categories that you can use to fully
+00:18:46.860 describe the use case you might have
+00:18:49.020 preconditions that must be satisfied
+00:18:50.820 before the system can execute the use
+00:18:52.799 case post conditions that are true after
+00:18:55.200 successful completion
+00:18:57.059 you'll probably list the steps that take
+00:18:59.220 place in a dialogue between the user and
+00:19:01.620 the system describe how to handle things
+00:19:03.660 that could go wrong identify pertinent
+00:19:05.880 business rules and so forth
+00:19:08.340 so the ba can then derive all the
+00:19:10.799 necessary functional requirements that
+00:19:12.720 the developers must Implement to realize
+00:19:14.940 the use case you don't Implement
+00:19:16.679 business requirements you don't
+00:19:18.600 Implement user requirements you
+00:19:20.940 implement little bits of functionality
+00:19:22.919 that if all goes well let people do what
+00:19:25.080 they need to do and help them achieve
+00:19:26.940 their business objectives
+00:19:29.280 so this is a another thing I learned is
+00:19:31.679 that the the tests can fall out of use
+00:19:34.740 cases and that's a really powerful
+00:19:36.120 quality Aid we'll come back to talking
+00:19:37.860 about tests a little later
+00:19:39.900 user stories are typically employed on
+00:19:42.059 agile projects as the primary
+00:19:43.919 requirements deliverable a user story is
+00:19:46.919 written according to a pattern that
+00:19:48.600 provides a little more information and
+00:19:50.220 context than the use case name does we
+00:19:52.980 learned something about the type of user
+00:19:54.419 and the motivation or rationale behind
+00:19:56.760 the request so for the same bit of need
+00:19:59.940 that we mentioned earlier viewing
+00:20:01.740 article statistics we would write that
+00:20:03.419 in the form of user story perhaps like
+00:20:05.400 this as an author so that's the user
+00:20:07.980 class of Interest I want to view the
+00:20:10.380 statistics for my articles that's the
+00:20:12.299 core goal why so that I can see which
+00:20:15.059 topics my readers enjoy the most okay
+00:20:18.059 and that might there might be another
+00:20:19.980 why which is so I can write more on
+00:20:21.660 those topics okay
+00:20:24.059 so rather than writing detailed
+00:20:25.620 functional requirements agile projects
+00:20:27.539 typically provide the story details
+00:20:29.460 through a set of acceptance criteria the
+00:20:31.559 implemented story must satisfy
+00:20:33.720 requirements and tests are complementary
+00:20:36.059 thought processes they show the same
+00:20:38.220 information in different ways either is
+00:20:40.799 fine
+00:20:41.880 but with both use cases and user stories
+00:20:44.640 I think the core thought is to keep the
+00:20:46.980 focus on understanding user goals not on
+00:20:50.280 describing functionality
+00:20:52.919 so let's have Candace tell us a little
+00:20:54.660 bit about requirements analysis
+00:20:57.780 no worries once you've elicited some of
+00:21:00.419 the requirements you need to analyze
+00:21:02.100 them but what exactly does it mean to
+00:21:04.620 analyze requirements analysis kind of
+00:21:06.900 sounds like something that just happens
+00:21:08.160 through staring at requirements long
+00:21:09.660 enough
+00:21:10.559 in reality though you can use several
+00:21:12.419 techniques to search for specific
+00:21:13.860 problems and produce better requirements
+00:21:16.200 and hopefully then better Solutions
+00:21:18.840 analyzing requirements is where a
+00:21:20.580 skilled ba really adds value analysis is
+00:21:23.700 an incremental and iterative process
+00:21:25.320 interwoven with ongoing requirements
+00:21:27.299 elicitation specification and validation
+00:21:29.820 activities
+00:21:31.020 requirements analysis involves ensuring
+00:21:33.059 that the needs of all stakeholders are
+00:21:34.980 understood and documented appropriately
+00:21:36.840 the outcome of a successful analysis
+00:21:39.299 ensures that a satisfactory solution to
+00:21:41.700 meet those needs can be defined agreed
+00:21:43.799 upon built and tested
+00:21:46.020 analysis involves multiple thought
+00:21:48.059 processes to confirm completeness
+00:21:49.980 Clarity and correctness you ask
+00:21:52.620 questions to make sure you understand
+00:21:53.880 what each requirement is saying analysis
+00:21:56.220 also involves detailing requirements to
+00:21:58.020 an appropriate level you can compare
+00:22:00.000 multiple representations of information
+00:22:01.799 to spot errors and fill in any knowledge
+00:22:04.440 gaps and of course along the way you
+00:22:06.960 continue to confirm and refine your
+00:22:08.940 knowledge
+00:22:10.080 here are the four essential requirements
+00:22:12.120 analysis practices and Carl's in my view
+00:22:14.340 first is simply to analyze both
+00:22:16.740 individual requirements and sets of
+00:22:18.840 requirements I'll discuss this further
+00:22:20.580 in just a moment
+00:22:21.780 next drawing visual diagrams or models
+00:22:24.179 of requirements is an especially
+00:22:25.679 powerful technique I've been a fan of
+00:22:28.080 requirements modeling for many years and
+00:22:30.179 it's poor to our methodology here at
+00:22:32.580 argon digital
+00:22:33.900 additionally in addition to models
+00:22:35.700 people often create prototypes which
+00:22:37.980 could be possible or preliminary or even
+00:22:40.200 partial implementations to better
+00:22:42.059 understand the problem and to refine and
+00:22:44.400 validate requirements for some part of
+00:22:46.380 the solution
+00:22:47.520 and finally since no team can Implement
+00:22:49.919 all of its requirements simultaneously
+00:22:52.020 they must prioritize them to make sure
+00:22:54.059 the team delivers the most important
+00:22:55.559 capabilities in the right sequence to
+00:22:57.600 maximize the delivered value
+00:23:01.140 as we analyze individual requirements
+00:23:03.059 here are the major aspects of analyzing
+00:23:05.220 them that we should consider
+00:23:06.900 we should be able to trace each
+00:23:08.400 requirement or user story back to its
+00:23:10.200 origin additionally if anyone asks why a
+00:23:12.900 particular requirement is present the ba
+00:23:15.299 should have a compelling answer the
+00:23:16.740 rationale
+00:23:18.059 another aspect of analysis is to
+00:23:20.340 decompose large or high-level
+00:23:22.080 requirements into a sufficient level of
+00:23:24.299 detail for implementation
+00:23:25.980 analysis also includes deriving
+00:23:27.840 functional requirements from the bits of
+00:23:29.760 a use case a story business rules or
+00:23:32.340 other sources
+00:23:34.500 developers also write a lot of code to
+00:23:37.320 handle exceptions that could prevent
+00:23:38.760 successful execution during analysis
+00:23:41.400 identify potential error conditions
+00:23:43.260 including user actions system conditions
+00:23:45.659 or data values that the system must
+00:23:47.880 detect and handle
+00:23:50.400 as we move on experience DA's
+00:23:52.559 automatically scan for certain
+00:23:54.360 characteristics as they review
+00:23:55.320 requirements a quality assessment they
+00:23:57.780 should be correct complete feasible
+00:23:59.880 necessary unambiguous and so on we've
+00:24:03.480 all seen those lists or sometimes
+00:24:05.280 acronyms you'll never get perfect
+00:24:07.500 requirements but keep these
+00:24:09.240 characteristics in mind as you write and
+00:24:11.220 review them
+00:24:12.600 we also have to consider how someone
+00:24:14.460 could judge whether the requirement was
+00:24:16.080 correctly implemented and ready for use
+00:24:17.640 its acceptance criteria
+00:24:20.100 people also often make unstated
+00:24:22.020 assumptions regarding requirements
+00:24:24.059 conflicting and obsolete assumptions can
+00:24:26.880 cause problems later
+00:24:29.880 also constraints constraints restrict
+00:24:32.640 the developer's design or implementation
+00:24:34.440 options as we're thinking about
+00:24:36.120 constraints confirm whether any
+00:24:37.919 constraints that are embedded in the
+00:24:39.299 requirements are truly restrictions or
+00:24:42.120 just solution ideas that somebody
+00:24:43.559 proposed
+00:24:45.240 we also have business rules that often
+00:24:47.580 influence or service the source of
+00:24:49.320 specific pieces of functionality or data
+00:24:52.020 it's important to know which rules apply
+00:24:53.820 to which processes functions and data
+00:24:55.919 objects we'll come back to business
+00:24:57.419 rules later on
+00:24:59.760 additionally products that pose safety
+00:25:01.860 risk must also include password analysis
+00:25:04.320 as part of their requirements analysis
+00:25:05.940 we also want to think about the risk
+00:25:07.740 that any requirement could pose the
+00:25:09.480 Project's success
+00:25:10.799 and finally requirements reuse involves
+00:25:13.260 both crafting requirements that can be
+00:25:15.059 reused in other contexts and finding
+00:25:17.460 existing functionality that your
+00:25:18.780 application could exploit consider both
+00:25:20.880 reuse aspects during your analysis
+00:25:25.020 and while we analyze individual
+00:25:27.020 requirements other aspects of analysis
+00:25:29.400 assess sets of requirements
+00:25:31.980 specifically we start with gaps because
+00:25:34.260 it's hard to see the requirements that
+00:25:35.520 aren't there they're invisible to assess
+00:25:37.919 completeness we want to trace downward
+00:25:39.480 from business objectives through to the
+00:25:41.159 solution requirements to ensure that
+00:25:42.539 everything aligns properly
+00:25:44.279 we also want to look for inconsistencies
+00:25:46.080 that can arise between a parent
+00:25:47.400 requirement and its children or
+00:25:49.620 requirements of the same type that can
+00:25:51.059 conflict or be inconsistent One
+00:25:53.400 requirement may say to do a and another
+00:25:55.320 says to do B but it's logically
+00:25:57.419 impossible to do both
+00:26:00.059 we also want to look for multiple
+00:26:01.620 instances of the same information Carl
+00:26:04.020 once reviewed several use cases that had
+00:26:06.419 merely but not exactly the same data
+00:26:09.120 structure definition in three different
+00:26:10.500 places well in that case the reader
+00:26:13.080 doesn't know which one to believe if any
+00:26:15.080 replication also raises the risk of
+00:26:17.580 generating an inconsistency if one
+00:26:19.380 instance is changed but the others are
+00:26:21.059 not
+00:26:21.840 it's better to point to a single source
+00:26:23.580 of the information instead of
+00:26:24.779 duplicating it
+00:26:27.179 we also have dependencies some
+00:26:29.039 requirements depend on others being
+00:26:30.480 implemented at the same time or
+00:26:31.860 previously I find this one a lot in my
+00:26:34.080 work for instance it only makes sense to
+00:26:36.539 implement exception handling code
+00:26:37.799 concurrently with the functionality
+00:26:39.360 where the error could occur
+00:26:42.179 and Beyond the desirable characteristics
+00:26:44.580 of completeness and consistency that we
+00:26:47.039 mentioned earlier for individual
+00:26:48.179 requirements we also want to make sure
+00:26:49.679 that groups of requirements are written
+00:26:51.360 and labeled in a way to be modifiable
+00:26:52.919 and traceable
+00:26:55.260 we also want to create multiple
+00:26:57.120 representations of requirements using
+00:26:58.919 different thought processes because that
+00:27:00.659 lets us compare them to find problems
+00:27:03.059 of course earlier we mentioned the
+00:27:04.860 importance of prioritizing requirements
+00:27:06.600 so we have to prioritize the set
+00:27:09.900 and finally stakeholders sometimes
+00:27:11.700 assume that the solution will include
+00:27:14.039 certain pieces of functionality without
+00:27:15.720 them having to say so explicitly but as
+00:27:18.720 Carl likes to say telepathy and
+00:27:20.400 Clairvoyance are not very effective
+00:27:21.960 requirements elicitation tools
+00:27:24.179 if you apply these analysis techniques
+00:27:26.940 they will eventually become second
+00:27:28.320 nature to you and they will make your
+00:27:30.840 requirements and requirement sets better
+00:27:33.539 and with that we will pass it back to
+00:27:35.220 Carl to talk about requirement
+00:27:36.240 specification
+00:27:38.760 okay I'm back
+00:27:41.100 um we just covered here A bunch of
+00:27:42.720 different analysis techniques I think
+00:27:44.400 there's 18 all told on these two slides
+00:27:47.100 and it's hard to remember all those
+00:27:49.740 um eventually you will internalize them
+00:27:52.260 but in the meantime I find it really
+00:27:54.299 helpful to use checklists to remind me
+00:27:56.520 of things like this so if you go to the
+00:27:58.860 website for this book at softwarerex.com
+00:28:01.580 you can download checklists that will
+00:28:04.559 remind you of these kinds of things to
+00:28:06.419 look for during analysis along with a
+00:28:08.159 bunch of other checklists as well so
+00:28:09.720 there's a lot of useful AIDS there
+00:28:13.020 the term requirement specification
+00:28:15.179 refers to two things both to recording
+00:28:18.059 requirements knowledge in some form and
+00:28:20.340 to the deliverables you produce such as
+00:28:22.559 a software requirements requirements
+00:28:25.140 specification and we see here on this
+00:28:27.840 slide one of the very first business
+00:28:29.700 analysts in the world carefully writing
+00:28:31.559 a requirement specification actually I'm
+00:28:33.900 pretty sure that's Charles Dickens but
+00:28:35.279 close enough
+00:28:36.539 now whenever you see the phrase writing
+00:28:39.779 requirements I want you to mentally
+00:28:41.520 change that to representing requirements
+00:28:44.760 knowledge we think of writing
+00:28:46.740 requirements in natural language text
+00:28:48.840 and that of course is the most popular
+00:28:50.460 way to record requirements information
+00:28:52.559 because it's how people normally
+00:28:54.240 communicate however there are many
+00:28:56.760 Alternatives way alternative ways to
+00:28:59.159 represent knowledge including tables
+00:29:01.260 these visual models tests prototypes
+00:29:05.100 mathematical Expressions all kinds of
+00:29:07.500 ways that you can communicate
+00:29:09.659 now some people don't like to write
+00:29:11.279 requirements but I think it's important
+00:29:13.559 to remember that the cost of recording
+00:29:15.539 knowledge is small compared to the cost
+00:29:18.179 of acquiring that knowledge or
+00:29:20.220 reacquiring it in the future the hard
+00:29:22.740 part is not writing the requirements the
+00:29:25.320 hard part is figuring out what they are
+00:29:26.880 if human memories are imperfect and
+00:29:29.220 incomplete they fade and distort over
+00:29:31.799 time and also other people can't access
+00:29:34.080 them so documented requirements
+00:29:36.600 constitute a kind of persistent group
+00:29:38.580 memory
+00:29:40.020 we can record requirements in many
+00:29:42.240 structures including documents
+00:29:44.059 spreadsheets requirements management
+00:29:45.960 tools stickies on a wall whatever works
+00:29:48.840 for you
+00:29:49.860 these representations will vary in the
+00:29:52.080 information they contain how the
+00:29:53.700 information is organized how much detail
+00:29:56.100 is included and so forth so no matter
+00:29:58.679 what form you're using just think of
+00:30:00.240 your requirements specification as just
+00:30:02.580 being a container for requirements
+00:30:04.500 related knowledge
+00:30:06.539 very important to remember that the goal
+00:30:08.880 of writing any kinds of requirements is
+00:30:11.279 always clear and effective communication
+00:30:13.500 it's not purity of style it's not
+00:30:15.600 conformance to the current fad or
+00:30:17.460 anything else so so keep this goal in
+00:30:19.980 mind
+00:30:20.940 and there are many ways to achieve that
+00:30:22.740 so two requirement requirements
+00:30:25.200 specification practices that are
+00:30:27.000 fundamental are to write the
+00:30:28.799 requirements in consistent ways
+00:30:30.960 according to recognizable patterns and
+00:30:33.299 to organize that information in a
+00:30:34.919 structured fashion with the help of a
+00:30:36.539 template I'm going to talk in a moment
+00:30:38.700 about the importance of identifying and
+00:30:40.799 documenting business rules and also
+00:30:43.320 we're in the Communication business here
+00:30:45.059 requirements are much more about
+00:30:46.380 communication than Computing so to
+00:30:48.840 facilitate that each project should
+00:30:50.580 accumulate a glossary of significant
+00:30:52.679 terms abbreviations acronyms and
+00:30:55.740 synonyms to make sure that everyone
+00:30:57.659 understands them in the same way that
+00:31:00.539 will definitely help make our
+00:31:02.159 communication go a little bit more
+00:31:03.960 smoothly
+00:31:08.279 so let me tell you a little story here
+00:31:09.899 my friend Jeremy recently visited his
+00:31:11.940 local blood bank's website and made an
+00:31:13.860 appointment to donate blood later that
+00:31:15.659 day good for Jeremy but when Jeremy
+00:31:18.000 arrived at the blood bank the staff told
+00:31:20.580 him well we don't take same-day
+00:31:22.140 appointments even though the website let
+00:31:24.419 him make that kind of appointment and he
+00:31:26.340 was rather annoyed
+00:31:27.960 business rules are statements that
+00:31:30.480 Define or restrict certain aspects of an
+00:31:33.120 organization's operations or they
+00:31:35.460 influence the behaviors of people and
+00:31:37.320 systems within the organization they're
+00:31:39.720 not software requirements themselves but
+00:31:41.760 business rules often lead to derived
+00:31:43.799 requirements to enforce or comply with
+00:31:46.500 the rule and as such they're a critical
+00:31:48.659 piece of the requirements puzzle on
+00:31:50.520 every project while the blood bank's
+00:31:52.620 website developers kind of dropped the
+00:31:54.240 ball on that issue by not enforcing in
+00:31:56.399 the software the no same day appointment
+00:31:58.559 policy
+00:32:00.539 there are various sorts of business
+00:32:02.159 rules some simply state facts about the
+00:32:04.320 business many rules impose constraints
+00:32:06.659 on who can do what under what conditions
+00:32:08.720 action enablers trigger some system or
+00:32:11.460 business behavior and computations not
+00:32:13.679 surprisingly describe how certain
+00:32:15.000 calculations are performed
+00:32:17.039 business rules can come from various
+00:32:18.779 sources company policies constitute a
+00:32:21.600 large Source like a stores policy for
+00:32:23.520 issuing refunds many systems need to
+00:32:26.100 comply with various laws and regulations
+00:32:28.399 industry standards such as interface
+00:32:30.899 standards are another major source
+00:32:33.120 but too often business rules are not
+00:32:35.460 documented at all or they're embedded in
+00:32:37.559 the code it's better to document
+00:32:39.360 business rules like your document
+00:32:40.740 requirements they should be clear
+00:32:42.240 complete consistent unambiguous and so
+00:32:45.240 forth
+00:32:46.380 so business rules are also subject to
+00:32:48.419 the same problems that can afflict
+00:32:50.039 requirements one rule could conflict or
+00:32:52.559 overlap with another rules could be
+00:32:54.480 imprecise or fail to cover certain
+00:32:56.640 conditions and as with the requirements
+00:32:59.340 textual rules aren't always the best way
+00:33:01.559 to communicate information
+00:33:03.720 suppose you have an online store that
+00:33:05.700 offers various combinations of discounts
+00:33:07.919 and free shipping depending on the total
+00:33:09.779 price of an order and whether the
+00:33:11.520 customer is a club member you could
+00:33:13.500 write out all those rules in natural
+00:33:15.120 language but displaying them in the form
+00:33:17.640 of a decision table like this is easier
+00:33:19.919 to understand the decision table shows
+00:33:22.559 all the various combinations of
+00:33:24.299 conditions and the resulting actions
+00:33:26.760 here we have two sets of conditions
+00:33:28.740 depending on the Range in which the
+00:33:31.140 order total Falls and whether or not the
+00:33:34.500 customer is a club member and the
+00:33:36.360 various combinations of these lead to
+00:33:39.059 various actions down here multiple
+00:33:41.159 possible actions
+00:33:42.840 might get a discount or you might not
+00:33:44.700 might get a discount of different
+00:33:46.200 amounts and you might or might not get
+00:33:48.000 free shipping
+00:33:49.260 so the table shows this very nicely as
+00:33:51.659 an example rule discount five these
+00:33:54.059 things need labels states that if the
+00:33:56.159 order amount the total is in the range
+00:33:58.679 of fifty dollars to one hundred dollars
+00:34:00.360 inclusive and the customer is a club
+00:34:03.360 member then they get a 10 discount and
+00:34:07.140 they get free shipping so representing
+00:34:09.719 the business logic with decision tables
+00:34:11.520 like this helps to avoid boundary value
+00:34:13.320 problems you might have something below
+00:34:15.060 50 and something above 50 but you don't
+00:34:17.639 know what happens at exactly 50. that's
+00:34:19.739 a problem
+00:34:20.879 and it helps you avoid missing logical
+00:34:23.099 combinations this compact table format
+00:34:25.918 is easier to create read and modify than
+00:34:29.280 a repetitive set of very similar rules
+00:34:32.159 and it facilitates test design to ensure
+00:34:34.859 that we don't miss any condition
+00:34:36.659 combinations
+00:34:38.879 so now we're going to have Candace pick
+00:34:40.739 up and talk about requirements
+00:34:42.359 validation
+00:34:44.399 thanks Carl so by this point in the
+00:34:47.159 requirements development process you've
+00:34:48.960 elicited requirements for some portion
+00:34:51.239 of the solution you've analyzed them
+00:34:52.800 you've recorded those requirements in
+00:34:54.540 appropriate forms the team is now ready
+00:34:56.639 to begin development on that portion of
+00:34:58.260 the product right maybe yes you have
+00:35:01.980 some requirements but how do you know
+00:35:03.480 that they're the right requirements are
+00:35:05.580 you confident that they'll meet the
+00:35:06.839 user's goals and address the business
+00:35:08.280 situation that led to launching the
+00:35:10.020 initiative in the first place you could
+00:35:12.060 have a set of beautifully written and
+00:35:13.980 modeled requirements that appear to be
+00:35:15.300 Crystal Clear complete and unambiguous
+00:35:17.520 and yet they could still be wrong
+00:35:20.160 requirements validation activities then
+00:35:22.320 confirm that some set of the
+00:35:24.060 requirements accurately describes the
+00:35:25.800 stakeholders needs and that a solution
+00:35:27.720 based on these requirements would indeed
+00:35:29.640 satisfy those needs
+00:35:31.440 and achieve the intended business
+00:35:33.480 objectives the terms verification and
+00:35:36.359 validation are often confused or misused
+00:35:39.720 verification confirms that whatever
+00:35:41.520 you've done was done correctly into
+00:35:43.200 specification while validation ensures
+00:35:45.599 that you're doing the right thing
+00:35:47.579 I come from a civil engineering
+00:35:49.200 background and so when I think about
+00:35:50.880 bridges validation is did we design the
+00:35:53.460 bridge correctly and verification as
+00:35:55.200 well was the bridge built to spec so I
+00:35:57.720 love always to make those references
+00:35:59.099 back to my civil engineering days
+00:36:01.560 as we think specifically about
+00:36:02.700 requirements validation those validation
+00:36:04.800 activities are interwoven with the
+00:36:06.599 ongoing elicitation analysis and
+00:36:08.880 specification work
+00:36:10.380 sometimes prototypes or early releases
+00:36:12.420 of your solution sometimes even
+00:36:13.980 delivering the full solution well those
+00:36:15.960 are ways to validate with customers
+00:36:17.400 whether or not you're building the
+00:36:18.599 correct solution but those can be
+00:36:20.520 extensive activities especially if
+00:36:21.960 you're building the whole solution and
+00:36:23.820 you don't get much feedback until you've
+00:36:25.619 actually built something
+00:36:27.359 so we have one core practice for ongoing
+00:36:29.640 requirements validation and this
+00:36:30.960 involves reviewing requirements and
+00:36:32.579 testing them before you have any code
+00:36:34.500 whatsoever
+00:36:36.000 so we're going to talk about this one
+00:36:37.320 practice I'm going to start with review
+00:36:39.119 the requirements
+00:36:40.680 in a peer review we'll move peer review
+00:36:42.720 requirements colleagues of the person
+00:36:44.040 who created the requirements artifact
+00:36:45.839 examine it for potential defects or
+00:36:47.640 other issues and because of this reviews
+00:36:49.619 are high leverage investment and quality
+00:36:51.720 and the requirements reviews offer the
+00:36:53.280 highest leverage of all yeah I think I'm
+00:36:56.040 bespoke there
+00:36:58.020 um we need to choose the right review
+00:36:59.520 participants when we think about a
+00:37:00.960 requirements review a ba might invite
+00:37:03.240 another analyst to review the
+00:37:04.800 requirements because the other ba well
+00:37:06.780 they know what kind of problems to look
+00:37:08.160 for
+00:37:08.880 however that other ba can't tell if the
+00:37:11.579 requirements properly address the
+00:37:12.839 business need so to validate the
+00:37:14.940 requirements you also need reviewers who
+00:37:16.920 supplied the information that led to
+00:37:18.540 those requirements such as
+00:37:19.980 representatives of various user classes
+00:37:21.900 and the author of any higher level or
+00:37:23.880 predecessor system specification
+00:37:26.280 additionally people who must base their
+00:37:28.320 work on the requirements would like to
+00:37:29.760 call them victims of the requirements
+00:37:31.440 also make good reviewers Architects
+00:37:33.900 designers developers and testers will
+00:37:35.940 all find different kinds of issues
+00:37:39.000 reviews also span a range of formality
+00:37:41.520 and rigor the simplest involves just
+00:37:43.560 asking a colleague to look over
+00:37:45.060 something you've created well that's an
+00:37:46.680 ad hoc review
+00:37:48.300 in a pass around a slightly deeper type
+00:37:51.000 of review you invite several people to
+00:37:52.800 examine some requirements or diagrams a
+00:37:55.200 team review and an inspection are more
+00:37:57.060 structured and more formal which makes
+00:37:59.940 them slower and more expensive but also
+00:38:02.220 more thorough and ultimately more
+00:38:04.079 valuable
+00:38:05.160 reviewers can use a checklist to remind
+00:38:07.200 them of common types of requirements
+00:38:08.700 problems to look for like these
+00:38:12.480 ambiguities and consistencies
+00:38:14.280 duplications omissions unnecessary
+00:38:16.680 requirements or even missing
+00:38:18.119 requirements with experience like most
+00:38:20.760 things you'll internalize this list
+00:38:22.500 however we also have a checklist of this
+00:38:25.560 on the website softwarerecs.com
+00:38:30.060 once we've reviewed the requirements we
+00:38:31.920 want to test the requirements and we
+00:38:33.300 found out that you can begin testing
+00:38:34.680 your quote software as soon as you
+00:38:36.839 define your first requirement
+00:38:38.300 requirements describe what to build and
+00:38:41.099 how the solution should behave in
+00:38:42.420 various conditions tests describe how to
+00:38:44.820 tell if the solution is exhibiting the
+00:38:46.200 correct behavior and to find situations
+00:38:47.940 where it does not
+00:38:49.740 we find that writing tests from your
+00:38:51.420 mental image of how the system should
+00:38:52.859 behave is a completely different thought
+00:38:54.839 process than writing the requirements
+00:38:56.460 themselves
+00:38:57.780 once we have thought about how we would
+00:39:00.180 test the system we can then walk through
+00:39:02.160 those tests and work them against the
+00:39:04.320 requirements to make sure that every
+00:39:05.520 test could be performed by firing off
+00:39:07.560 certain requirements every time we do
+00:39:10.079 that we found missing requirements or
+00:39:12.000 erroneous requirements sometimes missing
+00:39:13.859 or erroneous test cases
+00:39:16.140 additionally agile teams often write
+00:39:18.300 acceptance criteria in the form of
+00:39:20.160 acceptance tests to define the user
+00:39:21.960 story's details those details help the
+00:39:24.180 developers understand what to implement
+00:39:25.800 and how to tell if they're done the
+00:39:27.839 tests also help users Envision whether a
+00:39:29.820 story will meet their needs which is the
+00:39:32.040 essence of requirements validation
+00:39:34.740 one popular way to write acceptance
+00:39:36.780 tests uses the given when then pattern
+00:39:39.359 think back to that user story we saw
+00:39:41.160 earlier as a as a user as an author I
+00:39:44.640 want to view the statistics for my
+00:39:45.960 article so I can see which topics my
+00:39:47.460 readers enjoy the most
+00:39:49.020 well with that user story this could be
+00:39:50.940 one acceptance test for that given
+00:39:52.920 what's our precondition what's the state
+00:39:54.900 of the system or the user so given I'm
+00:39:57.119 logged into the platform and I have
+00:39:59.280 published articles or articles published
+00:40:01.619 when the trigger the thing that says
+00:40:03.960 what the system should do when I request
+00:40:06.180 to view the statistics so that might be
+00:40:08.040 a link I click on and then the actions
+00:40:11.339 that the system takes then a graph of my
+00:40:13.800 total article view statistics from the
+00:40:15.599 past 30 days is displayed and a list of
+00:40:18.000 Statistics views reads and the like for
+00:40:20.640 individual articles is displayed in
+00:40:22.800 Reverse chronological order by
+00:40:24.300 publication date
+00:40:25.859 this compact way of writing these
+00:40:27.960 acceptance criteria and acceptance test
+00:40:29.940 tells us how to test with the
+00:40:31.980 requirements done it doesn't give us the
+00:40:33.780 exact details of how to implement it the
+00:40:35.400 developer will figure that out but we
+00:40:37.440 can say if you can show us this when I
+00:40:39.599 click this button and I see these things
+00:40:41.160 well we can accept that story is done so
+00:40:44.040 it's an important way to validate our
+00:40:46.140 tests or validate our stories
+00:40:48.900 another thing we can do
+00:40:51.380 uh we can do two tester requirements
+00:40:55.079 is to validate our requirements against
+00:40:57.240 various models and various tests so
+00:40:59.700 suppose you've drawn a model to
+00:41:00.839 complement some of your textual
+00:41:02.040 requirements you can then Trace The
+00:41:04.320 Logical execution path on the model with
+00:41:06.240 a highlighter pin as you walk through
+00:41:07.920 every test to see if the system would
+00:41:09.540 behave as expected after you walk
+00:41:11.640 through all the highlighter paths
+00:41:13.920 you look for problems a path in the
+00:41:16.020 model that isn't highlighted so a step
+00:41:17.820 that isn't used could indicate that
+00:41:19.260 either we're missing a test or that the
+00:41:21.119 path does not reflect a legitimate
+00:41:22.500 system Behavior conversely if we have a
+00:41:24.960 test that has no corresponding path to
+00:41:26.640 tracing the model well either the test
+00:41:28.859 is invalid or the model is incomplete
+00:41:30.900 either way that disconnect tells you
+00:41:32.760 there's a problem here's an example I
+00:41:35.160 always like pictures
+00:41:36.300 this is a portion of a process flow
+00:41:38.040 diagram for a website that lets sales
+00:41:39.599 representatives enter orders for a
+00:41:41.339 customer who's on the phone
+00:41:42.839 in one scenario the customers requested
+00:41:45.060 items are all out of stock
+00:41:46.560 and among many others the tester has
+00:41:49.200 written the test case here
+00:41:50.579 well given that the the card is empty
+00:41:52.740 when the customer declines to order more
+00:41:54.780 items then the process terminates
+00:41:57.780 now if you attempt to trace that the
+00:42:00.240 path this test describes on the process
+00:42:01.859 flow you can't do it the diagram says
+00:42:04.680 that if the requested items are not in
+00:42:06.359 stock and the customer doesn't want to
+00:42:07.920 order more items thereby leaving the
+00:42:10.079 cart empty the sales rep still sends an
+00:42:12.660 empty quote to the customer
+00:42:14.520 that doesn't match the test assuming the
+00:42:16.740 test is correct we found an error in the
+00:42:18.599 model and an any textual requirements
+00:42:20.160 that align with the model and who wants
+00:42:22.380 to be sent an empty order
+00:42:25.500 armed with that knowledge about narrow
+00:42:27.300 in the diagram the ba can then redraw
+00:42:29.280 that portion of the process model to
+00:42:30.720 look like this
+00:42:31.859 the Blue Diamond in this modified
+00:42:33.420 process now checks to see if the cart
+00:42:35.400 contains items following the end of the
+00:42:37.680 customer sales rep dialog if so it sends
+00:42:40.619 the quote if not it terminates the
+00:42:42.480 process
+00:42:43.800 well if we go back to that same test now
+00:42:46.320 we can trace that test path correctly on
+00:42:49.020 the process flow ending the sales
+00:42:50.760 process instead of sending the customer
+00:42:52.320 a meaningless quote with nothing in it
+00:42:54.540 finding errors like this one before the
+00:42:57.119 team writes the code and certainly
+00:42:58.380 before the customer encounters the
+00:43:00.119 problem is always a good thing customers
+00:43:02.339 are never in a good mood when they
+00:43:03.780 report a problem
+00:43:07.680 once we've analyzed elicited specified
+00:43:10.920 and validated the requirements we have
+00:43:13.020 to manage them requirements management
+00:43:14.760 is that is the sub domain sub
+00:43:17.040 requirements engineering that deals with
+00:43:18.720 how requirements are used on the project
+00:43:20.280 and how the project responds to evolving
+00:43:22.260 needs requirements management involves
+00:43:24.300 several ongoing activities
+00:43:26.280 first you need to track versions of
+00:43:28.200 individual requirements as they change
+00:43:29.579 over time
+00:43:30.660 similarly the status of each individual
+00:43:32.880 requirement changes over time each one
+00:43:34.980 goes from being proposed to approved to
+00:43:37.020 ultimately being either verified and
+00:43:38.760 correctly implemented in the product or
+00:43:40.859 deferred or deleted
+00:43:42.960 and if you're serious about requirements
+00:43:44.640 management you'll Trace each one both
+00:43:46.680 backward to its origin and forward to
+00:43:49.020 design elements such as code and tests
+00:43:51.240 to show where it was implemented in the
+00:43:52.800 solution well these are all valuable but
+00:43:55.680 the two most important requirements
+00:43:57.240 management practices that apply to every
+00:44:00.540 project are establishing and managing
+00:44:02.880 requirements baselines we'll talk more
+00:44:04.380 about this one in a minute and managing
+00:44:06.359 changes to requirements effectively you
+00:44:08.819 have to have mechanisms in place to add
+00:44:10.619 new requirements that come along modify
+00:44:12.540 existing ones and delete plan
+00:44:14.160 requirements from your backlog of
+00:44:15.420 pending work because as we all know
+00:44:17.099 change happens
+00:44:20.280 when we established the requirements
+00:44:21.960 Baseline
+00:44:23.160 we think about
+00:44:24.599 the set of requirements that we've
+00:44:25.980 developed so we have a set of
+00:44:27.300 requirements we've confirmed that they
+00:44:28.560 describe a suitable solution the next
+00:44:30.780 step is for the development team to be
+00:44:32.579 able to commit to implementing a subset
+00:44:34.800 of those requirements in a specific time
+00:44:36.780 frame or development cycle and that's a
+00:44:38.940 requirements Baseline it's an agreement
+00:44:41.099 establishing a baseline assures everyone
+00:44:43.560 that the team can move forward with
+00:44:45.300 development at a low risk of major
+00:44:47.280 changes a sensible baselining and change
+00:44:50.220 approach ensures that everyone knows
+00:44:51.720 what they should and sometimes more
+00:44:53.400 importantly should not be working on
+00:44:55.920 when we think about baselines we can
+00:44:57.540 define a baseline in two ways a Time
+00:44:59.819 bound Baseline Begins by establishing a
+00:45:01.740 time box that could be a single
+00:45:03.480 iteration a group of iterations a plan
+00:45:05.640 release or the entire product
+00:45:09.000 this is often used in agile projects the
+00:45:11.280 team then allocates the highest priority
+00:45:13.140 requirements from their backlog to the
+00:45:14.819 Baseline until the time boxes
+00:45:16.560 development and testing capacities are
+00:45:19.140 filled
+00:45:20.220 conversely a scope bound Baseline
+00:45:22.500 consists of a logically grouped set of
+00:45:24.300 features requirements or stories that
+00:45:26.579 can be built tested approved and
+00:45:28.680 deployed together as a unit
+00:45:30.839 with the scope bound approach the
+00:45:32.460 requirements Baseline is established
+00:45:34.200 without necessarily knowing its size or
+00:45:36.599 even when it will be delivered
+00:45:38.280 a baseline serves as the reference point
+00:45:40.619 for commencing the Change Control
+00:45:42.000 process of those committed requirements
+00:45:43.680 your team should follow its defined
+00:45:45.480 requirements change process to make sure
+00:45:47.400 the right people make the right
+00:45:48.420 decisions and this often involves
+00:45:50.579 negotiating changes in scope time and
+00:45:53.160 resources for the work the work
+00:45:55.260 Baseline does not mean Frozen
+00:46:00.060 and with that I believe I'm passing it
+00:46:02.520 back to Carl to close us out I'm back
+00:46:06.000 yes and you know nobody likes that last
+00:46:08.579 bullet here you know they don't like the
+00:46:10.740 fact that if you change something you're
+00:46:13.319 going to have to talk about what's going
+00:46:15.180 to change along with that people want to
+00:46:17.940 keep stuffing as much as they can into
+00:46:19.380 the box however you've defined a box but
+00:46:21.540 you're still going to be done on time
+00:46:22.619 and it's still all going to be correct
+00:46:23.819 with no bugs right uh no probably not
+00:46:27.420 that's just the reality I often point
+00:46:29.819 out that sometimes I'm not crazy about
+00:46:31.500 reality but it's all I got so I have to
+00:46:33.720 live with it
+00:46:35.220 so thanks Candace we have covered a lot
+00:46:37.619 of ground quickly here today I hope
+00:46:39.720 you've made some notes of practices that
+00:46:41.579 you feel would add value to your project
+00:46:43.140 that might reduce risk that might
+00:46:45.180 increase your chance of success we can't
+00:46:48.000 promise that if you perform these 20
+00:46:49.859 practices on your projects you'll
+00:46:51.780 definitely be successful but we can
+00:46:53.940 promise that you'll have fewer
+00:46:55.200 requirements related headaches if you do
+00:46:57.060 and that seems to me to be a strong
+00:46:59.099 enough motivate motivation to look into
+00:47:01.020 them and see if these practices can help
+00:47:03.240 your teams beef up how they plan develop
+00:47:05.640 and manage their requirements
+00:47:09.119 so with that I think I'll come back on
+00:47:11.339 camera
+00:47:13.380 I think we're all back
+00:47:16.200 foreign
+00:47:19.700 thank you so much for uh really really
+00:47:23.099 informative fast-paced presentation with
+00:47:26.460 with so much uh that you covered I I
+00:47:29.099 know from the comments in the chat that
+00:47:30.960 people are really really uh appreciative
+00:47:33.000 uh just before we get on we'll cover as
+00:47:35.640 many questions as we can I just want to
+00:47:37.500 point out a couple of things uh before
+00:47:40.500 we get on to questions the first is uh
+00:47:43.380 that the Publishers have very very
+00:47:46.020 kindly uh given us a 35 discount code
+00:47:50.280 off of software requirement Essentials
+00:47:52.619 using the code blackmetric uh so if you
+00:47:55.260 go to informit.com forward slash
+00:47:57.540 software requirements uh you can uh you
+00:48:00.599 can access that and for those of you
+00:48:02.220 that opted into receiving emails after
+00:48:03.960 the session I will also include that in
+00:48:06.060 the wrap-up email so you don't need to
+00:48:08.099 write it down now
+00:48:09.839 um but before we get on to the questions
+00:48:11.819 I want to tell you about how the
+00:48:13.319 competition will work
+00:48:15.359 so in just a second if you want to enter
+00:48:17.700 the competition you might not want to
+00:48:19.319 but if you're here by now I think you
+00:48:21.060 probably do
+00:48:22.319 um I'm gonna literally put a URL in and
+00:48:25.260 all you need to do is
+00:48:27.060 um put your name and email address in
+00:48:28.740 there all this data is used for is
+00:48:31.319 running the competition after the
+00:48:33.240 competition is run it will be deleted
+00:48:35.280 but this gives you this just lets us
+00:48:37.560 know who's here who wants to actually
+00:48:38.880 enter uh with the chance of winning a
+00:48:42.119 copy of the book so now in the chat I'm
+00:48:45.000 going to put that link in and in about
+00:48:48.359 five minutes time we will draw it so
+00:48:51.420 um get get typing your name and email in
+00:48:54.060 uh now but whilst you are doing that
+00:48:57.540 um I am going to go through some of the
+00:49:00.119 questions so
+00:49:01.980 our first question uh is from an
+00:49:05.040 anonymous attendee uh but they ask they
+00:49:07.800 mentioned Candice uh mentioned setting a
+00:49:10.079 decision rule
+00:49:11.460 um could that be defined or explained a
+00:49:13.619 little more so I wonder if you could
+00:49:15.839 just elaborate on what you mean by
+00:49:17.339 decision rule there Candice
+00:49:19.800 no sure no worries yeah so it's
+00:49:22.020 basically how you will make a decision
+00:49:23.819 so this could be that it has to be a
+00:49:25.920 unanimous vote everybody agrees the same
+00:49:27.960 way it could be consensus that everybody
+00:49:30.420 maybe they don't agree with it 100 but
+00:49:32.819 they can live with it or it could be the
+00:49:34.980 decision maker or decision leader the
+00:49:36.960 person who is coordinating those
+00:49:38.339 activities maybe they get to decide or
+00:49:40.079 they can delegate so all those are
+00:49:41.339 different types of decision rules
+00:49:44.220 fantastic
+00:49:46.260 um so uh yeah so people are noticing
+00:49:48.240 that there's a message saying the
+00:49:49.319 competition's closed that's because I've
+00:49:50.579 reused the form from a previous thing
+00:49:52.020 ignore that as long as you've entered
+00:49:53.760 your details it will get through so uh
+00:49:55.680 that's uh with the competition that's
+00:49:57.540 that's me repurposing an old form trust
+00:50:00.359 me if you've put your your details in it
+00:50:02.400 will uh it will get through to us
+00:50:04.560 um Michelle asks is document analysis
+00:50:07.560 and elicitation technique I think of it
+00:50:09.839 as more of an investigation technique
+00:50:12.599 um it might lead me to ask a question
+00:50:14.280 but not contribute a requirement itself
+00:50:17.220 what do we think to that one really
+00:50:19.619 quite thought-provoking question that
+00:50:21.119 one
+00:50:22.500 yeah I think yes the answer to almost
+00:50:26.339 all of these questions is it depends on
+00:50:28.680 the situation okay and that's not just a
+00:50:30.660 consultant's cop out it's just the
+00:50:32.040 reality is that you know things are
+00:50:33.720 situational but yeah certainly document
+00:50:35.760 analysis can be important depending on
+00:50:38.339 what document you're reading and why
+00:50:40.380 you're reading it you might find that uh
+00:50:43.200 this document has got a lot of business
+00:50:44.640 rules in it which we maybe didn't know
+00:50:47.160 about otherwise which could absolutely
+00:50:48.960 be an elicitation technique because you
+00:50:50.819 have to then ask yourself okay do I have
+00:50:53.520 to build some functionality or set some
+00:50:55.740 data triggers or something up to enforce
+00:50:58.440 those business rules and comply with
+00:51:00.480 them so I would say yeah it is an
+00:51:02.579 elicitation uh technique in the broad
+00:51:05.220 sense of we are looking for information
+00:51:07.260 some of that may turn into requirements
+00:51:09.839 some of it may turn into questions that
+00:51:11.400 we go ask the right people to get the
+00:51:13.140 knowledge which may turn into
+00:51:14.339 requirements and I think it's not
+00:51:16.200 important whether you call it an
+00:51:17.339 elicitation technique or not you ask
+00:51:19.260 yourself will this help us better
+00:51:20.400 understand the requirements and better
+00:51:22.020 communicate and understanding to design
+00:51:24.180 an appropriate solution I think that's
+00:51:26.640 really the the goal
+00:51:28.380 definitely definitely
+00:51:30.599 um along a similar vein
+00:51:33.839 um John asks regarding requirements
+00:51:36.240 elicitation could you explain invention
+00:51:38.400 in this context because you mentioned
+00:51:40.440 that you know requirements can be
+00:51:41.819 elicited from various sources or
+00:51:43.319 invented what do you mean in that
+00:51:45.180 context
+00:51:46.619 well I think back to uh experience that
+00:51:49.200 I had on our project once
+00:51:51.300 um where we're I'm talking with a group
+00:51:53.880 of users and if you are just asking you
+00:51:56.220 know what do you want or what do you
+00:51:57.540 need to do or what you know some
+00:51:58.800 questions like that even what tasks are
+00:52:01.440 you trying to perform then those are
+00:52:03.780 going to be things that are already in
+00:52:04.980 people's minds
+00:52:06.540 but suppose you've asked a question like
+00:52:08.400 would anybody ever need to do this or
+00:52:10.740 would it be helpful if
+00:52:13.200 um if you could do this thing and chain
+00:52:15.480 these things together and treat it as a
+00:52:17.520 single operation instead of multiple
+00:52:19.140 operations in other words you're in
+00:52:21.300 you're inventing or suggesting a novel
+00:52:24.420 approach that no one had asked you for
+00:52:26.400 no one had maybe thought of on their own
+00:52:28.520 but you've but you've got an idea as the
+00:52:30.900 business analyst so that's what I mean
+00:52:32.460 by inventing requirements now it's a
+00:52:34.440 very bad idea I think to just throw that
+00:52:36.359 in and build it simply because you
+00:52:38.040 thought of it but I think it's a very
+00:52:39.720 good idea to be creative and come up
+00:52:41.880 with those ideas and and throw them out
+00:52:44.460 there and have people say oh you could
+00:52:46.740 do that that would save us a lot of time
+00:52:48.180 I never thought of that or they might
+00:52:50.280 say no no one ever need to do that you
+00:52:52.440 don't know until you ask that's what I
+00:52:54.000 mean by inventing requirements with
+00:52:56.099 visual models as well like it's an
+00:52:58.319 interesting psychological fact that
+00:52:59.700 people are just bad at coming up with
+00:53:01.380 stuff on the spot but if you show them
+00:53:03.240 something they can tell you what's wrong
+00:53:04.559 and so having those drop after inventing
+00:53:07.500 but we call straw man models gives them
+00:53:09.540 something to like poke holes at I
+00:53:11.520 actually did a one-hour talk internally
+00:53:13.559 at Argonne digital called The Art and
+00:53:15.180 Science of making things up
+00:53:16.980 it was very well received
+00:53:19.020 fantastic well we are at the end of our
+00:53:21.780 allotted slot we had so many questions I
+00:53:25.079 mean Carl if people have like a burning
+00:53:27.359 question are you happy for them to like
+00:53:28.980 connect with you on LinkedIn or or or
+00:53:30.660 should they just read the book or no or
+00:53:32.940 both well
+00:53:35.460 um any of those are fine I'm always
+00:53:37.500 happy to you know get emails from people
+00:53:39.720 if you go to any of my websites
+00:53:41.420 processimpact.com or carlwegers.com
+00:53:43.859 that's easy to reach me there and feel
+00:53:46.200 free to send questions I I can't promise
+00:53:48.540 that I can answer everything and I think
+00:53:50.460 you will find that there's an awful lot
+00:53:52.079 of information either in this book or in
+00:53:54.119 the software requirements third edition
+00:53:55.500 book or in another book I wrote called
+00:53:57.660 more about software requirements uh
+00:54:00.300 those I I think will be very helpful for
+00:54:03.839 a lot of those kinds of questions and
+00:54:05.940 there are certain kinds of questions
+00:54:06.839 that I don't answer people sometimes say
+00:54:08.940 well what do you see the future of
+00:54:10.200 business analysis to be or what do you
+00:54:12.300 think about chat gbt and business
+00:54:14.579 analysis and and I do not attempt to
+00:54:16.680 predict the future maybe Candace can do
+00:54:18.300 that maybe she has a Crystal Ball but I
+00:54:20.040 don't try to predict the future
+00:54:22.280 it's best avoided best avoided I think
+00:54:25.319 well Carl Candice thank you so much
+00:54:28.079 um for such an informative session
+00:54:30.480 um uh Elizabeth there's so many comments
+00:54:32.819 I've I've missed uh Elizabeth says thank
+00:54:35.160 you very much for one of the most
+00:54:36.119 informative hours of my life which I
+00:54:37.800 think really uh shows how well uh people
+00:54:40.500 have thought of this session
+00:54:42.420 um so for those of you uh you know
+00:54:43.800 attending live do give our our
+00:54:46.500 presenters a virtual Round of Applause
+00:54:48.240 and one of the ways that you can do that
+00:54:49.920 is of course to check out their book
+00:54:51.420 check out the website connect with them
+00:54:53.280 on social media
+00:54:55.020 um for those of you that have stayed
+00:54:56.579 till the very end just a few Community
+00:54:58.920 announcements before you log off the
+00:55:00.960 first thing is if you've liked this
+00:55:02.520 webinar you will like other webinars
+00:55:04.440 that we run
+00:55:06.240 um I always try and get speakers on
+00:55:09.180 interesting topics and excellent
+00:55:11.040 speakers like uh Carl and Candice and in
+00:55:14.640 a little under a month's time on the 1st
+00:55:17.760 of August I have lingervin and Mick
+00:55:20.760 Brian who are talking about the art of
+00:55:22.980 backlog management and it's an
+00:55:25.500 interactive q a so slightly different
+00:55:27.780 format we'll be having an open
+00:55:29.220 conversation lots and lots of time for
+00:55:31.260 any issues questions you have about
+00:55:34.200 backlogs and
+00:55:36.059 um there tend to be backlogs can be
+00:55:38.640 quite problematic at times
+00:55:40.619 um I also wanted to just
+00:55:43.079 show you before I close and this is
+00:55:46.800 again where I am all of my windows are
+00:55:49.500 in the wrong place but just in case
+00:55:51.960 you're not aware and there is a
+00:55:54.240 completely free
+00:55:56.579 um quarterly PDF magazine called ba
+00:56:00.359 digest now Biba digest is written by
+00:56:04.079 practitioners for practitioners you
+00:56:06.780 don't even have to register to download
+00:56:08.880 it I mean I hope you'll like it and you
+00:56:11.160 will choose to sign up but you can just
+00:56:13.079 go to our website and download it or you
+00:56:16.140 can read it online and to give you an
+00:56:18.720 Insight of what it looks like it looks
+00:56:20.819 like this we've got over 60 pages every
+00:56:23.339 quarter of really practical uh
+00:56:26.400 practitioner LED content so if you are
+00:56:29.700 interested in accessing that the quick
+00:56:31.859 way of accessing it is ba digest dot
+00:56:34.440 link that's ba digest.link and you'll
+00:56:37.140 always find the most recent version
+00:56:39.240 there it's a labor of love this magazine
+00:56:41.280 I can tell you but we are a couple of
+00:56:44.160 moments over which I always hate doing
+00:56:45.660 so again thank you everyone for tuning
+00:56:47.579 in live I know we've had a really Global
+00:56:49.040 representation today uh Carl Candice
+00:56:51.660 thank you for such a stunning
+00:56:52.859 presentation
+00:56:54.300 um I have a fantastic evening afternoon
+00:56:56.220 morning everyone and hope to catch up
+00:56:58.380 with you all again soon so take care and
+00:57:00.420 bye for now
+00:57:01.619 thanks Adrian thanks everybody bye-bye
+00:57:03.839 bye for now
+00:57:09.840 [Music]

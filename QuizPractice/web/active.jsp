@@ -19,19 +19,6 @@
 
     </head>
     <body>
-        <div class="main">
-            <div>
-                <h1>Verify Your Email</h1>
-                <p>Check your email & click the link to activate your account.</p>
-                <div class="email-image">
-                    <img src="https://fptshop.com.vn/Uploads/Originals/2020/11/24/637418264301403600_email-cover.jpg" alt="Email Verification">
-                </div>
-                <div class="buttons-group">
-                    <button class="resend">Resend Email</button>
-                    <button class="new-email">Enter New Email</button>
-                    <button class="support">Contact Support</button>
-                </div>
-            </div>
-        </div>
+        
     </body>
 </html>

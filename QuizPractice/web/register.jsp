@@ -17,7 +17,6 @@
     <body>
         <!-- header -->
         <%@include file="layout/header.jsp"%>  
-
         <!-- sidebar -->
         <%@include file="layout/sidebar.jsp"%>
         <section class="form-container">
@@ -72,13 +71,9 @@
             </form>
 
         </section>
-
         <!-- footer -->
         <%@include file="layout/footer.jsp"%>
-
         <!-- custom js file link  -->
         <script src="js/script.js"></script>
-
-
     </body>
 </html>

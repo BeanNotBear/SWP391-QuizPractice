@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import model.User;
+import util.mail.Mail;
 import util.security.CodeVerify;
 import util.security.Security;
 import util.validation.Validation;
@@ -90,8 +91,8 @@ public class RegisterController extends HttpServlet {
                     "You must fill username!");
             isValidInformation = false;
         }
-        if(userDAO.checkUserExsitedByUsername(username)) {
-            request.setAttribute("username_err", 
+        if (!userDAO.checkUserExsitedByUsername(username)) {
+            request.setAttribute("username_err",
                     "Username has been existed!");
             isValidInformation = false;
         }
@@ -118,27 +119,35 @@ public class RegisterController extends HttpServlet {
             request.getRequestDispatcher("register.jsp")
                     .forward(request, response);
         } else {
-            RegisterUserDto registerUserDto = new RegisterUserDto();
             try {
-                registerUserDto.setFirstName(firstName);
-                registerUserDto.setLastName(lastName);
-                registerUserDto.setEmail(email);
-                registerUserDto.setPhoneNumber(phone);
-                registerUserDto.setGender(Boolean.getBoolean(gender));
-                SimpleDateFormat formatter = new SimpleDateFormat(
-                        "dd-MMM-yyyy");
-                Date date = formatter.parse(dob);
-                registerUserDto.setDob(date);
-                registerUserDto.setUsername(username);
+                User user = new User();
+                user.setFirstName(firstName);
+                user.setLastName(lastName);
+                user.setEmail(email);
+                user.setPhoneNumber(phone);
+                user.setDob(java.sql.Date.valueOf(dob));
+                user.setGender(Boolean.parseBoolean(gender));
+                user.setUsername(username);
                 password = Security.encryptToSHA512(password);
-                registerUserDto.setPassword(password);
-                
-                User insertedUser = userDAO.insert(registerUserDto);
-                session.setAttribute("user", insertedUser);
-                session.setAttribute("token", 
-                        CodeVerify.generateVerificationCode());
+                user.setPassword(password);
+                userDAO.insert(user);
+                String token = CodeVerify.generateVerificationCode();
+                session.setAttribute("token",
+                        token);
+                session.setAttribute("email", email);
+                String activeLink = request.getScheme() + "://"
+                        + // "http" + "://
+                        request.getServerName()
+                        + // "myhost"
+                        ":"
+                        + // ":"
+                        request.getServerPort()
+                        + // "9999"
+                        "/QuizPractice/active";
+                        request.getQueryString();
+                Mail.sendMailVerify(email, token, activeLink);
                 request.getRequestDispatcher("active.jsp").forward(request, response);
-                
+
             } catch (Exception e) {
             }
         }

@@ -41,15 +41,7 @@ public class UserDAO extends DBContext {
         return instance;
     }
 
-    /**
-     * Inserts a new user into the database based on the provided
-     * RegisterUserDto.
-     *
-     * @param registerUserDto the data transfer object containing user
-     * registration details
-     * @return the number of rows affected by the insert operation
-     */
-    public User insert(RegisterUserDto registerUserDto) {
+    public int insert(User user) {
         // SQL query with placeholders for parameterized input
         String query = "INSERT INTO [dbo].[users]\n"
                 + "           ([first_name]\n"
@@ -68,12 +60,7 @@ public class UserDAO extends DBContext {
                 + "     VALUES\n"
                 + "           (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-        // Convert RegisterUserDto to User entity
-        User user = UserMapper.ConvertRegisterUserToUser(registerUserDto);
         int rowAffected = 0; // Variable to store the number of rows affected
-
-        // Create a PreparedStatement object
-        PreparedStatement ps;
 
         try {
 
@@ -106,7 +93,7 @@ public class UserDAO extends DBContext {
             e.printStackTrace(); // Replace with logger in real application
         }
 
-        return user;
+        return rowAffected;
     }
 
     /**
@@ -123,9 +110,6 @@ public class UserDAO extends DBContext {
                 + "WHERE username = ?";
 
         // Declaration of PreparedStatement and ResultSet
-        PreparedStatement ps;
-        ResultSet rs;
-
         try {
             // Prepare the SQL query for execution
             // The prepareStatement method creates a PreparedStatement object to send
@@ -150,4 +134,80 @@ public class UserDAO extends DBContext {
         // If no result is found, return true indicating the username does not exist
         return true;
     }
+
+    public User findUserByEmailAndPassword(String email, String password) {
+        String query = "SELECT *\n"
+                + "FROM users\n"
+                + "WHERE email = ? AND [password] = ?";
+        User user = null;
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, email);
+            ps.setString(2, password);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                user = new User();
+                user.setUserId(rs.getInt(1));
+                user.setFirstName(rs.getString(2));
+                user.setEmail(rs.getString(3));
+                user.setPhoneNumber(rs.getString(4));
+                user.setGender(rs.getBoolean(5));
+                user.setDob(rs.getDate(6));
+                user.setProfileImg(rs.getString(7));
+                user.setUsername(rs.getString(8));
+                user.setPassword(rs.getString(9));
+                user.setCreatedAt(rs.getDate(10));
+                user.setUpdatedAt(rs.getDate(11));
+                user.setRoleId(rs.getInt(12));
+                user.setStatusID(rs.getInt(13));
+            }
+        } catch (Exception e) {
+        }
+        return user;
+    }
+
+    public User findUserByEmail(String email) {
+        String query = "SELECT *\n"
+                + "FROM users\n"
+                + "WHERE email = ?";
+        User user = null;
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, email);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                user = new User();
+                user.setUserId(rs.getInt(1));
+                user.setFirstName(rs.getString(2));
+                user.setEmail(rs.getString(3));
+                user.setPhoneNumber(rs.getString(4));
+                user.setGender(rs.getBoolean(5));
+                user.setDob(rs.getDate(6));
+                user.setProfileImg(rs.getString(7));
+                user.setUsername(rs.getString(8));
+                user.setPassword(rs.getString(9));
+                user.setCreatedAt(rs.getDate(10));
+                user.setUpdatedAt(rs.getDate(11));
+                user.setRoleId(rs.getInt(12));
+                user.setStatusID(rs.getInt(13));
+            }
+        } catch (Exception e) {
+        }
+        return user;
+    }
+    
+    public int UpdateStatusByEmail(String email) {
+        String query = "UPDATE users\n"
+                + "SET status_id = 2\n"
+                + "WHERE email = ?";
+        int rowAffected = 0;
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, email);
+            rowAffected = ps.executeUpdate();
+        } catch (Exception e) {
+        }
+        return rowAffected;
+    }
+
 }

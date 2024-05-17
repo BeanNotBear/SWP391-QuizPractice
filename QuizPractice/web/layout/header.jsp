@@ -29,7 +29,7 @@
             <p class="role">student</p>
             <a href="profile.html" class="btn">view profile</a>
             <div class="flex-btn">
-                <a href="login.html" class="option-btn">login</a>
+                <a href="/QuizPractice/login" class="option-btn">login</a>
                 <a href="/QuizPractice/register" class="option-btn">register</a>
             </div>
         </div>

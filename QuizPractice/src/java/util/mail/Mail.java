@@ -17,7 +17,7 @@ public class Mail {
     // Password: fqzp yxqg mrrh spxx
 
     private static final String from = "nghinv03@gmail.com";
-    private static final String password = "jqpi dhev mrtr nmha";
+    private static final String password = "qzuw grmn mcko ubzc";
 
     public static boolean sendEmail(String to, String subject, String content) {
         // Properties : declare properties
@@ -129,9 +129,5 @@ public class Mail {
                 + "    </div>\n"
                 + "</body>\n"
                 + "</html>";
-    }
-    
-    public static void main(String[] args) {
-        sendMailVerify("vannghibg03@gmail.com", "9999", "http://localhost:9999/QuizPractice/user/active");
     }
 }
