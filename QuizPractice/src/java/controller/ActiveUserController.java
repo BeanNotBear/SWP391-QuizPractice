@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.User;
 import jakarta.servlet.http.HttpServlet;
+import util.security.CodeVerify;
 
 /**
  *
@@ -19,22 +20,22 @@ public class ActiveUserController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        String email = (String) session.getAttribute("email");
-        String tokenFromServer = (String) session.getAttribute("token");
+
         String token = request.getParameter("token");
 
         UserDAO userDAO = UserDAO.getInstance();
 
-        if (tokenFromServer.equals(token)) {
-            session.removeAttribute("token");
-            User user = userDAO.findUserByEmail(email);
-            userDAO.UpdateStatusByEmail(email);
+        User user = userDAO.findUserByToken(token);
+        
+        if(user != null) {
+            String newToken = CodeVerify.generateVerificationCode();
             session.setAttribute("user", user);
-            request.getRequestDispatcher("home.jsp").forward(request, response);
+            userDAO.UpdateStatusByToken(token);
+            userDAO.UpdateTokenByEmail(newToken, user.getEmail());
+            response.sendRedirect("home");
         } else {
-            request.getRequestDispatcher("active.jsp").forward(request, response);
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
-        request.getRequestDispatcher("home.jsp").forward(request, response);
     }
 
     @Override
