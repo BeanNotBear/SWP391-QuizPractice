@@ -7,14 +7,15 @@ import lombok.NoArgsConstructor;
 
 /**
  * The User class represents a user entity with attributes such as user ID,
- * first name, last name, email, phone number, gender, date of birth,
- * profile image, username, password, creation timestamp, update timestamp,
- * role ID, and status ID.
+ * first name, last name, email, phone number, gender, date of birth, profile
+ * image, username, password, creation timestamp, update timestamp, role ID, and
+ * status ID.
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
+
     // Fields
     private int userId; // Unique identifier for the user
     private String firstName; // User's first name
@@ -30,4 +31,7 @@ public class User {
     private Date updatedAt; // Timestamp of the last update
     private int roleId = 1; // Role ID of the user (default is 1)
     private int statusID = 1; // Status ID of the user (default is 1)
+    private Role role;
+    private UserStatus status;
+
 }

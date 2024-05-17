@@ -12,16 +12,24 @@
         <servlet-name>ActiveUserController</servlet-name>
         <servlet-class>controller.ActiveUserController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>HomeServlet</servlet-name>
+        <servlet-class>controller.HomeServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterController</servlet-name>
         <url-pattern>/register</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>LoginController</servlet-name>
-        <url-pattern>/login</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>ActiveUserController</servlet-name>
         <url-pattern>/active</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HomeServlet</servlet-name>
+        <url-pattern>/home</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoginController</servlet-name>
+        <url-pattern>/login</url-pattern>
     </servlet-mapping>
 </web-app>

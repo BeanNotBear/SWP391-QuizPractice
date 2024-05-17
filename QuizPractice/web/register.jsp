@@ -24,48 +24,50 @@
             <form action="register" method="post">
                 <h3>register now</h3>
                 <p>Enter your first name <span>*</span></p>
-                <input type="text" name="first-name" placeholder="First name" required maxlength="50" class="box">
+                <input type="text" name="first-name" placeholder="First name" required maxlength="50" class="box" value="${requestScope.firstName}">
                 <span class="danger_msg">${requestScope.firstName_err}</span>
 
                 <p>Enter your last name <span>*</span></p>
-                <input type="text" name="last-name" placeholder="Last name" required maxlength="50" class="box">
+                <input type="text" name="last-name" placeholder="Last name" required maxlength="50" class="box" value="${requestScope.lastName}">
                 <span class="danger_msg">${requestScope.lastName_err}</span>
 
                 <p>Enter your email <span>*</span></p>
-                <input type="email" name="email" placeholder="Email" required maxlength="50" class="box">
+                <input type="email" name="email" placeholder="Email" required maxlength="50" class="box" value="${requestScope.email}">
                 <span class="danger_msg">${requestScope.email_err}</span>
-
+                
+                
                 <p>Enter your phone number <span>*</span></p>
-                <input type="text" name="phone" placeholder="Phone number" required maxlength="50" class="box">
+                <input type="text" name="phone" placeholder="Phone number" required maxlength="50" class="box" value="${requestScope.email}">
                 <span class="danger_msg">${requestScope.phone_err}</span>
 
-                <p>Enter your date of birth <span>*</span></p>
-                <input type="date" name="dob" placeholder="Date of birth" required maxlength="50" class="box">
-                <span class="danger_msg">${requestScope.dob_err}</span>
-
-                <p>Gender <span>*</span></p>
-                <select class="box" name="gender">
+                <p>Enter your gender <span>*</span></p>
+                <select id="gender" class="box" name="gender">
                     <option value="true">Male</option>
                     <option value="false">Female</option>
                 </select>
                 <span class="danger_msg">${requestScope.gender_err}</span>
-
+                
+                <p>Enter your dob <span>*</span></p>
+                <input type="date" name="dob" placeholder="DOB" required maxlength="50" class="box" value="${requestScope.email}">
+                <span class="danger_msg">${requestScope.dbo_err}</span>
+                
+                
                 <p>Enter your username <span>*</span></p>
-                <input type="text" name="username" placeholder="Username" required maxlength="20" class="box">
-                <span class="danger_msg">${requestScope.username_err}</span>
+                <input type="text" name="username" placeholder="Username" required maxlength="20" class="box" value="${requestScope.username}">
+                <span class="danger_msg">${requestScope.usernam_err}</span>
 
                 <div class="group-pass">
                     <p>Enter your password <span>*</span></p>
-                    <input id="password" type="password" name="password" placeholder="Password" required maxlength="20" class="box password">
+                    <input id="password" type="password" name="password" placeholder="Password" required maxlength="20" class="box password" value="${requestScope.password}">
                     <span id="show-pass" class="show-password">Show password</span>
-                    <div class="danger_msg">${requestScope.passowrd_err}</div>
+                    <div class="danger_msg">${requestScope.password_err}</div>
                 </div>
 
                 <div class="group-cf-pass">
                     <p>Enter your password again<span>*</span></p>
-                    <input id="cfPasssword" type="password" name="cf-password" placeholder="Confirm password" required maxlength="20" class="box cf-password">
+                    <input id="cfPasssword" type="password" name="cf-password" placeholder="Confirm password" required maxlength="20" class="box cf-password" value="${requestScope.cfPassowrd}">
                     <span id="show-cf-pass" class="show-password">Show password</span>
-                    <div class="danger_msg">${requestScope.cfPassowrd_err}</div>
+                    <div class="danger_msg">${requestScope.cfPassword_err}</div>
                 </div>
                 <input type="submit" value="register new" name="submit" class="btn">
             </form>

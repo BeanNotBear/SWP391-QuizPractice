@@ -1,18 +1,8 @@
 package dal;
 
 import context.DBContext;
-import dto.RegisterUserDto;
-import jakarta.servlet.jsp.jstl.sql.Result;
-import mapper.UserMapper;
 import model.User;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
-/**
- * UserDAO is a Data Access Object (DAO) class that provides methods to interact
- * with the users table in the database. It extends the DBContext to utilize the
- * database connection.
- */
 public class UserDAO extends DBContext {
 
     // Singleton instance of UserDAO
@@ -24,12 +14,6 @@ public class UserDAO extends DBContext {
     private UserDAO() {
     }
 
-    /**
-     * Provides a global point of access to the UserDAO instance. Implements
-     * double-checked locking to ensure thread safety.
-     *
-     * @return the singleton instance of UserDAO
-     */
     public static UserDAO getInstance() {
         if (instance == null) {
             synchronized (lockPad) {
@@ -60,7 +44,7 @@ public class UserDAO extends DBContext {
                 + "     VALUES\n"
                 + "           (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-        int rowAffected = 0; // Variable to store the number of rows affected
+        int rowAffected = 0; // Variable to store the number of rows affecteds
 
         try {
 
@@ -92,46 +76,24 @@ public class UserDAO extends DBContext {
             // Log the exception (if a logging framework is available)
             e.printStackTrace(); // Replace with logger in real application
         }
-
         return rowAffected;
     }
 
-    /**
-     * Checks if a user exists in the database by username.
-     *
-     * @param username the username to check for existence
-     * @return true if the username does not exist in the database, false
-     * otherwise
-     */
-    public boolean checkUserExsitedByUsername(String username) {
-        // SQL query to check for the existence of the username in the database
-        String query = "SELECT username\n"
-                + "FROM [dbo].[users]\n"
-                + "WHERE username = ?";
-
-        // Declaration of PreparedStatement and ResultSet
+    public boolean checkUserExistedByUsernameAndEmail(String username,
+            String email) {
+        String query = "SELECT email, username\n"
+                + "FROM users\n"
+                + "WHERE email = ? AND username = ?";
         try {
-            // Prepare the SQL query for execution
-            // The prepareStatement method creates a PreparedStatement object to send
-            // parameterized SQL statements to the database, preventing SQL injection
             ps = connection.prepareStatement(query);
-
-            // Set the username parameter in the query
-            ps.setString(1, username);
-
-            // Execute the query and get the result set
+            ps.setString(1, email);
+            ps.setString(2, username);
             rs = ps.executeQuery();
-
-            // If there is a result, the username exists, return false
             if (rs.next()) {
                 return false;
             }
         } catch (Exception e) {
-            // Log the exception (if a logging framework is available)
-            e.printStackTrace(); // Replace with logger in real application
         }
-
-        // If no result is found, return true indicating the username does not exist
         return true;
     }
 
@@ -176,26 +138,28 @@ public class UserDAO extends DBContext {
             ps.setString(1, email);
             rs = ps.executeQuery();
             if (rs.next()) {
-                user = new User();
-                user.setUserId(rs.getInt(1));
-                user.setFirstName(rs.getString(2));
-                user.setEmail(rs.getString(3));
-                user.setPhoneNumber(rs.getString(4));
-                user.setGender(rs.getBoolean(5));
-                user.setDob(rs.getDate(6));
-                user.setProfileImg(rs.getString(7));
-                user.setUsername(rs.getString(8));
-                user.setPassword(rs.getString(9));
-                user.setCreatedAt(rs.getDate(10));
-                user.setUpdatedAt(rs.getDate(11));
-                user.setRoleId(rs.getInt(12));
-                user.setStatusID(rs.getInt(13));
+                if (rs.next()) {
+                    user = new User();
+                    user.setUserId(rs.getInt(1));
+                    user.setFirstName(rs.getString(2));
+                    user.setEmail(rs.getString(3));
+                    user.setPhoneNumber(rs.getString(4));
+                    user.setGender(rs.getBoolean(5));
+                    user.setDob(rs.getDate(6));
+                    user.setProfileImg(rs.getString(7));
+                    user.setUsername(rs.getString(8));
+                    user.setPassword(rs.getString(9));
+                    user.setCreatedAt(rs.getDate(10));
+                    user.setUpdatedAt(rs.getDate(11));
+                    user.setRoleId(rs.getInt(12));
+                    user.setStatusID(rs.getInt(13));
+                }
             }
         } catch (Exception e) {
         }
         return user;
     }
-    
+
     public int UpdateStatusByEmail(String email) {
         String query = "UPDATE users\n"
                 + "SET status_id = 2\n"
@@ -209,5 +173,4 @@ public class UserDAO extends DBContext {
         }
         return rowAffected;
     }
-
 }
