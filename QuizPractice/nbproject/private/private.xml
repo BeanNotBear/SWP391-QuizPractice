@@ -2,6 +2,7 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+<<<<<<< HEAD
         <group>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/util/security/Security.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/web/login.jsp</file>
@@ -35,5 +36,8 @@
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/controller/ActiveUserController.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/web/home.jsp</file>
         </group>
+=======
+        <group/>
+>>>>>>> dddfff332fcc0bc907d93167d8db11416eb4d481
     </open-files>
 </project-private>
