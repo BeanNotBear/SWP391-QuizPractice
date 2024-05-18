@@ -1,147 +1,161 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller;
 
+// Import necessary classes
 import dal.UserDAO;
-import dto.RegisterUserDto;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import mapper.UserMapper;
 import model.User;
 import util.mail.Mail;
+import util.security.CodeVerify;
 import util.security.Security;
 import util.validation.Validation;
 
-/**
- *
- * @author nghin
- */
+// Servlet class for handling user registration
 public class RegisterController extends HttpServlet {
 
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    // Handles GET requests
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Forward the request to the register.jsp page
         request.getRequestDispatcher("register.jsp").forward(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    // Handles POST requests
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
+        // Retrieve registration parameters from the request
         String firstName = request.getParameter("first-name");
         String lastName = request.getParameter("last-name");
         String email = request.getParameter("email");
         String gender = request.getParameter("gender");
-        System.out.println(gender);
+        String phone = request.getParameter("phone");
+        String dob = request.getParameter("dob");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String cfPassword = request.getParameter("cf-password");
 
-        boolean isValidInformation = true;
+        boolean isValidInformation = true; // Flag to check if the information is valid
 
+        // Get an instance of UserDAO
         UserDAO userDAO = UserDAO.getInstance();
 
+        // Retrieve the current session
         HttpSession session = request.getSession();
 
+        // Get an instance of Validation
         Validation validation = Validation.getInstance();
 
+        // Validate first name
         if (firstName == null || firstName.isEmpty()) {
             isValidInformation = false;
-            request.setAttribute("firstName_err",
-                    "You must fill first name");
+            request.setAttribute("firstName_err", "You must fill first name");
         }
 
+        // Validate last name
         if (lastName == null || lastName.isEmpty()) {
             isValidInformation = false;
-            request.setAttribute("lastName_err",
-                    "You must fill last name");
+            request.setAttribute("lastName_err", "You must fill last name");
         }
 
+        // Validate email format
         if (!validation.CheckFormatEmail(email)) {
             isValidInformation = false;
-            request.setAttribute("email_err",
-                    "Email is wrong format");
+            request.setAttribute("email_err", "Email is wrong format");
         }
 
+        // Validate gender
         if (gender == null || gender.isEmpty()
-                || (!gender.equals("true")
-                && !gender.equals("false"))) {
+                || (!gender.equals("true") && !gender.equals("false"))) {
             isValidInformation = false;
-            request.setAttribute("gender_err",
-                    "Gender must be male or female");
+            request.setAttribute("gender_err", "Gender must be male or female");
         }
 
+        // Validate phone number format
+        if (!validation.CheckFormatPhone(phone)) {
+            isValidInformation = false;
+            request.setAttribute("phone_err", "Phone is wrong format");
+        }
+
+        // Validate username
         if (username == null || username.isEmpty()) {
             isValidInformation = false;
-            request.setAttribute("username_err",
-                    "You must fill username");
+            request.setAttribute("username_err", "You must fill username");
         }
 
-        if (!userDAO.checkUserExistedByUsernameAndEmail(username, email)) {
+        // Check if the username or email already exists
+        if (userDAO.checkUserExistedByUsernameAndEmail(username, email)) {
             isValidInformation = false;
-            request.setAttribute("usernam_err",
-                    "Usernam has been existed");
+            request.setAttribute("username_err", "Username has been existed");
             request.setAttribute("email_err", "Email has been existed");
         }
 
+        // Validate password format
         if (!validation.CheckFormatPassword(password)) {
             isValidInformation = false;
             request.setAttribute("password_err",
                     "Your input must contain at least one uppercase letter,"
-                            + " one lowercase letter, one digit, "
-                            + "one special character, "
-                            + "and be at least 8 characters long.");
+                    + " one lowercase letter, one digit, "
+                    + "one special character, "
+                    + "and be at least 8 characters long.");
         }
 
+        // Validate if passwords match
         if (!password.equals(cfPassword)) {
             isValidInformation = false;
-            request.setAttribute("cfPassword_err",
-                    "Password and Confirm password do not match");
+            request.setAttribute("cfPassword_err", "Password and Confirm password do not match");
         }
 
+        // If all information is valid
         if (isValidInformation) {
-            RegisterUserDto registerUserDto = new RegisterUserDto();
-            registerUserDto.setFirstName(firstName);
-            registerUserDto.setLastName(lastName);
-            registerUserDto.setEmail(email);
-            registerUserDto.setGender(Boolean.parseBoolean(gender));
-            registerUserDto.setUsername(username);
-            password = Security.encryptToSHA512(password);
-            registerUserDto.setPassword(password);
-            User user = UserMapper.ConvertRegisterUserToUser(registerUserDto);
-            userDAO.insert(user);
-            session.setAttribute("user", user);
-            response.sendRedirect("active");
+            try {
+                // Create a new user object and set its properties
+                User user = new User();
+                user.setFirstName(firstName);
+                user.setLastName(lastName);
+                user.setEmail(email);
+                user.setPhoneNumber(phone);
+                user.setDob(java.sql.Date.valueOf(dob));
+                user.setGender(Boolean.parseBoolean(gender));
+                user.setUsername(username);
+                password = Security.encryptToSHA512(password); // Encrypt the password
+                user.setPassword(password);
+                String token = CodeVerify.generateVerificationCode(); // Generate a verification token
+                user.setToken(token);
+                userDAO.insert(user); // Insert the user into the database
+                
+                // Create an activation link
+                String activeLink = request.getScheme() + "://"
+                        + request.getServerName()
+                        + ":"
+                        + request.getServerPort()
+                        + "/QuizPractice/active";
+                
+                // Send a verification email
+                Mail.sendMailVerify(email, token, activeLink);
+                
+                // Forward the request to the active.jsp page
+                request.getRequestDispatcher("active.jsp").forward(request, response);
+
+            } catch (Exception e) {
+                // Handle exceptions
+                e.printStackTrace();
+            }
         } else {
+            // If the information is not valid, set request attributes and forward back to register.jsp
             request.setAttribute("firstName", firstName);
             request.setAttribute("lastName", lastName);
             request.setAttribute("email", email);
             request.setAttribute("gender", gender);
             request.setAttribute("username", username);
             request.setAttribute("password", password);
-            request.setAttribute("cfPassowrd", cfPassword);
+            request.setAttribute("cfPassword", cfPassword);
             request.getRequestDispatcher("register.jsp").forward(request, response);
         }
     }
@@ -153,7 +167,7 @@ public class RegisterController extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+        return "RegisterController handles user registration and validation.";
+    }
 
 }

@@ -1,89 +1,65 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller;
 
+// Import necessary classes
 import dal.UserDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.User;
-import util.mail.Mail;
+import jakarta.servlet.http.HttpServlet;
 import util.security.CodeVerify;
 
-/**
- *
- * @author nghin
- */
+// Controller class for activating user accounts
 public class ActiveUserController extends HttpServlet {
 
-    private String code;
-
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    // Handles GET requests
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Retrieve the current session
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if(user == null) {
-            response.sendRedirect("login");
-            return;
-        }
-        if(user.getStatusID() == 2) {
+
+        // Get the token parameter from the request
+        String token = request.getParameter("token");
+
+        // Get an instance of UserDAO
+        UserDAO userDAO = UserDAO.getInstance();
+
+        // Find the user by the provided token
+        User user = userDAO.findUserByToken(token);
+        
+        // Check if a user with the given token exists
+        if(user != null) {
+            // Generate a new verification token
+            String newToken = CodeVerify.generateVerificationCode();
+            
+            // Store the user object in the session
+            session.setAttribute("user", user);
+            
+            // Update the user's status in the database using the token
+            userDAO.UpdateStatusByToken(token);
+            
+            // Update the user's token in the database with the new token
+            userDAO.UpdateTokenByEmail(newToken, user.getEmail());
+            
+            // Redirect the user to the home page
             response.sendRedirect("home");
-            return;
+        } else {
+            // If no user is found, send a 404 error response
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
-        code = CodeVerify.generateVerificationCode();
-        if(Mail.sendMailVerify(user.getEmail(), code)){
-            System.out.println("");};
-        request.getRequestDispatcher("active.jsp")
-                .forward(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    // Handles POST requests by forwarding them to the doGet method
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String codeFromInput = request.getParameter("code");
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        UserDAO userDAO = UserDAO.getInstance();
-        
-        if (codeFromInput.equals(code)) {
-            user.setStatusID(2);
-            session.removeAttribute("user");
-            session.setAttribute("user", user);
-            userDAO.UpdateStatusByUsername(user.getUsername());
-            response.sendRedirect("home");
-        } else {
-            request.getRequestDispatcher("active.jsp")
-                    .forward(request, response);
-        }
+        doGet(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
+    // Provides a short description of the servlet
     @Override
     public String getServletInfo() {
         return "Short description";

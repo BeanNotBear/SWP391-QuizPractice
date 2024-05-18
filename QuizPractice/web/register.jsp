@@ -17,7 +17,6 @@
     <body>
         <!-- header -->
         <%@include file="layout/header.jsp"%>  
-
         <!-- sidebar -->
         <%@include file="layout/sidebar.jsp"%>
         <section class="form-container">
@@ -35,6 +34,11 @@
                 <p>Enter your email <span>*</span></p>
                 <input type="email" name="email" placeholder="Email" required maxlength="50" class="box" value="${requestScope.email}">
                 <span class="danger_msg">${requestScope.email_err}</span>
+                
+                
+                <p>Enter your phone number <span>*</span></p>
+                <input type="text" name="phone" placeholder="Phone number" required maxlength="50" class="box" value="${requestScope.email}">
+                <span class="danger_msg">${requestScope.phone_err}</span>
 
                 <p>Enter your gender <span>*</span></p>
                 <select id="gender" class="box" name="gender">
@@ -42,7 +46,12 @@
                     <option value="false">Female</option>
                 </select>
                 <span class="danger_msg">${requestScope.gender_err}</span>
-
+                
+                <p>Enter your dob <span>*</span></p>
+                <input type="date" name="dob" placeholder="DOB" required maxlength="50" class="box" value="${requestScope.email}">
+                <span class="danger_msg">${requestScope.dbo_err}</span>
+                
+                
                 <p>Enter your username <span>*</span></p>
                 <input type="text" name="username" placeholder="Username" required maxlength="20" class="box" value="${requestScope.username}">
                 <span class="danger_msg">${requestScope.usernam_err}</span>
@@ -64,13 +73,9 @@
             </form>
 
         </section>
-
         <!-- footer -->
         <%@include file="layout/footer.jsp"%>
-
         <!-- custom js file link  -->
         <script src="js/script.js"></script>
-
-
     </body>
 </html>

@@ -1,3 +1,8 @@
+
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package util.security;
 
 import java.security.SecureRandom;
@@ -6,7 +11,7 @@ import java.security.SecureRandom;
  *
  * @author nghin
  */
-public class CodeVerify {
+public class CodeVerify2 {
 
     // Define the length of the verification code
     private static final int CODE_LENGTH = 30;
@@ -25,5 +30,11 @@ public class CodeVerify {
             sb.append(ALLOWED_CHARACTERS.charAt(randomIndex));
         }
         return sb.toString();
+    }
+
+    public static String generateVerificationCodeOTP() {
+        int number = RANDOM.nextInt(999999);
+        return String.format("%06d", number);
+
     }
 }

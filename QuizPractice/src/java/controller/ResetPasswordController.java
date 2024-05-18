@@ -8,13 +8,13 @@ import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import util.mail.Mail;
-import util.security.CodeVerify;
+import util.security.CodeVerify2;
+
 
 /**
  *
@@ -81,7 +81,7 @@ public class ResetPasswordController extends HttpServlet {
         String otpvalue = "";
         HttpSession mySession = request.getSession();
         if (userDAO.checkExistEmail(email)) {
-            otpvalue = CodeVerify.generateVerificationCodeOTP();
+            otpvalue = CodeVerify2.generateVerificationCodeOTP();
             if (Mail.sendMailOTP(email, otpvalue)) {
                 request.setAttribute("message", "OTP is sent to your email id");
                 mySession.setAttribute("otp", otpvalue);

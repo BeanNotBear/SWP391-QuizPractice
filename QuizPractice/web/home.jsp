@@ -1,9 +1,3 @@
-<%-- 
-    Document   : home
-    Created on : May 15, 2024, 11:08:26 PM
-    Author     : Acer
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>

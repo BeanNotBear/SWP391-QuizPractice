@@ -22,11 +22,11 @@
 
             <form action="login" method="post">
                 <h3>login now</h3>
-                <span class="danger_msg">${requestScope.login_fail_err}</span>
                 <p>your email <span>*</span></p>
                 <input type="email" name="email" placeholder="enter your email" required maxlength="50" class="box">
                 <p>your password <span>*</span></p>
                 <input type="password" name="password" placeholder="enter your password" required maxlength="50" class="box">
+                <span class="danger_msg">${requestScope.login_fail_err}</span>
                 <input type="submit" value="login new" name="submit" class="btn">
             </form>
         </section>

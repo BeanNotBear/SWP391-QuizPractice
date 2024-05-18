@@ -6,6 +6,8 @@ package dal;
 
 import context.DBContext;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.User;
 
 /**
@@ -46,7 +48,7 @@ public class UserDAO extends DBContext {
         }
         return duplicate;
     }
-    
+
     public boolean updatePassword(String password, String email) {
         String sql = "UPDATE users SET password = ? WHERE email = ?";
         try {
@@ -61,7 +63,7 @@ public class UserDAO extends DBContext {
         }
     }
 
-    public User insert(User user) {
+    public int insert(User user) {
         // SQL query with placeholders for parameterized input
         String query = "INSERT INTO [dbo].[users]\n"
                 + "           ([first_name]\n"
@@ -76,14 +78,14 @@ public class UserDAO extends DBContext {
                 + "           ,[created_at]\n"
                 + "           ,[updated_at]\n"
                 + "           ,[role_id]\n"
-                + "           ,[status_id])\n"
+                + "           ,[status_id]\n"
+                + "           ,[token])\n"
                 + "     VALUES\n"
-                + "           (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + "           (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-        int rowAffected = 0; // Variable to store the number of rows affecteds
+        int rowAffected = 0; // Variable to store the number of rows affected
 
         try {
-
             // Prepare the SQL query for execution
             ps = connection.prepareStatement(query);
 
@@ -105,6 +107,7 @@ public class UserDAO extends DBContext {
             ps.setDate(11, user.getUpdatedAt());
             ps.setInt(12, user.getRoleId());
             ps.setInt(13, user.getStatusID());
+            ps.setString(14, user.getToken());
 
             // Execute the query and get the number of rows affected
             rowAffected = ps.executeUpdate();
@@ -112,11 +115,10 @@ public class UserDAO extends DBContext {
             // Log the exception (if a logging framework is available)
             e.printStackTrace(); // Replace with logger in real application
         }
-        return user;
+        return rowAffected;
     }
 
-    public boolean checkUserExistedByUsernameAndEmail(String username,
-            String email) {
+    public boolean checkUserExistedByUsernameAndEmail(String username, String email) {
         String query = "SELECT email, username\n"
                 + "FROM users\n"
                 + "WHERE email = ? AND username = ?";
@@ -133,14 +135,14 @@ public class UserDAO extends DBContext {
         return true;
     }
 
-    public int UpdateStatusByUsername(String username) {
+    public int UpdateStatusByToken(String token) {
         String query = "UPDATE users\n"
                 + "SET status_id = 2\n"
-                + "WHERE username = ?";
+                + "WHERE token = ?";
         int rowAffected = 0;
         try {
             ps = connection.prepareStatement(query);
-            ps.setString(1, username);
+            ps.setString(1, token);
             rowAffected = ps.executeUpdate();
         } catch (Exception e) {
         }
@@ -161,17 +163,69 @@ public class UserDAO extends DBContext {
                 user = new User();
                 user.setUserId(rs.getInt(1));
                 user.setFirstName(rs.getString(2));
-                user.setEmail(rs.getString(3));
-                user.setPhoneNumber(rs.getString(4));
-                user.setGender(rs.getBoolean(5));
-                user.setDob(rs.getDate(6));
-                user.setProfileImg(rs.getString(7));
-                user.setUsername(rs.getString(8));
-                user.setPassword(rs.getString(9));
-                user.setCreatedAt(rs.getDate(10));
-                user.setUpdatedAt(rs.getDate(11));
-                user.setRoleId(rs.getInt(12));
-                user.setStatusID(rs.getInt(13));
+                user.setLastName(rs.getString(3));
+                user.setEmail(rs.getString(4));
+                user.setPhoneNumber(rs.getString(5));
+                user.setGender(rs.getBoolean(6));
+                user.setDob(rs.getDate(7));
+                user.setProfileImg(rs.getString(8));
+                user.setUsername(rs.getString(9));
+                user.setPassword(rs.getString(10));
+                user.setCreatedAt(rs.getDate(11));
+                user.setUpdatedAt(rs.getDate(12));
+                user.setRoleId(rs.getInt(13));
+                user.setStatusID(rs.getInt(14));
+                user.setToken(rs.getString(15));
+            }
+        } catch (Exception e) {
+        }
+        return user;
+    }
+
+    public int UpdateTokenByEmail(String token, String email) {
+        String query = "UPDATE users\n"
+                + "SET token = ?\n"
+                + "WHERE email = ?";
+        int rowAffected = 0;
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, token);
+            ps.setString(2, email);
+            rowAffected = ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return rowAffected;
+    }
+
+    public User findUserByToken(String token) {
+        String query = "SELECT * \n"
+                + "FROM users\n"
+                + "WHERE token = ?";
+
+        User user = null;
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, token);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                user = new User();
+                user.setUserId(rs.getInt(1));
+                user.setFirstName(rs.getString(2));
+                user.setLastName(rs.getString(3));
+                user.setEmail(rs.getString(4));
+                user.setPhoneNumber(rs.getString(5));
+                user.setGender(rs.getBoolean(6));
+                user.setDob(rs.getDate(7));
+                user.setProfileImg(rs.getString(8));
+                user.setUsername(rs.getString(9));
+                user.setPassword(rs.getString(10));
+                user.setCreatedAt(rs.getDate(11));
+                user.setUpdatedAt(rs.getDate(12));
+                user.setRoleId(rs.getInt(13));
+                user.setStatusID(rs.getInt(14));
+                user.setToken(rs.getString(15));
             }
         } catch (Exception e) {
         }

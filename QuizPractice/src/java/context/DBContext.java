@@ -8,9 +8,11 @@ import java.sql.ResultSet;
 
 
 public class DBContext {
+    
     protected Connection connection;
     protected PreparedStatement ps;
     protected ResultSet rs;
+    
     public DBContext()
     {
         try {
