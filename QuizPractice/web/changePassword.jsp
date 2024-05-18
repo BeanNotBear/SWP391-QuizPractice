@@ -48,8 +48,8 @@
                 <h3>Change Password</h3>
                 <p>Old password <span>*</span></p>
                 <div class="password-container">
-                    <input type="password" id="new_password" name="password" placeholder="Enter your new password" required maxlength="50" class="box">
-                    <i class="fas fa-eye" id="toggleNewPassword" onclick="togglePassword('new_password', 'toggleNewPassword')"></i>
+                    <input type="password" id="password" name="password" placeholder="Enter your new password" required maxlength="50" class="box">
+                    <i class="fas fa-eye" id="togglePassword" onclick="togglePassword('password', 'togglePassword')"></i>
                 </div>
                 <p>New password <span>*</span></p>
                 <div class="password-container">
