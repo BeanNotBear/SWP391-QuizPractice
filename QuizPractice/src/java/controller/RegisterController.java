@@ -90,7 +90,7 @@ public class RegisterController extends HttpServlet {
         }
 
         // Check if the username or email already exists
-        if (userDAO.checkUserExistedByUsernameAndEmail(username, email)) {
+        if (!userDAO.checkUserExistedByUsernameAndEmail(username, email)) {
             isValidInformation = false;
             request.setAttribute("username_err", "Username has been existed");
             request.setAttribute("email_err", "Email has been existed");
