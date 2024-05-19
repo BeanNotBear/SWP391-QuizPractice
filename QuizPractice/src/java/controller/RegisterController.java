@@ -7,7 +7,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import model.User;
 import util.mail.Mail;
 import util.security.CodeVerify;
@@ -45,9 +44,6 @@ public class RegisterController extends HttpServlet {
 
         // Get an instance of UserDAO
         UserDAO userDAO = UserDAO.getInstance();
-
-        // Retrieve the current session
-        HttpSession session = request.getSession();
 
         // Get an instance of Validation
         Validation validation = Validation.getInstance();
@@ -90,7 +86,7 @@ public class RegisterController extends HttpServlet {
         }
 
         // Check if the username or email already exists
-        if (userDAO.checkUserExistedByUsernameAndEmail(username, email)) {
+        if (!userDAO.checkUserExistedByUsernameAndEmail(username, email)) {
             isValidInformation = false;
             request.setAttribute("username_err", "Username has been existed");
             request.setAttribute("email_err", "Email has been existed");
@@ -153,6 +149,8 @@ public class RegisterController extends HttpServlet {
             request.setAttribute("lastName", lastName);
             request.setAttribute("email", email);
             request.setAttribute("gender", gender);
+            request.setAttribute("phone", phone);
+            request.setAttribute("dob", dob);
             request.setAttribute("username", username);
             request.setAttribute("password", password);
             request.setAttribute("cfPassword", cfPassword);
