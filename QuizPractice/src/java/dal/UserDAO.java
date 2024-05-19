@@ -89,7 +89,7 @@ public class UserDAO extends DBContext {
     public boolean checkUserExistedByUsernameAndEmail(String username, String email) {
         String query = "SELECT email, username\n"
                 + "FROM users\n"
-                + "WHERE email = ? AND username = ?";
+                + "WHERE email = ? OR username = ?";
         try {
             ps = connection.prepareStatement(query);
             ps.setString(1, email);
