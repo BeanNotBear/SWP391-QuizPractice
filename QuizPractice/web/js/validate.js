@@ -101,11 +101,3 @@ function checkPasswordAndCfPassword(cfPassword) {
         cfPasswordMsg.innerHTML = "";
     }
 }
-
-function IsAllowSendData(submit) {
-    if(isValidate) {
-        submit.disable = false;
-    } else {
-        submit.disable = true;
-    }
-}
