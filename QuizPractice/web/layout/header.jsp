@@ -1,9 +1,3 @@
-<%-- 
-    Document   : header
-    Created on : May 14, 2024, 12:10:50 PM
-    Author     : nghin
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <header class="header">
 
@@ -20,7 +14,7 @@
             <div id="menu-btn" class="fas fa-bars"></div>
             <div id="search-btn" class="fas fa-search"></div>
             <div id="user-btn" class="fas fa-user"></div>
-            <div id="toggle-btn" class="fas fa-sun"></div>
+            <!--<div id="toggle-btn" class="fas fa-sun"></div>-->
         </div>
 
         <div class="profile">
@@ -29,8 +23,13 @@
             <p class="role">student</p>
             <a href="profile.html" class="btn">view profile</a>
             <div class="flex-btn">
-                <a href="/QuizPractice/login" class="option-btn">login</a>
-                <a href="/QuizPractice/register" class="option-btn">register</a>
+                <c:if test="${sessionScope.user == null}">
+                    <a href="/QuizPractice/login" class="option-btn">login</a>
+                    <a href="/QuizPractice/register" class="option-btn">register</a>
+                </c:if>
+                <c:if test="${sessionScope.user != null}">
+                    <a href="/QuizPractice/logout" class="option-btn">Log Out</a>
+                </c:if>
             </div>
         </div>
 
