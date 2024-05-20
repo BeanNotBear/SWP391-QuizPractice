@@ -71,13 +71,13 @@ const password = document.querySelector("#password");
 const cfPassword = document.querySelector("#cfPasssword");
 
 showPassword.addEventListener("click", function () {
-    this.classList.toggle("fa-eye-slash");
+    this.innerHTML = this.innerHTML === "Show password" ? "Hide password" : "Show password";
     const type = password.getAttribute("type") === "password" ? "text" : "password";
     password.setAttribute("type", type);
 });
 
 showCfPassword.addEventListener("click", function () {
-    this.classList.toggle("fa-eye-slash");
+    this.innerHTML = this.innerHTML === "Show password" ? "Hide password" : "Show password";
     const type = cfPassword.getAttribute("type") === "password" ? "text" : "password";
     cfPassword.setAttribute("type", type);
 });

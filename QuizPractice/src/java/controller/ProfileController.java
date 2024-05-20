@@ -4,23 +4,18 @@
  */
 package controller;
 
-import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import model.User;
-import util.security.Security;
-import util.validation.Validation;
 
 /**
  *
  * @author Acer
  */
-public class ChangePasswordController extends HttpServlet {
+public class ProfileController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +34,10 @@ public class ChangePasswordController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ChangePasswordController</title>");
+            out.println("<title>Servlet ProfileController</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ChangePasswordController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ProfileController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,7 +55,7 @@ public class ChangePasswordController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("changePassword.jsp").forward(request, response);
+        request.getRequestDispatcher("profile.jsp").forward(request, response);
     }
 
     /**
@@ -74,30 +69,7 @@ public class ChangePasswordController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-
-        String oldPassword = request.getParameter("password");
-        String newPassword = request.getParameter("newPassword");
-        String confirmPassword = request.getParameter("confirmPassword");
-        
-        UserDAO userDAO = UserDAO.getInstance();
-        
-        User user = (User) session.getAttribute("user");
-
-        Validation validation = Validation.getInstance();
-
-        if (Security.encryptToSHA512(oldPassword).equals(user.getPassword()) && oldPassword != null && newPassword != null && confirmPassword != null && newPassword.equals(confirmPassword) && validation.CheckFormatPassword(newPassword)) {
-            if (userDAO.updatePassword(newPassword, user.getEmail())) {
-                request.setAttribute("status", "Change password successfully");
-                request.getRequestDispatcher("home.jsp").forward(request, response);
-            } else {
-                request.setAttribute("status", "Change password fail");
-                request.getRequestDispatcher("changePassword.jsp").forward(request, response);
-            }
-        } else {
-            request.setAttribute("status", "Please confirm password again!");
-            request.getRequestDispatcher("changePassword.jsp").forward(request, response);
-        }
+        processRequest(request, response);
     }
 
     /**

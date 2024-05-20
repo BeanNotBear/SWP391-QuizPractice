@@ -31,9 +31,9 @@
 
         <div class="profile">
             <img src="images/pic-1.jpg" class="image" alt="">
-            <h3 class="name">shaikh anas</h3>
+            <h3 class="name">${user.username}</h3>
             <p class="role">student</p>
-            <a href="profile.html" class="btn">view profile</a>
+            <a href="profile" class="btn">view profile</a>
             <div class="flex-btn">
                 <a href="login" class="option-btn">login</a>
                 <a href="/QuizPractice/register" class="option-btn">register</a>

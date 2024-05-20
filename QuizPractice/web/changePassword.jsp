@@ -44,7 +44,7 @@
         <%@include file="layout/header.jsp" %>
         <%@include file="layout/sidebar.jsp" %>
         <section class="form-container">
-            <form action="change_password" method="post">
+            <form action="change-password" method="post">
                 <h3>Change Password</h3>
                 <p>Old password <span>*</span></p>
                 <div class="password-container">
