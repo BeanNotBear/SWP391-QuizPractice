@@ -39,31 +39,49 @@
                         <div class="card">
                             <div class="card-body">
                                 <div id="general" class="content">
-                                    <form>
+                                    <form action="profile" method="post">
                                         <div class="form-group">
-                                            <label for="username">Username</label>
-                                            <input type="text" class="form-control" id="username" value="nmaxwell">
+                                            <label for="username">First Name:</label>
+                                            <input type="text" class="form-control" id="first-name" value="${user.firstName}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="name">Name</label>
-                                            <input type="text" class="form-control" id="name" value="Nelle Maxwell">
+                                            <label for="name">Last Name:</label>
+                                            <input type="text" class="form-control" id="last-name" value="${user.lastName}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="email">E-mail</label>
-                                            <input type="email" class="form-control" id="email" value="nmaxwell@mail.com">
-                                            <small class="form-text text-danger">Your email is not confirmed. Please check your inbox.</small>
-                                            <a href="#" class="form-text">Resend confirmation</a>
+                                            <label for="email">Email:</label>
+                                            <input type="email" class="form-control" id="email" value="${user.email}" readonly>
                                         </div>
                                         <div class="form-group">
-                                            <label for="company">Company</label>
-                                            <input type="text" class="form-control" id="company" value="Company Ltd.">
+                                            <label for="company">Phone Number:</label>
+                                            <input type="text" class="form-control" id="phone-number" value="${user.phoneNumber}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="company">Gender:</label>
+                                            <input type="text" class="form-control" id="gender" value="${user.gender}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="company">Date of birth:</label>
+                                            <input type="text" class="form-control" id="dob" value="${user.dob}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="company">Username:</label>
+                                            <input type="text" class="form-control" id="username" value="${user.username}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="company">Created At:</label>
+                                            <input type="text" class="form-control" id="created-at" value="${user.createdAt}" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="company">Updated At:</label>
+                                            <input type="text" class="form-control" id="company" value="${user.updatedAt}" readonly>
                                         </div>
                                         <button type="submit" class="btn btn-primary">Save changes</button>
                                         <button type="reset" class="btn btn-secondary">Cancel</button>
                                     </form>
                                 </div>
                                 <div id="change-password" class="content d-none">
-                                    <form>
+                                    <form action="change-password" method="post">
                                         <div class="form-group">
                                             <label for="current-password">Current password</label>
                                             <input type="password" class="form-control" id="current-password">

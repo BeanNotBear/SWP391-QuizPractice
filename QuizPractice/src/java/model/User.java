@@ -23,7 +23,7 @@ public class User {
     private String username; // User's chosen username
     private String password; // User's password
     private Date createdAt = new Date(System.currentTimeMillis()); // Timestamp of when the user was created
-    private Date updatedAt; // Timestamp of the last update
+    private Date updatedAt = new Date(System.currentTimeMillis()); // Timestamp of the last update
     private int roleId = 1; // Role ID of the user (default is 1)
     private int statusID = 1; // Status ID of the user (default is 1)
     private String token;

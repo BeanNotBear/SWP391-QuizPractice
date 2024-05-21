@@ -4,12 +4,15 @@
  */
 package controller;
 
+import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import model.User;
 
 /**
  *
@@ -69,7 +72,20 @@ public class ProfileController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+         HttpSession session = request.getSession();
+
+        String firstName = request.getParameter("first-name");
+        String lastName = request.getParameter("last-name");
+        String phoneNumber = request.getParameter("phone-number");
+        String gender = request.getParameter("gender");
+        String dob = request.getParameter("dob");
+        String username = request.getParameter("username");
+        
+        UserDAO userDAO = UserDAO.getInstance();
+        
+        User user = (User) session.getAttribute("user");
+        
+        
     }
 
     /**
