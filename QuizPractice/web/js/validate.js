@@ -1,4 +1,4 @@
-var isValidate = true;
+var isValidate = false;
 
 function validateFirstName (fName) {
     let firstName = document.querySelector("#firstName");
@@ -99,5 +99,13 @@ function checkPasswordAndCfPassword(cfPassword) {
     } else {
         isValidate = true;
         cfPasswordMsg.innerHTML = "";
+    }
+}
+
+function isAllowSendData(submit) {
+    if(!isValidate) {
+        submit.disable = true;
+    } else {
+        submit.disable = false;
     }
 }
