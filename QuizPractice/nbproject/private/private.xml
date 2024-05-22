@@ -5,47 +5,60 @@
         <group>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/util/security/Security.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/web/login.jsp</file>
-            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/controller/UpdateProfileController.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/mapper/UserMapper.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/context/DBContext.java</file>
-            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/dto/RegisterUserDto.java</file>
-            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/resource/Resource.properties</file>
-            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/dto/ResetPasswordDTO.java</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/web/layout/sidebarright.jsp</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/exception/InvalidPhoneNumberFormatException.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/web/WEB-INF/web.xml</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/exception/InvalidEmailFormatException.java</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/web/blogdetail.jsp</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/controller/ValidateOTPController.java</file>
-            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/controller/ChangePasswordController.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/web/register.jsp</file>
-            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/util/security/CodeVerify.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/exception/InvalidPasswordFormatException.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/web/js/script.js</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/web/layout/header.jsp</file>
-            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/controller/LoginController.java</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/web/subject.jsp</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/dal/SubjectDAO.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/util/validation/Validation.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/controller/RegisterController.java</file>
-            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/model/UserStatus.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/web/active.jsp</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/controller/SubjectController.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/util/mail/Mail.java</file>
-            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/model/Role.java</file>
-            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/controller/ProfileController.java</file>
-            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/web/js/validate.js</file>
-            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/filter/AuthBlock.java</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/controller/CategoryController.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/filter/BlockAccessJSPFilter.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/web/profile.jsp</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/dal/UserDAO.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/controller/HomeController.java</file>
-            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/web/resetPassword.jsp</file>
-            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/controller/ResetPasswordController.java</file>
-            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/web/css/style.css</file>
-            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/model/User.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/controller/NewPasswordController.java</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/model/Blogs.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/dto/LoginDTO.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/util/security/CodeVerify2.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/web/profile.html</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/web/blogslist.jsp</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/web/home.jsp</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/controller/UpdateProfileController.java</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/filter/AuthenticationFilter.java</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/dto/RegisterUserDto.java</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/resource/Resource.properties</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/controller/BlogListController.java</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/dto/ResetPasswordDTO.java</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/controller/ChangePasswordController.java</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/util/security/CodeVerify.java</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/controller/LoginController.java</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/model/UserStatus.java</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/model/Category.java</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/web/layout/sidebar.jsp</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/model/Role.java</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/controller/ProfileController.java</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/web/js/validate.js</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/filter/AuthBlock.java</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/web/resetPassword.jsp</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/controller/ResetPasswordController.java</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/web/css/style.css</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/model/Subject.java</file>
+            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/model/User.java</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/web/changePassword.jsp</file>
             <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/src/java/controller/ActiveUserController.java</file>
-            <file>file:/C:/Users/Acer/OneDrive/Máy%20tính/SE05.5/SWP391/SWP391_G6/QuizPractice/web/home.jsp</file>
         </group>
     </open-files>
 </project-private>

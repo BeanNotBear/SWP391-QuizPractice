@@ -22,6 +22,8 @@
     text-decoration: none;
 }
 
+
+
 *::selection{
     background-color: var(--main-color);
     color:#fff;
@@ -260,6 +262,200 @@ section{
     z-index: 1200;
 }
 
+
+.side-barright {
+    position:fixed ;
+    top: 78px; /* Adjust the top position as needed */
+    right: 0px; /* Initially hide the sidebarright */
+    width: 157px; /* Adjust the width as needed */
+    background-color: #f9f9f7;
+    height: 200vh;
+    border-right: 1px solid #ddd; /* Example border styling */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Example box shadow */
+    z-index: 1000;
+    padding: 20px;
+    transition: right 0.3s; /* Add transition effect for smooth animation */
+    
+}
+
+.side-barright.active {
+    right: 0; /* Show the sidebarright when active */
+}
+
+
+
+
+
+.search-input {
+    width: calc(100% - 600px); /* Adjust input width */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+
+
+.category-container {
+    margin-top: 20px;
+}
+
+.category-label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.category-select {
+    width: 10%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+
+a.activee{
+    color: green;
+    font-weight: bold;
+    
+}
+#pagee{
+    font-size: 30px;
+    margin-left: 30px;
+   
+    
+}
+.heading-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.heading-container .heading {
+    margin: 0;
+}
+
+.category-container {
+    display: flex;
+    align-items: center;
+}
+
+.category-container label {
+    margin-right: 10px;
+    font-size: 25px; /* Increase font size */
+    font-weight: bold; /* Make the label bold */
+}
+
+.category-container select {
+    padding: 10px 20px; /* Increase padding */
+    font-size: 1.4em; /* Increase font size */
+    border: 2px solid #ccc; /* Increase border width */
+    border-radius: 10px; /* Round the corners */
+    background-color: #f9f9f9; /* Light background color */
+    transition: border-color 0.3s, background-color 0.3s; /* Smooth transitions */
+}
+
+.category-container select:focus {
+    border-color: #007BFF; /* Change border color on focus */
+    background-color: #fff; /* Change background color on focus */
+}
+
+.box-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.box {
+    flex: 1 1 calc(33.333% - 20px);
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.box img {
+    width: 100%;
+    height: auto;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
+}
+
+.box .student {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.box .student h3 {
+    margin: 0;
+    font-size: 1.1em;
+}
+
+.box .student .stars p {
+    margin: 5px 0;
+}
+
+.box .student button a {
+    text-decoration: none;
+    color: white;
+    background-color: #007BFF;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.box .student button a:hover {
+    background-color: #0056b3;
+}
+
+
+#sea{
+    width: 120px;
+    height: 55px;
+    border-radius:  10px ;
+    background-color: honeydew;
+}
+#seb{
+    height: 50px ;
+    width: 50px;
+    border-radius: 80px;
+    color: #218838;
+    background-color: #ddd;
+    margin-top: 10px;
+}
+#hot{
+    margin-bottom: 30px;
+    font-size: 18px;
+    background-color: bisque;
+}
+
+#ima{
+    style: " width: 325px;height: 220px;"
+}
+
+
+.catepost{
+    font-size: 18px;
+    list-style: initial;
+    text-align: center;
+
+}
+.catepost.selected a {
+    color: red; 
+    font-weight: bolder; 
+}
+.choose{
+    color: #c82333;
+    font-weight: 700;
+}
+
+
+/* Add additional styling as needed */
+.side-bar {
+    display: block;
+    /* or visibility: hidden; if you want to keep the space */
+    /* any other styling for the sidebar */
+}
 .side-bar #close-btn{
     text-align: right;
     padding: 2rem;
@@ -335,14 +531,16 @@ section{
 
 .side-bar.active{
     left: -30rem;
+    
 }
+
 
 .home-grid .box-container{
     display: grid;
     grid-template-columns: repeat(auto-fit, 27.5rem);
     gap:1.5rem;
     justify-content: center;
-    align-items: flex-end;
+    align-items: flex-start;
 }
 
 .home-grid .box-container .box{
@@ -1342,6 +1540,7 @@ section{
     color:var(--black);
     margin-top: 1rem;
     z-index: 1000;
+    /* padding-bottom: 9.5rem; */
 }
 
 .footer span{
