@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 var isValidate = false;
+=======
+var isValidate = true;
+>>>>>>> NghiNV-HE176303
 
 function validateFirstName (fName) {
     let firstName = document.querySelector("#firstName");
@@ -101,6 +105,7 @@ function checkPasswordAndCfPassword(cfPassword) {
         cfPasswordMsg.innerHTML = "";
     }
 }
+<<<<<<< HEAD
 
 function isAllowSendData(submit) {
     if(!isValidate) {
@@ -109,3 +114,5 @@ function isAllowSendData(submit) {
         submit.disable = false;
     }
 }
+=======
+>>>>>>> NghiNV-HE176303

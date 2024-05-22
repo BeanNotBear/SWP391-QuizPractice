@@ -69,7 +69,11 @@
                     <span id="show-cf-pass" class="show-password">Show password</span>
                     <div id="cfPassowrdMsg" class="danger_msg">${requestScope.cfPassword_err}</div>
                 </div>
+<<<<<<< HEAD
                 <input onmouseover="isAllowSendData(this)" type="submit" value="register new" name="submit" class="btn">
+=======
+                <input onmouseover="IsAllowSendData(this)" type="submit" value="register new" name="submit" class="btn">
+>>>>>>> NghiNV-HE176303
             </form>
 
         </section>

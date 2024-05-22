@@ -3,9 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/web/js/script.js</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/filter/AuthBlockFilter.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/web/layout/footer.jsp</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/web/layout/header.jsp</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/controller/HomeController.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/web/layout/sidebar.jsp</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/filter/AuthenticationFilter.java</file>
             <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/controller/LogoutController.java</file>
-            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/web/js/validate.js</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/web/home.jsp</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/controller/RegisterController.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/web/WEB-INF/web.xml</file>
         </group>
     </open-files>
 </project-private>
