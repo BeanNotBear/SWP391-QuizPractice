@@ -1,5 +1,3 @@
-var isValidate = true;
-
 function validateFirstName (fName) {
     let firstName = document.querySelector("#firstName");
     if(fName.value === "") {
