@@ -22,7 +22,7 @@ import model.User;
  *
  * @author nghin
  */
-public class AuthBlock implements Filter {
+public class AuthBlockFilter implements Filter {
 
     private static final boolean debug = true;
 
@@ -31,7 +31,7 @@ public class AuthBlock implements Filter {
     // configured. 
     private FilterConfig filterConfig = null;
 
-    public AuthBlock() {
+    public AuthBlockFilter() {
     }
 
     /**
