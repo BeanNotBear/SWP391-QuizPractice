@@ -1,8 +1,12 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 var isValidate = false;
 =======
 var isValidate = true;
 >>>>>>> NghiNV-HE176303
+=======
+var isValidate = false;
+>>>>>>> AnNT-HE173516
 
 function validateFirstName (fName) {
     let firstName = document.querySelector("#firstName");
@@ -106,6 +110,9 @@ function checkPasswordAndCfPassword(cfPassword) {
     }
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> AnNT-HE173516
 
 function isAllowSendData(submit) {
     if(!isValidate) {
@@ -114,5 +121,8 @@ function isAllowSendData(submit) {
         submit.disable = false;
     }
 }
+<<<<<<< HEAD
 =======
 >>>>>>> NghiNV-HE176303
+=======
+>>>>>>> AnNT-HE173516

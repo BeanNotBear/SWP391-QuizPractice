@@ -70,10 +70,14 @@
                     <div id="cfPassowrdMsg" class="danger_msg">${requestScope.cfPassword_err}</div>
                 </div>
 <<<<<<< HEAD
+<<<<<<< HEAD
                 <input onmouseover="isAllowSendData(this)" type="submit" value="register new" name="submit" class="btn">
 =======
                 <input onmouseover="IsAllowSendData(this)" type="submit" value="register new" name="submit" class="btn">
 >>>>>>> NghiNV-HE176303
+=======
+                <input onmouseover="isAllowSendData(this)" type="submit" value="register new" name="submit" class="btn">
+>>>>>>> AnNT-HE173516
             </form>
 
         </section>

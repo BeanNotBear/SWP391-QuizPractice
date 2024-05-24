@@ -4,7 +4,6 @@
     <div id="close-btn">
         <i class="fas fa-times"></i>
     </div>
-
     <c:if test="${sessionScope.user != null}">
         <div class="profile">
             <img src="images/pic-1.jpg" class="image" alt="">

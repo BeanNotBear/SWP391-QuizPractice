@@ -75,4 +75,37 @@ public class Mail {
                 + "</html>";
     }
 
+    public static boolean sendMailOTP(String to, String code) {
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com"); // SMTP HOST
+        props.put("mail.smtp.port", "587"); // TLS 587 SSL 465
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+
+        // Create a session with authentication
+        Session session = Session.getInstance(props, new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(from, password);
+            }
+        });
+
+        try {
+            // Create a message
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(from));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+            message.setSubject("Your OTP Code");
+
+            // Email content
+            message.setText("Your OTP code is: " + code);
+
+            // Send the message
+            Transport.send(message);
+            return true; // Email sent successfully
+        } catch (MessagingException e) {
+            e.printStackTrace(); // Replace with proper logging
+            return false; // Failed to send email
+        }
+    }
+
 }
