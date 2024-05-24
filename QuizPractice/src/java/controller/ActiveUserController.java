@@ -4,6 +4,7 @@ package controller;
 import dal.UserDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -12,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import util.security.CodeVerify;
 
 // Controller class for activating user accounts
+@WebServlet("/active")
 public class ActiveUserController extends HttpServlet {
 
     // Handles GET requests

@@ -3,11 +3,13 @@ package controller;
 // Import necessary classes
 import java.io.IOException;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 // Servlet class for handling requests to the home page
+@WebServlet("/home")
 public class HomeController extends HttpServlet {
 
     // Handles GET requests
