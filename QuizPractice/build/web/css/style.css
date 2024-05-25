@@ -403,7 +403,6 @@ a.activee{
     background-color: #0056b3;
 }
 
-
 #sea{
     width: 120px;
     height: 55px;
@@ -1183,6 +1182,10 @@ a.activee{
     height: 1.2rem;
     width: 2rem;
     clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+.thumbnail {
+    width: 100px;
 }
 
 .teachers .search-tutor{
