@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import model.Subject;
 
 @WebServlet("/subject/details")
-public class SubjectDetails extends HttpServlet {
+public class SubjectDetailsController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
