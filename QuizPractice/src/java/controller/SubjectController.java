@@ -36,13 +36,13 @@ public class SubjectController extends HttpServlet {
         request.setAttribute("totalPages", listSubject.size() % pageSize == 0 ? (listSubject.size() / pageSize) : (listSubject.size() / pageSize + 1));
         request.setAttribute("currentPage", page);
         request.setAttribute("searchParam", searchParam);
-        request.getRequestDispatcher("subject.jsp").forward(request, response);
+        request.getRequestDispatcher("subject/subject.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        doGet(request, response);
     }
 
 }

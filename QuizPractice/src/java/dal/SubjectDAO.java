@@ -14,13 +14,14 @@ import model.User;
 // Data Access Object for User operations, extending DBContext to utilize database connections
 public class SubjectDAO extends DBContext {
 
-     // Singleton instance of UserDAO
+    // Singleton instance of UserDAO
     private static SubjectDAO instance;
     // Lock object for thread-safe singleton instantiation
     private static Object lockPad = new Object();
 
     // Private constructor to prevent instantiation
-    private SubjectDAO() {}
+    private SubjectDAO() {
+    }
 
     // Returns the singleton instance of UserDAO
     public static SubjectDAO getInstance() {
@@ -33,7 +34,7 @@ public class SubjectDAO extends DBContext {
         }
         return instance;
     }
-    
+
     public List<Subject> allSubjectsWithConditions(String searchParam) {
         List<Subject> subjects = new ArrayList<>();
         List<Object> list = new ArrayList<>();
@@ -57,20 +58,20 @@ public class SubjectDAO extends DBContext {
             ResultSet resultSet = statement.executeQuery();
             // Iterate over the result set
             while (resultSet.next()) {
-                    // Retrieve subject details from each row
-                    Subject subject = new Subject();
-                    subject.setId(resultSet.getInt("id"));
-                    subject.setName(resultSet.getString("name"));
-                    User creator = userDAO.findUserById(resultSet.getInt("creator_id"));
-                    subject.setCreator(creator);
-                    subject.setCreate_at(resultSet.getDate("creater_at"));
-                    subject.setUpdate_at(resultSet.getDate("update_at"));
-                    subject.setStatus(resultSet.getInt("status"));
-                    subject.setImg(resultSet.getString("img"));
-                    // count lesson to add to list subject return by search
-                    subject.setNumberOfLesson(countLessonsBySubjectId(resultSet.getInt("id")));
-                    // Add the subject to the list
-                    subjects.add(subject);
+                // Retrieve subject details from each row
+                Subject subject = new Subject();
+                subject.setId(resultSet.getInt("id"));
+                subject.setName(resultSet.getString("name"));
+                User creator = userDAO.findUserById(resultSet.getInt("creator_id"));
+                subject.setCreator(creator);
+                subject.setCreate_at(resultSet.getDate("creater_at"));
+                subject.setUpdate_at(resultSet.getDate("update_at"));
+                subject.setStatus(resultSet.getInt("status"));
+                subject.setImg(resultSet.getString("img"));
+                // count lesson to add to list subject return by search
+                subject.setNumberOfLesson(countLessonsBySubjectId(resultSet.getInt("id")));
+                // Add the subject to the list
+                subjects.add(subject);
             }
             // Close the resources
             resultSet.close();
@@ -130,6 +131,7 @@ public class SubjectDAO extends DBContext {
             }
         }
     }
+
     // phân trang để hiển thị page
     public List<Subject> Paging(List<Subject> subject, int page, int pageSize) {
         // Tính toán chỉ số bắt đầu của danh sách con cho trang hiện tại
@@ -149,6 +151,41 @@ public class SubjectDAO extends DBContext {
         // Trả về danh sách con cho trang cụ thể
         // Điều này sẽ trả về danh sách trống nếu fromIndex bằng với toIndex
         return subject.subList(fromIndex, toIndex);
+    }
+
+    public Subject findSubjectById(int id) {
+        String query = "SELECT [id]\n"
+                + ",[name]\n"
+                + ",[creator_id]\n"
+                + ",[creater_at]\n"
+                + ",[update_at]\n"
+                + ",[status]\n"
+                + ",[img]\n"
+                + "FROM [SWP391_G6].[dbo].[subjects]\n"
+                + "WHERE [id] = ?";
+        Subject subject = null;
+        UserDAO userDAO = UserDAO.getInstance();
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            if (rs.next()) {                
+                subject = new Subject();
+                subject.setId(rs.getInt("id"));
+                subject.setName(rs.getString("name"));
+                User creator = userDAO.findUserById(rs.getInt("creator_id"));
+                subject.setCreator(creator);
+                subject.setCreate_at(rs.getDate("creater_at"));
+                subject.setUpdate_at(rs.getDate("update_at"));
+                subject.setStatus(rs.getInt("status"));
+                subject.setImg(rs.getString("img"));
+                // count lesson to add to list subject return by search
+                subject.setNumberOfLesson(countLessonsBySubjectId(rs.getInt("id")));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return subject;
     }
 
     public static void main(String[] args) {

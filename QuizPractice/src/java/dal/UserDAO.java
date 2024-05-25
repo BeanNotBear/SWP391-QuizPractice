@@ -57,8 +57,8 @@ public class UserDAO extends DBContext {
     }
     
     public User findUserById(int id) {
-        String query = "SELECT *"
-                + "FROM users"
+        String query = "SELECT * "
+                + "FROM users "
                 + "WHERE id = ?";
         User user = null;
         try {
@@ -343,7 +343,7 @@ public class UserDAO extends DBContext {
                 String category = rs.getString(10);
 
                 Category cat = new Category(category);
-                Blogs blog = new Blogs(blogId, blogTitle, authorId, createdDate, updatedDate, content, status, thumbnail, briefInfo, cat);
+//                Blogs blog = new Blogs(blogId, blogTitle, authorId, createdDate, updatedDate, content, status, thumbnail, briefInfo, cat);
                 listPage.add(blog);
             }
         } catch (SQLException ex) {

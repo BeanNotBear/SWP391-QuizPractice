@@ -4,21 +4,17 @@
  */
 package controller;
 
-import dal.UserDAO;
+import dal.SubjectDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import util.mail.Mail;
-import util.security.CodeVerify2;
+import model.Subject;
 
-
-@WebServlet("/resetpassword")
-public class ResetPasswordController extends HttpServlet {
+@WebServlet("/subject/details")
+public class SubjectDetails extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,18 +27,22 @@ public class ResetPasswordController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ResetPasswordController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ResetPasswordController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        String subjectId = request.getParameter("id");
+        int subId;
+        System.out.println(subjectId);
+        SubjectDAO subjectDAO = SubjectDAO.getInstance();
+        Subject subject = null;
+        try {
+            subId = Integer.parseInt(subjectId);
+            subject = subjectDAO.findSubjectById(subId);
+            if(subject != null) {
+                request.setAttribute("subject", subject);
+                request.getRequestDispatcher("playlist.jsp").forward(request, response);
+            } else {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
         }
     }
 
@@ -58,7 +58,7 @@ public class ResetPasswordController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("forgotPassword.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -70,30 +70,9 @@ public class ResetPasswordController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    @SuppressWarnings("all")
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String email = request.getParameter("email");
-        
-        UserDAO userDAO = UserDAO.getInstance();
-          
-        String otpvalue = "";
-        HttpSession mySession = request.getSession();
-        if (userDAO.checkExistEmail(email)) {
-            otpvalue = CodeVerify2.generateVerificationCodeOTP();
-            if (Mail.sendMailOTP(email, otpvalue)) {
-                request.setAttribute("message", "OTP is sent to your email id");
-                mySession.setAttribute("otp", otpvalue);
-                mySession.setAttribute("email", email);
-                request.getRequestDispatcher("enterOTP.jsp").forward(request, response);
-            } else {
-                request.setAttribute("message", "Error email sending!");
-                request.getRequestDispatcher("forgotPassword.jsp").forward(request, response);
-            }
-        } else {
-            request.setAttribute("message", "Email doesn't exist!");
-            request.getRequestDispatcher("forgotPassword.jsp").forward(request, response);
-        }
+        processRequest(request, response);
     }
 
     /**

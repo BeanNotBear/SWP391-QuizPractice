@@ -30,12 +30,10 @@
                 <input type="submit" value="login new" name="submit" class="btn">
             </form>
         </section>
-
+       
         <%@include file="layout/footer.jsp" %>
 
         <!-- custom js file link  -->
         <script src="js/script.js"></script>
-
-
     </body>
 </html>
