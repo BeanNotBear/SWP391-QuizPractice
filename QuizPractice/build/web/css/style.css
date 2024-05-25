@@ -274,7 +274,7 @@ section{
     z-index: 1000;
     padding: 20px;
     transition: right 0.3s; /* Add transition effect for smooth animation */
-    
+
 }
 
 .side-barright.active {
@@ -311,14 +311,29 @@ section{
 a.activee{
     color: green;
     font-weight: bold;
-    
+
 }
 #pagee{
     font-size: 30px;
     margin-left: 30px;
-   
-    
 }
+
+
+.pagination {
+    justify-content: center; /* Căn giữa các nút phân trang */
+    text-align: center;
+}
+
+.page-item .page-link {
+    font-size: 1.25rem; /* Tăng kích thước chữ của các nút phân trang */
+    padding: 0.75rem 1.25rem; /* Tăng kích thước padding của các nút phân trang */
+}
+
+.page-item.active .page-link {
+    background-color: #007bff; /* Màu nền cho nút đang hoạt động */
+    border-color: #007bff; /* Màu viền cho nút đang hoạt động */
+}
+
 .heading-container {
     display: flex;
     justify-content: space-between;
@@ -435,8 +450,8 @@ a.activee{
 
 }
 .catepost.selected a {
-    color: red; 
-    font-weight: bolder; 
+    color: red;
+    font-weight: bolder;
 }
 .choose{
     color: #c82333;
