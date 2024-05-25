@@ -22,12 +22,12 @@ public class SubjectController extends HttpServlet {
         String pageParam = request.getParameter("page");
         String searchParam = request.getParameter("search");
         int page = 1; // Default to the first page
-        int pageSize = 5; // Set the desired page size
+        int pageSize = 6; // Set the desired page size
         if (pageParam != null && !pageParam.isEmpty()) {
             // Parse the page parameter to an integer
             page = Integer.parseInt(pageParam);
         }
-        SubjectDAO subjectDAO = new SubjectDAO();
+        SubjectDAO subjectDAO = SubjectDAO.getInstance();
 
         List<Subject> listSubject = subjectDAO.allSubjectsWithConditions(searchParam);
         System.out.println(listSubject.size());
