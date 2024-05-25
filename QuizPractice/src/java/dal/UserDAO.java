@@ -54,6 +54,38 @@ public class UserDAO extends DBContext {
         }
         return duplicate;
     }
+    
+    public User findUserById(int id) {
+        String query = "SELECT *\n"
+                + "FROM users\n"
+                + "WHERE id = ?";
+        User user = null;
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                user = new User();
+                user.setUserId(rs.getInt(1));
+                user.setFirstName(rs.getString(2));
+                user.setLastName(rs.getString(3));
+                user.setEmail(rs.getString(4));
+                user.setPhoneNumber(rs.getString(5));
+                user.setGender(rs.getBoolean(6));
+                user.setDob(rs.getDate(7));
+                user.setProfileImg(rs.getString(8));
+                user.setUsername(rs.getString(9));
+                user.setPassword(rs.getString(10));
+                user.setCreatedAt(rs.getDate(11));
+                user.setUpdatedAt(rs.getDate(12));
+                user.setRoleId(rs.getInt(13));
+                user.setStatusID(rs.getInt(14));
+                user.setToken(rs.getString(15));
+            }
+        } catch (Exception e) {
+        }
+        return user;
+    }
 
     public boolean updatePassword(String password, String email) {
         String sql = "UPDATE users SET password = ? WHERE email = ?";
