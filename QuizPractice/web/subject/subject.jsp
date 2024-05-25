@@ -13,22 +13,6 @@
 
         <!-- custom css file link  -->
         <link rel="stylesheet" href="css/style.css">
-        <style>
-            .pagination {
-                justify-content: center; /* Căn giữa các nút phân trang */
-                text-align: center;
-            }
-
-            .page-item .page-link {
-                font-size: 1.25rem; /* Tăng kích thước chữ của các nút phân trang */
-                padding: 0.75rem 1.25rem; /* Tăng kích thước padding của các nút phân trang */
-            }
-
-            .page-item.active .page-link {
-                background-color: #007bff; /* Màu nền cho nút đang hoạt động */
-                border-color: #007bff; /* Màu viền cho nút đang hoạt động */
-            }
-        </style>
     </head>
     <body>
 
