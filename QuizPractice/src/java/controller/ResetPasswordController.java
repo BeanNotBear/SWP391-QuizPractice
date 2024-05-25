@@ -70,6 +70,7 @@ public class ResetPasswordController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
+    @SuppressWarnings("all")
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String email = request.getParameter("email");
