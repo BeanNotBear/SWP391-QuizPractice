@@ -22,6 +22,7 @@ public class UserDAO extends DBContext {
     private static UserDAO instance;
     // Lock object for thread-safe singleton instantiation
     private static Object lockPad = new Object();
+    private Logger logger = Logger.getLogger(UserDAO.class.getName());
 
     // Private constructor to prevent instantiation
     private UserDAO() {}
@@ -56,8 +57,8 @@ public class UserDAO extends DBContext {
     }
     
     public User findUserById(int id) {
-        String query = "SELECT *\n"
-                + "FROM users\n"
+        String query = "SELECT *"
+                + "FROM users"
                 + "WHERE id = ?";
         User user = null;
         try {
@@ -82,7 +83,8 @@ public class UserDAO extends DBContext {
                 user.setStatusID(rs.getInt(14));
                 user.setToken(rs.getString(15));
             }
-        } catch (Exception e) {
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
         return user;
     }
@@ -149,7 +151,7 @@ public class UserDAO extends DBContext {
 
             // Execute the query and get the number of rows affected
             rowAffected = ps.executeUpdate();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             // Log the exception (if a logging framework is available)
             e.printStackTrace(); // Replace with logger in real application
         }
@@ -170,6 +172,7 @@ public class UserDAO extends DBContext {
                 return false;
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return true;
     }
@@ -204,6 +207,7 @@ public class UserDAO extends DBContext {
                 user.setToken(rs.getString(15));
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return user;
     }
@@ -237,6 +241,7 @@ public class UserDAO extends DBContext {
                 user.setToken(rs.getString(15));
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return user;
     }
@@ -252,6 +257,7 @@ public class UserDAO extends DBContext {
             ps.setString(1, token);
             rowAffected = ps.executeUpdate();
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return rowAffected;
     }
@@ -286,14 +292,15 @@ public class UserDAO extends DBContext {
                 user.setToken(rs.getString(15));
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return user;
     }
 
     // Updates the token of a user by email
     public int UpdateTokenByEmail(String token, String email) {
-        String query = "UPDATE users\n"
-                + "SET token = ?\n"
+        String query = "UPDATE users"
+                + "SET token = ?"
                 + "WHERE email = ?";
         int rowAffected = 0;
         try {
