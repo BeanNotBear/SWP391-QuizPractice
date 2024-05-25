@@ -1,4 +1,6 @@
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
 <<<<<<< HEAD
 var isValidate = false;
 =======
@@ -8,6 +10,7 @@ var isValidate = true;
 var isValidate = false;
 >>>>>>> AnNT-HE173516
 
+>>>>>>> main
 function validateFirstName (fName) {
     let firstName = document.querySelector("#firstName");
     if(fName.value === "") {
@@ -110,6 +113,8 @@ function checkPasswordAndCfPassword(cfPassword) {
     }
 }
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> AnNT-HE173516
@@ -126,3 +131,4 @@ function isAllowSendData(submit) {
 >>>>>>> NghiNV-HE176303
 =======
 >>>>>>> AnNT-HE173516
+>>>>>>> main

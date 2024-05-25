@@ -10,11 +10,30 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Subject;
 import model.User;
-import dal.UserDAO;
 
 // Data Access Object for User operations, extending DBContext to utilize database connections
 public class SubjectDAO extends DBContext {
 
+     // Singleton instance of UserDAO
+    private static SubjectDAO instance;
+    // Lock object for thread-safe singleton instantiation
+    private static Object lockPad = new Object();
+
+    // Private constructor to prevent instantiation
+    private SubjectDAO() {}
+
+    // Returns the singleton instance of UserDAO
+    public static SubjectDAO getInstance() {
+        if (instance == null) {
+            synchronized (lockPad) {
+                if (instance == null) {
+                    instance = new SubjectDAO();
+                }
+            }
+        }
+        return instance;
+    }
+    
     public List<Subject> allSubjectsWithConditions(String searchParam) {
         List<Subject> subjects = new ArrayList<>();
         List<Object> list = new ArrayList<>();
@@ -42,7 +61,7 @@ public class SubjectDAO extends DBContext {
                     Subject subject = new Subject();
                     subject.setId(resultSet.getInt("id"));
                     subject.setName(resultSet.getString("name"));
-                    User creator = userDAO.findUserByEmail(resultSet.getString("email"));
+                    User creator = userDAO.findUserById(resultSet.getInt("creator_id"));
                     subject.setCreator(creator);
                     subject.setCreate_at(resultSet.getDate("creater_at"));
                     subject.setUpdate_at(resultSet.getDate("update_at"));

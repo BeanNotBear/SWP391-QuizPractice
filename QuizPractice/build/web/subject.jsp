@@ -38,52 +38,17 @@
     </head>
     <body>
 
-        <header class="header">
-
-            <section class="flex">
-
-                <a href="home" class="logo">Educa.</a>
-
-
-                <form action="subject" method="get" class="search-form">
-                    <input type="text" name="search"  placeholder="search subjects..." maxlength="100" value="${param.search}">
-                    <input type="hidden" name="page" value="${currentPage}">
-                    <button type="submit" class="fas fa-search"></button>
-                </form>
-
-                <div class="icons">
-                    <div id="menu-btn" class="fas fa-bars"></div>
-                    <div id="search-btn" class="fas fa-search"></div>
-                    <div id="user-btn" class="fas fa-user"></div>
-                    <div id="toggle-btn" class="fas fa-sun"></div>
-                </div>
-
-                <div class="profile">
-                    <img src="images/pic-1.jpg" class="image" alt="">
-                    <h3 class="name">shaikh anas</h3>
-                    <p class="role">student</p>
-                    <a href="profile.html" class="btn">view profile</a>
-                    <div class="flex-btn">
-                        <a href="/QuizPractice/login" class="option-btn">login</a>
-                        <a href="/QuizPractice/register" class="option-btn">register</a>
-                    </div>
-                </div>
-
-            </section>
-
-        </header> 
-
+        <%@include file="layout/header.jsp" %> 
         <%@include file="layout/sidebar.jsp" %>
 
-        <section class="subjects">
-
+        <section class="courses">
             <h1 class="heading">our subjects</h1>
 
             <div class="box-container">
                 <c:forEach items="${listC}" var="c">
                     <div class="box">
                         <div class="tutor">
-                            <img src="images/pic-2.jpg" alt="">
+                            <img src="${c.creator.profileImg}" alt="">
                             <div class="info">
                                 <h3>${c.creator.firstName} ${c.creator.lastName}</h3>
                                 <span>${c.create_at}</span>
@@ -94,44 +59,40 @@
                             <span>${c.numberOfLesson} lesson</span>
                         </div>
                         <h3 class="title">${c.name}</h3>
-                        <a href="playlist.html" class="inline-btn">view playlist</a>
+                        <a href="subject/details?id=${c.id}" class="inline-btn">Details</a>
+                        <a href="subject/register?id=${c.id}" class="inline-btn">Register Now</a>
                     </div>
                 </c:forEach>
-
-
-
             </div>
-        </div>
+        </section>
+        <nav class="mt-3" style="" aria-label="Page navigation example">
+            <ul class="pagination">
+                <!-- Disable the "Previous" link if on the first page -->
+                <c:if test="${currentPage > 1}">
+                    <li class="page-item">
+                        <a class="page-link" href="?category=${param.category}&amp;search=${param.search}&amp;sort=${param.sort}&amp;color=${param.color}&amp;size=${param.size}&amp;page=${currentPage - 1}">Previous</a>
+                    </li>
+                </c:if>
 
-    </section>
-    <nav class="mt-3" style="" aria-label="Page navigation example">
-        <ul class="pagination">
-            <!-- Disable the "Previous" link if on the first page -->
-            <c:if test="${currentPage > 1}">
-                <li class="page-item">
-                    <a class="page-link" href="?category=${param.category}&amp;search=${param.search}&amp;sort=${param.sort}&amp;color=${param.color}&amp;size=${param.size}&amp;page=${currentPage - 1}">Previous</a>
-                </li>
-            </c:if>
+                <!-- Display the page numbers as links -->
+                <c:forEach var="pageNum" begin="1" end="${totalPages}">
+                    <li class="page-item <c:if test='${pageNum == currentPage}'>active</c:if>">
+                        <a class="page-link" href="?category=${param.category}&amp;search=${param.search}&amp;sort=${param.sort}&amp;color=${param.color}&amp;size=${param.size}&amp;page=${pageNum}">${pageNum}</a>
+                    </li>
+                </c:forEach>
 
-            <!-- Display the page numbers as links -->
-            <c:forEach var="pageNum" begin="1" end="${totalPages}">
-                <li class="page-item <c:if test='${pageNum == currentPage}'>active</c:if>">
-                    <a class="page-link" href="?category=${param.category}&amp;search=${param.search}&amp;sort=${param.sort}&amp;color=${param.color}&amp;size=${param.size}&amp;page=${pageNum}">${pageNum}</a>
-                </li>
-            </c:forEach>
+                <!-- Disable the "Next" link if on the last page -->
+                <c:if test="${currentPage < totalPages}">
+                    <li class="page-item">
+                        <a class="page-link" href="?category=${param.category}&amp;search=${param.search}&amp;sort=${param.sort}&amp;color=${param.color}&amp;size=${param.size}&amp;page=${currentPage + 1}">Next</a>
+                    </li>
+                </c:if>
+            </ul>
+        </nav>
+        <%@include file="layout/footer.jsp" %>
 
-            <!-- Disable the "Next" link if on the last page -->
-            <c:if test="${currentPage < totalPages}">
-                <li class="page-item">
-                    <a class="page-link" href="?category=${param.category}&amp;search=${param.search}&amp;sort=${param.sort}&amp;color=${param.color}&amp;size=${param.size}&amp;page=${currentPage + 1}">Next</a>
-                </li>
-            </c:if>
-        </ul>
-    </nav>
-    <%@include file="layout/footer.jsp" %>
+        <!-- custom js file link  -->
+        <script src="js/script.js"></script>
 
-    <!-- custom js file link  -->
-    <script src="js/script.js"></script>
-
-</body>
+    </body>
 </html>

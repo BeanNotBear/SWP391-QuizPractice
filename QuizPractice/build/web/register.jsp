@@ -34,8 +34,8 @@
                 <p>Enter your email <span>*</span></p>
                 <input onkeyup="validateEmail(this)" type="email" name="email" placeholder="Email" required maxlength="50" class="box" value="${requestScope.email}">
                 <span id="uEmail" class="danger_msg">${requestScope.email_err}</span>
-                
-                
+
+
                 <p>Enter your phone number <span>*</span></p>
                 <input onkeyup="validatePhoneNumber(this)" type="text" name="phone" placeholder="Phone number" required maxlength="50" class="box" value="${requestScope.phone}">
                 <span id="phoneNumber" class="danger_msg">${requestScope.phone_err}</span>
@@ -46,12 +46,12 @@
                     <option value="false">Female</option>
                 </select>
                 <span class="danger_msg">${requestScope.gender_err}</span>
-                
+
                 <p>Enter your dob <span>*</span></p>
                 <input oninput="validateDob(this)" type="date" name="dob" placeholder="DOB" required maxlength="50" class="box" value="${requestScope.dob}">
                 <span id="dobMsg" class="danger_msg">${requestScope.dbo_err}</span>
-                
-                
+
+
                 <p>Enter your username <span>*</span></p>
                 <input onkeyup="validateUsername(this)" type="text" name="username" placeholder="Username" required maxlength="20" class="box" value="${requestScope.username}">
                 <span id="usernameMsg" class="danger_msg">${requestScope.username_err}</span>
@@ -69,15 +69,7 @@
                     <span id="show-cf-pass" class="show-password">Show password</span>
                     <div id="cfPassowrdMsg" class="danger_msg">${requestScope.cfPassword_err}</div>
                 </div>
-<<<<<<< HEAD
-<<<<<<< HEAD
-                <input onmouseover="isAllowSendData(this)" type="submit" value="register new" name="submit" class="btn">
-=======
                 <input onmouseover="IsAllowSendData(this)" type="submit" value="register new" name="submit" class="btn">
->>>>>>> NghiNV-HE176303
-=======
-                <input onmouseover="isAllowSendData(this)" type="submit" value="register new" name="submit" class="btn">
->>>>>>> AnNT-HE173516
             </form>
 
         </section>
