@@ -47,8 +47,9 @@
 
                     <div class="details">
                         <h3>${subject.name}</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum minus reiciendis, error sunt veritatis exercitationem deserunt velit doloribus itaque voluptate.</p>
-                        <a href="teacher_profile.html" class="inline-btn">view profile</a>
+                        <p>${subject.description}</p>
+                        <a href="<%=request.getContextPath()%>/teacher?id=${subject.creator.userId}" class="inline-btn">view profile</a>
+                        <a href="<%=request.getContextPath()%>/subject/register?id=${subject.id}" class="inline-btn">Register Now</a>
                     </div>
                 </div>
             </div>
