@@ -48,7 +48,7 @@
                 <span class="danger_msg">${requestScope.gender_err}</span>
 
                 <p>Enter your dob <span>*</span></p>
-                <input oninput="validateDob(this)" type="date" name="dob" placeholder="DOB" required maxlength="50" class="box" value="${requestScope.dob}">
+                <input type="date" name="dob" required class="box" value="${requestScope.dob}"/>
                 <span id="dobMsg" class="danger_msg">${requestScope.dbo_err}</span>
 
 
