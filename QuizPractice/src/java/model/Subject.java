@@ -1,6 +1,7 @@
 package model;
 
 import java.sql.Date;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@SuppressWarnings("all")
 public class Subject {
     // Fields
     private int id;
@@ -24,4 +26,6 @@ public class Subject {
     private int status;
     private String img;
     private int numberOfLesson;
+    private String description;
+    private List<Lesson> lessons;
 }
