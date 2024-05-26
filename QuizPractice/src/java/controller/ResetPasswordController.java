@@ -79,7 +79,7 @@ public class ResetPasswordController extends HttpServlet {
           
         String otpvalue = "";
         HttpSession mySession = request.getSession();
-        if (userDAO.checkExistEmail(email)) {
+        if (userDAO.checkExistByEmail(email)) {
             otpvalue = CodeVerify2.generateVerificationCodeOTP();
             if (Mail.sendMailOTP(email, otpvalue)) {
                 request.setAttribute("message", "OTP is sent to your email id");
