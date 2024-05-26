@@ -1,16 +1,5 @@
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-var isValidate = false;
-=======
-var isValidate = true;
->>>>>>> NghiNV-HE176303
-=======
-var isValidate = false;
->>>>>>> AnNT-HE173516
+let isValidate = false;
 
->>>>>>> main
 function validateFirstName (fName) {
     let firstName = document.querySelector("#firstName");
     if(fName.value === "") {
@@ -112,12 +101,6 @@ function checkPasswordAndCfPassword(cfPassword) {
         cfPasswordMsg.innerHTML = "";
     }
 }
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> AnNT-HE173516
 
 function isAllowSendData(submit) {
     if(!isValidate) {
@@ -126,9 +109,3 @@ function isAllowSendData(submit) {
         submit.disable = false;
     }
 }
-<<<<<<< HEAD
-=======
->>>>>>> NghiNV-HE176303
-=======
->>>>>>> AnNT-HE173516
->>>>>>> main
