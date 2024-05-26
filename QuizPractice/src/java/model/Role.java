@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@SuppressWarnings("all")
+@SuppressWarnings("All")
 public class Role {
     // Fields
     private int id; // Unique identifier for the role
