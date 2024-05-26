@@ -1,6 +1,7 @@
 package model;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,5 +28,5 @@ public class Subject {
     private String img;
     private int numberOfLesson;
     private String description;
-    private List<Lesson> lessons;
+    private List<Lesson> lessons = new ArrayList<>();
 }
