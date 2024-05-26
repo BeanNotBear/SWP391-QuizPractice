@@ -52,30 +52,31 @@ public class SubjectDAO extends DBContext {
 
 //            query.append(" order by id");
             // Create prepared statement
-            PreparedStatement statement = connection.prepareStatement(query.toString());
-            mapParams(statement, list);
+            ps = connection.prepareStatement(query.toString());
+            mapParams(ps, list);
             // Execute the query
-            ResultSet resultSet = statement.executeQuery();
+           rs = ps.executeQuery();
             // Iterate over the result set
-            while (resultSet.next()) {
+            while (rs.next()) {
                 // Retrieve subject details from each row
                 Subject subject = new Subject();
-                subject.setId(resultSet.getInt("id"));
-                subject.setName(resultSet.getString("name"));
-                User creator = userDAO.findUserById(resultSet.getInt("creator_id"));
+                subject.setId(rs.getInt("id"));
+                subject.setName(rs.getString("name"));
+                User creator = userDAO.findUserById(rs.getInt("creator_id"));
                 subject.setCreator(creator);
-                subject.setCreate_at(resultSet.getDate("creater_at"));
-                subject.setUpdate_at(resultSet.getDate("update_at"));
-                subject.setStatus(resultSet.getInt("status"));
-                subject.setImg(resultSet.getString("img"));
+                subject.setCreate_at(rs.getDate("creater_at"));
+                subject.setUpdate_at(rs.getDate("update_at"));
+                subject.setStatus(rs.getInt("status"));
+                subject.setImg(rs.getString("img"));
+                subject.setDescription(rs.getString("description"));
                 // count lesson to add to list subject return by search
-                subject.setNumberOfLesson(countLessonsBySubjectId(resultSet.getInt("id")));
+                subject.setNumberOfLesson(countLessonsBySubjectId(rs.getInt("id")));
                 // Add the subject to the list
                 subjects.add(subject);
             }
             // Close the resources
-            resultSet.close();
-            statement.close();
+            rs.close();
+            ps.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -161,6 +162,7 @@ public class SubjectDAO extends DBContext {
                 + ",[update_at]\n"
                 + ",[status]\n"
                 + ",[img]\n"
+                + ",[description]"
                 + "FROM [SWP391_G6].[dbo].[subjects]\n"
                 + "WHERE [id] = ?";
         Subject subject = null;
@@ -179,6 +181,7 @@ public class SubjectDAO extends DBContext {
                 subject.setUpdate_at(rs.getDate("update_at"));
                 subject.setStatus(rs.getInt("status"));
                 subject.setImg(rs.getString("img"));
+                subject.setDescription(rs.getString("description"));
                 // count lesson to add to list subject return by search
                 subject.setNumberOfLesson(countLessonsBySubjectId(rs.getInt("id")));
             }

@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@SuppressWarnings("all")
 public class UserStatus {
     // Fields
     private int id; // Unique identifier for the user status

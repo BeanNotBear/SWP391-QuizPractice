@@ -12,7 +12,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
 
         <!-- custom css file link  -->
-        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/css/style.css">
     </head>
     <body>
 
@@ -21,7 +21,6 @@
 
         <section class="courses">
             <h1 class="heading">our subjects</h1>
-
             <div class="box-container">
                 <c:forEach items="${listC}" var="c">
                     <div class="box">
@@ -70,7 +69,7 @@
         <%@include file="../layout/footer.jsp" %>
 
         <!-- custom js file link  -->
-        <script src="js/script.js"></script>
+        <script src="<%=request.getContextPath()%>/js/script.js"></script>
 
     </body>
 </html>
