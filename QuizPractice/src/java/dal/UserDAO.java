@@ -39,21 +39,20 @@ public class UserDAO extends DBContext {
         return instance;
     }
 
-    // Inserts a new User into the database
-    public boolean checkExistEmail(String email) {
-        boolean duplicate = false;
-        String sql = "Select * From users where email =?";
+    public boolean checkExistByEmail(String email) {
+        boolean isDuplicate = true;
+        String sql = "Select 1 From users where email =?";
         try {
             ps = connection.prepareStatement(sql);
             ps.setString(1, email);
             rs = ps.executeQuery();
             if (rs.next()) {
-                duplicate = true;
+                isDuplicate = false;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return duplicate;
+        return isDuplicate;
     }
     
     public User findUserById(int id) {
@@ -158,23 +157,24 @@ public class UserDAO extends DBContext {
         return rowAffected;
     }
 
-    // Checks if a user already exists by username and email
-    public boolean checkUserExistedByUsernameAndEmail(String username, String email) {
-        String query = "SELECT email, username\n"
+    // Checks if a user already exists by email
+    @SuppressWarnings("all")
+    public boolean checkUserExistedByUsername(String username) {
+        String query = "SELECT 1\n"
                 + "FROM users\n"
-                + "WHERE email = ? OR username = ?";
+                + "WHERE username = ?";
+        boolean isDuplicate = true;
         try {
             ps = connection.prepareStatement(query);
-            ps.setString(1, email);
-            ps.setString(2, username);
+            ps.setString(1, username);
             rs = ps.executeQuery();
             if (rs.next()) {
-                return false;
+                isDuplicate = false;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return true;
+        return isDuplicate;
     }
 
     // Finds a user by email and password
