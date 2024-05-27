@@ -4,15 +4,39 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/web/login.jsp</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/model/UserStatus.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/controller/CategoryController.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/controller/UpdateProfileController.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/controller/HomeController.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/dal/UserDAO.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/controller/ProfileController.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/util/security/CodeVerify.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/controller/NewPasswordController.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/web/subject/subject.jsp</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/controller/ActiveUserController.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/controller/RegisterController.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/controller/SubjectController.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/controller/ResetPasswordController.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/web/profile.jsp</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/model/Category.java</file>
             <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/dal/SubjectDAO.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/controller/BlogListController.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/controller/LogoutController.java</file>
             <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/model/User.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/util/security/Security.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/web/register.jsp</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/controller/SubjectDetailsController.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/controller/LoginController.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/web/css/style.css</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/util/validation/Validation.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/controller/ValidateOTPController.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/model/Role.java</file>
             <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/web/subject/playlist.jsp</file>
             <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/model/Subject.java</file>
             <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/web/layout/sidebar.jsp</file>
-            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/web/subject/subject.jsp</file>
-            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/model/Blogs.java</file>
-            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/controller/SubjectController.java</file>
-            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/controller/SubjectDetailsController.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/model/Lesson.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/web/js/validate.js</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/controller/ChangePasswordController.java</file>
         </group>
     </open-files>
 </project-private>
