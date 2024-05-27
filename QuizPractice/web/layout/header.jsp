@@ -18,22 +18,19 @@
         <div class="profile">
             <c:if test="${sessionScope.user != null}">
                 <img src="images/pic-1.jpg" class="image" alt="">
-                <h3 class="name">shaikh anas</h3>
+                <h3 class="name">${user.username}</h3>
                 <p class="role">student</p>
                 <a href="profile" class="btn">view profile</a>
-                <div class="flex-btn">
-                    <h3 class="name">${user.username}</h3>
-                    <p class="role">student</p>
+            </c:if>
+            <div class="flex-btn">
+                <c:if test="${sessionScope.user == null}">
+                    <a href="/QuizPractice/login" class="option-btn">login</a>
+                    <a href="/QuizPractice/register" class="option-btn">register</a>
                 </c:if>
-                <div class="flex-btn">
-                    <c:if test="${sessionScope.user == null}">
-                        <a href="/QuizPractice/login" class="option-btn">login</a>
-                        <a href="/QuizPractice/register" class="option-btn">register</a>
-                    </c:if>
-                    <c:if test="${sessionScope.user != null}">
-                        <a href="/QuizPractice/logout" class="option-btn">Log Out</a>
-                    </c:if>
-                </div>
+                <c:if test="${sessionScope.user != null}">
+                    <a href="/QuizPractice/logout" class="option-btn">Log Out</a>
+                </c:if>
             </div>
+        </div>
     </section>
 </header> 

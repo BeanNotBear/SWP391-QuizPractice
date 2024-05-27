@@ -16,8 +16,8 @@
 
     </head>
     <body> 
-        <%@include file="layout/header.jsp" %>
-        <%@include file="layout/sidebar.jsp" %>
+        <%@include file="layout/header.jsp"%>
+        <%@include file="layout/sidebar.jsp"%>
         <section class="form-container">
 
             <form action="login" method="post">
@@ -27,10 +27,12 @@
                 <p>your password <span>*</span></p>
                 <input type="password" name="password" placeholder="enter your password" required maxlength="50" class="box">
                 <span class="danger_msg">${requestScope.login_fail_err}</span>
+                <a id="forget_password" href="resetpassword">Forget Password?</a>
                 <input type="submit" value="login new" name="submit" class="btn">
+
             </form>
         </section>
-       
+
         <%@include file="layout/footer.jsp" %>
 
         <!-- custom js file link  -->

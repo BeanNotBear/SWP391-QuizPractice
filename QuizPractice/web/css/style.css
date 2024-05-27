@@ -288,7 +288,9 @@ section{
     border-radius: 5px;
 }
 
-
+#forget_password {
+    font-size: 20px;
+}
 
 .category-container {
     margin-top: 20px;

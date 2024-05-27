@@ -94,8 +94,10 @@
                                             <label for="repeat-new-password">Repeat new password</label>
                                             <input type="password" class="form-control" id="repeat-new-password">
                                         </div>
-                                        <button type="submit" class="btn btn-primary">Save changes</button>
-                                        <button type="reset" class="btn btn-secondary">Cancel</button>
+                                        <div class="box-container">
+                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                            <button type="reset" class="btn btn-secondary">Cancel</button>
+                                        </div>
                                     </form>
                                 </div>
                                 <!-- Add other content divs similarly, setting them as d-none initially -->
