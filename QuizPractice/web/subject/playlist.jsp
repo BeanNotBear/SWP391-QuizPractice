@@ -22,7 +22,7 @@
 
         <section class="playlist-details">
             <c:set var="subject" value="${requestScope.subject}"/>
-            <h1 class="heading">playlist details</h1>
+            <h1 class="heading">Subject details</h1>
 
             <div class="row">
 
@@ -52,52 +52,6 @@
                         <a href="<%=request.getContextPath()%>/subject/register?id=${subject.id}" class="inline-btn">Register Now</a>
                     </div>
                 </div>
-            </div>
-
-        </section>
-
-        <section class="playlist-videos">
-
-            <h1 class="heading">playlist videos</h1>
-
-            <div class="box-container">
-
-                <a class="box" href="watch-video.html">
-                    <i class="fas fa-play"></i>
-                    <img src="images/post-1-1.png" alt="">
-                    <h3>complete HTML tutorial (part 01)</h3>
-                </a>
-
-                <a class="box" href="watch-video.html">
-                    <i class="fas fa-play"></i>
-                    <img src="images/post-1-2.png" alt="">
-                    <h3>complete HTML tutorial (part 02)</h3>
-                </a>
-
-                <a class="box" href="watch-video.html">
-                    <i class="fas fa-play"></i>
-                    <img src="images/post-1-3.png" alt="">
-                    <h3>complete HTML tutorial (part 03)</h3>
-                </a>
-
-                <a class="box" href="watch-video.html">
-                    <i class="fas fa-play"></i>
-                    <img src="images/post-1-4.png" alt="">
-                    <h3>complete HTML tutorial (part 04)</h3>
-                </a>
-
-                <a class="box" href="watch-video.html">
-                    <i class="fas fa-play"></i>
-                    <img src="images/post-1-5.png" alt="">
-                    <h3>complete HTML tutorial (part 05)</h3>
-                </a>
-
-                <a class="box" href="watch-video.html">
-                    <i class="fas fa-play"></i>
-                    <img src="images/post-1-6.png" alt="">
-                    <h3>complete HTML tutorial (part 06)</h3>
-                </a>
-
             </div>
 
         </section>

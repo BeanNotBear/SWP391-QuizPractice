@@ -4,7 +4,7 @@
  */
 package controller;
 
-import dal.UserDAO;
+import dal.BlogDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
-import model.Blogs;
+import model.Blog;
 import model.Category;
 
 /**
@@ -37,10 +37,10 @@ public class CategoryController extends HttpServlet {
         // đã lấy id của category
         String cateId = request.getParameter("cid");
 
-        UserDAO dao = UserDAO.getInstance();
-        List<Blogs> listblog = dao.getAllCategoriesByid(cateId);
+        BlogDAO dao = BlogDAO.getInstance();
+        List<Blog> listblog = dao.getAllCategoriesByid(cateId);
         List<Category> listcate = dao.getAllCategories();
-        Blogs blog = dao.findNewPost();
+        Blog blog = dao.findNewPost();
 
         request.setAttribute("bloglist", listblog);
         
