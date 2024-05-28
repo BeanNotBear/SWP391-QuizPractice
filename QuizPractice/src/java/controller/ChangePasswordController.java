@@ -17,7 +17,7 @@ import model.User;
 import util.security.Security;
 import util.validation.Validation;
 
-@WebServlet("/changepassword")
+@WebServlet("/change-password")
 public class ChangePasswordController extends HttpServlet {
 
     /**

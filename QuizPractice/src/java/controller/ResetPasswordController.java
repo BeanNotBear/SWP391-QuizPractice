@@ -13,38 +13,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.User;
 import util.mail.Mail;
-import util.security.CodeVerify2;
+import util.security.CodeVerify;
 
-
-@WebServlet("/resetpassword")
+@WebServlet("/reset-password")
 public class ResetPasswordController extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ResetPasswordController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ResetPasswordController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -74,18 +48,29 @@ public class ResetPasswordController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String email = request.getParameter("email");
-        
+
         UserDAO userDAO = UserDAO.getInstance();
-          
+
         String otpvalue = "";
+
+        User user = new User();
+
+        String activeLink = request.getScheme() + "://"
+                + request.getServerName()
+                + ":"
+                + request.getServerPort()
+                + "/QuizPractice/new-password";
+
         HttpSession mySession = request.getSession();
-        if (userDAO.checkExistByEmail(email)) {
-            otpvalue = CodeVerify2.generateVerificationCodeOTP();
-            if (Mail.sendMailOTP(email, otpvalue)) {
-                request.setAttribute("message", "OTP is sent to your email id");
-                mySession.setAttribute("otp", otpvalue);
+        if (!userDAO.checkExistByEmail(email)) {
+            String token = CodeVerify.generateVerificationCode(); // Generate a verification token
+            user.setToken(token);
+            if (Mail.sendMailVerify(email, token, activeLink)) {
+//                request.setAttribute("message", "OTP is sent to your email id");
+//                mySession.setAttribute("otp", otpvalue);
                 mySession.setAttribute("email", email);
-                request.getRequestDispatcher("enterOTP.jsp").forward(request, response);
+//                request.getRequestDispatcher("enterOTP.jsp").forward(request, response);
+                request.getRequestDispatcher("active.jsp").forward(request, response);
             } else {
                 request.setAttribute("message", "Error email sending!");
                 request.getRequestDispatcher("forgotPassword.jsp").forward(request, response);

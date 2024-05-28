@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,6 +13,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.User;
+import util.security.CodeVerify;
 
 @WebServlet("/validateotp")
 public class ValidateOTPController extends HttpServlet {
@@ -54,7 +57,37 @@ public class ValidateOTPController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("enterOTP.jsp").forward(request, response);
+        HttpSession session = request.getSession();
+
+        // Get the token parameter from the request
+        String token = request.getParameter("token");
+
+        // Get an instance of UserDAO
+        UserDAO userDAO = UserDAO.getInstance();
+
+        // Find the user by the provided token
+        User user = userDAO.findUserByToken(token);
+        
+        // Check if a user with the given token exists
+        if(user != null) {
+            // Generate a new verification token
+            String newToken = CodeVerify.generateVerificationCode();
+            
+            // Store the user object in the session
+            session.setAttribute("user", user);
+            
+            // Update the user's status in the database using the token
+            userDAO.UpdateStatusByToken(token);
+            
+            // Update the user's token in the database with the new token
+            userDAO.UpdateTokenByEmail(newToken, user.getEmail());
+            
+            // Redirect the user to the home page
+            response.sendRedirect("new-password");
+        } else {
+            // If no user is found, send a 404 error response
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
     }
 
     /**

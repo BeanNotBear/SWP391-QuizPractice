@@ -27,7 +27,7 @@
                 <p>Your password <span>*</span></p>
                 <input type="password" name="password" placeholder="enter your password" required maxlength="50" class="box">
                 <div class="danger_msg">${requestScope.login_fail_err}</div>
-                <a id="forget_password" href="resetpassword">Forget Password?</a>
+                <a id="forget_password" href="reset-password">Forget Password?</a>
                 <input type="submit" value="login now" name="submit" class="btn">
 
             </form>
