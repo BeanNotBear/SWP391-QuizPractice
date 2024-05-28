@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.User;
 import jakarta.servlet.http.HttpServlet;
+import util.mail.Mail;
 import util.security.CodeVerify;
 
 // Controller class for activating user accounts
@@ -26,26 +27,43 @@ public class ActiveUserController extends HttpServlet {
         // Get the token parameter from the request
         String token = request.getParameter("token");
 
+        // Get time
+        String time = request.getParameter("time");
+        long timeSending = Long.parseLong(time);
+        long currentTime = System.currentTimeMillis();
+
         // Get an instance of UserDAO
         UserDAO userDAO = UserDAO.getInstance();
 
         // Find the user by the provided token
         User user = userDAO.findUserByToken(token);
-        
+
         // Check if a user with the given token exists
-        if(user != null) {
+        if (user != null) {
+            if (timeSending + 6000 < currentTime) {
+                String newToken = CodeVerify.generateVerificationCode();
+                userDAO.UpdateTokenByEmail(newToken, user.getEmail());
+                String activeLink = request.getScheme() + "://"
+                        + request.getServerName()
+                        + ":"
+                        + request.getServerPort()
+                        + "/QuizPractice/active";
+                Mail.sendMailVerify(user.getEmail(), newToken, activeLink);
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
             // Generate a new verification token
             String newToken = CodeVerify.generateVerificationCode();
-            
+
             // Store the user object in the session
             session.setAttribute("user", user);
-            
+
             // Update the user's status in the database using the token
             userDAO.UpdateStatusByToken(token);
-            
+
             // Update the user's token in the database with the new token
             userDAO.UpdateTokenByEmail(newToken, user.getEmail());
-            
+
             // Redirect the user to the home page
             response.sendRedirect("home");
         } else {

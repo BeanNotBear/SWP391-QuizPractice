@@ -53,6 +53,7 @@ public class Mail {
     }
 
     private static String buildEmailContent(String code, String linkActive) {
+        long time = System.currentTimeMillis();
         // Build the email content dynamically using the provided code and linkActive
         return "<!DOCTYPE html>\n"
                 + "<html lang=\"en\">\n"
@@ -68,7 +69,7 @@ public class Mail {
                 + "    <div class=\"container\">\n"
                 + "        <h1>Verify Your Account</h1>\n"
                 + "        <p>Thank you for signing up! To complete your registration, please click the button below to verify your account:</p>\n"
-                + "        <a href=\"" + linkActive + "?token=" + code + "\" class=\"btn\">Verify Account</a>\n"
+                + "        <a href=\"" + linkActive + "?token=" + code + "&time=" + time + "\" class=\"btn\">Verify Account</a>\n"
                 + "        <p>If you did not create an account, you can safely ignore this email.</p>\n"
                 + "    </div>\n"
                 + "</body>\n"

@@ -37,7 +37,7 @@ public class SubjectDetailsController extends HttpServlet {
             subject = subjectDAO.findSubjectById(subId);
             if(subject != null) {
                 request.setAttribute("subject", subject);
-                request.getRequestDispatcher("playlist.jsp").forward(request, response);
+                request.getRequestDispatcher("/subject/playlist.jsp").forward(request, response);
             } else {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
             }

@@ -22,13 +22,13 @@
 
             <form action="login" method="post">
                 <h3>login now</h3>
-                <p>your email <span>*</span></p>
+                <p>Your email <span>*</span></p>
                 <input type="email" name="email" placeholder="enter your email" required maxlength="50" class="box">
-                <p>your password <span>*</span></p>
+                <p>Your password <span>*</span></p>
                 <input type="password" name="password" placeholder="enter your password" required maxlength="50" class="box">
-                <span class="danger_msg">${requestScope.login_fail_err}</span>
+                <div class="danger_msg">${requestScope.login_fail_err}</div>
                 <a id="forget_password" href="resetpassword">Forget Password?</a>
-                <input type="submit" value="login new" name="submit" class="btn">
+                <input type="submit" value="login now" name="submit" class="btn">
 
             </form>
         </section>
