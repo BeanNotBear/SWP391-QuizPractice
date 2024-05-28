@@ -3,7 +3,15 @@
     Created on : May 19, 2024, 3:41:01 PM
     Author     : DELL
 --%>
+<<<<<<< QuizPractice/web/layout/sidebarright.jsp
+<<<<<<< HEAD
+
+=======
 <%-- 
+>>>>>>> main
+=======
+<%-- 
+>>>>>>> QuizPractice/web/layout/sidebarright.jsp
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
@@ -66,4 +74,12 @@
         </div>
 
     </body>
+<<<<<<< QuizPractice/web/layout/sidebarright.jsp
+<<<<<<< HEAD
+</html>
+=======
 </html> --%>
+>>>>>>> main
+=======
+</html> --%>
+>>>>>>> QuizPractice/web/layout/sidebarright.jsp
