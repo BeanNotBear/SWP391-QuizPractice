@@ -1560,7 +1560,9 @@ a.activee{
     color:var(--main-color);
 }
 
-
+.center {
+    
+}
 
 @media (max-width:1200px){
 

@@ -55,7 +55,6 @@
             </div>
 
         </section>
-
         <%@include file="../layout/footer.jsp" %>
 
         <!-- custom js file link  -->

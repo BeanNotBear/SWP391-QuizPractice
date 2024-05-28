@@ -49,39 +49,82 @@
 
         </header> 
         <%@include file="layout/sidebar.jsp" %>
-        <%@include file="layout/sidebarright.jsp" %>
+       <div class="side-barright">
+            <div class="box-container">            
+                <h3>Hot new Post</h3> <!-- Hiển thị blogs mới nhất theo thời gian -->
+                <div class="box">
+                    <img src="${nee.getThumbnail()}" id="ima"/>
+                    <div class="student">                        
+                        <h3>    ${nee.getTitle()}</h3>                           
+                    </div>
+                    <p>Date: ${nee.createdDate}</p>    
+                </div>
+            </div>
+            <c:forEach items="${newblog}" var="li" >                 
+                <div class="box">
+                    <img src="${li.thumbnail}" id="ima"/>
+                    <div class="student">
+                        <div>
+                            <h3>${li.title}</h3>
+                            <p> ${li.brieinfo}</p>                              
+                        </div>
+                    </div>
+                </div>
+            </c:forEach> 
+
+            <br><!-- Tìm kiếm blogs theo tiêu đề. -->
+            <div class="icons">
+                <div id="search-btn" class="fas fa-search"> </div>
+            </div>
+            <h1>Search</h1>           
+
+            <form action="blog" method="post" class="search-formm" >
+                <input id="sea" type="text" name="search"  placeholder=" Search blogs...." maxlength="100" value="${param.search}" >
+                <br><!-- comment -->
+                <button  id="seb" type="submit" class="fas fa-search" ></button>
+            </form>
+
+                
+                
+                
+            <br><!-- Hiển thị tất cả danh mục (category)-->          
+            <h2>Category Posts</h2> 
+            <ul>
+                <c:forEach items="${listcatego}" var="l">
+                    <li class="catepost ${tag == l.id? "choose":""}"><a href="category?cid=${l.id}">${l.getCategory_Name()}</a></li>                
+                    </c:forEach>
+            </ul>
+        </div>
+
 
         <section class="reviews">
 
             <h1 class="heading">Pots detail </h1>
 
             <div class="box-container">
-                <c:forEach items="${detail}" var="li">
+               
                     <div class="box">
-                        <img src="${li.getThumbnail()}" id="ima"/>
+                        <img src="${detail.getThumbnail()}" id="detailImg"/>
                         <div class="student">
                             <div>
-                                <h3>${li.getTitle()}</h3>
-                                <p>${li.getBrieinfo()}</p>
+                                <h3>${detail.getTitle()}</h3>
+                             
                                 <div class="stars">
-                                    <p>Category: ${li.category.getCategory_Name()}</p>
-                                </div>
+                                    <p>Author: ${detail.blog_firstName}</p>
+                                    <p>Create date: ${detail.createdDate}</p>
+                                    <p>Category: ${detail.category.getCategory_Name()}</p>                                  
+                                </div>                        
+                                  <p>${detail.content}</p>
                             </div>
                         </div>
                     </div>
-                </c:forEach>
+               
 
             </div>
 
         </section>
-
-
-
-
         <%@include file="layout/footer.jsp" %>
         <script src="js/script.js"></script>
 
     </body>
 </html>
-
-

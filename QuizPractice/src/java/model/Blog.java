@@ -4,10 +4,18 @@
  */
 package model;
 
-import java.util.Date;
+
+import java.sql.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@SuppressWarnings("all")
+
+
 
 /**
  * Lớp này đại diện cho một blog trong hệ thống. Bao gồm các thuộc tính như ID,
@@ -16,10 +24,7 @@ import lombok.NoArgsConstructor;
  *
  * @author DELL
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Blogs {
+public class Blog {
 
     /**
      * ID của blog.
@@ -84,10 +89,6 @@ public class Blogs {
     /**
      * Tên của tác giả blog.
      */
-    private User blog_firstName;
-
-    /**
-     * Họ của tác giả blog.
-     */
-    private User blog_lastName;
+    private String blog_firstName; // Changed to String
+    private String blog_lastName;
 }
