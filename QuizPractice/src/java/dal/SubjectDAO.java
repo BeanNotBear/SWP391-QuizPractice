@@ -100,7 +100,6 @@ public class SubjectDAO extends DBContext {
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
-
         return lessonCount;
     }
 
