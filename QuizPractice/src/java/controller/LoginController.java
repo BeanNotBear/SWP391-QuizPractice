@@ -42,7 +42,7 @@ public class LoginController extends HttpServlet {
 
         // Encrypt the password using SHA-512
         password = Security.encryptToSHA512(password);
-        
+
         System.out.println(email);
         System.out.println(password);
 
@@ -61,8 +61,6 @@ public class LoginController extends HttpServlet {
             System.out.println("false");
             // If user is not found, set an error message and forward to login.jsp
         } else {
-            // If user is found, set the user object in the session
-            session.setAttribute("user", user);
 
             // Check the user's status
             if (user.getStatusID() == 1) {
@@ -83,11 +81,14 @@ public class LoginController extends HttpServlet {
 
                 // Send a verification email to the user
                 Mail.sendMailVerify(email, token, activeLink);
+            } else {
+                // If user is found, set the user object in the session
+                session.setAttribute("user", user);
             }
         }
         try {
             if (isSuccess) {
-                if(isActive) {
+                if (isActive) {
                     jsonResponse.put("status", "success");
                 } else {
                     jsonResponse.put("status", "unactive");

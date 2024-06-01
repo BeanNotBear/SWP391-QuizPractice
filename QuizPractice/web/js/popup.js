@@ -35,13 +35,17 @@ $("#login-form").submit(function (e) {
         password: password
     };
     const actionUrl = "login";
-    $(this).css('cursor', 'wait');
     $.ajax({
         type: "POST",
         url: actionUrl,
         data: formData,
+        beforeSend: function () {
+            $("#loading").css('display', 'flex');
+        },
+        complete: function () {
+            $("#loading").css('display', 'none');
+        },
         success: function (data) {
-             $(this).css('cursor', 'default');
             console.log(data.status);
             if (data.status === "success") {
                 Swal.fire({
@@ -75,7 +79,6 @@ $("#register-form").submit(function (e) {
     const gender = $("#gender").val();
     const password = $("#password-rg").val();
     const cfPassword = $("#cfPasssword-rg").val();
-    $(this).css('cursor', 'wait');
     const formData = {
         fullName: fullName,
         email: email,
@@ -91,8 +94,13 @@ $("#register-form").submit(function (e) {
         type: 'POST',
         url: actionUrl,
         data: formData,
+        beforeSend: function () {
+            $("#loading").css('display', 'flex');
+        },
+        complete: function () {
+            $("#loading").css('display', 'none');
+        },
         success: function (data) {
-            $(this).css('cursor', 'default');
             console.log("ok");
             if (data.status === "success") {
                 Swal.fire({

@@ -39,10 +39,11 @@
         <!--login pop-up-->
         <%@include file="layout/login.jsp" %>
         
+        <!--register pop up-->
         <%@include file="layout/register.jsp" %>
         
-        <!--register pop up-->
-
+        <%@include file="layout/loader.jsp" %>
+        
         <!-- Slider -->
         <section class="home-grid">
             <div id="myCarousel" class="carousel slide custom-carousel" data-ride="carousel">
