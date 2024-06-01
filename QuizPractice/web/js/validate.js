@@ -1,24 +1,13 @@
 let isValidate = false;
 
-function validateFirstName (fName) {
-    let firstName = document.querySelector("#firstName");
-    if(fName.value === "") {
+function validateFullName (fName) {
+    let fullName = document.querySelector("#fullName");
+    if(fName.value.trim() === "") {
         isValidate = false;
-        firstName.innerHTML = "you must fill first name";
+        fullName.innerHTML = "You must fill first name";
     } else {
         isValidate = true;
-        firstName.innerHTML = "";
-    }
-}
-
-function validateLastName(lName) {
-    let lastName = document.querySelector("#lastName");
-    if(lName.value === "") {
-        isValidate = false;
-        lastName.innerHTML = "you must fill last name";
-    } else {
-        isValidate = true;
-        lastName.innerHTML = "";
+        fullName.innerHTML = "";
     }
 }
 
@@ -37,9 +26,9 @@ function validateEmail(email) {
 function validatePhoneNumber(phone) {
     let phoneNumber = document.querySelector("#phoneNumber");
     const phonePattern = /^(\+?\d{1,4}?[-.\s]?)?(\(?\d{3}\)?[-.\s]?)?\d{3}[-.\s]?\d{4}$/;
-    if(!phonePattern.test(phone.value)) {
+    if(phone.value.trim() !== "" && !phonePattern.test(phone.value)) {
         isValidate = false;
-        phoneNumber.innerHTML = "Phone is wrong formats";
+        phoneNumber.innerHTML = "Phone is wrong format";
     } else {
         isValidate = true;
         phoneNumber.innerHTML = "";
@@ -92,7 +81,7 @@ function validatePassword(password) {
 
 function checkPasswordAndCfPassword(cfPassword) {
     let cfPasswordMsg = document.querySelector("#cfPassowrdMsg");
-    let password = document.querySelector("#password");
+    let password = document.querySelector("#password-rg");
     if(cfPassword.value !== password.value) {
         isValidate = false;
         cfPasswordMsg.innerHTML = "Password and Confirm password do not match";
@@ -104,8 +93,10 @@ function checkPasswordAndCfPassword(cfPassword) {
 
 function isAllowSendData(submit) {
     if(!isValidate) {
-        submit.disable = true;
+        submit.disabled = true;
+        submit.style.cursor = "not-allowed";
     } else {
-        submit.disable = false;
+        submit.disabled = false;
+        submit.style.cursor = "pointer";
     }
 }

@@ -1,9 +1,3 @@
-<%-- 
-    Document   : blogs
-    Created on : May 16, 2024, 10:24:47 AM
-    Author     : DELL
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -20,73 +14,20 @@
         <!-- Custom CSS file link -->
         <link rel="stylesheet" href="css/style.css">
 
+        <link rel="stylesheet" href="css/popup.css"/>
+
+        <!-- Bootstrap file link  -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
     </head>
     <body>
-        <header class="header">
-            <section class="flex">
-                <a href="home.html" class="logo">Educa.</a>
-                <div class="icons">
-                    <div id="menu-btn" class="fas fa-bars"></div>
-                    <div id="user-btn" class="fas fa-user"></div>
-                    <div id="toggle-btn" class="fas fa-sun"></div>
-                </div>
-                <div class="profile">
-                    <img src="images/pic-1.jpg" class="image" alt="">
-                    <h3 class="name">shaikh anas</h3>
-                    <p class="role">student</p>
-                    <a href="profile.html" class="btn">view profile</a>
-                    <div class="flex-btn">
-                        <a href="login.html" class="option-btn">login</a>
-                        <a href="/QuizPractice/register" class="option-btn">register</a>
-                    </div>
-                </div>
-            </section>
-        </header>
+        <%@include file="layout/header.jsp" %>
 
         <%@include file="layout/sidebar.jsp" %>
 
-        <div class="side-barright">
-            <div class="box-container">            
-                <h3>Hot new Post</h3> <!-- Hiển thị blogs mới nhất theo thời gian -->
-                <div class="box">
-                    <img src="${nee.getThumbnail()}" id="ima"/>
-                    <div class="student">                        
-                        <h3>    ${nee.getTitle()}</h3>                           
-                    </div>
-                    <p>Date: ${nee.createdDate}</p>    
-                </div>
-            </div>
-            <c:forEach items="${newblog}" var="li" >                 
-                <div class="box">
-                    <img src="${li.thumbnail}" id="ima"/>
-                    <div class="student">
-                        <div>
-                            <h3>${li.title}</h3>
-                            <p> ${li.brieinfo}</p>                              
-                        </div>
-                    </div>
-                </div>
-            </c:forEach> 
-
-            <br><!-- Tìm kiếm blogs theo tiêu đề. -->
-            <div class="icons">
-                <div id="search-btn" class="fas fa-search"> </div>
-            </div>
-            <h1>Search</h1>           
-            <form action="blogslist" method="post" class="search-formm" >
-                <input id="sea" type="text" name="search"  placeholder=" Search blogs...." maxlength="100" value="${param.search}" >
-                <br><!-- comment -->
-                <button  id="seb" type="submit" class="fas fa-search" ></button>
-            </form>
-
-            <br><!-- Hiển thị tất cả danh mục (category)-->          
-            <h2>Category Posts</h2> 
-            <ul>
-                <c:forEach items="${listcatego}" var="l">
-                    <li class="catepost ${tag == l.id? "choose":""}"><a href="category?cid=${l.id}">${l.getCategory_Name()}</a></li>                
-                    </c:forEach>
-            </ul>
-        </div>
+        <%@include file="layout/sidebarright.jsp" %>
 
         <!-- Hiển thị tất cả blogs có trong database -->
         <section class="reviews">
@@ -103,22 +44,32 @@
                                 <p> ${li.getBrieinfo()}</p>
                                 <div class="stars">
                                     <p>Category : ${li.category.getCategory_Name()}</p>
-                                    <button> <a href="blogdetail.jsp">MORE THAN</a></button>   
+                                    <button> <a href="blogdetail?pid=${li.blog_id}">READ MORE</a></button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                  </c:forEach>            
-                </div>
+                </c:forEach>            
+            </div>
         </section>
 
         <div id="pagee">
             <c:forEach begin="1" end="${endPage}" var="i">
-                <a class="${currentPage == i ? 'activee' : ''}" href="blogslist?search=${searchQuery}&index=${i}">${i}</a>
+                <a class="${currentPage == i ? 'activee' : ''}" href="blog?search=${searchQuery}&index=${i}">${i}</a>
             </c:forEach>
         </div>
         <%@include file="layout/footer.jsp" %>
+        <!--pop js-->
+        <script src="js/popup.js"></script>
+
+        <!--jquery-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+        <!--swal-->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="js/script.js"></script>
+        <script src="js/rightsidebar.js"></script>
     </body>
 </html>
 

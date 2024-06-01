@@ -1,12 +1,19 @@
 package controller;
 
 // Import necessary classes
+import dal.BlogDAO;
+import dal.SliderDAO;
+import dal.SubjectDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+import model.Blog;
+import model.Slider;
+import model.Subject;
 
 // Servlet class for handling requests to the home page
 @WebServlet("/home")
@@ -17,7 +24,21 @@ public class HomeController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         // Forward the request to the home.jsp page
-        request.getRequestDispatcher("home.jsp").forward(request, response);
+        BlogDAO blogDAO = BlogDAO.getInstance();
+        SliderDAO sliderDAO = SliderDAO.getInstance();
+        SubjectDAO subjectDAO = SubjectDAO.getInstance();
+        
+        List<Blog> top8Blog = blogDAO.listTop8Blog();
+        List<Slider> top8Slider = sliderDAO.listTop8Slider();
+        List<Subject> top8Subject = subjectDAO.listTop8Subject();
+        
+         // Đặt các danh sách vào phạm vi request
+        request.setAttribute("top8Blog", top8Blog);
+        request.setAttribute("top8Slider", top8Slider);
+        request.setAttribute("top8Subject", top8Subject);
+
+        // Chuyển hướng đến trang home.jsp
+        request.getRequestDispatcher("/home.jsp").forward(request, response);
     } 
 
     /** 

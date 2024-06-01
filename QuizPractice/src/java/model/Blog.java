@@ -14,9 +14,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuppressWarnings("all")
-
-
-
 /**
  * Lớp này đại diện cho một blog trong hệ thống. Bao gồm các thuộc tính như ID,
  * tiêu đề, ID tác giả, ngày tạo, ngày cập nhật, nội dung, trạng thái, ảnh thu

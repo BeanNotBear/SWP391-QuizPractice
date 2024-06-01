@@ -27,11 +27,6 @@ public class ActiveUserController extends HttpServlet {
         // Get the token parameter from the request
         String token = request.getParameter("token");
 
-        // Get time
-        String time = request.getParameter("time");
-        long timeSending = Long.parseLong(time);
-        long currentTime = System.currentTimeMillis();
-
         // Get an instance of UserDAO
         UserDAO userDAO = UserDAO.getInstance();
 
@@ -40,21 +35,9 @@ public class ActiveUserController extends HttpServlet {
 
         // Check if a user with the given token exists
         if (user != null) {
-            if (timeSending + 6000 < currentTime) {
-                String newToken = CodeVerify.generateVerificationCode();
-                userDAO.UpdateTokenByEmail(newToken, user.getEmail());
-                String activeLink = request.getScheme() + "://"
-                        + request.getServerName()
-                        + ":"
-                        + request.getServerPort()
-                        + "/QuizPractice/active";
-                Mail.sendMailVerify(user.getEmail(), newToken, activeLink);
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-                return;
-            }
             // Generate a new verification token
             String newToken = CodeVerify.generateVerificationCode();
-
+            
             // Store the user object in the session
             session.setAttribute("user", user);
 

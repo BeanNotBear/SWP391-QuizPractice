@@ -17,10 +17,7 @@ import java.util.List;
 import model.Blog;
 import model.Category;
 
-/**
- *
- * @author DELL
- */
+
 @WebServlet(name="BlogListServlet", urlPatterns={"/blog"})
 public class BlogListController extends HttpServlet {
    
@@ -48,8 +45,8 @@ public class BlogListController extends HttpServlet {
         int index = Integer.parseInt(indexPage);
         // Đếm tổng số blog phù hợp với tìm kiếm
         int count = dao.countBlogsByTitle(search);
-        int endPage = count / 3;
-        if (count % 3 != 0) {
+        int endPage = count / 6;
+        if (count % 6 != 0) {
             endPage++;
         }
         // Lấy danh sách blog phù hợp với tìm kiếm và phân trang

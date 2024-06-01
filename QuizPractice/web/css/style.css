@@ -22,8 +22,6 @@
     text-decoration: none;
 }
 
-
-
 *::selection{
     background-color: var(--main-color);
     color:#fff;
@@ -259,7 +257,8 @@ section{
     background-color: var(--white);
     height: 100vh;
     border-right: var(--border);
-    z-index: 1200;
+    z-index: 1;
+    display: none;
 }
 
 .side-barright {
@@ -271,10 +270,10 @@ section{
     height: 200vh;
     border-right: 1px solid #ddd; /* Example border styling */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Example box shadow */
-    z-index: 1000;
+    z-index: 100px;
     padding: 20px;
     transition: right 0.3s; /* Add transition effect for smooth animation */
-
+    display: none;
 }
 
 .side-barright.active {
@@ -315,25 +314,21 @@ a.activee{
     font-weight: bold;
 
 }
-#pagee{
+#pagee {
     font-size: 30px;
-    margin-left: 30px;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10vh; /* Adjusted height */
 }
 
-
-.pagination {
-    justify-content: center; /* Căn giữa các nút phân trang */
-    text-align: center;
+#pagee a {
+    margin: 0 5px; /* Adjust the margin value to set the spacing */
 }
 
-.page-item .page-link {
-    font-size: 1.25rem; /* Tăng kích thước chữ của các nút phân trang */
-    padding: 0.75rem 1.25rem; /* Tăng kích thước padding của các nút phân trang */
-}
-
-.page-item.active .page-link {
-    background-color: #007bff; /* Màu nền cho nút đang hoạt động */
-    border-color: #007bff; /* Màu viền cho nút đang hoạt động */
+#pagee a.activee {
+    font-weight: bold; /* Example styling for the active page link */
 }
 
 .heading-container {
@@ -812,7 +807,7 @@ a.activee{
 }
 
 .playlist-details .row .column{
-    flex: 1 1 40rem;
+    flex: 1 1 55rem;
 }
 
 .playlist-details .row .column .save-playlist{
@@ -1541,10 +1536,29 @@ a.activee{
     margin: 1rem 0;
 }
 
+.links {
+    display: flex;
+    gap: 10px;
+}
+.links a {
+    text-decoration: none;
+    color: #000;
+    font-size: larger;
+    padding: 10px 20px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+.links a:hover {
+    background-color: #ccc;
+}
+
+
+
 .footer{
     background-color: var(--white);
     border-top: var(--border);
-    position: sticky;
+    position: static;
     bottom: 0;
     left: 0;
     right: 0;
@@ -1561,7 +1575,7 @@ a.activee{
 }
 
 .center {
-    
+
 }
 
 @media (max-width:1200px){

@@ -1,6 +1,8 @@
 package dal;
 
 import context.DBContext;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,6 +10,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import model.PricePackage;
 import model.Subject;
 import model.User;
 
@@ -35,32 +38,37 @@ public class SubjectDAO extends DBContext {
         return instance;
     }
 
-    public List<Subject> allSubjectsWithConditions(String searchParam) {
+    public List<Subject> allSubjectsWithConditions(String searchParam, String sort) {
         List<Subject> subjects = new ArrayList<>();
         List<Object> list = new ArrayList<>();
         UserDAO userDAO = UserDAO.getInstance();
         try {
             StringBuilder query = new StringBuilder();
             query.append("select *"
-                    + "from subjects  \n"
-                    + "where status = 1 ");
+                    + "from subjects\n"
+                    + "where status = 1");
             // Create SQL query with sorting, LIMIT, and OFFSET clauses
             if (searchParam != null && !searchParam.trim().isEmpty()) {
                 query.append(" AND name LIKE ? ");
                 list.add("%" + searchParam + "%");
             }
-
+            
+            if(sort != null && !sort.trim().isEmpty()) {
+                query.append(" ORDER BY [update_at] " + sort);
+            }
+            
 //            query.append(" order by id");
             // Create prepared statement
             ps = connection.prepareStatement(query.toString());
             mapParams(ps, list);
             // Execute the query
-           rs = ps.executeQuery();
+            rs = ps.executeQuery();
             // Iterate over the result set
             while (rs.next()) {
                 // Retrieve subject details from each row
                 Subject subject = new Subject();
-                subject.setId(rs.getInt("id"));
+                int id = rs.getInt("id");
+                subject.setId(id);
                 subject.setName(rs.getString("name"));
                 User creator = userDAO.findUserById(rs.getInt("creator_id"));
                 subject.setCreator(creator);
@@ -70,7 +78,9 @@ public class SubjectDAO extends DBContext {
                 subject.setImg(rs.getString("img"));
                 subject.setDescription(rs.getString("description"));
                 // count lesson to add to list subject return by search
-                subject.setNumberOfLesson(countLessonsBySubjectId(rs.getInt("id")));
+                subject.setNumberOfLesson(countLessonsBySubjectId(id));
+                subject.setPricePackages(findPricePackageBySubjectId(id));
+                System.out.println("ok");
                 // Add the subject to the list
                 subjects.add(subject);
             }
@@ -170,7 +180,7 @@ public class SubjectDAO extends DBContext {
             ps = connection.prepareStatement(query);
             ps.setInt(1, id);
             rs = ps.executeQuery();
-            if (rs.next()) {                
+            if (rs.next()) {
                 subject = new Subject();
                 subject.setId(rs.getInt("id"));
                 subject.setName(rs.getString("name"));
@@ -183,6 +193,7 @@ public class SubjectDAO extends DBContext {
                 subject.setDescription(rs.getString("description"));
                 // count lesson to add to list subject return by search
                 subject.setNumberOfLesson(countLessonsBySubjectId(rs.getInt("id")));
+                subject.setPricePackages(findPricePackageBySubjectId(id));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -190,13 +201,78 @@ public class SubjectDAO extends DBContext {
         return subject;
     }
 
+    public List<PricePackage> findPricePackageBySubjectId(int id) {
+        List<PricePackage> pricePackages = new ArrayList<>();
+        String query = "SELECT [id]\n"
+                + "      ,[name]\n"
+                + "      ,[duration]\n"
+                + "      ,[sale_price]\n"
+                + "      ,[price]\n"
+                + "FROM [SWP391_G6].[dbo].[package_price]\n"
+                + "INNER JOIN [dbo].[subject_has_price_package] AS SP ON SP.price_package_id = id\n"
+                + "WHERE SP.subject_id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) { 
+                PricePackage pricePackage = new PricePackage();
+                pricePackage.setId(resultSet.getInt(1));
+                pricePackage.setName(resultSet.getString(2));
+                pricePackage.setDuration(resultSet.getInt(3));
+                pricePackage.setSalePrice(resultSet.getDouble(4));
+                pricePackage.setPrice(resultSet.getDouble(5));
+                pricePackages.add(pricePackage);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return pricePackages;
+    }
+
+    public List<Subject> listTop8Subject() {
+        List<Subject> listSubject = new ArrayList<>();
+        try {
+            String query = "SELECT TOP 8 * FROM subjects order by creater_at desc";
+
+            ps = connection.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                String name = rs.getString(2);
+                int creator_id = rs.getInt(3);
+                Date creater_at = rs.getDate(4);
+                Date update_at = rs.getDate(5);
+                int status = rs.getInt(6);
+                String img = rs.getString(7);
+                String description = rs.getString(8);
+                String tag = rs.getString(9);
+
+                Subject subject = new Subject();
+                subject.setId(id);
+                subject.setName(name);
+                subject.setCreator_id(creator_id);
+                subject.setCreate_at(creater_at);
+                subject.setUpdate_at(update_at);
+                subject.setStatus(status);
+                subject.setImg(img);
+                subject.setDescription(description);
+                subject.setTag(tag);
+                listSubject.add(subject);
+            }
+        } catch (SQLException ex) {
+
+        }
+        return listSubject;
+    }
+
     public static void main(String[] args) {
         // view all subjects in database with status = 1
         SubjectDAO c = new SubjectDAO();
-        List<Subject> l = c.allSubjectsWithConditions("");
-        System.out.println(l.size());
-        for (Subject cs : l) {
-            System.out.println(cs);
+        
+        for (Subject s : c.allSubjectsWithConditions("", "asc")) {
+            System.out.println(s.toString());
         }
+        
     }
 }

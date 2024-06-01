@@ -35,7 +35,7 @@ public class ProfileController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProfileController</title>");            
+            out.println("<title>Servlet ProfileController</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet ProfileController at " + request.getContextPath() + "</h1>");
@@ -56,7 +56,17 @@ public class ProfileController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("profile.jsp").forward(request, response);
+        HttpSession session = request.getSession();
+        UserDAO userDAO = UserDAO.getInstance();
+        User user = (User) session.getAttribute("user");
+        User getAllInfo = userDAO.findUserByEmail(user.getEmail());
+        if (getAllInfo != null) {
+            request.setAttribute("user", getAllInfo);
+            request.getRequestDispatcher("profile.jsp").forward(request, response);
+        } else {
+            request.getRequestDispatcher("profile.jsp").forward(request, response);
+        }
+
     }
 
     /**
@@ -70,20 +80,28 @@ public class ProfileController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         HttpSession session = request.getSession();
-
+        HttpSession session = request.getSession();
+        String email = request.getParameter("email");
         String firstName = request.getParameter("first-name");
         String lastName = request.getParameter("last-name");
-        String phoneNumber = request.getParameter("phone-number");
-        String gender = request.getParameter("gender");
-        String dob = request.getParameter("dob");
         String username = request.getParameter("username");
-        
+        String phoneNumber = request.getParameter("phone-number");
         UserDAO userDAO = UserDAO.getInstance();
-        
+
         User user = (User) session.getAttribute("user");
-        
-        
+
+        if (user.getEmail() != null) {
+            userDAO.UpdateUserProfile(firstName, lastName, username, phoneNumber, email);
+            User getAllInfo = userDAO.findUserByEmail(email);
+            session.setAttribute("user", getAllInfo);
+            request.setAttribute("msg", "Update successfully");
+            response.sendRedirect("profile");
+        } else {
+            request.setAttribute("msg", "Update fail");
+            response.sendRedirect("profile");
+
+        }
+
     }
 
     /**

@@ -20,14 +20,11 @@ public class User {
 
     // Fields
     private int userId; // Unique identifier for the user
-    private String firstName; // User's first name
-    private String lastName; // User's last name
+    private String fullName; // User's full name
     private String email; // User's email address
     private String phoneNumber; // User's phone number
     private boolean gender; // User's gender (true for male, false for female)
-    private Date dob; // User's date of birth
     private String profileImg; // URL or path to the user's profile image
-    private String username; // User's chosen username
     private String password; // User's password
     private Date createdAt = new Date(System.currentTimeMillis()); // Timestamp of when the user was created
     private Date updatedAt = new Date(System.currentTimeMillis()); // Timestamp of the last update

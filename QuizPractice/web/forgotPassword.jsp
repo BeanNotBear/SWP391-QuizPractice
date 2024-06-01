@@ -1,9 +1,3 @@
-<%-- 
-    Document   : forgotPassword
-    Created on : May 14, 2024, 1:06:21 PM
-    Author     : Acer
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
@@ -11,7 +5,7 @@
     <head>
         <meta charset='utf-8'>
         <meta name='viewport' content='width=device-width, initial-scale=1'>
-        <title>Snippet - BBBootstrap</title>
+        <title>Forget Pasword</title>
         <link
             href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css'
             rel='stylesheet'>
@@ -79,9 +73,9 @@
                             <li><span class="text-primary text-medium">1. </span>Enter
                                 your email address below.</li>
                             <li><span class="text-primary text-medium">2. </span>Our
-                                system will send you an OTP to your email</li>
-                            <li><span class="text-primary text-medium">3. </span>Enter the OTP on the 
-                                next page</li>
+                                system will send you an via link to your email</li>
+                            <li><span class="text-primary text-medium">3. </span>Go 
+                                to your email and click on the via link to reset password </li>
                         </ol>
                     </div>
                     <form class="card mt-4" action="reset-password" method="POST">
@@ -90,7 +84,7 @@
                                 <label for="email-for-pass">Enter your email address</label> <input
                                     class="form-control" type="text" name="email" id="email-for-pass" required=""><small
                                     class="form-text text-muted">Enter the registered email address . Then we'll
-                                    email a OTP to this address.</small>
+                                    email a via link to this address.</small>
                                     <%
                                     if(request.getAttribute("message")!=null){
                                         out.print("<p class='text-danger ml-1'>"+request.getAttribute("message")+"</p>");

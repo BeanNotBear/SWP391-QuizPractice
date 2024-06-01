@@ -77,9 +77,9 @@ public class ChangePasswordController extends HttpServlet {
         String oldPassword = request.getParameter("password");
         String newPassword = request.getParameter("newPassword");
         String confirmPassword = request.getParameter("confirmPassword");
-        
+
         UserDAO userDAO = UserDAO.getInstance();
-        
+
         User user = (User) session.getAttribute("user");
 
         Validation validation = Validation.getInstance();
@@ -87,7 +87,7 @@ public class ChangePasswordController extends HttpServlet {
         if (Security.encryptToSHA512(oldPassword).equals(user.getPassword()) && oldPassword != null && newPassword != null && confirmPassword != null && newPassword.equals(confirmPassword) && validation.CheckFormatPassword(newPassword)) {
             if (userDAO.updatePassword(newPassword, user.getEmail())) {
                 request.setAttribute("status", "Change password successfully");
-                request.getRequestDispatcher("home.jsp").forward(request, response);
+                response.sendRedirect("home");
             } else {
                 request.setAttribute("status", "Change password fail");
                 request.getRequestDispatcher("changePassword.jsp").forward(request, response);

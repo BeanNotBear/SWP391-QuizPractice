@@ -1,5 +1,12 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page import="model.Blog" %>
+<%@ page import="model.Slider" %>
+<%@ page import="model.Subject" %>
+<%@ page import="java.util.List" %>
+<% List<Slider> top8Slider = (List<Slider>)request.getAttribute("top8Slider"); %>
+<% List<Subject> top8Subject = (List<Subject>)request.getAttribute("top8Subject"); %>
+<% List<Blog> top8Blog = (List<Blog>)request.getAttribute("top8Blog"); %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -13,7 +20,13 @@
 
         <!-- custom css file link  -->
         <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/home.css">
+        <link rel="stylesheet" href="css/popup.css"/>
 
+        <!-- Bootstrap file link  -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     </head>
     <body>
 
@@ -23,176 +36,127 @@
         <!-- sidebar -->
         <%@include file="layout/sidebar.jsp" %>
 
+        <!--login pop-up-->
+        <%@include file="layout/login.jsp" %>
+        
+        <%@include file="layout/register.jsp" %>
+        
+        <!--register pop up-->
+
+        <!-- Slider -->
         <section class="home-grid">
+            <div id="myCarousel" class="carousel slide custom-carousel" data-ride="carousel">
+                <!-- Indicators -->
+                <ol class="carousel-indicators">
+                    <% for (int i = 0; i < top8Slider.size(); i++) { %>
+                    <li data-target="#myCarousel" data-slide-to="<%= i %>" <% if (i == 0) { %>class="active"<% } %>></li>
+                        <% } %>
+                </ol>
 
-            <h1 class="heading">quick options</h1>
-
-            <div class="box-container">
-
-                <div class="box">
-                    <h3 class="title">likes and comments</h3>
-                    <p class="likes">total likes : <span>25</span></p>
-                    <a href="#" class="inline-btn">view likes</a>
-                    <p class="likes">total comments : <span>12</span></p>
-                    <a href="#" class="inline-btn">view comments</a>
-                    <p class="likes">saved playlists : <span>4</span></p>
-                    <a href="#" class="inline-btn">view playlists</a>
-                </div>
-
-                <div class="box">
-                    <h3 class="title">top categories</h3>
-                    <div class="flex">
-                        <a href="#"><i class="fas fa-code"></i><span>development</span></a>
-                        <a href="#"><i class="fas fa-chart-simple"></i><span>business</span></a>
-                        <a href="#"><i class="fas fa-pen"></i><span>design</span></a>
-                        <a href="#"><i class="fas fa-chart-line"></i><span>marketing</span></a>
-                        <a href="#"><i class="fas fa-music"></i><span>music</span></a>
-                        <a href="#"><i class="fas fa-camera"></i><span>photography</span></a>
-                        <a href="#"><i class="fas fa-cog"></i><span>software</span></a>
-                        <a href="#"><i class="fas fa-vial"></i><span>science</span></a>
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner">
+                    <% for (int i = 0; i < top8Slider.size(); i++) { %>
+                    <div class="item <% if (i == 0) { %>active<% } %>">
+                        <img src="<%= top8Slider.get(i).getImage() %>" alt="<%= top8Slider.get(i).getTitle() %>"
+                             onclick="window.location.href = '<%= top8Slider.get(i).getLinkUrl() %>'"
+                             style="cursor: pointer;">
+                        <div class="carousel-caption">
+                            <h3><%= top8Slider.get(i).getTitle() %></h3>
+                            <p><%= top8Slider.get(i).getSubTitle() %></p>
+                        </div>
                     </div>
+                    <% } %>
                 </div>
 
-                <div class="box">
-                    <h3 class="title">popular topics</h3>
-                    <div class="flex">
-                        <a href="#"><i class="fab fa-html5"></i><span>HTML</span></a>
-                        <a href="#"><i class="fab fa-css3"></i><span>CSS</span></a>
-                        <a href="#"><i class="fab fa-js"></i><span>javascript</span></a>
-                        <a href="#"><i class="fab fa-react"></i><span>react</span></a>
-                        <a href="#"><i class="fab fa-php"></i><span>PHP</span></a>
-                        <a href="#"><i class="fab fa-bootstrap"></i><span>bootstrap</span></a>
-                    </div>
-                </div>
-
-                <div class="box">
-                    <h3 class="title">become a tutor</h3>
-                    <p class="tutor">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Perspiciatis, nam?</p>
-                    <a href="teachers.html" class="inline-btn">get started</a>
-                </div>
-
+                <!-- Left and right controls -->
+                <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                    <span class="sr-only">Next</span>
+                </a>
             </div>
-
         </section>
 
-
-
+        <!-- Courses -->
         <section class="courses">
-
-            <h1 class="heading">our courses</h1>
-
-            <div class="box-container">
-
-                <div class="box">
-                    <div class="tutor">
-                        <img src="images/pic-2.jpg" alt="">
-                        <div class="info">
-                            <h3>john deo</h3>
-                            <span>21-10-2022</span>
+            <div class="container">
+                <div class="courses-header">
+                    <h1 class="heading">
+                        Subject <i class="fas fa-star" style="color: gold;"></i>
+                    </h1>
+                    <a href="<%=contextPath%>/subject" class="inline-option-btn btn-orange">View All Subject</a>
+                </div>
+                <div class="row">
+                    <% for (int i = 0; i < top8Subject.size(); i++) { %>
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div class="card">
+                            <img src="<%= top8Subject.get(i).getImg() %>" class="card-img-top fixed-size-img subject-img" alt="<%= top8Subject.get(i).getName() %>"
+                                 data-subject-id="<%= top8Subject.get(i).getId() %>">
+                            <div class="card-body">
+                                <h5 class="card-title"><%= top8Subject.get(i).getName() %></h5>
+                                <p class="card-text"><span class="badge badge-info"><%= top8Subject.get(i).getTag() %></span></p>
+                            </div>
                         </div>
                     </div>
-                    <div class="thumb">
-                        <img src="images/thumb-1.png" alt="">
-                        <span>10 videos</span>
-                    </div>
-                    <h3 class="title">complete HTML tutorial</h3>
-                    <a href="playlist.html" class="inline-btn">view playlist</a>
+                    <% } %>
                 </div>
-
-                <div class="box">
-                    <div class="tutor">
-                        <img src="images/pic-3.jpg" alt="">
-                        <div class="info">
-                            <h3>john deo</h3>
-                            <span>21-10-2022</span>
-                        </div>
-                    </div>
-                    <div class="thumb">
-                        <img src="images/thumb-2.png" alt="">
-                        <span>10 videos</span>
-                    </div>
-                    <h3 class="title">complete CSS tutorial</h3>
-                    <a href="playlist.html" class="inline-btn">view playlist</a>
-                </div>
-
-                <div class="box">
-                    <div class="tutor">
-                        <img src="images/pic-4.jpg" alt="">
-                        <div class="info">
-                            <h3>john deo</h3>
-                            <span>21-10-2022</span>
-                        </div>
-                    </div>
-                    <div class="thumb">
-                        <img src="images/thumb-3.png" alt="">
-                        <span>10 videos</span>
-                    </div>
-                    <h3 class="title">complete JS tutorial</h3>
-                    <a href="playlist.html" class="inline-btn">view playlist</a>
-                </div>
-
-                <div class="box">
-                    <div class="tutor">
-                        <img src="images/pic-5.jpg" alt="">
-                        <div class="info">
-                            <h3>john deo</h3>
-                            <span>21-10-2022</span>
-                        </div>
-                    </div>
-                    <div class="thumb">
-                        <img src="images/thumb-4.png" alt="">
-                        <span>10 videos</span>
-                    </div>
-                    <h3 class="title">complete Boostrap tutorial</h3>
-                    <a href="playlist.html" class="inline-btn">view playlist</a>
-                </div>
-
-                <div class="box">
-                    <div class="tutor">
-                        <img src="images/pic-6.jpg" alt="">
-                        <div class="info">
-                            <h3>john deo</h3>
-                            <span>21-10-2022</span>
-                        </div>
-                    </div>
-                    <div class="thumb">
-                        <img src="images/thumb-5.png" alt="">
-                        <span>10 videos</span>
-                    </div>
-                    <h3 class="title">complete JQuery tutorial</h3>
-                    <a href="playlist.html" class="inline-btn">view playlist</a>
-                </div>
-
-                <div class="box">
-                    <div class="tutor">
-                        <img src="images/pic-7.jpg" alt="">
-                        <div class="info">
-                            <h3>john deo</h3>
-                            <span>21-10-2022</span>
-                        </div>
-                    </div>
-                    <div class="thumb">
-                        <img src="images/thumb-6.png" alt="">
-                        <span>10 videos</span>
-                    </div>
-                    <h3 class="title">complete SASS tutorial</h3>
-                    <a href="playlist.html" class="inline-btn">view playlist</a>
-                </div>
-
             </div>
+        </section>
 
-            <div class="more-btn">
-                <a href="courses.html" class="inline-option-btn">view all courses</a>
+        <!-- Blog -->
+        <section class="blog-section">
+            <div class="container">
+                <div class="blog-header">
+                    <h1 class="heading">Latest Posts</h1>
+                    <a href="<%=contextPath%>/blog" class="inline-option-btn btn-orange">View All Blog</a>
+                </div>
+                <div class="row">
+                    <% for (int i = 0; i < top8Blog.size(); i++) { %>
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div class="blog-card">
+                            <img src="<%= top8Blog.get(i).getThumbnail()%>" class="card-img-top" alt="<%= top8Blog.get(i).getTitle() %>">
+                            <div class="card-body">
+                                <h5 class="card-title"><%= top8Blog.get(i).getTitle()%></h5>
+                                <p class="post-date"><%= top8Blog.get(i).getCreatedDate() %></p>
+                                <a href="<%=contextPath%>/blogdetail?pid=<%=top8Blog.get(i).getBlog_id()%>" class="btn btn-primary">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
+                </div>
             </div>
-
         </section>
 
         <!-- footer -->
         <%@include file="layout/footer.jsp" %>
 
+        <!--pop js-->
+        <script src="js/popup.js"></script>
+        
+        <!--validate js-->
+        <script src="js/validate.js"></script>
+
+        <!--jquery-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+        <!--swal-->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        
         <!-- custom js file link  -->
         <script src="js/script.js"></script>
-
-
+        
+        <!-- Click course image go to detail  -->
+        <script>
+                                 $(document).ready(function () {
+                                     $(".subject-img").click(function () {
+                                         var subjectId = $(this).data("subject-id");
+                                         window.location.href = "subject/details?id=" + subjectId;
+                                     });
+                                 });
+        </script>
     </body>
 </html>

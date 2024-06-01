@@ -1,142 +1,92 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>User Profile</title>
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-        <!-- font awesome cdn link  -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
-
-        <!-- custom css file link  -->
-        <link rel="stylesheet" href="css/style.css">
-
-    </head>
+    <%@include file="layout/head.jsp" %>
     <body>
+
         <!-- header -->
         <%@include file="layout/header.jsp" %>
 
         <!-- sidebar -->
         <%@include file="layout/sidebar.jsp" %>
-        <section>
-            <div class="container mt-5">
+
+
+        <!-- Edit profile -->
+        <section class="user-form-section">
+            <div class="container">
                 <div class="row">
-                    <div class="col-md-3">
-                        <div class="text-center mb-3">
-                            <img src="avatar.png" class="rounded-circle" alt="Avatar" width="100">
-                            <div>
-                                <button type="button" class="btn btn-primary btn-sm mt-2">Upload new photo</button>
-                            </div>
+                    <!-- Form column -->
+                    <div class="col-md-6 col-lg-6 mx-auto">
+                        <div class="form-header">
+                            <h1 class="heading">User Profile</h1>
                         </div>
-                        <ul class="list-group" id="sidebar">
-                            <li class="list-group-item active" data-target="general">General</li>
-                            <li class="list-group-item" data-target="change-password">Change password</li>
-                            <li class="list-group-item" data-target="info">Info</li>
-                        </ul>
-                    </div>
-                    <div class="col-md-9">
-                        <div class="card">
-                            <div class="card-body">
-                                <div id="general" class="content">
-                                    <form action="profile" method="post">
-                                        <div class="form-group">
-                                            <label for="username">First Name:</label>
-                                            <input type="text" class="form-control" id="first-name" value="${user.firstName}">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="name">Last Name:</label>
-                                            <input type="text" class="form-control" id="last-name" value="${user.lastName}">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="email">Email:</label>
-                                            <input type="email" class="form-control" id="email" value="${user.email}" readonly>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="company">Phone Number:</label>
-                                            <input type="text" class="form-control" id="phone-number" value="${user.phoneNumber}">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="company">Gender:</label>
-                                            <input type="text" class="form-control" id="gender" value="${user.gender}">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="company">Date of birth:</label>
-                                            <input type="text" class="form-control" id="dob" value="${user.dob}">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="company">Username:</label>
-                                            <input type="text" class="form-control" id="username" value="${user.username}">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="company">Created At:</label>
-                                            <input type="text" class="form-control" id="created-at" value="${user.createdAt}" readonly>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="company">Updated At:</label>
-                                            <input type="text" class="form-control" id="company" value="${user.updatedAt}" readonly>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary">Save changes</button>
-                                        <button type="reset" class="btn btn-secondary">Cancel</button>
-                                    </form>
-                                </div>
-                                <div id="change-password" class="content d-none">
-                                    <form action="change-password" method="post">
-                                        <div class="form-group">
-                                            <label for="current-password">Current password</label>
-                                            <input type="password" class="form-control" id="current-password">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="new-password">New password</label>
-                                            <input type="password" class="form-control" id="new-password">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="repeat-new-password">Repeat new password</label>
-                                            <input type="password" class="form-control" id="repeat-new-password">
-                                        </div>
-                                        <div class="box-container">
-                                            <button type="submit" class="btn btn-primary">Save changes</button>
-                                            <button type="reset" class="btn btn-secondary">Cancel</button>
-                                        </div>
-                                    </form>
-                                </div>
-                                <!-- Add other content divs similarly, setting them as d-none initially -->
+
+                        <form action="profile?email=${user.email}" method="POST" class="user-form">
+                            <%
+                                   if(request.getAttribute("msg")!=null){
+                                       out.print("<p class='text-danger ml-1'>"+request.getAttribute("msg")+"</p>");
+                                   }
+		  
+                            %>
+                            <div class="form-group">
+                                <label for="name">First name:</label>
+                                <input type="text" id="name" name="first-name" class="form-control" required value=${user.firstName} >
                             </div>
+                            <div class="form-group">
+                                <label for="phone">Last name:</label>
+                                <input type="text" id="phone" name="last-name" class="form-control" required value=${user.lastName}>
+                            </div>
+                            <div class="form-group">
+                                <label for="address">User name:</label>
+                                <input type="text" id="address" name="username" class="form-control" required value="${user.username}">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="email" id="email" name="email" class="form-control" readonly value="${user.email}" >
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Phone number:</label>
+                                <input type="text" id="address" name="phone-number" class="form-control" required value=${user.phoneNumber}>
+                            </div>
+
+                            <div class="form-group">
+                                <a href="change-password">Change password</a>
+                            </div>
+                            <div class="form-group buttons-inline">
+                                <button type="reset" class="btn btn-primary">Reset</button>
+                                <button type="submit" class="btn btn-secondary">Save changes</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="col-md-6 col-lg-2"></div>
+                    <!-- Image column -->
+                    <div class="col-md-6 col-lg-3">
+                        <div class="image-container">
+                            <img src="images/thumb-1.png" alt="User Profile Image" class="img-responsive">
+                            <button type="button" class="btn btn-secondary" onclick="location.href = 'home'">  <i class="fas fa-upload"></i> Upload</button>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
+        <!-- footer -->
         <%@include file="layout/footer.jsp" %>
 
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <!--pop js-->
+        <script src="js/popup.js"></script>
+
+        <!--jquery-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+        <!--swal-->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <!-- custom js file link  -->
         <script src="js/script.js"></script>
-        <script >
-            document.addEventListener('DOMContentLoaded', function () {
-                var sidebarItems = document.querySelectorAll('#sidebar .list-group-item');
-                var contentDivs = document.querySelectorAll('.content');
-
-                sidebarItems.forEach(function (item) {
-                    item.addEventListener('click', function () {
-                        sidebarItems.forEach(function (i) {
-                            i.classList.remove('active');
-                        });
-                        item.classList.add('active');
-
-                        var target = item.getAttribute('data-target');
-                        contentDivs.forEach(function (div) {
-                            if (div.id === target) {
-                                div.classList.remove('d-none');
-                            } else {
-                                div.classList.add('d-none');
-                            }
-                        });
-                    });
-                });
-            });
-        </script>
     </body>
 </html>

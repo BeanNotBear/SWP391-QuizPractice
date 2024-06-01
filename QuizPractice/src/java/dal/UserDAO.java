@@ -17,7 +17,8 @@ public class UserDAO extends DBContext {
     private Logger logger = Logger.getLogger(UserDAO.class.getName());
 
     // Private constructor to prevent instantiation
-    private UserDAO() {}
+    private UserDAO() {
+    }
 
     // Returns the singleton instance of UserDAO
     public static UserDAO getInstance() {
@@ -46,7 +47,7 @@ public class UserDAO extends DBContext {
         }
         return isDuplicate;
     }
-    
+
     public User findUserById(int id) {
         String query = "SELECT * "
                 + "FROM users "
@@ -59,20 +60,17 @@ public class UserDAO extends DBContext {
             if (rs.next()) {
                 user = new User();
                 user.setUserId(rs.getInt(1));
-                user.setFirstName(rs.getString(2));
-                user.setLastName(rs.getString(3));
-                user.setEmail(rs.getString(4));
-                user.setPhoneNumber(rs.getString(5));
-                user.setGender(rs.getBoolean(6));
-                user.setDob(rs.getDate(7));
-                user.setProfileImg(rs.getString(8));
-                user.setUsername(rs.getString(9));
-                user.setPassword(rs.getString(10));
-                user.setCreatedAt(rs.getDate(11));
-                user.setUpdatedAt(rs.getDate(12));
-                user.setRoleId(rs.getInt(13));
-                user.setStatusID(rs.getInt(14));
-                user.setToken(rs.getString(15));
+                user.setFullName(rs.getString(2));
+                user.setEmail(rs.getString(3));
+                user.setPhoneNumber(rs.getString(4));
+                user.setGender(rs.getBoolean(5));
+                user.setProfileImg(rs.getString(6));
+                user.setPassword(rs.getString(7));
+                user.setCreatedAt(rs.getDate(8));
+                user.setUpdatedAt(rs.getDate(9));
+                user.setRoleId(rs.getInt(10));
+                user.setStatusID(rs.getInt(11));
+                user.setToken(rs.getString(12));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -97,14 +95,11 @@ public class UserDAO extends DBContext {
     public int insert(User user) {
         // SQL query with placeholders for parameterized input
         String query = "INSERT INTO [dbo].[users]\n"
-                + "           ([first_name]\n"
-                + "           ,[last_name]\n"
+                + "           ([full_name]\n"
                 + "           ,[email]\n"
                 + "           ,[phone_number]\n"
                 + "           ,[gender]\n"
-                + "           ,[dob]\n"
                 + "           ,[profile_img]\n"
-                + "           ,[username]\n"
                 + "           ,[password]\n"
                 + "           ,[created_at]\n"
                 + "           ,[updated_at]\n"
@@ -112,7 +107,7 @@ public class UserDAO extends DBContext {
                 + "           ,[status_id]\n"
                 + "           ,[token])\n"
                 + "     VALUES\n"
-                + "           (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + "           (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         int rowAffected = 0; // Variable to store the number of rows affected
 
@@ -121,24 +116,21 @@ public class UserDAO extends DBContext {
             ps = connection.prepareStatement(query);
 
             // Set parameters for the PreparedStatement
-            ps.setString(1, user.getFirstName());
-            ps.setString(2, user.getLastName());
-            ps.setString(3, user.getEmail());
-            ps.setString(4, user.getPhoneNumber());
-            ps.setBoolean(5, user.isGender());
-            ps.setDate(6, user.getDob());
+            ps.setString(1, user.getFullName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPhoneNumber());
+            ps.setBoolean(4, user.isGender());
 
             // Set the profile image path based on gender
             String imgPath = user.isGender() ? "images/pic-1.jpg" : "images/pic-5.jpg";
-            ps.setString(7, imgPath);
+            ps.setString(5, imgPath);
 
-            ps.setString(8, user.getUsername());
-            ps.setString(9, user.getPassword()); // Ensure password is hashed
-            ps.setDate(10, user.getCreatedAt());
-            ps.setDate(11, user.getUpdatedAt());
-            ps.setInt(12, user.getRoleId());
-            ps.setInt(13, user.getStatusID());
-            ps.setString(14, user.getToken());
+            ps.setString(6, user.getPassword()); // Ensure password is hashed
+            ps.setDate(7, user.getCreatedAt());
+            ps.setDate(8, user.getUpdatedAt());
+            ps.setInt(9, user.getRoleId());
+            ps.setInt(10, user.getStatusID());
+            ps.setString(11, user.getToken());
 
             // Execute the query and get the number of rows affected
             rowAffected = ps.executeUpdate();
@@ -149,7 +141,7 @@ public class UserDAO extends DBContext {
         return rowAffected;
     }
 
-    // Checks if a user already exists by email
+    // Checks if a user already exists by username
     @SuppressWarnings("all")
     public boolean checkUserExistedByUsername(String username) {
         String query = "SELECT 1\n"
@@ -183,20 +175,17 @@ public class UserDAO extends DBContext {
             if (rs.next()) {
                 user = new User();
                 user.setUserId(rs.getInt(1));
-                user.setFirstName(rs.getString(2));
-                user.setLastName(rs.getString(3));
-                user.setEmail(rs.getString(4));
-                user.setPhoneNumber(rs.getString(5));
-                user.setGender(rs.getBoolean(6));
-                user.setDob(rs.getDate(7));
-                user.setProfileImg(rs.getString(8));
-                user.setUsername(rs.getString(9));
-                user.setPassword(rs.getString(10));
-                user.setCreatedAt(rs.getDate(11));
-                user.setUpdatedAt(rs.getDate(12));
-                user.setRoleId(rs.getInt(13));
-                user.setStatusID(rs.getInt(14));
-                user.setToken(rs.getString(15));
+                user.setFullName(rs.getString(2));
+                user.setEmail(rs.getString(3));
+                user.setPhoneNumber(rs.getString(4));
+                user.setGender(rs.getBoolean(5));
+                user.setProfileImg(rs.getString(6));
+                user.setPassword(rs.getString(7));
+                user.setCreatedAt(rs.getDate(8));
+                user.setUpdatedAt(rs.getDate(9));
+                user.setRoleId(rs.getInt(10));
+                user.setStatusID(rs.getInt(11));
+                user.setToken(rs.getString(12));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -217,20 +206,17 @@ public class UserDAO extends DBContext {
             if (rs.next()) {
                 user = new User();
                 user.setUserId(rs.getInt(1));
-                user.setFirstName(rs.getString(2));
-                user.setLastName(rs.getString(3));
-                user.setEmail(rs.getString(4));
-                user.setPhoneNumber(rs.getString(5));
-                user.setGender(rs.getBoolean(6));
-                user.setDob(rs.getDate(7));
-                user.setProfileImg(rs.getString(8));
-                user.setUsername(rs.getString(9));
-                user.setPassword(rs.getString(10));
-                user.setCreatedAt(rs.getDate(11));
-                user.setUpdatedAt(rs.getDate(12));
-                user.setRoleId(rs.getInt(13));
-                user.setStatusID(rs.getInt(14));
-                user.setToken(rs.getString(15));
+                user.setFullName(rs.getString(2));
+                user.setEmail(rs.getString(3));
+                user.setPhoneNumber(rs.getString(4));
+                user.setGender(rs.getBoolean(5));
+                user.setProfileImg(rs.getString(6));
+                user.setPassword(rs.getString(7));
+                user.setCreatedAt(rs.getDate(8));
+                user.setUpdatedAt(rs.getDate(9));
+                user.setRoleId(rs.getInt(10));
+                user.setStatusID(rs.getInt(11));
+                user.setToken(rs.getString(12));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -268,20 +254,17 @@ public class UserDAO extends DBContext {
             if (rs.next()) {
                 user = new User();
                 user.setUserId(rs.getInt(1));
-                user.setFirstName(rs.getString(2));
-                user.setLastName(rs.getString(3));
-                user.setEmail(rs.getString(4));
-                user.setPhoneNumber(rs.getString(5));
-                user.setGender(rs.getBoolean(6));
-                user.setDob(rs.getDate(7));
-                user.setProfileImg(rs.getString(8));
-                user.setUsername(rs.getString(9));
-                user.setPassword(rs.getString(10));
-                user.setCreatedAt(rs.getDate(11));
-                user.setUpdatedAt(rs.getDate(12));
-                user.setRoleId(rs.getInt(13));
-                user.setStatusID(rs.getInt(14));
-                user.setToken(rs.getString(15));
+                user.setFullName(rs.getString(2));
+                user.setEmail(rs.getString(3));
+                user.setPhoneNumber(rs.getString(4));
+                user.setGender(rs.getBoolean(5));
+                user.setProfileImg(rs.getString(6));
+                user.setPassword(rs.getString(7));
+                user.setCreatedAt(rs.getDate(8));
+                user.setUpdatedAt(rs.getDate(9));
+                user.setRoleId(rs.getInt(10));
+                user.setStatusID(rs.getInt(11));
+                user.setToken(rs.getString(12));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -291,14 +274,39 @@ public class UserDAO extends DBContext {
 
     // Updates the token of a user by email
     public int UpdateTokenByEmail(String token, String email) {
-        String query = "UPDATE users"
-                + "SET token = ?"
-                + "WHERE email = ?";
+        String query = "UPDATE users\n"
+                + "SET token = ?\n"
+                + "WHERE email = ?;";
         int rowAffected = 0;
+        System.out.println(token);
+        System.out.println(email);
         try {
             ps = connection.prepareStatement(query);
             ps.setString(1, token);
             ps.setString(2, email);
+            rowAffected = ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return rowAffected;
+    }
+
+    public int UpdateUserProfile(String firstName, String lastName, String username, String phoneNumber, String email) {
+        String query = "UPDATE [dbo].[users]\n"
+                + "                        SET [first_name] = ?\n"
+                + "                        ,[last_name] = ?\n"
+                + "                        ,[phone_number] = ?\n"
+                + "                        ,[username] = ?\n"
+                + "                        WHERE email= ?";
+        int rowAffected = 0;
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, firstName);
+            ps.setString(2, lastName);
+            ps.setString(3, phoneNumber);
+            ps.setString(4, username);
+            ps.setString(5, email);
             rowAffected = ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);

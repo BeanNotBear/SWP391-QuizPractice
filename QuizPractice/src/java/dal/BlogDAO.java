@@ -6,6 +6,7 @@ package dal;
 
 import context.DBContext;
 import java.sql.SQLException;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -44,15 +45,15 @@ public class BlogDAO extends DBContext {
     public List<Blog> searchPagingBlogs(String title, int index) {
         List<Blog> listPage = new ArrayList<>();
         try {
-            String query = "SELECT b.id, b.title, b.author, c.created_at,\n"
+            String query = "SELECT b.id, b.title, b.author_id, c.created_at,\n"
                     + "      c.updated_at, content, thumbnail, briefinfo,\n"
-                    + "      c.category_name\n"
-                    + "      FROM Category c \n"
+                    + "      c.name\n"
+                    + "      FROM categories c \n"
                     + "      JOIN [users] u ON u.id = c.created_by \n"
-                    + "      JOIN blogs b ON b.author = u.id \n"
+                    + "      JOIN blogs b ON b.author_id = u.id \n"
                     + "      WHERE b.title LIKE ?\n"
                     + "      ORDER BY b.created_at desc\n"
-                    + "      OFFSET ? ROWS FETCH NEXT 3 ROWS ONLY";
+                    + "      OFFSET ? ROWS FETCH NEXT 6 ROWS ONLY";
 
             ps = connection.prepareStatement(query);
             ps.setString(1, "%" + title + "%");
@@ -109,7 +110,7 @@ public class BlogDAO extends DBContext {
         List<Category> categories = new ArrayList<>();
         try {
 
-            String query = "SELECT * FROM category";
+            String query = "SELECT * FROM categories";
             ps = connection.prepareStatement(query);
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -161,13 +162,13 @@ public class BlogDAO extends DBContext {
         List<Blog> listPage = new ArrayList<>();
         try {
 
-            String query = "select b.id, b.title, b.author, b.created_at,\n"
-                    + "        b.Update_At, content, thumbnail, briefinfo, c.category_name\n"
-                    + "         FROM Category c \n"
+            String query = "select b.id, b.title, b.author_id, b.created_at,\n"
+                    + "        b.updated_at, content, thumbnail, briefinfo, c.name\n"
+                    + "         FROM categories c \n"
                     + "          JOIN [users] u ON u.id = c.created_by \n"
-                    + "           JOIN blogs b ON b.author = u.id\n"
+                    + "           JOIN blogs b ON b.author_id = u.id\n"
                     + "            order by b.created_at desc \n"
-                    + "          offset ? rows fetch next 3\n"
+                    + "          offset ? rows fetch next 6\n"
                     + "           rows only";
 
             ps = connection.prepareStatement(query);
@@ -211,8 +212,8 @@ public class BlogDAO extends DBContext {
                 blogs.setBlog_id(rs.getInt(1));
                 blogs.setTitle(rs.getString(2));
                 blogs.setAuthor_id(rs.getInt(3));
-                blogs.setCreatedDate(rs.getDate(7));
-                blogs.setThumbnail(rs.getString(11));
+                blogs.setCreatedDate(rs.getDate(4));
+                blogs.setThumbnail(rs.getString(8));
 
             }
         } catch (SQLException ex) {
@@ -233,11 +234,11 @@ public class BlogDAO extends DBContext {
         List<Blog> list = new ArrayList<>();
         try {
 
-            String query = "SELECT b.id, b.title, b.author, c.created_at,\n"
-                    + "     c.updated_at, content, thumbnail, briefinfo, c.category_name\n"
-                    + "     FROM category c \n"
+            String query = "SELECT b.id, b.title, b.author_id, c.created_at,\n"
+                    + "     c.updated_at, content, thumbnail, briefinfo, c.name\n"
+                    + "     FROM categories c \n"
                     + "     JOIN [users] u ON u.id = c.created_by \n"
-                    + "     JOIN blogs b ON b.author = u.id \n"
+                    + "     JOIN blogs b ON b.author_id = u.id \n"
                     + "     WHERE c.id LIKE ?\n"
                     + "     ORDER BY b.created_at desc";
             ps = connection.prepareStatement(query);
@@ -272,12 +273,12 @@ public class BlogDAO extends DBContext {
      */
     public Blog getBlogById(String id) {
         Blog blogs = null;
-        String query = "SELECT b.id, b.title, b.author, b.Created_At,\n"
-                + "                b.Update_At, Content, Thumbnail, briefinfo, c.Category_Name\n"
-                + "                 ,u.Last_Name + ' ' + u.First_Name as FullName\n"
-                + "                    FROM Category c \n"
-                + "                   JOIN [Users] u ON u.id = c.Created_By \n"
-                + "                   JOIN blogs b ON b.author = u.id \n"
+        String query = "SELECT b.id, b.title, b.author_id, b.created_at,\n"
+                + "                b.updated_at, content, b.thumbnail, b.briefinfo, c.name\n"
+                + "                 ,u.last_name + ' ' + u.first_Name as fullName\n"
+                + "                    FROM categories c \n"
+                + "                   JOIN [Users] u ON u.id = c.created_By \n"
+                + "                   JOIN blogs b ON b.author_id = u.id \n"
                 + "                    WHERE  b.id = ?";
         try {
             ps = connection.prepareStatement(query);
@@ -303,10 +304,48 @@ public class BlogDAO extends DBContext {
         }
         return blogs;
     }
+    
+    public List<Blog> listTop8Blog() {
+        List<Blog> listBlogs = new ArrayList<>();
+        try {
+            String query = "SELECT TOP 8 * FROM blogs order by created_at desc";
+
+            ps = connection.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                String title = rs.getString(2);
+                int author_id = rs.getInt(3);
+                Date created_at = rs.getDate(4);
+                Date updated_at = rs.getDate(5);
+                String content = rs.getString(6);
+                
+                int status = rs.getInt(7);
+                String thumbnail = rs.getString(8);
+                String briefinfo = rs.getString(9);
+                
+                Blog  blog = new Blog();
+                blog.setBlog_id(id);
+                blog.setTitle(title);
+                blog.setAuthor_id(author_id);
+                blog.setCreatedDate(created_at);
+                blog.setUpdatedDate(updated_at);
+                blog.setContent(content);
+                blog.setStatus(true);
+                blog.setThumbnail(thumbnail);
+                blog.setBrieinfo(briefinfo);
+                
+                listBlogs.add(blog);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listBlogs;
+    }
 
     public static void main(String[] args) {
         BlogDAO b = getInstance();
-        System.out.println(b.findNewPost());
+        System.out.println(b.getBlogById("24"));
     }
 
 }

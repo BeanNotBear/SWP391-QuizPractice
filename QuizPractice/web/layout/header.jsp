@@ -3,34 +3,37 @@
 <header class="header">
 
     <section class="flex">
-        <a href="home" class="logo">Educa.</a>
+        <a href="<%=request.getContextPath()%>/home" class="logo">Educa.</a>
 
-        <form action="search.html" method="post" class="search-form">
-            <input type="text" name="search_box" required placeholder="search courses..." maxlength="100">
+        <form action="<%=request.getContextPath()%>/subject" method="post" class="search-form">
+            <input type="text" name="search_box" required placeholder="search subject..." maxlength="100">
             <button type="submit" class="fas fa-search"></button>
         </form>
         <div class="icons">
             <div id="menu-btn" class="fas fa-bars"></div>
             <div id="search-btn" class="fas fa-search"></div>
             <div id="user-btn" class="fas fa-user"></div>
-            <div id="toggle-btn" class="fas fa-sun"></div>
+            <div onclick="openRightSideBar()" id="right-side-btn" class="fas fa-sun"></div>
         </div>
         <div class="profile">
             <c:if test="${sessionScope.user != null}">
-                <img src="images/pic-1.jpg" class="image" alt="">
-                <h3 class="name">${user.username}</h3>
+                <img src="<%=request.getContextPath()%>/${sessionScope.user.profileImg}" class="image" alt="">
+                <h3 class="name">${user.fullName}</h3>
                 <p class="role">student</p>
-                <a href="profile" class="btn">view profile</a>
+                <a href="profile" class="option-btn">view profile</a>
             </c:if>
             <div class="flex-btn">
                 <c:if test="${sessionScope.user == null}">
-                    <a href="/QuizPractice/login" class="option-btn">login</a>
-                    <a href="/QuizPractice/register" class="option-btn">register</a>
+                    <a onclick="openPopUp()" class="option-btn">login</a>
+                    <a onclick="openPopUp1()" class="option-btn">register</a>
                 </c:if>
                 <c:if test="${sessionScope.user != null}">
-                    <a href="/QuizPractice/logout" class="option-btn">Log Out</a>
+                    <a onclick="logout()" class="option-btn">Log Out</a>
                 </c:if>
             </div>
         </div>
     </section>
-</header> 
+</header>
+
+<!--login pop-up-->
+<%@include file="login.jsp" %>

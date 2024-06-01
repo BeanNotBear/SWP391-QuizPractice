@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Subject;
 
-@WebServlet("/subject/details")
+@WebServlet("/subject-details")
 public class SubjectDetailsController extends HttpServlet {
 
     /**
@@ -29,15 +29,16 @@ public class SubjectDetailsController extends HttpServlet {
             throws ServletException, IOException {
         String subjectId = request.getParameter("id");
         int subId;
-        System.out.println(subjectId);
         SubjectDAO subjectDAO = SubjectDAO.getInstance();
         Subject subject = null;
+        final String contexPath = request.getContextPath();
+        final String domain = request.getLocalName();
         try {
             subId = Integer.parseInt(subjectId);
             subject = subjectDAO.findSubjectById(subId);
             if(subject != null) {
                 request.setAttribute("subject", subject);
-                request.getRequestDispatcher("/subject/playlist.jsp").forward(request, response);
+                request.getRequestDispatcher("/playlist.jsp").forward(request, response);
             } else {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
             }
