@@ -32,7 +32,7 @@ public class SubjectController extends HttpServlet {
         SubjectDAO subjectDAO = SubjectDAO.getInstance();
 
         List<Subject> listSubject = subjectDAO.allSubjectsWithConditions(searchParam, sort);
-        System.out.println(listSubject.size());
+        System.out.println(listSubject);
         List<Subject> pagingSubject = subjectDAO.Paging(listSubject, page, pageSize);
         request.setAttribute("listC", pagingSubject);
         request.setAttribute("totalPages", listSubject.size() % pageSize == 0 ? (listSubject.size() / pageSize) : (listSubject.size() / pageSize + 1));

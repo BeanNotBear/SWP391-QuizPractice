@@ -10,6 +10,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.Blog;
 import model.Slider;
@@ -31,11 +32,15 @@ public class HomeController extends HttpServlet {
         List<Blog> top8Blog = blogDAO.listTop8Blog();
         List<Slider> top8Slider = sliderDAO.listTop8Slider();
         List<Subject> top8Subject = subjectDAO.listTop8Subject();
+        List<Subject> top3Subject = subjectDAO.find3FeatureSubject();
+        
+        HttpSession session = request.getSession();
         
          // Đặt các danh sách vào phạm vi request
         request.setAttribute("top8Blog", top8Blog);
         request.setAttribute("top8Slider", top8Slider);
         request.setAttribute("top8Subject", top8Subject);
+        session.setAttribute("top3Subject", top3Subject);
 
         // Chuyển hướng đến trang home.jsp
         request.getRequestDispatcher("/home.jsp").forward(request, response);

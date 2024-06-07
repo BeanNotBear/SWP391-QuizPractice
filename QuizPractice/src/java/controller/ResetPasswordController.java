@@ -6,7 +6,6 @@ package controller;
 
 import dal.UserDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -65,11 +64,9 @@ public class ResetPasswordController extends HttpServlet {
         if (!userDAO.checkExistByEmail(email)) {
             String token = CodeVerify.generateVerificationCode(); // Generate a verification token
             user.setToken(token);
-            if (Mail.sendMailVerify(email, token, activeLink)) {
-//                request.setAttribute("message", "OTP is sent to your email id");
-//                mySession.setAttribute("otp", otpvalue);
+            if (Mail.sendMailVerifyResetPassword(email, token, activeLink)) {
+
                 mySession.setAttribute("email", email);
-//                request.getRequestDispatcher("enterOTP.jsp").forward(request, response);
                 request.getRequestDispatcher("active.jsp").forward(request, response);
             } else {
                 request.setAttribute("message", "Error email sending!");

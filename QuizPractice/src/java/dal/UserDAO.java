@@ -78,7 +78,7 @@ public class UserDAO extends DBContext {
         return user;
     }
 
-    public boolean updatePassword(String password, String email) {
+    public boolean resetPassword(String password, String email) {
         String sql = "UPDATE users SET password = ? WHERE email = ?";
         try {
             ps = connection.prepareStatement(sql);
@@ -90,6 +90,21 @@ public class UserDAO extends DBContext {
             ex.printStackTrace();
             return false;
         }
+
+    }
+
+    public int updatePassword(String password, String email) {
+        String sql = "UPDATE users SET password = ? WHERE email = ?";
+        int rowAffected = 0; // Variable to store the number of rows affected
+        try {
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, Security.encryptToSHA512(password));
+            ps.setString(2, email);
+            rowAffected = ps.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return rowAffected;
     }
 
     public int insert(User user) {
@@ -292,21 +307,23 @@ public class UserDAO extends DBContext {
         return rowAffected;
     }
 
-    public int UpdateUserProfile(String firstName, String lastName, String username, String phoneNumber, String email) {
+    public int UpdateUserProfile(String fullName, String phoneNumber, String gender, String email) {
         String query = "UPDATE [dbo].[users]\n"
-                + "                        SET [first_name] = ?\n"
-                + "                        ,[last_name] = ?\n"
-                + "                        ,[phone_number] = ?\n"
-                + "                        ,[username] = ?\n"
-                + "                        WHERE email= ?";
+                + "   SET [full_name] = ?\n"
+                + "      ,[phone_number] = ?\n"
+                + "      ,[gender] = ?\n"
+                + " WHERE [email] = ?";
+        int gen = 0;
+        if(gender.equals("true")) {
+            gen = 1;
+        }
         int rowAffected = 0;
         try {
             ps = connection.prepareStatement(query);
-            ps.setString(1, firstName);
-            ps.setString(2, lastName);
-            ps.setString(3, phoneNumber);
-            ps.setString(4, username);
-            ps.setString(5, email);
+            ps.setString(1, fullName);
+            ps.setString(2, phoneNumber);
+            ps.setInt(3, gen);
+            ps.setString(4, email);
             rowAffected = ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);

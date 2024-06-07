@@ -35,15 +35,21 @@
 
         <!-- sidebar -->
         <%@include file="layout/sidebar.jsp" %>
+        
+        <!--profile pop-up-->
+        <%@include file="layout/profile.jsp" %>
+        
+        <!--change password pop-up-->
+        <%@include file="layout/changePassword.jsp" %>
 
         <!--login pop-up-->
         <%@include file="layout/login.jsp" %>
-        
+
         <!--register pop up-->
         <%@include file="layout/register.jsp" %>
-        
+
         <%@include file="layout/loader.jsp" %>
-        
+
         <!-- Slider -->
         <section class="home-grid">
             <div id="myCarousel" class="carousel slide custom-carousel" data-ride="carousel">
@@ -98,7 +104,9 @@
                                  data-subject-id="<%= top8Subject.get(i).getId() %>">
                             <div class="card-body">
                                 <h5 class="card-title"><%= top8Subject.get(i).getName() %></h5>
-                                <p class="card-text"><span class="badge badge-info"><%= top8Subject.get(i).getTag() %></span></p>
+                                <%for(int j = 0; j < top8Subject.get(i).getTags().size(); j++) {%>
+                                <span class="card-text"><span class="badge badge-info"><%= top8Subject.get(i).getTags().get(j).getTag()%></span></span>
+                                    <%}%>
                             </div>
                         </div>
                     </div>
@@ -136,7 +144,7 @@
 
         <!--pop js-->
         <script src="js/popup.js"></script>
-        
+
         <!--validate js-->
         <script src="js/validate.js"></script>
 
@@ -146,16 +154,16 @@
         <!--swal-->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        
+
         <!-- custom js file link  -->
         <script src="js/script.js"></script>
-        
+
         <!-- Click course image go to detail  -->
         <script>
                                  $(document).ready(function () {
                                      $(".subject-img").click(function () {
                                          var subjectId = $(this).data("subject-id");
-                                         window.location.href = "subject/details?id=" + subjectId;
+                                         window.location.href = "subject-details?id=" + subjectId;
                                      });
                                  });
         </script>

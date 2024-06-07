@@ -26,6 +26,9 @@
 
         <%@include file="layout/header.jsp" %> 
         <%@include file="layout/sidebar.jsp" %>
+        <%@include file="layout/profile.jsp" %>
+        <!--change password pop-up-->
+        <%@include file="layout/changePassword.jsp" %>
 
         <section class="courses">
             <div>
@@ -41,7 +44,7 @@
                         <div class="tutor">
                             <img src="${c.creator.profileImg}" alt="">
                             <div class="info">
-                                <h3>${c.creator.firstName} ${c.creator.lastName}</h3>
+                                <h3>${c.creator.fullName}</h3>
                                 <span>${c.create_at}</span>
                             </div>
                         </div>
@@ -50,7 +53,12 @@
                             <span>${c.numberOfLesson} lesson</span>
                         </div>
                         <h3 class="title">${c.name}</h3>
-                        <h4 class="heading">${c.pricePackages.get(0).salePrice}VND</h4>
+                        <h4>Sale price: ${c.pricePackages.get(0).salePrice}VND</h4>
+                        <h4>Origin price: <span style="text-decoration: line-through">${c.pricePackages.get(0).price}VND</span></h4>
+                        <c:forEach var="i" items="${c.tags}">
+                            <span class="card-text"><span class="badge badge-info">${i.tag}</span></span>
+                            </c:forEach>
+                        <br/>
                         <a href="subject-details?id=${c.id}" class="inline-btn">Details</a>
                         <a href="subject-register?id=${c.id}" class="inline-btn">Register</a>
                     </div>

@@ -275,7 +275,7 @@ public class BlogDAO extends DBContext {
         Blog blogs = null;
         String query = "SELECT b.id, b.title, b.author_id, b.created_at,\n"
                 + "                b.updated_at, content, b.thumbnail, b.briefinfo, c.name\n"
-                + "                 ,u.last_name + ' ' + u.first_Name as fullName\n"
+                + "                 ,u.full_name, u.email, u.phone_number\n"
                 + "                    FROM categories c \n"
                 + "                   JOIN [Users] u ON u.id = c.created_By \n"
                 + "                   JOIN blogs b ON b.author_id = u.id \n"
@@ -298,6 +298,8 @@ public class BlogDAO extends DBContext {
                 Category cat = new Category(category);
                 blogs.setCategory(cat); // Set the category name
                 blogs.setBlog_firstName(rs.getString(10)); // Set the first name
+                blogs.setEmail_blog(rs.getString(11));
+                blogs.setNumber_blog(rs.getString(12));
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);

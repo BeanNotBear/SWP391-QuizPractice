@@ -13,38 +13,16 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.User;
+import org.json.JSONException;
+import org.json.JSONObject;
 import util.security.Security;
 import util.validation.Validation;
 
 @WebServlet("/change-password")
 public class ChangePasswordController extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ChangePasswordController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ChangePasswordController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -58,7 +36,7 @@ public class ChangePasswordController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("changePassword.jsp").forward(request, response);
+        doPost(request, response);
     }
 
     /**
@@ -74,9 +52,9 @@ public class ChangePasswordController extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
 
-        String oldPassword = request.getParameter("password");
-        String newPassword = request.getParameter("newPassword");
-        String confirmPassword = request.getParameter("confirmPassword");
+        String oldPassword = request.getParameter("old-password");
+        String newPassword = request.getParameter("new-password");
+        String confirmPassword = request.getParameter("confirm-password");
 
         UserDAO userDAO = UserDAO.getInstance();
 
@@ -84,18 +62,43 @@ public class ChangePasswordController extends HttpServlet {
 
         Validation validation = Validation.getInstance();
 
-        if (Security.encryptToSHA512(oldPassword).equals(user.getPassword()) && oldPassword != null && newPassword != null && confirmPassword != null && newPassword.equals(confirmPassword) && validation.CheckFormatPassword(newPassword)) {
-            if (userDAO.updatePassword(newPassword, user.getEmail())) {
-                request.setAttribute("status", "Change password successfully");
-                response.sendRedirect("home");
-            } else {
-                request.setAttribute("status", "Change password fail");
-                request.getRequestDispatcher("changePassword.jsp").forward(request, response);
+        JSONObject jsonResponse = new JSONObject();
+
+        boolean isValidInformation = true; // Flag to check if the information is valid
+        try {
+            if (!validation.CheckFormatPassword(newPassword)) {
+                isValidInformation = false;
+                jsonResponse.put("err",
+                        "Your input must contain at least one uppercase letter,"
+                        + " one lowercase letter, one digit, "
+                        + "one special character, "
+                        + "and be at least 8 characters long.");
             }
-        } else {
-            request.setAttribute("status", "Please confirm password again!");
-            request.getRequestDispatcher("changePassword.jsp").forward(request, response);
+
+            // Validate if passwords match
+            if (!newPassword.equals(confirmPassword)) {
+                isValidInformation = false;
+                jsonResponse.put("err", "Password and Confirm password do not match");
+            }
+
+            if (isValidInformation && Security.encryptToSHA512(oldPassword).equals(user.getPassword()) 
+                    && oldPassword != null 
+                    && newPassword != null 
+                    && confirmPassword != null 
+                    && newPassword.equals(confirmPassword) 
+                    && validation.CheckFormatPassword(newPassword)) {
+                jsonResponse.put("status", "success");
+                userDAO.updatePassword(newPassword, user.getEmail());
+            } else {
+                jsonResponse.put("status", "error");
+            }
+        } catch (JSONException ex) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        response.setContentType("application/json");
+        response.getWriter().write(jsonResponse.toString());
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.sendRedirect("home");
     }
 
     /**

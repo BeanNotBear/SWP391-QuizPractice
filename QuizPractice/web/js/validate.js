@@ -1,7 +1,7 @@
 let isValidate = false;
 
 function validateFullName (fName) {
-    let fullName = document.querySelector("#fullName");
+    let fullName = document.querySelector("#fullName-rg");
     if(fName.value.trim() === "") {
         isValidate = false;
         fullName.innerHTML = "You must fill first name";
@@ -12,7 +12,7 @@ function validateFullName (fName) {
 }
 
 function validateEmail(email) {
-    let uEmail = document.querySelector("#uEmail");
+    let uEmail = document.querySelector("#uEmail-rg");
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if(!emailPattern.test(email.value)) {
         isValidate = false;
@@ -24,7 +24,7 @@ function validateEmail(email) {
 }
 
 function validatePhoneNumber(phone) {
-    let phoneNumber = document.querySelector("#phoneNumber");
+    let phoneNumber = document.querySelector("#phoneNumber-rg");
     const phonePattern = /^(\+?\d{1,4}?[-.\s]?)?(\(?\d{3}\)?[-.\s]?)?\d{3}[-.\s]?\d{4}$/;
     if(phone.value.trim() !== "" && !phonePattern.test(phone.value)) {
         isValidate = false;
@@ -35,40 +35,8 @@ function validatePhoneNumber(phone) {
     }
 }
 
-function validateDob(dob) {
-    const dobDate = new Date(dob.value);
-    
-    // Get the current date
-    const currentDate = new Date();
-    
-    // Calculate the age
-    let age = currentDate.getFullYear() - dobDate.getFullYear();
-    
-    // Get msg of dob
-    let dobMsg = document.querySelector("#dobMsg");
-    
-    if(!(age >= 16)) {
-        isValidate = false;
-        dobMsg.innerHTML = "Your age needs to be greater than 16";
-    } else {
-        isValidate = true;
-        dobMsg.innerHTML = "";
-    }
-}
-
-function validateUsername(username) {
-    let usernameMsg = document.querySelector("#usernameMsg");
-    if(username.value === "") {
-        isValidate = false;
-        usernameMsg.innerHTML = "you must fill username";
-    } else {
-        isValidate = true;
-        usernameMsg.innerHTML = "";
-    }
-}
-
 function validatePassword(password) {
-    let passwordMsg = document.querySelector("#passwordMsg");
+    let passwordMsg = document.querySelector("#passwordMsg-rg");
     const passwordPattern = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,20}$/;
     if(!passwordPattern.test(password.value)) {
         isValidate = false;
@@ -80,8 +48,8 @@ function validatePassword(password) {
 }
 
 function checkPasswordAndCfPassword(cfPassword) {
-    let cfPasswordMsg = document.querySelector("#cfPassowrdMsg");
-    let password = document.querySelector("#password-rg");
+    let cfPasswordMsg = document.querySelector("#cfPassowrdMsg-rg");
+    let password = document.querySelector("#password-rg-1");
     if(cfPassword.value !== password.value) {
         isValidate = false;
         cfPasswordMsg.innerHTML = "Password and Confirm password do not match";

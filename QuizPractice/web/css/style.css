@@ -274,6 +274,22 @@ section{
     padding: 20px;
     transition: right 0.3s; /* Add transition effect for smooth animation */
     display: none;
+    overflow-y: auto;
+}
+
+
+#search-blog {
+    position: relative;
+}
+
+#seb {
+    position: absolute;
+    top: 12px;
+    right: -13px;
+}
+
+#date-bl {
+    font-size: 10px;
 }
 
 .side-barright.active {
@@ -416,18 +432,17 @@ a.activee{
 }
 
 #sea{
-    width: 120px;
+    width: 130px;
     height: 55px;
     border-radius:  10px ;
     background-color: honeydew;
 }
 #seb{
-    height: 50px ;
-    width: 50px;
+    height: 30px ;
+    width: 30px;
     border-radius: 80px;
     color: #218838;
     background-color: #ddd;
-    margin-top: 10px;
 }
 #hot{
     margin-bottom: 30px;
@@ -1553,29 +1568,56 @@ a.activee{
     background-color: #ccc;
 }
 
-
-
-.footer{
+.footer {
     background-color: var(--white);
-    border-top: var(--border);
-    position: static;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    color: var(--main-color);
+    padding: 1px;
     text-align: center;
-    font-size: 2rem;
-    padding:2.5rem 2rem;
-    color:var(--black);
-    margin-top: 1rem;
-    z-index: 1000;
+    font-family: Arial, sans-serif;
+    border-top: 1px solid;
+}
+.footer section {
+    margin-bottom: 20px;
+}
+.footer h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+.footer p {
+    margin: 5px 0;
+}
+.footer strong {
+    color: var(--main-color);
+}
+.footer ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+}
+.footer ul li {
+    display: inline;
+    margin: 0 10px;
+}
+.footer ul li #facebook {
+    color: var(--blue);
+    text-decoration: none;
 }
 
-.footer span{
-    color:var(--main-color);
+.footer ul li #youtube {
+    color: var(--red);
+    text-decoration: none;
 }
 
-.center {
+.footer ul li #tiktok {
+    color: var(--black);
+    text-decoration: none;
+}
 
+.footer ul li a:hover {
+    text-decoration: underline;
+}
+.footer span {
+    font-weight: bold;
 }
 
 @media (max-width:1200px){
@@ -1655,4 +1697,31 @@ a.activee{
         height: 25rem;
     }
 
+}
+
+.feature-subject {
+    display: block;
+    padding-top: 2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    font-size: 2rem;
+    color: #8e44ad;
+}
+
+.side-bar {
+    overflow-y: auto;
+}
+
+.search-form {
+    width: 90%;
+    border-radius: .5rem;
+    background-color: var(--light-bg);
+    padding: 1.5rem 2rem;
+    display: flex;
+    gap: 2rem;
+    margin-left: 15px;
+}
+
+.search-form input{
+    background-color: var(--light-bg);
 }

@@ -88,4 +88,6 @@ public class Blog {
      */
     private String blog_firstName; // Changed to String
     private String blog_lastName;
+    private String email_blog;
+    private String number_blog;
 }

@@ -26,8 +26,8 @@ public class Subject {
     private int status;
     private String img;
     private String description;
-    private String tag;
     private int numberOfLesson;
     private User creator;
     private List<PricePackage> pricePackages;
+    private List<Tag> tags;
 }

@@ -25,9 +25,13 @@
 
     </head>
     <body>
+
         <%@include file="/layout/header.jsp"%>
 
         <%@include file="/layout/sidebar.jsp"%>
+        <%@include file="layout/profile.jsp" %>
+        <!--change password pop-up-->
+        <%@include file="layout/changePassword.jsp" %>
 
         <section class="playlist-details">
             <c:set var="subject" value="${requestScope.subject}"/>
@@ -52,7 +56,7 @@
                     <div class="tutor">
                         <img src="<%=contextPath%>/${subject.creator.profileImg}" alt="">
                         <div>
-                            <h3>${subject.creator.firstName} ${subject.creator.lastName}</h3>
+                            <h3>${subject.creator.fullName}</h3>
                             <span>${subject.create_at}</span>
                         </div>
                     </div>
@@ -60,13 +64,12 @@
                     <div class="details">
                         <h3>${subject.name}</h3>
                         <p>${subject.description}</p>
-                        <p>
-                            ${subject.name} has ${subject.pricePackages.size()} package price:
-                            <br/>
-                            <c:forEach var="p" items="${subject.pricePackages}">
-                                ${p.name}: ${p.salePrice} VND<br/> 
+                        <h4>Sale price: <span>${subject.pricePackages.get(0).salePrice} VND</span></h4>
+                        <h4>Origin price: <span style="text-decoration: line-through">${subject.pricePackages.get(0).price} VND</span></h4>
+                        <c:forEach var="i" items="${subject.tags}">
+                            <span class="card-text"><span class="badge badge-info">${i.tag}</span></span>
                             </c:forEach>
-                        </p>
+                        <br/>
                         <a href="<%=contextPath%>/teacher?id=${subject.creator.userId}" class="inline-btn">view profile</a>
                         <a href="<%=contextPath%>/subject/register?id=${subject.id}" class="inline-btn">Register Now</a>
                     </div>

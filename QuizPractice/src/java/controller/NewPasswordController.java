@@ -45,26 +45,26 @@ public class NewPasswordController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        
-        String newPassword = request.getParameter("newPassword");       
+
+        String newPassword = request.getParameter("newPassword");
         String confirmPassword = request.getParameter("confirmPassword");
         String email = (String) session.getAttribute("email");
-        
+
         UserDAO userDAO = UserDAO.getInstance();
-        
+
         Validation validation = Validation.getInstance();
-        
+
         if (newPassword != null && confirmPassword != null && newPassword.equals(confirmPassword) && validation.CheckFormatPassword(newPassword)) {
-            if (userDAO.updatePassword(newPassword, email)) {
+            if (userDAO.resetPassword(newPassword, email)) {
                 request.setAttribute("status", "Change password successfully");
-                request.getRequestDispatcher("login.jsp").forward(request, response);
+                response.sendRedirect("home");
             } else {
                 request.setAttribute("status", "Change password fail!");
-                request.getRequestDispatcher("login.jsp").forward(request, response);
+                response.sendRedirect("home");
             }
         } else {
             request.setAttribute("status", "Please confirm password again!");
-            request.getRequestDispatcher("resetPassword.jsp").forward(request, response);
+                            response.sendRedirect("reset-password");
         }
     }
 

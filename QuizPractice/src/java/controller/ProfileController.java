@@ -13,7 +13,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.User;
+import org.json.JSONException;
+import org.json.JSONObject;
+import util.validation.Validation;
 
 @WebServlet("/profile")
 public class ProfileController extends HttpServlet {
@@ -56,17 +61,7 @@ public class ProfileController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        UserDAO userDAO = UserDAO.getInstance();
-        User user = (User) session.getAttribute("user");
-        User getAllInfo = userDAO.findUserByEmail(user.getEmail());
-        if (getAllInfo != null) {
-            request.setAttribute("user", getAllInfo);
-            request.getRequestDispatcher("profile.jsp").forward(request, response);
-        } else {
-            request.getRequestDispatcher("profile.jsp").forward(request, response);
-        }
-
+        doPost(request, response);
     }
 
     /**
@@ -82,25 +77,53 @@ public class ProfileController extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         String email = request.getParameter("email");
-        String firstName = request.getParameter("first-name");
-        String lastName = request.getParameter("last-name");
-        String username = request.getParameter("username");
-        String phoneNumber = request.getParameter("phone-number");
+        String fullName = request.getParameter("fullName");
+        String phoneNumber = request.getParameter("phone");
+        String gender = request.getParameter("gender");
         UserDAO userDAO = UserDAO.getInstance();
+        boolean isValidInformation = true;
+
+        JSONObject jsonResponse = new JSONObject();
 
         User user = (User) session.getAttribute("user");
 
-        if (user.getEmail() != null) {
-            userDAO.UpdateUserProfile(firstName, lastName, username, phoneNumber, email);
-            User getAllInfo = userDAO.findUserByEmail(email);
-            session.setAttribute("user", getAllInfo);
-            request.setAttribute("msg", "Update successfully");
-            response.sendRedirect("profile");
-        } else {
-            request.setAttribute("msg", "Update fail");
-            response.sendRedirect("profile");
+        Validation validation = Validation.getInstance();
 
+        try {
+            // Validate fullname
+            if (fullName == null || fullName.isEmpty()) {
+                isValidInformation = false;
+                jsonResponse.put("err", "You must fill first name");
+            }
+
+            // Validate gender
+            if (gender == null || gender.isEmpty()
+                    || (!gender.equals("true") && !gender.equals("false"))) {
+                isValidInformation = false;
+                jsonResponse.put("err", "Gender must be male or female");
+            }
+
+            // Validate phone number format
+            if (phoneNumber != null && !phoneNumber.isEmpty() && !validation.CheckFormatPhone(phoneNumber)) {
+                isValidInformation = false;
+                jsonResponse.put("err", "Phone is wrong format");
+            }
+            if (isValidInformation && user.getEmail() != null) {
+                userDAO.UpdateUserProfile(fullName, phoneNumber, gender, email);
+                User getAllInfo = userDAO.findUserByEmail(email);
+                session.setAttribute("user", getAllInfo);
+                jsonResponse.put("status", "success");
+            } else {
+                jsonResponse.put("status", "error");
+
+            }
+        } catch (JSONException ex) {
+            Logger.getLogger(LoginController.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
+        response.setContentType("application/json");
+        response.getWriter().write(jsonResponse.toString());
+        response.setStatus(HttpServletResponse.SC_OK);
 
     }
 

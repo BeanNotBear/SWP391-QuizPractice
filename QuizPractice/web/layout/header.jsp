@@ -5,22 +5,18 @@
     <section class="flex">
         <a href="<%=request.getContextPath()%>/home" class="logo">Educa.</a>
 
-        <form action="<%=request.getContextPath()%>/subject" method="post" class="search-form">
-            <input type="text" name="search_box" required placeholder="search subject..." maxlength="100">
-            <button type="submit" class="fas fa-search"></button>
-        </form>
         <div class="icons">
             <div id="menu-btn" class="fas fa-bars"></div>
             <div id="search-btn" class="fas fa-search"></div>
             <div id="user-btn" class="fas fa-user"></div>
             <div onclick="openRightSideBar()" id="right-side-btn" class="fas fa-sun"></div>
         </div>
-        <div class="profile">
+        <div class="profile ">
             <c:if test="${sessionScope.user != null}">
                 <img src="<%=request.getContextPath()%>/${sessionScope.user.profileImg}" class="image" alt="">
                 <h3 class="name">${user.fullName}</h3>
                 <p class="role">student</p>
-                <a href="profile" class="option-btn">view profile</a>
+                <a onclick="openPopUp2()" class="option-btn">view profile</a>
             </c:if>
             <div class="flex-btn">
                 <c:if test="${sessionScope.user == null}">
