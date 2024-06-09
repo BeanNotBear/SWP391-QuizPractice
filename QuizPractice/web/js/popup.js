@@ -13,16 +13,17 @@ function openPopUp() {
 }
 
 function closePopUp1() {
-    const loginPopUp = document.querySelector(".register-popup");
-    if (loginPopUp.style.display !== "none") {
-        loginPopUp.style.display = "none";
+    const registerPopUp = document.querySelector("#register-popup");
+    if (registerPopUp.style.display !== "none") {
+        registerPopUp.style.display = "none";
     }
 }
 
 function openPopUp1() {
-    const loginPopUp = document.querySelector(".register-popup");
-    if (loginPopUp.style.display === "none" || loginPopUp.style.display === "") {
-        loginPopUp.style.display = "block";
+    const registerPopUp = document.querySelector("#register-popup");
+    console.log(registerPopUp.style.display);
+    if (registerPopUp.style.display === "none" || registerPopUp.style.display === "") {
+        registerPopUp.style.display = "block";
     }
 }
 

@@ -38,25 +38,28 @@
 
         <!-- Hiển thị tất cả blogs có trong database -->
         <section class="reviews">
-            <div class="heading-container">
-                <h1 class="heading">Blogs</h1>
-            </div>
+
+            <h1 class="heading">Pots detail </h1>
+
             <div class="box-container">
-                <c:forEach items="${bloglist}" var="li" >
+               
                     <div class="box">
-                        <img src="${li.thumbnail}" id="ima"/>
+                        <img src="${detail.getThumbnail()}" id="detailImg"/>
                         <div class="student">
                             <div>
-                                <h3>${li.getTitle()}</h3>
-                                <p> ${li.getBrieinfo()}</p>
+                                <h3>${detail.getTitle()}</h3>
+                             
                                 <div class="stars">
-                                    <p>Category : ${li.category.getCategory_Name()}</p>
-                                    <button> <a href="blogdetail?pid=${li.blog_id}">READ MORE</a></button>
-                                </div>
+                                    <p>Author: ${detail.blog_firstName}</p>
+                                    <p>Create date: ${detail.createdDate}</p>
+                                    <p>Category: ${detail.category.getCategory_Name()}</p>                                  
+                                </div> 
+                                <h2>Content</h2>
+                                  <p>${detail.content}</p>
                             </div>
-                        </div>
+                            
+                        </div>         
                     </div>
-                </c:forEach>            
             </div>
         </section>
 

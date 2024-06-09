@@ -12,14 +12,14 @@
 
             <div class="group-pass">
                 <p>Enter your new password <span>*</span></p>
-                <input onkeyup="validatePassword(this)" id="password-rg" type="password" name="new-password" placeholder="New password" required maxlength="20" class="box cf-password">
+                <input onkeyup="validatePassword(this)" id="password-ch" type="password" name="new-password" placeholder="New password" required maxlength="20" class="box cf-password">
                 <span id="show-pass" class="show-password">Show password</span>
                 <div id="passwordMsg" class="danger_msg"></div>
             </div>
 
             <div class="group-cf-pass">
                 <p>Confirm your new password<span>*</span></p>
-                <input onkeyup="checkPasswordAndCfPassword(this)" id="cfPasssword-rg" type="password" name="confirm-password" placeholder="Confirm password" required maxlength="20" class="box cf-password">
+                <input onkeyup="checkPasswordAndCfPassword(this)" id="cfPasssword-ch" type="password" name="confirm-password" placeholder="Confirm password" required maxlength="20" class="box cf-password">
                 <span id="show-cf-pass" class="show-password">Show password</span>
                 <div id="cfPassowrdMsg" class="danger_msg"></div>
             </div>

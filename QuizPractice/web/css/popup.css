@@ -28,7 +28,7 @@
     cursor: pointer;
 }
 
-.register-popup {
+#register-popup {
     display: none;
     position: fixed;
     z-index: 1000;

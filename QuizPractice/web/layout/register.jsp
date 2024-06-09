@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<div class="register-popup">
+<div id="register-popup">
     <section class="form-container">
         <i id="cancel-register" class="fa-solid fa-xmark" onclick="closePopUp1()"></i>
         <form id="register-form" action="register" method="post">
