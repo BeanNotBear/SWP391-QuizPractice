@@ -21,7 +21,6 @@ function closePopUp1() {
 
 function openPopUp1() {
     const registerPopUp = document.querySelector("#register-popup");
-    console.log(registerPopUp.style.display);
     if (registerPopUp.style.display === "none" || registerPopUp.style.display === "") {
         registerPopUp.style.display = "block";
     }
