@@ -1,11 +1,2 @@
-<<<<<<< .gitignore
-<<<<<<< HEAD
-=======
-/QuizPractice/dist/
->>>>>>> .gitignore
 /QuizPractice/build/
 /QuizPractice/dist/
-=======
-/QuizPractice/dist/
-/QuizPractice/build/
->>>>>>> main
