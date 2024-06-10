@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
-import model.Subject;
+import dto.SubjectDTO;
 
 @WebServlet(name = "SubjectController", urlPatterns = {"/subject"})
 public class SubjectController extends HttpServlet {
@@ -31,9 +31,9 @@ public class SubjectController extends HttpServlet {
         
         SubjectDAO subjectDAO = SubjectDAO.getInstance();
 
-        List<Subject> listSubject = subjectDAO.allSubjectsWithConditions(searchParam, sort);
+        List<SubjectDTO> listSubject = subjectDAO.allSubjectsWithConditions(searchParam, sort);
         System.out.println(listSubject);
-        List<Subject> pagingSubject = subjectDAO.Paging(listSubject, page, pageSize);
+        List<SubjectDTO> pagingSubject = subjectDAO.Paging(listSubject, page, pageSize);
         request.setAttribute("listC", pagingSubject);
         request.setAttribute("totalPages", listSubject.size() % pageSize == 0 ? (listSubject.size() / pageSize) : (listSubject.size() / pageSize + 1));
         request.setAttribute("currentPage", page);

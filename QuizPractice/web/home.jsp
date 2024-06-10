@@ -2,10 +2,10 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page import="model.Blog" %>
 <%@ page import="model.Slider" %>
-<%@ page import="model.Subject" %>
+<%@ page import="dto.SubjectDTO" %>
 <%@ page import="java.util.List" %>
 <% List<Slider> top8Slider = (List<Slider>)request.getAttribute("top8Slider"); %>
-<% List<Subject> top8Subject = (List<Subject>)request.getAttribute("top8Subject"); %>
+<% List<SubjectDTO> top8Subject = (List<SubjectDTO>)request.getAttribute("top8Subject"); %>
 <% List<Blog> top8Blog = (List<Blog>)request.getAttribute("top8Blog"); %>
 <!DOCTYPE html>
 <html lang="en">

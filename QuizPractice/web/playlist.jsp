@@ -20,14 +20,10 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
-
-
     </head>
+
     <body>
-
         <%@include file="/layout/header.jsp"%>
-
         <%@include file="/layout/sidebar.jsp"%>
         <%@include file="layout/profile.jsp" %>
         <!--change password pop-up-->
@@ -38,7 +34,6 @@
             <h1 class="heading">Subject details</h1>
 
             <div class="row">
-
                 <div class="column">
                     <form action="" method="post" class="save-playlist">
                         <button type="submit"><i class="far fa-bookmark"></i> <span>save subject</span></button>
@@ -47,9 +42,6 @@
                     <div class="thumb">
                         <img src="<%=contextPath%>/${subject.img}" alt="">
                         <span>${subject.numberOfLesson} lesson</span>
-                    </div>
-                    <div>
-
                     </div>
                 </div>
                 <div class="column">
@@ -71,12 +63,21 @@
                             </c:forEach>
                         <br/>
                         <a href="<%=contextPath%>/teacher?id=${subject.creator.userId}" class="inline-btn">view profile</a>
-                        <a href="<%=contextPath%>/subject/register?id=${subject.id}" class="inline-btn">Register Now</a>
+                        <a href="#" id="registerNowBtn" class="inline-btn">Register Now</a>
                     </div>
                 </div>
             </div>
-
         </section>
+
+        <!-- Register Subject Popup Modal -->
+        <div id="registerSubjectPopup" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <!-- Content will be loaded here by AJAX -->
+                </div>
+            </div>
+        </div>
+
         <%@include file="/layout/footer.jsp" %>
 
         <!--pop js-->
@@ -91,5 +92,25 @@
 
         <!-- custom js file link  -->
         <script src="js/script.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                // Load the register subject popup content
+                $("#registerNowBtn").on("click", function (event) {
+                    event.preventDefault();
+                    var subjectId = '${subject.id}'; // Pass the subject ID to the modal
+                    var subjectName = '${subject.name}'; 
+                    $.ajax({
+                        url: "<%=contextPath%>/subjectRegister",
+                        type: "GET",
+                        data: {subjectId: subjectId, subjectName: subjectName},
+                        success: function (data) {
+                            $("#registerSubjectPopup .modal-content").html(data);
+                            $("#registerSubjectPopup").modal("show");
+                        }
+                    });
+                });
+            });
+        </script>
     </body>
 </html>

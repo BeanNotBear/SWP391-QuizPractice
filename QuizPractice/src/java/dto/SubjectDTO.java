@@ -1,10 +1,12 @@
-package model;
+package dto;
 
 import java.sql.Date;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import model.Tag;
+import model.User;
 
 /**
  * The User class represents a user entity with attributes such as user ID,
@@ -16,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuppressWarnings("all")
-public class Subject {
+public class SubjectDTO {
     // Fields
     private int id;
     private String name;
@@ -28,6 +30,6 @@ public class Subject {
     private String description;
     private int numberOfLesson;
     private User creator;
-    private List<PricePackage> pricePackages;
+    private List<PricePackageDTO> pricePackages;
     private List<Tag> tags;
 }

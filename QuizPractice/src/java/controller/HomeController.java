@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.Blog;
 import model.Slider;
-import model.Subject;
+import dto.SubjectDTO;
 
 // Servlet class for handling requests to the home page
 @WebServlet("/home")
@@ -31,8 +31,8 @@ public class HomeController extends HttpServlet {
         
         List<Blog> top8Blog = blogDAO.listTop8Blog();
         List<Slider> top8Slider = sliderDAO.listTop8Slider();
-        List<Subject> top8Subject = subjectDAO.listTop8Subject();
-        List<Subject> top3Subject = subjectDAO.find3FeatureSubject();
+        List<SubjectDTO> top8Subject = subjectDAO.listTop8Subject();
+        List<SubjectDTO> top3Subject = subjectDAO.find3FeatureSubject();
         
         HttpSession session = request.getSession();
         

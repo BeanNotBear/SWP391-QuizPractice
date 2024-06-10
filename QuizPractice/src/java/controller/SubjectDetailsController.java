@@ -11,7 +11,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.Subject;
+import dto.SubjectDTO;
 
 @WebServlet("/subject-details")
 public class SubjectDetailsController extends HttpServlet {
@@ -30,7 +30,7 @@ public class SubjectDetailsController extends HttpServlet {
         String subjectId = request.getParameter("id");
         int subId;
         SubjectDAO subjectDAO = SubjectDAO.getInstance();
-        Subject subject = null;
+        SubjectDTO subject = null;
         final String contexPath = request.getContextPath();
         final String domain = request.getLocalName();
         try {
