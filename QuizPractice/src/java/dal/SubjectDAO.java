@@ -449,6 +449,25 @@ public class SubjectDAO extends DBContext {
         return 0;
     }
 
+    public boolean deleteRegister(int id) {
+        // SQL query with placeholders for parameterized input
+        String query = "delete from Subject_Register where id = ?";
+
+        try {
+            // Prepare the SQL query for execution
+            ps = connection.prepareStatement(query);
+
+            // Set parameters for the PreparedStatement
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            // Log the exception (if a logging framework is available)
+            e.printStackTrace(); // Replace with logger in real application
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
         // view all subjects in database with status = 1
         SubjectDAO c = new SubjectDAO();
