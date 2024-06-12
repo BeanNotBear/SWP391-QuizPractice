@@ -1,6 +1,7 @@
 package dal;
 
 import context.DBContext;
+import dto.MyRegisterDTO;
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
 import java.sql.Date;
@@ -449,6 +450,109 @@ public class SubjectDAO extends DBContext {
         return 0;
     }
 
+    public List<MyRegisterDTO> getPaginationRegisterSubjectSearch(int userId, int page, int recordsPerPage, String searchName) {
+        List<MyRegisterDTO> lst = new ArrayList<>();
+        int start = (page - 1) * recordsPerPage + 1;
+        int end = start + recordsPerPage - 1;
+
+        try {
+            String query = "WITH PagedResults AS (\n"
+                    + "    SELECT r.id,s.name AS subject_name, r.CreatedAt, p.name AS package_name, p.original_price, r.Status,\n"
+                    + "           ROW_NUMBER() OVER (ORDER BY r.CreatedAt) AS row_num\n"
+                    + "    FROM Subject_Register r \n"
+                    + "    LEFT JOIN subjects s ON r.SubjectId = s.id \n"
+                    + "\n"
+                    + "    LEFT JOIN package_price p ON p.id = r.PackageId\n"
+                    + "    WHERE r.UserId = ? and s.name like ?\n"
+                    + ")\n"
+                    + "SELECT * \n"
+                    + "FROM PagedResults\n"
+                    + "WHERE row_num BETWEEN ? AND ?\n"
+                    + "ORDER BY row_num;";
+
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, userId); // Thay đổi UserId tương ứng
+            ps.setString(2, "%" + searchName + "%");
+            ps.setInt(3, start);
+            ps.setInt(4, end);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                String subjectName = rs.getString(2);
+                Date duration = rs.getDate(3);
+                String packageName = rs.getString(4);
+                double originalPrice = rs.getDouble(5);
+                String status = rs.getString(6);
+
+                MyRegisterDTO p = new MyRegisterDTO(id, subjectName, duration, packageName, originalPrice, status);
+                lst.add(p);
+            }
+        } catch (SQLException ex) {
+        }
+        return lst;
+    }
+
+    public List<MyRegisterDTO> getPaginationRegisterSubject(int userId, int page, int recordsPerPage) {
+        List<MyRegisterDTO> lst = new ArrayList<>();
+        int start = (page - 1) * recordsPerPage + 1;
+        int end = start + recordsPerPage - 1;
+
+        try {
+            String query = "WITH PagedResults AS ("
+                    + "    SELECT r.id,s.name AS subject_name, r.CreatedAt, p.name AS package_name, p.original_price, r.Status,"
+                    + "           ROW_NUMBER() OVER (ORDER BY r.CreatedAt) AS row_num"
+                    + "    FROM Subject_Register r"
+                    + "    LEFT JOIN subjects s ON r.SubjectId = s.id"
+                    + "    LEFT JOIN package_price p ON p.id = r.PackageId"
+                    + "    WHERE r.UserId = ?"
+                    + ")"
+                    + "SELECT * "
+                    + "FROM PagedResults "
+                    + "WHERE row_num BETWEEN ? AND ? "
+                    + "ORDER BY row_num;";
+
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, userId); // Thay đổi UserId tương ứng
+            ps.setInt(2, start);
+            ps.setInt(3, end);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                String subjectName = rs.getString(2);
+                Date duration = rs.getDate(3);
+                String packageName = rs.getString(4);
+                double originalPrice = rs.getDouble(5);
+                String status = rs.getString(6);
+
+                MyRegisterDTO p = new MyRegisterDTO(id, subjectName, duration, packageName, originalPrice, status);
+                lst.add(p);
+            }
+        } catch (SQLException ex) {
+        }
+        return lst;
+    }
+
+    public int getTotalRecords(int userId) {
+        String query = "SELECT COUNT(*) FROM Subject_Register WHERE UserId = ?";
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, userId);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                return id;
+            }
+
+        } catch (SQLException e) {
+            // Log the exception (if a logging framework is available)
+            e.printStackTrace(); // Replace with logger in real application
+        }
+        return 0;
+    }
+    
     public boolean deleteRegister(int id) {
         // SQL query with placeholders for parameterized input
         String query = "delete from Subject_Register where id = ?";
