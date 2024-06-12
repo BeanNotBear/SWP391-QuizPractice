@@ -9,12 +9,15 @@
     <c:if test="${sessionScope.user != null}">
         <div class="profile">
             <img src="<%=contextPath%>/${sessionScope.user.profileImg}" class="image" alt="">
+            <br>
             <h3 class="name">${sessionScope.user.fullName}</h3>
+            <br>
             <p class="role">student</p>
+            <br>
             <a onclick="openPopUp2()" class="option-btn">view profile</a>
         </div>
     </c:if>
-    
+
     <form action="<%=request.getContextPath()%>/subject" method="post" class="search-form">
         <input type="text" name="search_box" required placeholder="search subject..." maxlength="100">
         <button type="submit" class="fas fa-search"></button>
@@ -25,7 +28,6 @@
                 <c:forEach var="i" items="${sessionScope.top3Subject}">
             <a class="subject-f" href="subject-details?id=${i.id}"><span>${i.name}</span></a>
                 </c:forEach>
-
     </nav>
 
     <nav class="navbar">
