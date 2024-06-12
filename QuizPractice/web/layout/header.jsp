@@ -45,14 +45,12 @@
                 background-color: #e0e0e0;
                 border-radius: 5px;
             }
-            .icons, .profile {
-                display: flex;
-                align-items: center;
-            }
+            
             .icons div, .profile div {
                 margin-left: 15px;
                 cursor: pointer;
                 color: #333;
+                font-size: 25px;
             }
             .profile .name, .profile .role {
                 color: #333;
@@ -128,9 +126,7 @@
                     display: block;
                 }
             }
-            .icons, .profile {
-                float: right;
-            }
+            
         </style>
     </head>
     <body>
@@ -143,12 +139,11 @@
                     <c:choose>
                     
                         <c:when test="${sessionScope.user.roleId == 1}">
-                      
                             <li><a href="<%=request.getContextPath()%>/home">Home</a></li>
                             <li><a href="<%=request.getContextPath()%>/blog">Blog</a></li>
-                            <li><a href="<%=request.getContextPath()%>/courses">Courses</a></li>
+                            <li><a href="<%=request.getContextPath()%>/subject">Subjects</a></li>
                             <li><a href="<%=request.getContextPath()%>/myRegister">My Register</a></li>
-                            <li><a href="<%=request.getContextPath()%>/myregister">Register Course</a></li>
+                            <li><a href="<%=request.getContextPath()%>/myregister">Register Subjects</a></li>
                             <li><a href="<%=request.getContextPath()%>/myregister">Simulate Exam</a></li> 
                             <li><a href="<%=request.getContextPath()%>/practiceList">Practice List</a></li>
                             </c:when>
