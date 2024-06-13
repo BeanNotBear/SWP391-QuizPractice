@@ -1725,3 +1725,21 @@ a.activee{
 .search-form input{
     background-color: var(--light-bg);
 }
+
+#loading {
+    height: 100%;
+    width: 100%;
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    align-items: center;
+    justify-content: center;
+}
+
+#loading img {
+    height: 10vh;
+    width: 10vh;
+}

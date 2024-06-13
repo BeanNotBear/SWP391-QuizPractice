@@ -25,9 +25,12 @@
     <body>
         <%@include file="/layout/header.jsp"%>
         <%@include file="/layout/sidebar.jsp"%>
-        <%@include file="layout/profile.jsp" %>
+        <%@include file="layout/profile.jsp"%>
         <!--change password pop-up-->
-        <%@include file="layout/changePassword.jsp" %>
+        <%@include file="layout/changePassword.jsp"%>
+        <%@include file="layout/loader.jsp" %>
+        <%@include file="layout/login.jsp"%>
+        <%@include file="layout/register.jsp"%>
 
         <section class="playlist-details">
             <c:set var="subject" value="${requestScope.subject}"/>
@@ -92,6 +95,9 @@
 
         <!-- custom js file link  -->
         <script src="js/script.js"></script>
+        
+        <!--validate-->
+        <script src="js/validate.js"></script>
 
         <script>
             $(document).ready(function () {

@@ -151,7 +151,7 @@ $("#register-form").submit(function (e) {
 
 $("#profile-form").submit(function (e) {
     e.preventDefault();
-     const fullName = $("#full-name-pf").val();
+    const fullName = $("#full-name-pf").val();
     const email = $("#email-pf").val();
     const phoneNumber = $("#phone-pf").val();
     const gender = $("input[name=gender]").val();
@@ -195,7 +195,7 @@ $("#profile-form").submit(function (e) {
     });
 });
 
-function changePassword () {
+function changePassword() {
     const oldPassword = $(":old-password-cd").val();
     const newPassword = $(":new-password").val();
     const confirmPassword = $("#confirm-passsword").val();
