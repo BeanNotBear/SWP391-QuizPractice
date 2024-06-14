@@ -45,12 +45,10 @@
                 background-color: #e0e0e0;
                 border-radius: 5px;
             }
-            
             .icons div, .profile div {
                 margin-left: 15px;
                 cursor: pointer;
                 color: #333;
-                font-size: 25px;
             }
             .profile .name, .profile .role {
                 color: #333;
@@ -126,7 +124,6 @@
                     display: block;
                 }
             }
-            
         </style>
     </head>
     <body>
@@ -141,17 +138,17 @@
                         <c:when test="${sessionScope.user.roleId == 1}">
                             <li><a href="<%=request.getContextPath()%>/home">Home</a></li>
                             <li><a href="<%=request.getContextPath()%>/blog">Blog</a></li>
-                            <li><a href="<%=request.getContextPath()%>/subject">Subjects</a></li>
+                            <li><a href="<%=request.getContextPath()%>/courses">Courses</a></li>
                             <li><a href="<%=request.getContextPath()%>/myRegister">My Register</a></li>
-                            <li><a href="<%=request.getContextPath()%>/myRegister">Register Subjects</a></li>
-                            <li><a href="<%=request.getContextPath()%>/myRegister">Simulate Exam</a></li> 
+                            <li><a href="<%=request.getContextPath()%>/myregister">Register Course</a></li>
+                            <li><a href="<%=request.getContextPath()%>/myregister">Simulate Exam</a></li> 
                             <li><a href="<%=request.getContextPath()%>/practiceList">Practice List</a></li>
                             </c:when>
                             
                             <c:when test="${sessionScope.user.roleId == 2}">
                                 <li><a href="<%=request.getContextPath()%>/newmenu1">Home</a></li>
                                 <li><a href="<%=request.getContextPath()%>/newmenu2">New Subject</a></li>
-                                <li><a href="<%=request.getContextPath()%>/newmenu3">Subject Manager</a></li>
+                                <li><a href="<%=request.getContextPath()%>/subjectManager">Subject Manager</a></li>
                                 <li><a href="<%=request.getContextPath()%>/newmenu3">User List</a></li>
                                 <li><a href="<%=request.getContextPath()%>/newmenu3">Dashboard</a></li>
                                 <li><a href="<%=request.getContextPath()%>/newmenu3">Question Manager</a></li>   
@@ -159,7 +156,7 @@
                            
                             </c:when>
                                 
-                                <c:when test="${sessionScope.user.roleId == 3}">
+                                <c:when test="${sessionScope.user.roleId == 4}">
                                 <li><a href="<%=request.getContextPath()%>/newmenu1">Home</a></li>
                                 <li><a href="<%=request.getContextPath()%>/newmenu2">Dashboard</a></li>
                                 <li><a href="<%=request.getContextPath()%>/newmenu3">Register List</a></li>
@@ -167,7 +164,7 @@
                            
                             </c:when>
                                 
-                                <c:when test="${sessionScope.user.roleId == 4}">
+                                <c:when test="${sessionScope.user.roleId == 5}">
                                 <li><a href="<%=request.getContextPath()%>/newmenu1">Home</a></li>
                                 <li><a href="<%=request.getContextPath()%>/newmenu2">Dashboard</a></li>
                                 <li><a href="<%=request.getContextPath()%>/newmenu3">Blog Manager</a></li>
@@ -176,10 +173,10 @@
                            
                             </c:when>
                                 
-                                <c:when test="${sessionScope.user.roleId == 5 }">
+                                <c:when test="${sessionScope.user.roleId == 3 }">
                                 <li><a href="<%=request.getContextPath()%>/newmenu1">Home</a></li>
                                 <li><a href="<%=request.getContextPath()%>/newmenu2">Question Manager</a></li>
-                                <li><a href="<%=request.getContextPath()%>/newmenu3">Subject Manager</a></li>
+                                <li><a href="<%=request.getContextPath()%>/subjectManager">Subject Manager</a></li>
                                 <li><a href="<%=request.getContextPath()%>/newmenu3">Quiz Manager</a></li>
                                 
                            
@@ -212,7 +209,6 @@
                 </c:if>
             </div>
         </header>
-
         <script>
             document.getElementById('user-btn').addEventListener('click', function () {
                 var profileMenu = document.getElementById('profile-menu');
