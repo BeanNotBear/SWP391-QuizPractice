@@ -9,7 +9,6 @@
 <br/>
 <br/>
 
-    
     <c:if test="${sessionScope.user != null}">
         <div class="profile">
             <img src="<%=contextPath%>/${sessionScope.user.profileImg}" class="image" alt="">
@@ -20,35 +19,43 @@
     </c:if>
     <br/>
 
-    <form action="<%=request.getContextPath()%>/subject" method="post" class="search-form">
-        <input type="text" name="search_box" required placeholder="Subject" maxlength="100">
+    <form action="<%=request.getContextPath()%>/subjectManager" method="post" class="search-form">
+        <input type="text" name="subjectName" required placeholder="Subject" maxlength="100">
+        <input type="hidden" name="typeSubmit" value="submitName">
         <button type="submit" class="fas fa-search"></button>
     </form>
   
-
-   <form action="search" method="GET" class="form-inline" id="searchByCategory">
+    <form action="<%=request.getContextPath()%>/subjectManager" method="post" class="form-inline" id="searchByDimension">
         <div class="form-group">
-            <select id="category" name="category" class="form-control">
-                <option value="" disabled selected>Tìm kiếm theo category</option>
-                <c:forEach var="category" items="${categories}">
-                    <option value="${category.id}">${category.name}</option>
+            <select id="dimension" name="dimensionId" class="form-control">
+                <option value="" disabled selected>Search by category</option>
+                <c:forEach var="dimension" items="${dimensions}">
+                    <option value="${dimension.id}">${dimension.name}</option>
                 </c:forEach>
             </select>
+            <input type="hidden" name="typeSubmit" value="dimensionId">
         </div>
-
     </form>
     
-    <form action="search" method="GET" class="form-inline" id="searchByCategory">
+    <form action="<%=request.getContextPath()%>/subjectManager" method="post" class="form-inline" id="searchByStatus">
         <div class="form-group">
-            <select id="category" name="category" class="form-control">
-                <option value="" disabled selected>Tìm kiếm theo status</option>
-                <c:forEach var="category" items="${categories}">
-                    <option value="Active">Active</option>
-                    <option value="Active">Inactive</option>
-                </c:forEach>
+            <select id="status" name="status" class="form-control">
+                <option value="" disabled selected>Search by status</option>
+                <option value="true">Active</option>
+                <option value="false">Inactive</option>
             </select>
+            <input type="hidden" name="typeSubmit" value="status">
         </div>
-
     </form>
     <br/>
-</div>s
+</div>
+
+<script>
+    document.getElementById('dimension').addEventListener('change', function() {
+        document.getElementById('searchByDimension').submit();
+    });
+
+    document.getElementById('status').addEventListener('change', function() {
+        document.getElementById('searchByStatus').submit();
+    });
+</script>
