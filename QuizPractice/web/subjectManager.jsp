@@ -22,10 +22,10 @@
 
         <!-- Custom CSS to make the footer fixed -->
         <style>
-            /*            body {
-                            padding: 0;
-                            margin: 0;
-                        }*/
+/*            body {
+                padding: 0;
+                margin: 0;
+            }*/
             .footer {
                 background: #f8f9fa;
                 text-align: center;
@@ -53,7 +53,7 @@
             nav{
                 margin-top: -25px;
             }
-
+            
             #newSubject{
                 text-decoration: underline;
                 margin-bottom: 20px;
@@ -88,8 +88,8 @@
                                 <td>${item.dimensionName}</td>
                                 <td>${item.numberOfLesson}</td>
                                 <td>${item.status}</td>
-
-                                <td><a href="detail.jsp?id=1" class="btn btn-info btn-sm">Detail</a></td>
+                               
+                                <td><a href="subjectDetailExpert?id=${item.id}" class="btn btn-info btn-sm">Detail</a></td>
                             </tr>
                         </c:forEach>
 
@@ -136,7 +136,6 @@
 
         <%@include file="/layout/footer.jsp"%>
 
-        <!-- side bar có thể thu nhỏ khi màn hình nhỏ  -->
-        <script src="js/script.js"></script>
+        <%@include file="/layout/script.jsp" %>
     </body>
 </html>
