@@ -44,7 +44,7 @@ public class SubjectRegisterController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        SubjectDAO subject2DAO = SubjectDAO.getInstance();
+        SubjectDAO subjectDAO = SubjectDAO.getInstance();
         int pricePackageId = Integer.parseInt(request.getParameter("pricePackageId"));
         int subjectId = Integer.parseInt(request.getParameter("subjectId"));
 
@@ -52,7 +52,7 @@ public class SubjectRegisterController extends HttpServlet {
         User user = (User) request.getSession().getAttribute("user");
         if (user != null) {
             try {
-                subject2DAO.addNewSubjectRegister(subjectId, user.getUserId(), pricePackageId);
+                subjectDAO.addNewSubjectRegister(subjectId, user.getUserId(), pricePackageId);
             } catch (Exception ex) {
                  PrintWriter out = response.getWriter();
                  out.println("<p>" + ex + "</p>");
@@ -67,9 +67,9 @@ public class SubjectRegisterController extends HttpServlet {
             String gender = request.getParameter("gender");
             
             try {
-                subject2DAO.addNewUser(userName, email, phoneNumber, gender);
-                int userId = subject2DAO.getLastUserId(); 
-                subject2DAO.addNewSubjectRegister(subjectId, userId, pricePackageId);
+                subjectDAO.addNewUser(userName, email, phoneNumber, gender);
+                int userId = subjectDAO.getLastUserId(); 
+                subjectDAO.addNewSubjectRegister(subjectId, userId, pricePackageId);
                 PrintWriter out = response.getWriter();
                 out.println("<p>" + "Register successfully"+ "</p>");
                 
