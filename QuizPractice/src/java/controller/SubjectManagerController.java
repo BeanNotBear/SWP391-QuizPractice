@@ -30,31 +30,64 @@ public class SubjectManagerController extends HttpServlet {
             return;
         }
 
-        // Lấy trang hiện tại từ request
         int page = 1;
         int recordsPerPage = 10;
-        if (request.getParameter("page") != null) {
-            page = Integer.parseInt(request.getParameter("page"));
+        int totalRecords = 0;
+        int totalPages = 0;
+
+        if (user.getRoleId() == 3) {
+            // Lấy trang hiện tại từ request
+
+            if (request.getParameter("page") != null) {
+                page = Integer.parseInt(request.getParameter("page"));
+            }
+
+            lst = subjectDAO.getPaginationExpertManagerSubject(user.getUserId(), page, recordsPerPage);
+            totalRecords = subjectDAO.getTotalRecordsExpertManagerSubject(user.getUserId());
+            totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
+
+            List<DimensionDTO> dimensionDTOs = new ArrayList<>();
+            dimensionDTOs = subjectDAO.getListDimensionDTO();
+            request.setAttribute("dimensions", dimensionDTOs);
+
+            request.setAttribute("listSubject", lst);
+            request.setAttribute("currentPage", page);
+            request.setAttribute("totalPages", totalPages);
+        } else if (user.getRoleId() == 2) {
+            if (request.getParameter("page") != null) {
+                page = Integer.parseInt(request.getParameter("page"));
+            }
+
+            lst = subjectDAO.getPaginationAdmin(page, recordsPerPage);
+            totalRecords = subjectDAO.getTotalRecordSubject();
+            totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
+
+            List<DimensionDTO> dimensionDTOs = new ArrayList<>();
+            dimensionDTOs = subjectDAO.getListDimensionDTO();
+            request.setAttribute("dimensions", dimensionDTOs);
+
+            request.setAttribute("listSubject", lst);
+            request.setAttribute("currentPage", page);
+            request.setAttribute("totalPages", totalPages);
         }
-
-        lst = subjectDAO.getPaginationExpertManagerSubject(user.getUserId(), page, recordsPerPage);
-        int totalRecords = subjectDAO.getTotalRecordsExpertManagerSubject(user.getUserId());
-        int totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
-
-        List<DimensionDTO> dimensionDTOs = new ArrayList<>();
-        dimensionDTOs = subjectDAO.getListDimensionDTO();
-        request.setAttribute("dimensions", dimensionDTOs);
-
-        request.setAttribute("listSubject", lst);
-        request.setAttribute("currentPage", page);
-        request.setAttribute("totalPages", totalPages);
-
         request.getRequestDispatcher("/subjectManager.jsp").forward(request, response);
-
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        var user = (User) session.getAttribute("user");
+
+        // User is an expert
+        if (user.getRoleId() == 3) {
+            filterByExpert(request, response);
+        } else if (user.getRoleId() == 2) { // user is an admin
+            filterByAdmin(request, response);
+        }
+    }
+
+    private void filterByExpert(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String type = request.getParameter("typeSubmit");
         System.out.println(type);
@@ -90,8 +123,7 @@ public class SubjectManagerController extends HttpServlet {
             request.setAttribute("totalPages", totalPages);
 
             request.getRequestDispatcher("/subjectManager.jsp").forward(request, response);
-        }
-        else if (type.equalsIgnoreCase("dimensionId")) {
+        } else if (type.equalsIgnoreCase("dimensionId")) {
             int dimensionId = Integer.parseInt(request.getParameter("dimensionId"));
             System.out.println(dimensionId);
             List<SubjectManagerDTO> lst = new ArrayList<>();
@@ -123,9 +155,8 @@ public class SubjectManagerController extends HttpServlet {
             request.setAttribute("totalPages", totalPages);
 
             request.getRequestDispatcher("/subjectManager.jsp").forward(request, response);
-        }
-        else if (type.equalsIgnoreCase("status")) {
-            int status = request.getParameter("status").equalsIgnoreCase("true")?1:0;
+        } else if (type.equalsIgnoreCase("status")) {
+            int status = request.getParameter("status").equalsIgnoreCase("true") ? 1 : 0;
             System.out.println(status);
             List<SubjectManagerDTO> lst = new ArrayList<>();
             SubjectDAO subjectDAO = SubjectDAO.getInstance();
@@ -159,4 +190,106 @@ public class SubjectManagerController extends HttpServlet {
         }
     }
 
+    private void filterByAdmin(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String type = request.getParameter("typeSubmit");
+        System.out.println(type);
+        if (type.equalsIgnoreCase("submitName")) {
+            String subjectName = request.getParameter("subjectName");
+            System.out.println(subjectName);
+            List<SubjectManagerDTO> lst = new ArrayList<>();
+            SubjectDAO subjectDAO = SubjectDAO.getInstance();
+            HttpSession session = request.getSession();
+            User user = (User) session.getAttribute("user");
+            if (user == null) {
+                response.sendRedirect("/QuizPractice/"); // Thay đổi đường dẫn này tùy theo trang đăng nhập của bạn
+                return;
+            }
+
+            // Lấy trang hiện tại từ request
+            int page = 1;
+            int recordsPerPage = 5;
+            if (request.getParameter("page") != null) {
+                page = Integer.parseInt(request.getParameter("page"));
+            }
+
+            lst = subjectDAO.getPaginationAdminManagerSubjectSearchBySubjectName(page, recordsPerPage, subjectName);
+            int totalRecords = subjectDAO.getTotalRecordsAdminManagerSubjectSearchBySubjectName(subjectName);
+            int totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
+
+            List<DimensionDTO> dimensionDTOs = new ArrayList<>();
+            dimensionDTOs = subjectDAO.getListDimensionDTO();
+            request.setAttribute("dimensions", dimensionDTOs);
+
+            request.setAttribute("listSubject", lst);
+            request.setAttribute("currentPage", page);
+            request.setAttribute("totalPages", totalPages);
+
+            request.getRequestDispatcher("/subjectManager.jsp").forward(request, response);
+        } else if (type.equalsIgnoreCase("dimensionId")) {
+            int dimensionId = Integer.parseInt(request.getParameter("dimensionId"));
+            System.out.println(dimensionId);
+            List<SubjectManagerDTO> lst = new ArrayList<>();
+            SubjectDAO subjectDAO = SubjectDAO.getInstance();
+            HttpSession session = request.getSession();
+            User user = (User) session.getAttribute("user");
+            if (user == null) {
+                response.sendRedirect("/QuizPractice/"); // Thay đổi đường dẫn này tùy theo trang đăng nhập của bạn
+                return;
+            }
+
+            // Lấy trang hiện tại từ request
+            int page = 1;
+            int recordsPerPage = 5;
+            if (request.getParameter("page") != null) {
+                page = Integer.parseInt(request.getParameter("page"));
+            }
+
+            lst = subjectDAO.getPaginationAdminManagerSubjectSearchByDimensionId(page, recordsPerPage, dimensionId);
+            int totalRecords = subjectDAO.getTotalRecordsExpertManagerSubjectSearchByDimensionId(user.getUserId(), dimensionId);
+            int totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
+
+            List<DimensionDTO> dimensionDTOs = new ArrayList<>();
+            dimensionDTOs = subjectDAO.getListDimensionDTO();
+            request.setAttribute("dimensions", dimensionDTOs);
+
+            request.setAttribute("listSubject", lst);
+            request.setAttribute("currentPage", page);
+            request.setAttribute("totalPages", totalPages);
+
+            request.getRequestDispatcher("/subjectManager.jsp").forward(request, response);
+        } else if (type.equalsIgnoreCase("status")) {
+            int status = request.getParameter("status").equalsIgnoreCase("true") ? 1 : 2;
+            System.out.println(status);
+            List<SubjectManagerDTO> lst = new ArrayList<>();
+            SubjectDAO subjectDAO = SubjectDAO.getInstance();
+            HttpSession session = request.getSession();
+            User user = (User) session.getAttribute("user");
+            if (user == null) {
+                response.sendRedirect("/QuizPractice/"); // Thay đổi đường dẫn này tùy theo trang đăng nhập của bạn
+                return;
+            }
+
+            // Lấy trang hiện tại từ request
+            int page = 1;
+            int recordsPerPage = 5;
+            if (request.getParameter("page") != null) {
+                page = Integer.parseInt(request.getParameter("page"));
+            }
+
+            lst = subjectDAO.getPaginationAdminManagerSubjectSearchByStatus(page, recordsPerPage, status);
+            int totalRecords = subjectDAO.getTotalRecordsExpertManagerSubjectSearchByStatus(user.getUserId(), status);
+            int totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
+
+            List<DimensionDTO> dimensionDTOs = new ArrayList<>();
+            dimensionDTOs = subjectDAO.getListDimensionDTO();
+            request.setAttribute("dimensions", dimensionDTOs);
+
+            request.setAttribute("listSubject", lst);
+            request.setAttribute("currentPage", page);
+            request.setAttribute("totalPages", totalPages);
+
+            request.getRequestDispatcher("/subjectManager.jsp").forward(request, response);
+        }
+    }
 }
