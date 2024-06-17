@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuppressWarnings("all")
-public class BlogManagerDTO {
+public class BlogManagerDetailDTO {
 
     private int id;
     private String title;
