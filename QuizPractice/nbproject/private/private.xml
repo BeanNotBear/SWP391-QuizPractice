@@ -3,9 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/controller/ChangeSubjectStatusController.java</file>
             <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/dal/SubjectDAO.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/model/User.java</file>
             <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/controller/SubjectManagerController.java</file>
-            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/web/subjectManager.jsp</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/web/newSubject.jsp</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/web/js/popup.js</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/controller/NewSubjectController.java</file>
         </group>
     </open-files>
 </project-private>
