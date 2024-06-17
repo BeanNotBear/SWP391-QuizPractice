@@ -15,7 +15,7 @@ import dto.SubjectDTO;
 
 @WebServlet("/subject-details")
 public class SubjectDetailsController extends HttpServlet {
-
+    private int previous_id;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -35,6 +35,7 @@ public class SubjectDetailsController extends HttpServlet {
         final String domain = request.getLocalName();
         try {
             subId = Integer.parseInt(subjectId);
+            previous_id = subId;
             subject = subjectDAO.findSubjectById(subId);
             if(subject != null) {
                 request.setAttribute("subject", subject);
@@ -43,7 +44,13 @@ public class SubjectDetailsController extends HttpServlet {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
             }
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            subject = subjectDAO.findSubjectById(previous_id);
+            if(subject != null) {
+                request.setAttribute("subject", subject);
+                request.getRequestDispatcher("/playlist.jsp").forward(request, response);
+            } else {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            }
         }
     }
 
