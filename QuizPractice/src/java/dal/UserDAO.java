@@ -1,7 +1,10 @@
 package dal;
 
 import context.DBContext;
+import dto.ExpertDTO;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.User;
@@ -314,7 +317,7 @@ public class UserDAO extends DBContext {
                 + "      ,[gender] = ?\n"
                 + " WHERE [email] = ?";
         int gen = 0;
-        if(gender.equals("true")) {
+        if (gender.equals("true")) {
             gen = 1;
         }
         int rowAffected = 0;
@@ -330,5 +333,25 @@ public class UserDAO extends DBContext {
         }
 
         return rowAffected;
+    }
+
+    public List<ExpertDTO> findAllExpert() {
+        List<ExpertDTO> experts = new ArrayList<>();
+        String query = "SELECT * \n"
+                + "FROM [dbo].[users]\n"
+                + "WHERE role_id = 3";
+        try {
+            ps = connection.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                experts.add(new ExpertDTO(
+                        rs.getInt(1),
+                        rs.getString(2)
+                ));
+            }
+        } catch (Exception e) {
+        }
+        
+        return experts;
     }
 }
