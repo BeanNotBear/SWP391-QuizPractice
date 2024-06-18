@@ -12,7 +12,21 @@
             <br>
             <h3 class="name">${sessionScope.user.fullName}</h3>
             <br>
-            <p class="role">student</p>
+            <c:if test="${sessionScope.user.roleId == 1}">
+                <p class="role">Customer</p>
+            </c:if>
+            <c:if test="${sessionScope.user.roleId == 2}">
+                <p class="role">Admin</p>
+            </c:if>
+            <c:if test="${sessionScope.user.roleId == 3}">
+                <p class="role">Expert</p>
+            </c:if>
+            <c:if test="${sessionScope.user.roleId == 4}">
+                <p class="role">Sale</p>
+            </c:if>
+            <c:if test="${sessionScope.user.roleId == 4}">
+                <p class="role">Marketing</p>
+            </c:if>
             <br>
             <a onclick="openPopUp2()" class="option-btn">view profile</a>
         </div>

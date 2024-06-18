@@ -29,7 +29,10 @@ public class SubjectManagerController extends HttpServlet {
             response.sendRedirect("/QuizPractice/"); // Thay đổi đường dẫn này tùy theo trang đăng nhập của bạn
             return;
         }
-
+        if(user.getRoleId() != 2 && user.getRoleId() != 3) {
+            response.sendError(404);
+            return;
+        }
         int page = 1;
         int recordsPerPage = 10;
         int totalRecords = 0;

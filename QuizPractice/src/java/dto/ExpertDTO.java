@@ -10,12 +10,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @SuppressWarnings("all")
-public class SubjectManagerDTO {
+public class ExpertDTO {
     private int id;
     private String name;
-    private String thumbnail;
-    private String dimensionName;
-    private int numberOfLesson;
-    private int status;
-    private String owner;
 }

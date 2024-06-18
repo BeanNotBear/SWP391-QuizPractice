@@ -26,14 +26,7 @@
                 padding: 0;
                 margin: 0;
             }
-            .footer {
-                background: #f8f9fa;
-                text-align: center;
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-                height: 15%;
-            }
+
             .postDetail {
                 margin-bottom: 100px;
 
@@ -111,11 +104,14 @@
                 border-radius: 50%;
             }
 
+            .swal2-styled {
+                padding: 6.250px 25px 6.250px 11px !important;
+            }
 
-
-
-
-
+            .error {
+                color: red;
+                display: none;
+            }
         </style>
     </head>
 
@@ -129,38 +125,68 @@
                 <div class="row">
                     <div class="col-md-2"></div>
                     <div class="col-md-3">
-                        <img src="./images/anhgt_1.jpg" alt="Ảnh Subject" class="img-responsive" id="avatarImage">
+                        <img src="./images/no_img.jpg" alt="Ảnh Subject" class="img-responsive" id="avatarImage">
                         <br>
                         <button type="button" class="btn btn-primary btn-sm" id="uploadButton">
                             <i class="fa fa-upload"></i> Upload Image
                         </button>
                         <!-- Input để chọn file ảnh, không hiển thị cho người dùng -->
-                        <input type="file" id="fileInput" style="display: none;">
+                        <input accept="image/png, image/jpeg" type="file" id="fileInput" style="display: none;">
                     </div>
                     <div class="col-md-1"></div>
 
                     <div class="col-md-6">
-                        <form action="newSubject" method="POST">
-                            <input type="hidden" id="img" name="img" value="./images/anhgt_1.jpg">
+                        <form id="newSubject" action="newSubject" method="POST">
+                            <input type="hidden" id="img" name="img" value="./images/no_img.jpg">
                             <div class="form-group">
                                 <label for="name">Name:</label>
-                                <input type="text" id="name" name="name" class="form-control" placeholder="Enter subject name">
+                                <input onkeyup="validateSubjectName()" required type="text" id="name" name="name" class="form-control" placeholder="Enter subject name">
+                                <span id="error-message" class="error">Please enter a valid subject name.</span>
                             </div>
 
                             <div class="form-group">
-                                <label for="category">Dimension:</label>
-                                <select id="dimension" name="dimensionId" class="form-control">
-                                    <option value="" disabled selected>Chọn dimension</option>
+                                <label for="category">Category:</label>
+                                <select required id="category" name="dimensionId" class="form-control">
+                                    <option value="" disabled selected>Select category</option>
                                     <c:forEach var="dimension" items="${dimensions}">
                                         <option value="${dimension.id}">${dimension.name}</option>
                                     </c:forEach>
                                 </select>
+                                <span id="error-message-category" class="error">Please select a category.</span>
                             </div>
 
+                            <div class="form-group">
+                                <label>Feature Subject</label>
+                                <br>
+                                <label class="switch">
+                                    <input id="feature" type="checkbox" name="feature">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="experts">Owner:</label>
+                                <select required id="experts" name="expertId" class="form-control">
+                                    <option value="" disabled selected>Select owner</option>
+                                    <c:forEach var="expert" items="${experts}">
+                                        <option value="${expert.id}">${expert.name}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="statusSubject">Status:</label>
+                                <select required id="statusSubject" name="statusId" class="form-control">
+                                    <option value="" disabled selected>Select status</option>
+                                    <option value="1">Published</option>
+                                    <option value="2">Unpublished</option>
+                                </select>
+                            </div>
 
                             <div class="form-group">
                                 <label for="description">Description: </label>
-                                <textarea id="description" name="description" class="form-control" rows="5" placeholder="Enter description"></textarea>
+                                <textarea onkeyup="validateDescription()" required id="description" name="description" class="form-control" rows="5" placeholder="Enter description"></textarea>
+                                <span id="error-message-description" class="error">Please enter a description.</span>
                             </div>
                             <button type="submit" class="btn btn-primary btn-sm col-md-2">Save</button>
                             <div class="col-md-1"></div>
@@ -177,36 +203,50 @@
         <%@include file="/layout/footer.jsp" %>
 
         <%@include file="/layout/script.jsp" %>
-        
-         <!-- Script để xử lý upload ảnh -->
-    <script>
-        document.getElementById('uploadButton').addEventListener('click', function () {
-            document.getElementById('fileInput').click();
-        });
 
-        document.getElementById('fileInput').addEventListener('change', function () {
-            var formData = new FormData();
-            formData.append('file', this.files[0]);
+        <script src="js/ChangeStatusOfSubject.js"></script>
 
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'upload', true);
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    var response = JSON.parse(xhr.responseText);
-                    var fileName = response.fileName;
-                    var avatarImage = document.getElementById('avatarImage');
-                    avatarImage.src = 'images/' + fileName; // Thay đổi src của hình ảnh avatarImage
-                    console.log(fileName);
+        <!-- Script để xử lý upload ảnh -->
+        <script>
+                                    document.getElementById('uploadButton').addEventListener('click', function () {
+                                        document.getElementById('fileInput').click();
+                                    });
 
-                    // Cập nhật giá trị của hidden input để lưu vào database
-                    document.getElementById('img').value = 'images/'+fileName;
-                }
-            };
-            xhr.send(formData);
-        });
-    </script>
-        
-        
+                                    document.getElementById('fileInput').addEventListener('change', function () {
+                                        var file = this.files[0];
+                                        var formData = new FormData();
+                                        var allowedTypes = ['image/jpeg', 'image/png'];
+                                        if (allowedTypes.indexOf(file.type) === -1) {
+                                            Swal.fire({
+                                                title: "Only allowed to upload image formats: JPEG, PNG, GIF",
+                                                icon: "error"
+                                            }).then(() => {
+                                                // Reset giá trị của input file để người dùng có thể chọn tệp khác
+                                                document.getElementById('fileInput').value = "";
+                                            });
+                                            return;
+                                        }
+                                        formData.append('file', this.files[0]);
+
+                                        var xhr = new XMLHttpRequest();
+                                        xhr.open('POST', 'upload', true);
+                                        xhr.onload = function () {
+                                            if (xhr.status === 200) {
+                                                var response = JSON.parse(xhr.responseText);
+                                                var fileName = response.fileName;
+                                                var avatarImage = document.getElementById('avatarImage');
+                                                avatarImage.src = 'images/' + fileName; // Thay đổi src của hình ảnh avatarImage
+                                                console.log(fileName);
+
+                                                // Cập nhật giá trị của hidden input để lưu vào database
+                                                document.getElementById('img').value = 'images/' + fileName;
+                                            }
+                                        };
+                                        xhr.send(formData);
+                                    });
+        </script>
+
+        <script src="js/validateSubject.js"></script>
         <!-- Bootstrap Toggle JS and CSS (optional) -->
         <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
         <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>

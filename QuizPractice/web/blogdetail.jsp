@@ -40,26 +40,45 @@
         <section class="reviews">
 
             <h1 class="heading">Pots detail </h1>
-
+            <c:if test="${not empty successMessage}">
+                <div class="alert alert-success" role="alert">
+                    ${successMessage}
+                </div>
+            </c:if>
             <div class="box-container">
-               
-                    <div class="box">
-                        <img src="${detail.getThumbnail()}" id="detailImg"/>
-                        <div class="student">
-                            <div>
-                                <h3>${detail.getTitle()}</h3>
-                             
-                                <div class="stars">
-                                    <p>Author: ${detail.blog_firstName}</p>
-                                    <p>Create date: ${detail.createdDate}</p>
-                                    <p>Category: ${detail.category.getCategory_Name()}</p>                                  
-                                </div> 
-                                <h2>Content</h2>
-                                  <p>${detail.content}</p>
-                            </div>
-                            
-                        </div>         
-                    </div>
+
+                <div class="box">
+                    <img src="${detail.getThumbnail()}" id="detailImg"/>
+                    <div class="student">
+                        <div>
+                            <h3>${detail.getTitle()}</h3>
+
+                            <div class="stars">
+                                <p>Author: ${detail.blog_firstName}</p>
+                                <c:if test="${sessionScope.user.roleId == 5}">
+                                    <p>Brie_info: ${detail.brieinfo}</p>
+                                    <p>Status:  
+                                        <c:choose>
+                                            <c:when test="${detail.status}">
+                                                <span style="color: green;">Published</span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span style="color: red;">Not published</span>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </p>
+
+
+                                </c:if>
+                                <p>Create date: ${detail.createdDate}</p>
+                                <p>Category: ${detail.category.getCategory_Name()}</p>                                      
+                            </div> 
+                            <h2>Content</h2>
+                            <p>${detail.content}</p>
+                        </div>
+
+                    </div>         
+                </div>
             </div>
         </section>
 

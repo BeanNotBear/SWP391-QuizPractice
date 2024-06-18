@@ -138,16 +138,16 @@
                         <c:when test="${sessionScope.user.roleId == 1}">
                             <li><a href="<%=request.getContextPath()%>/home">Home</a></li>
                             <li><a href="<%=request.getContextPath()%>/blog">Blog</a></li>
-                            <li><a href="<%=request.getContextPath()%>/courses">Courses</a></li>
+                            <li><a href="<%=request.getContextPath()%>/subject">Subject</a></li>
                             <li><a href="<%=request.getContextPath()%>/myRegister">My Register</a></li>
-                            <li><a href="<%=request.getContextPath()%>/myregister">Register Course</a></li>
+                            <li><a href="<%=request.getContextPath()%>/myregister">Register Subject</a></li>
                             <li><a href="<%=request.getContextPath()%>/myregister">Simulate Exam</a></li> 
-                            <li><a href="<%=request.getContextPath()%>/practiceList">Practice List</a></li>
+                            <li><a href="<%=request.getContextPath()%>/praticeList">Practice List</a></li>
                             </c:when>
                             
                             <c:when test="${sessionScope.user.roleId == 2}">
-                                <li><a href="<%=request.getContextPath()%>/newmenu1">Home</a></li>
-                                <li><a href="<%=request.getContextPath()%>/newmenu2">New Subject</a></li>
+                                <li><a href="<%=request.getContextPath()%>/home">Home</a></li>
+                                <li><a href="<%=request.getContextPath()%>/newSubject">New Subject</a></li>
                                 <li><a href="<%=request.getContextPath()%>/subjectManager">Subject Manager</a></li>
                                 <li><a href="<%=request.getContextPath()%>/newmenu3">User List</a></li>
                                 <li><a href="<%=request.getContextPath()%>/newmenu3">Dashboard</a></li>
@@ -157,7 +157,7 @@
                             </c:when>
                                 
                                 <c:when test="${sessionScope.user.roleId == 4}">
-                                <li><a href="<%=request.getContextPath()%>/newmenu1">Home</a></li>
+                                <li><a href="<%=request.getContextPath()%>/home">Home</a></li>
                                 <li><a href="<%=request.getContextPath()%>/newmenu2">Dashboard</a></li>
                                 <li><a href="<%=request.getContextPath()%>/newmenu3">Register List</a></li>
                                  
@@ -167,8 +167,8 @@
                                 <c:when test="${sessionScope.user.roleId == 5}">
                                 <li><a href="<%=request.getContextPath()%>/newmenu1">Home</a></li>
                                 <li><a href="<%=request.getContextPath()%>/newmenu2">Dashboard</a></li>
-                                <li><a href="<%=request.getContextPath()%>/newmenu3">Blog Manager</a></li>
-                                <li><a href="<%=request.getContextPath()%>/newmenu3">Slider Manager</a></li>
+                                <li><a href="<%=request.getContextPath()%>/blog">Blog Manager</a></li>
+                                <li><a href="<%=request.getContextPath()%>/sliderManager">Slider Manager</a></li>
                                
                            
                             </c:when>

@@ -26,14 +26,6 @@
                 padding: 0;
                 margin: 0;
             }
-            .footer {
-                background: #f8f9fa;
-                text-align: center;
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-                height: 15%;
-            }
             #topTable {
                 margin-bottom: 0.5%;
             }
@@ -78,7 +70,7 @@
                     </div>
                     <div class="col-md-5"></div>
                     <div class="col-md-2">
-                        <button class="btn btn-primary">New Practice</button>
+                        <a href="newPractice" class="btn btn-primary">New Practice</a>
                     </div>
                     <div class="col-md-2">
                         <button class="btn btn-primary">Simulation Exam</button>

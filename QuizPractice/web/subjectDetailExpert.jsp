@@ -31,10 +31,11 @@
             .footer {
                 background: #f8f9fa;
                 text-align: center;
+                padding: 0;
                 position: fixed;
                 bottom: 0;
                 width: 100%;
-                height: 15%;
+                height: 20%;
             }
             .subjectDetailExpert {
                 margin-bottom: 100px;
@@ -79,7 +80,7 @@
 
                 <ul class="nav nav-tabs">
                     <li class="active"><a data-toggle="tab" href="#home">Overview</a></li>
-                    <li><a data-toggle="tab" href="#menu1">Dimension</a></li>
+<!--                    <li><a data-toggle="tab" href="#menu1">Category</a></li>-->
                     <li><a data-toggle="tab" href="#menu2">Price Package</a></li>
                 </ul>
 
@@ -108,7 +109,7 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="category">Dimension:</label>
+                                            <label for="category">Category:</label>
                                             <select id="dimension" name="dimensionId" class="form-control">
                                                 <option value="" disabled selected>Select dimension</option>
                                                 <c:forEach var="dimension" items="${dimensions}">

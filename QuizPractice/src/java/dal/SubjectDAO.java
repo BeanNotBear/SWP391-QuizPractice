@@ -3,8 +3,6 @@ package dal;
 import context.DBContext;
 import dto.DimensionDTO;
 import dto.MyRegisterDTO;
-import java.lang.System.Logger;
-import java.lang.System.Logger.Level;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -102,8 +100,11 @@ public class SubjectDAO extends DBContext {
                 subject.setDescription(rs.getString("description"));
                 // count lesson to add to list subject return by search
                 subject.setNumberOfLesson(countLessonsBySubjectId(id));
-                subject.setPricePackages(findPricePackageBySubjectId(id));
-                subject.setTags(findTagsBySubjectId(id));
+                try {
+                    subject.setPricePackages(findPricePackageBySubjectId(id));
+                    subject.setTags(findTagsBySubjectId(id));
+                } catch (Exception e) {
+                }
                 System.out.println("ok");
                 // Add the subject to the list
                 subjects.add(subject);
@@ -283,7 +284,7 @@ public class SubjectDAO extends DBContext {
     public List<SubjectDTO> listTop8Subject() {
         List<SubjectDTO> listSubject = new ArrayList<>();
         try {
-            String query = "SELECT TOP 8 * FROM subjects order by creater_at desc";
+            String query = "SELECT TOP 8 * FROM subjects WHERE [status] = 1 order by creater_at desc";
 
             ps = connection.prepareStatement(query);
             rs = ps.executeQuery();
@@ -565,29 +566,35 @@ public class SubjectDAO extends DBContext {
                     + "    SELECT \n"
                     + "        s.id, \n"
                     + "        s.name, \n"
+                    + "        s.img, \n"
                     + "        d.DimensionName, \n"
-                    + "        COUNT(sl.lesson_id) as NumberLesson,\n"
+                    + "        COUNT(sl.lesson_id) AS NumberLesson,\n"
                     + "        s.status,\n"
-                    + "        ROW_NUMBER() OVER (ORDER BY s.creater_at) AS row_num\n"
+                    + "        ROW_NUMBER() OVER (ORDER BY s.creater_at desc) AS row_num,\n"
+                    + "		u.full_name\n"
                     + "    FROM \n"
                     + "        subjects s \n"
                     + "    LEFT JOIN \n"
                     + "        Dimension d ON s.dimensionId = d.DimensionId\n"
                     + "    LEFT JOIN \n"
                     + "        subject_has_lesson sl ON sl.subject_id = s.id\n"
+                    + "	LEFT JOIN\n"
+                    + "		[dbo].[users] u on u.id = s.creator_id\n"
                     + "    WHERE \n"
                     + "        s.creator_id = ?\n"
                     + "    GROUP BY \n"
                     + "        s.id, \n"
                     + "        s.name, \n"
+                    + "        s.img, \n"
                     + "        d.DimensionName, \n"
                     + "        s.status, \n"
-                    + "        s.creater_at\n"
+                    + "        s.creater_at,\n"
+                    + "		u.full_name\n"
                     + ")\n"
                     + "SELECT * \n"
                     + "FROM PagedResults\n"
                     + "WHERE row_num BETWEEN ? AND ?\n"
-                    + "ORDER BY row_num";
+                    + "ORDER BY row_num;";
 
             ps = connection.prepareStatement(query);
             ps.setInt(1, userId); // Thay đổi UserId tương ứng
@@ -598,11 +605,13 @@ public class SubjectDAO extends DBContext {
             while (rs.next()) {
                 int id = rs.getInt(1);
                 String name = rs.getString(2);
-                String dimensionName = rs.getString(3);
-                int numberOfLesson = rs.getInt(4);
-                int status = rs.getInt(5);
+                String thumbnail = rs.getString(3);
+                String dimensionName = rs.getString(4);
+                int numberOfLesson = rs.getInt(5);
+                int status = rs.getInt(6);
+                String fullName = rs.getString(8);
 
-                SubjectManagerDTO subjectManagerDTO = new SubjectManagerDTO(id, name, dimensionName, numberOfLesson, status);
+                SubjectManagerDTO subjectManagerDTO = new SubjectManagerDTO(id, name, thumbnail, dimensionName, numberOfLesson, status, fullName);
                 lst.add(subjectManagerDTO);
             }
         } catch (SQLException ex) {
@@ -666,7 +675,7 @@ public class SubjectDAO extends DBContext {
         }
         return 0;
     }
-    
+
     public int getTotalRecordsAdminManagerSubjectSearchBySubjectName(String subjectName) {
         String query = "SELECT COUNT(*) FROM subjects WHERE name like ?";
         try {
@@ -736,6 +745,7 @@ public class SubjectDAO extends DBContext {
                     + "    SELECT \n"
                     + "        s.id, \n"
                     + "        s.name, \n"
+                    + "        s.img,  \n"
                     + "        d.DimensionName, \n"
                     + "        COUNT(sl.lesson_id) as NumberLesson,\n"
                     + "        s.status,\n"
@@ -746,14 +756,18 @@ public class SubjectDAO extends DBContext {
                     + "        Dimension d ON s.dimensionId = d.DimensionId\n"
                     + "    LEFT JOIN \n"
                     + "        subject_has_lesson sl ON sl.subject_id = s.id\n"
+                    + "    LEFT JOIN \n"
+                    + "        [dbo].[users] u on u.id = s.creator_id\n"
                     + "    WHERE \n"
                     + "        s.creator_id = ? and s.name like ? \n"
                     + "    GROUP BY \n"
                     + "        s.id, \n"
                     + "        s.name, \n"
+                    + "        s.img, \n"
                     + "        d.DimensionName, \n"
                     + "        s.status, \n"
-                    + "        s.creater_at\n"
+                    + "        s.creater_at, \n"
+                    + "        u.full_name"
                     + ")\n"
                     + "SELECT * \n"
                     + "FROM PagedResults\n"
@@ -770,11 +784,13 @@ public class SubjectDAO extends DBContext {
             while (rs.next()) {
                 int id = rs.getInt(1);
                 String name = rs.getString(2);
-                String dimensionName = rs.getString(3);
-                int numberOfLesson = rs.getInt(4);
-                int status = rs.getInt(5);
+                String thumbnail = rs.getString(3);
+                String dimensionName = rs.getString(4);
+                int numberOfLesson = rs.getInt(5);
+                int status = rs.getInt(6);
+                String fullName = rs.getString(8);
 
-                SubjectManagerDTO subjectManagerDTO = new SubjectManagerDTO(id, name, dimensionName, numberOfLesson, status);
+                SubjectManagerDTO subjectManagerDTO = new SubjectManagerDTO(id, name, thumbnail, dimensionName, numberOfLesson, status, fullName);
                 lst.add(subjectManagerDTO);
             }
         } catch (SQLException ex) {
@@ -792,24 +808,30 @@ public class SubjectDAO extends DBContext {
                     + "    SELECT \n"
                     + "        s.id, \n"
                     + "        s.name, \n"
+                    + "        s.img, \n"
                     + "        d.DimensionName, \n"
                     + "        COUNT(sl.lesson_id) as NumberLesson,\n"
                     + "        s.status,\n"
-                    + "        ROW_NUMBER() OVER (ORDER BY s.creater_at) AS row_num\n"
+                    + "        ROW_NUMBER() OVER (ORDER BY s.creater_at desc) AS row_num,\n"
+                    + "        u.full_name"
                     + "    FROM \n"
                     + "        subjects s \n"
                     + "    LEFT JOIN \n"
                     + "        Dimension d ON s.dimensionId = d.DimensionId\n"
                     + "    LEFT JOIN \n"
                     + "        subject_has_lesson sl ON sl.subject_id = s.id\n"
+                    + "    LEFT JOIN \n"
+                    + "        [dbo].[users] u on u.id = s.creator_id\n"
                     + "    WHERE \n"
                     + "        s.creator_id = ? and s.dimensionId = ? \n"
                     + "    GROUP BY \n"
                     + "        s.id, \n"
                     + "        s.name, \n"
+                    + "        s.img,  \n"
                     + "        d.DimensionName, \n"
                     + "        s.status, \n"
-                    + "        s.creater_at\n"
+                    + "        s.creater_at, \n"
+                    + "        u.full_name\n"
                     + ")\n"
                     + "SELECT * \n"
                     + "FROM PagedResults\n"
@@ -826,18 +848,20 @@ public class SubjectDAO extends DBContext {
             while (rs.next()) {
                 int id = rs.getInt(1);
                 String name = rs.getString(2);
-                String dimensionName = rs.getString(3);
-                int numberOfLesson = rs.getInt(4);
-                int status = rs.getInt(5);
+                String thumbnail = rs.getString(3);
+                String dimensionName = rs.getString(4);
+                int numberOfLesson = rs.getInt(5);
+                int status = rs.getInt(6);
+                String fullName = rs.getString(8);
 
-                SubjectManagerDTO subjectManagerDTO = new SubjectManagerDTO(id, name, dimensionName, numberOfLesson, status);
+                SubjectManagerDTO subjectManagerDTO = new SubjectManagerDTO(id, name, thumbnail, dimensionName, numberOfLesson, status, fullName);
                 lst.add(subjectManagerDTO);
             }
         } catch (SQLException ex) {
         }
         return lst;
     }
-    
+
     public List<SubjectManagerDTO> getPaginationAdminManagerSubjectSearchByDimensionId(int page, int recordsPerPage, int dimensionId) {
         List<SubjectManagerDTO> lst = new ArrayList<>();
         int start = (page - 1) * recordsPerPage + 1;
@@ -848,24 +872,30 @@ public class SubjectDAO extends DBContext {
                     + "    SELECT \n"
                     + "        s.id, \n"
                     + "        s.name, \n"
+                    + "        s.img, \n"
                     + "        d.DimensionName, \n"
                     + "        COUNT(sl.lesson_id) as NumberLesson,\n"
                     + "        s.status,\n"
-                    + "        ROW_NUMBER() OVER (ORDER BY s.creater_at) AS row_num\n"
+                    + "        ROW_NUMBER() OVER (ORDER BY s.creater_at desc) AS row_num,\n"
+                    + "        u.full_name"
                     + "    FROM \n"
                     + "        subjects s \n"
                     + "    LEFT JOIN \n"
                     + "        Dimension d ON s.dimensionId = d.DimensionId\n"
                     + "    LEFT JOIN \n"
                     + "        subject_has_lesson sl ON sl.subject_id = s.id\n"
+                    + "    LEFT JOIN \n"
+                    + "        [dbo].[users] u on u.id = s.creator_id\n"
                     + "    WHERE \n"
                     + "        s.dimensionId = ? \n"
                     + "    GROUP BY \n"
                     + "        s.id, \n"
                     + "        s.name, \n"
+                    + "        s.img, \n"
                     + "        d.DimensionName, \n"
                     + "        s.status, \n"
-                    + "        s.creater_at\n"
+                    + "        s.creater_at, \n"
+                    + "        u.full_name\n"
                     + ")\n"
                     + "SELECT * \n"
                     + "FROM PagedResults\n"
@@ -881,11 +911,13 @@ public class SubjectDAO extends DBContext {
             while (rs.next()) {
                 int id = rs.getInt(1);
                 String name = rs.getString(2);
-                String dimensionName = rs.getString(3);
-                int numberOfLesson = rs.getInt(4);
-                int status = rs.getInt(5);
+                String thumbnail = rs.getString(3);
+                String dimensionName = rs.getString(4);
+                int numberOfLesson = rs.getInt(5);
+                int status = rs.getInt(6);
+                String fullName = rs.getString(8);
 
-                SubjectManagerDTO subjectManagerDTO = new SubjectManagerDTO(id, name, dimensionName, numberOfLesson, status);
+                SubjectManagerDTO subjectManagerDTO = new SubjectManagerDTO(id, name, thumbnail, dimensionName, numberOfLesson, status, fullName);
                 lst.add(subjectManagerDTO);
             }
         } catch (SQLException ex) {
@@ -1118,20 +1150,20 @@ public class SubjectDAO extends DBContext {
         return updated;
     }
 
-    public boolean insert(String name, String img, int dimensionId, int creator_id, int status, boolean feature , String description) {
+    public boolean insert(String name, String img, int dimensionId, int creator_id, int status, boolean feature, String description) {
         boolean updated = false;
-        String query = "INSERT INTO [dbo].[subjects]\n" +
-"           ([name]\n" +
-"           ,[creator_id]\n" +
-"           ,[creater_at]\n" +
-"           ,[update_at]\n" +
-"           ,[status]\n" +
-"           ,[img]\n" +
-"           ,[description]\n" +
-"           ,[dimensionId]\n" +
-"           ,[feature])\n" +
-"     VALUES\n" +
-"           (?,?,GETDATE(),GETDATE(),?,?,?,?,?)";
+        String query = "INSERT INTO [dbo].[subjects]\n"
+                + "           ([name]\n"
+                + "           ,[creator_id]\n"
+                + "           ,[creater_at]\n"
+                + "           ,[update_at]\n"
+                + "           ,[status]\n"
+                + "           ,[img]\n"
+                + "           ,[description]\n"
+                + "           ,[dimensionId]\n"
+                + "           ,[feature])\n"
+                + "     VALUES\n"
+                + "           (?,?,GETDATE(),GETDATE(),?,?,?,?,?)";
         try {
             ps = connection.prepareStatement(query);
             ps.setString(1, name);
@@ -1184,24 +1216,30 @@ public class SubjectDAO extends DBContext {
                     + "    SELECT \n"
                     + "        s.id, \n"
                     + "        s.name, \n"
+                    + "        s.img, \n"
                     + "        d.DimensionName, \n"
                     + "        COUNT(sl.lesson_id) as NumberLesson,\n"
                     + "        s.status,\n"
-                    + "        ROW_NUMBER() OVER (ORDER BY s.creater_at) AS row_num\n"
+                    + "        ROW_NUMBER() OVER (ORDER BY s.creater_at) AS row_num,\n"
+                    + "        u.full_name\n"
                     + "    FROM \n"
                     + "        subjects s \n"
                     + "    LEFT JOIN \n"
                     + "        Dimension d ON s.dimensionId = d.DimensionId\n"
                     + "    LEFT JOIN \n"
                     + "        subject_has_lesson sl ON sl.subject_id = s.id\n"
+                    + "    LEFT JOIN \n"
+                    + "        [dbo].[users] u on u.id = s.creator_id\n"
                     + "    WHERE \n"
                     + "        s.creator_id = ? and s.status = ? \n"
                     + "    GROUP BY \n"
                     + "        s.id, \n"
                     + "        s.name, \n"
+                    + "        s.img, \n"
                     + "        d.DimensionName, \n"
                     + "        s.status, \n"
-                    + "        s.creater_at\n"
+                    + "        s.creater_at,\n"
+                    + "        u.full_name\n"
                     + ")\n"
                     + "SELECT * \n"
                     + "FROM PagedResults\n"
@@ -1218,18 +1256,20 @@ public class SubjectDAO extends DBContext {
             while (rs.next()) {
                 int id = rs.getInt(1);
                 String name = rs.getString(2);
-                String dimensionName = rs.getString(3);
-                int numberOfLesson = rs.getInt(4);
-                int status = rs.getInt(5);
+                String thumbnail = rs.getString(3);
+                String dimensionName = rs.getString(4);
+                int numberOfLesson = rs.getInt(5);
+                int status = rs.getInt(6);
+                String fullName = rs.getString(8);
 
-                SubjectManagerDTO subjectManagerDTO = new SubjectManagerDTO(id, name, dimensionName, numberOfLesson, status);
+                SubjectManagerDTO subjectManagerDTO = new SubjectManagerDTO(id, name, thumbnail, dimensionName, numberOfLesson, status, fullName);
                 lst.add(subjectManagerDTO);
             }
         } catch (SQLException ex) {
         }
         return lst;
     }
-    
+
     public List<SubjectManagerDTO> getPaginationAdminManagerSubjectSearchByStatus(int page, int recordsPerPage, int statusInput) {
         List<SubjectManagerDTO> lst = new ArrayList<>();
         int start = (page - 1) * recordsPerPage + 1;
@@ -1240,24 +1280,30 @@ public class SubjectDAO extends DBContext {
                     + "    SELECT \n"
                     + "        s.id, \n"
                     + "        s.name, \n"
+                    + "        s.img, \n"
                     + "        d.DimensionName, \n"
                     + "        COUNT(sl.lesson_id) as NumberLesson,\n"
                     + "        s.status,\n"
-                    + "        ROW_NUMBER() OVER (ORDER BY s.creater_at) AS row_num\n"
+                    + "        ROW_NUMBER() OVER (ORDER BY s.creater_at desc) AS row_num,\n"
+                    + "        u.full_name\n"
                     + "    FROM \n"
                     + "        subjects s \n"
                     + "    LEFT JOIN \n"
                     + "        Dimension d ON s.dimensionId = d.DimensionId\n"
                     + "    LEFT JOIN \n"
                     + "        subject_has_lesson sl ON sl.subject_id = s.id\n"
+                    + "    LEFT JOIN \n"
+                    + "        [dbo].[users] u on u.id = s.creator_id\n"
                     + "    WHERE \n"
                     + "        s.status = ? \n"
                     + "    GROUP BY \n"
                     + "        s.id, \n"
                     + "        s.name, \n"
+                    + "        s.img, \n"
                     + "        d.DimensionName, \n"
                     + "        s.status, \n"
-                    + "        s.creater_at\n"
+                    + "        s.creater_at, \n"
+                    + "        u.full_name \n"
                     + ")\n"
                     + "SELECT * \n"
                     + "FROM PagedResults\n"
@@ -1273,11 +1319,13 @@ public class SubjectDAO extends DBContext {
             while (rs.next()) {
                 int id = rs.getInt(1);
                 String name = rs.getString(2);
-                String dimensionName = rs.getString(3);
-                int numberOfLesson = rs.getInt(4);
-                int status = rs.getInt(5);
+                String thumbnail = rs.getString(3);
+                String dimensionName = rs.getString(4);
+                int numberOfLesson = rs.getInt(5);
+                int status = rs.getInt(6);
+                String fullName = rs.getString(8);
 
-                SubjectManagerDTO subjectManagerDTO = new SubjectManagerDTO(id, name, dimensionName, numberOfLesson, status);
+                SubjectManagerDTO subjectManagerDTO = new SubjectManagerDTO(id, name, thumbnail, dimensionName, numberOfLesson, status, fullName);
                 lst.add(subjectManagerDTO);
             }
         } catch (SQLException ex) {
@@ -1316,22 +1364,28 @@ public class SubjectDAO extends DBContext {
                 + "    SELECT \n"
                 + "        s.id, \n"
                 + "        s.name, \n"
+                + "        s.img, \n"
                 + "        d.DimensionName, \n"
-                + "        COUNT(sl.lesson_id) as NumberLesson,\n"
+                + "        COUNT(sl.lesson_id) AS NumberLesson,\n"
                 + "        s.status,\n"
-                + "        ROW_NUMBER() OVER (ORDER BY s.creater_at) AS row_num\n"
+                + "        ROW_NUMBER() OVER (ORDER BY s.creater_at desc) AS row_num,\n"
+                + "        u.full_name\n"
                 + "    FROM \n"
                 + "        subjects s \n"
                 + "    LEFT JOIN \n"
                 + "        Dimension d ON s.dimensionId = d.DimensionId\n"
                 + "    LEFT JOIN \n"
                 + "        subject_has_lesson sl ON sl.subject_id = s.id\n"
+                + "	LEFT JOIN\n"
+                + "		[dbo].[users] u ON u.id = s.creator_id\n"
                 + "    GROUP BY \n"
                 + "        s.id, \n"
                 + "        s.name, \n"
+                + "        s.img, \n"
                 + "        d.DimensionName, \n"
                 + "        s.status, \n"
-                + "        s.creater_at\n"
+                + "        s.creater_at,\n"
+                + "        u.full_name\n"
                 + ")\n"
                 + "SELECT * \n"
                 + "FROM PagedResults\n"
@@ -1346,11 +1400,13 @@ public class SubjectDAO extends DBContext {
             while (resultSet.next()) {
                 int id = resultSet.getInt(1);
                 String name = resultSet.getString(2);
-                String dimensionName = resultSet.getString(3);
-                int numberOfLesson = resultSet.getInt(4);
-                int status = resultSet.getInt(5);
+                String thumbnail = resultSet.getString(3);
+                String dimensionName = resultSet.getString(4);
+                int numberOfLesson = resultSet.getInt(5);
+                int status = resultSet.getInt(6);
+                String fullName = resultSet.getString(8);
 
-                SubjectManagerDTO subjectManagerDTO = new SubjectManagerDTO(id, name, dimensionName, numberOfLesson, status);
+                SubjectManagerDTO subjectManagerDTO = new SubjectManagerDTO(id, name, thumbnail, dimensionName, numberOfLesson, status, fullName);
                 lst.add(subjectManagerDTO);
             }
             preparedStatement.close();
@@ -1388,24 +1444,30 @@ public class SubjectDAO extends DBContext {
                     + "    SELECT \n"
                     + "        s.id, \n"
                     + "        s.name, \n"
+                    + "        s.img, \n"
                     + "        d.DimensionName, \n"
                     + "        COUNT(sl.lesson_id) as NumberLesson,\n"
                     + "        s.status,\n"
-                    + "        ROW_NUMBER() OVER (ORDER BY s.creater_at) AS row_num\n"
+                    + "        ROW_NUMBER() OVER (ORDER BY s.creater_at desc) AS row_num,\n"
+                    + "        u.full_name\n"
                     + "    FROM \n"
                     + "        subjects s \n"
                     + "    LEFT JOIN \n"
                     + "        Dimension d ON s.dimensionId = d.DimensionId\n"
                     + "    LEFT JOIN \n"
                     + "        subject_has_lesson sl ON sl.subject_id = s.id\n"
+                    + "    LEFT JOIN \n"
+                    + "        [dbo].[users] u on u.id = s.creator_id\n"
                     + "    WHERE \n"
                     + "        s.name like ? \n"
                     + "    GROUP BY \n"
                     + "        s.id, \n"
                     + "        s.name, \n"
+                    + "        s.img, \n"
                     + "        d.DimensionName, \n"
                     + "        s.status, \n"
-                    + "        s.creater_at\n"
+                    + "        s.creater_at,\n"
+                    + "        u.full_name\n"
                     + ")\n"
                     + "SELECT * \n"
                     + "FROM PagedResults\n"
@@ -1421,16 +1483,81 @@ public class SubjectDAO extends DBContext {
             while (rs.next()) {
                 int id = rs.getInt(1);
                 String name = rs.getString(2);
-                String dimensionName = rs.getString(3);
-                int numberOfLesson = rs.getInt(4);
-                int status = rs.getInt(5);
+                String thumbnail = rs.getString(3);
+                String dimensionName = rs.getString(4);
+                int numberOfLesson = rs.getInt(5);
+                int status = rs.getInt(6);
+                String fullName = rs.getString(8);
 
-                SubjectManagerDTO subjectManagerDTO = new SubjectManagerDTO(id, name, dimensionName, numberOfLesson, status);
+                SubjectManagerDTO subjectManagerDTO = new SubjectManagerDTO(id, name, thumbnail, dimensionName, numberOfLesson, status, fullName);
                 lst.add(subjectManagerDTO);
             }
         } catch (SQLException ex) {
         }
         return lst;
+    }
+
+    public boolean checkSubjectRegisterById(int subId, int userId) {
+        String query = "SELECT *\n"
+                + "FROM [dbo].[Subject_Register]\n"
+                + "WHERE [SubjectId] = ? AND [UserId] = ?";
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, subId);
+            ps.setInt(2, userId);
+            rs = ps.executeQuery();
+            return rs.next();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean checkEmailExists(String email) {
+        String query = "SELECT COUNT(*) AS count FROM Users WHERE email = ?";
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, email);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int count = rs.getInt("count");
+                return count > 0;
+            }
+            return false;
+        } catch (SQLException e) {
+            e.printStackTrace(); // Replace with logger in real application
+            return false;
+        } finally {
+            // Ensure resources are closed
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace(); // Replace with logger in real application
+            }
+        }
+    }
+
+    public boolean checkExpertTeachSameSubject(String subjectName, int userId) {
+        String query = "SELECT s.name, u.id\n"
+                + "FROM subjects AS s\n"
+                + "INNER JOIN users AS u ON u.id = s.creator_id\n"
+                + "WHERE s.name = ? AND u.id = ?";
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1,subjectName);
+            ps.setInt(2, userId);
+            System.out.println("DK: " + ps.executeQuery().next());
+            return ps.executeQuery().next();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public static void main(String[] args) {

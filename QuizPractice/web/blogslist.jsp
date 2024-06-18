@@ -35,22 +35,63 @@
                 <h1 class="heading">Blogs</h1>
             </div>
             <div class="box-container">
-                <c:forEach items="${bloglist}" var="li" >
-                    <div class="box">
-                        <img src="${li.thumbnail}" id="ima"/>
-                        <div class="student">
-                            <div>
-                                <h3>${li.getTitle()}</h3>
-                                <p> ${li.getBrieinfo()}</p>
-                                <div class="stars">
-                                    <p>Category : ${li.category.getCategory_Name()}</p>
-                                    <button> <a href="blogdetail?pid=${li.blog_id}">READ MORE</a></button>
+                <c:forEach items="${bloglist}" var="li">
+                    <c:choose>
+                        <c:when test="${sessionScope.user.roleId == 5}">
+                            <!-- Hiển thị tất cả blog cho admin -->
+                            <div class="box">
+                                <img src="${li.thumbnail}" id="ima"/>
+                                <div class="student">
+                                    <div>
+                                        <h3>${li.getTitle()}</h3>
+                                        <p>${li.getBrieinfo()}</p>
+                                        <p>Status:  
+                                            <c:choose>
+                                                <c:when test="${li.status}">
+                                                    <span style="color: green;">Published</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span style="color: red;">Not published</span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </p>
+
+                                        <div class="stars">
+                                            <p>Category: ${li.category.getCategory_Name()}</p>
+                                            <button><a href="blogdetail?pid=${li.blog_id}">READ MORE</a></button>
+                                            <c:if test="${sessionScope.user.roleId == 5}">
+                                                <button><a href="postdetail?id=${li.blog_id}">Update</a></button>
+                                            </c:if>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </c:forEach>            
+                        </c:when>
+                        <c:otherwise>
+                            <!-- Chỉ hiển thị những blog có status = true cho các vai trò khác -->
+                            <c:if test="${li.status == true}">
+                                <div class="box">
+                                    <img src="${li.thumbnail}" id="ima"/>
+                                    <div class="student">
+                                        <div>
+                                            <h3>${li.getTitle()}</h3>
+                                            <p>${li.getBrieinfo()}</p>
+                                            <div class="stars">
+                                                <p>Category: ${li.category.getCategory_Name()}</p>
+                                                <button><a href="blogdetail?pid=${li.blog_id}">READ MORE</a></button>
+                                                <c:if test="${sessionScope.user.roleId == 5}">
+                                                    <button><a href="postdetail?id=${li.blog_id}">Update</a></button>
+                                                </c:if>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:if>
+                        </c:otherwise>
+                    </c:choose>
+                </c:forEach>
             </div>
+
         </section>
 
         <div id="pagee">

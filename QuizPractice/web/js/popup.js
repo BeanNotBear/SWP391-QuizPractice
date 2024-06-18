@@ -248,7 +248,7 @@ function logout() {
                 title: "Log Out Successfully!",
                 icon: "success"
             }).then((result) => {
-                window.location.reload();
+                window.location.href = "home";
             });
         }
     });

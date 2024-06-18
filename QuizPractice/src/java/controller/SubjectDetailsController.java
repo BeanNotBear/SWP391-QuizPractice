@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller;
 
 import dal.SubjectDAO;
@@ -12,10 +8,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import dto.SubjectDTO;
+import jakarta.servlet.http.HttpSession;
+import model.User;
 
 @WebServlet("/subject-details")
 public class SubjectDetailsController extends HttpServlet {
+
     private int previous_id;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -33,11 +33,22 @@ public class SubjectDetailsController extends HttpServlet {
         SubjectDTO subject = null;
         final String contexPath = request.getContextPath();
         final String domain = request.getLocalName();
+        boolean status = false;
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+
         try {
+            int userId = 0;
+
             subId = Integer.parseInt(subjectId);
             previous_id = subId;
             subject = subjectDAO.findSubjectById(subId);
-            if(subject != null) {
+            if (subject != null) {
+                if (user != null) {
+                    userId = user.getUserId();
+                    status = subjectDAO.checkSubjectRegisterById(previous_id, userId);
+                    request.setAttribute("status", status);
+                }
                 request.setAttribute("subject", subject);
                 request.getRequestDispatcher("/playlist.jsp").forward(request, response);
             } else {
@@ -45,7 +56,7 @@ public class SubjectDetailsController extends HttpServlet {
             }
         } catch (NumberFormatException e) {
             subject = subjectDAO.findSubjectById(previous_id);
-            if(subject != null) {
+            if (subject != null) {
                 request.setAttribute("subject", subject);
                 request.getRequestDispatcher("/playlist.jsp").forward(request, response);
             } else {

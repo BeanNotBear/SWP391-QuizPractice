@@ -22,20 +22,10 @@
 
         <!-- Custom CSS to make the footer fixed -->
         <style>
-/*            body {
-                padding: 0;
-                margin: 0;
-            }*/
-            .footer {
-                background: #f8f9fa;
-                text-align: center;
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-                height: 15%;
-                z-index: 10; /* Giá trị z-index cao để đè lên sidebar */
-                padding-right: 20%;
-            }
+            /*            body {
+                            padding: 0;
+                            margin: 0;
+                        }*/
             .subjectList {
                 margin-bottom: 50px;
             }
@@ -53,11 +43,13 @@
             nav{
                 margin-top: -25px;
             }
-            
+
             #newSubject{
                 text-decoration: underline;
                 margin-bottom: 20px;
             }
+
+
         </style>
     </head>
 
@@ -68,30 +60,74 @@
         <section class="subjectList">
             <h1 class="heading text-center">Subject list</h1>
             <div class="container">
-                <a href="newSubject" id="newSubject">New Subject</a>
+                <c:if test="${sessionScope.user.roleId == 2}">
+                    <a href="newSubject" id="newSubject">New Subject</a>
+                </c:if>
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>Id</th>
                             <th>Name</th>
+                            <th>Thumbnail</th>
+                            <th>Owner(Expert)</th>
                             <th>Category</th>
-                            <th>Number Lessons</th>                         
+                            <th>Number of Lessons</th>                         
                             <th>Status</th>
-                            <th>Detail</th>
+                            <th>
+                                <!--expert-->
+                                <c:if test="${sessionScope.user.roleId == 3}">
+                                    Detail 
+                                </c:if>
+                                <!--admin-->
+                                <c:if test="${sessionScope.user.roleId == 2}">
+                                    Action 
+                                </c:if>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="item" items="${listSubject}">
-                            <tr>
-                                <td>${item.id}</td>
-                                <td>${item.name}</td>
-                                <td>${item.dimensionName}</td>
-                                <td>${item.numberOfLesson}</td>
-                                <td>${item.status}</td>
-                               
-                                <td><a href="subjectDetailExpert?id=${item.id}" class="btn btn-info btn-sm">Detail</a></td>
-                            </tr>
-                        </c:forEach>
+                        <!--admin-->
+                        <c:if test="${sessionScope.user.roleId == 2}">
+                            <c:forEach var="item" items="${listSubject}">
+                                <tr>
+                                    <td>${item.id}</td>
+                                    <td>${item.name}</td>
+                                    <td style="width: 20%"><img width="100%" src="${item.thumbnail}" alt="alt"/></td>
+                                    <td>${item.owner}</td>
+                                    <td>${item.dimensionName}</td>
+                                    <td>${item.numberOfLesson}</td>
+                                    <td>
+                                        <a onclick="changeStatus(this, ${item.id})" 
+                                           <c:if test="${item.status == 1}">class="btn btn-info btn-sm"</c:if>
+                                           <c:if test="${item.status == 2}">class="btn btn-danger btn-sm"</c:if>
+                                           ><c:if test="${item.status == 1}">Published</c:if><c:if test="${item.status == 2}">Unpublished</c:if></a>
+                                        </td>
+
+                                            <td><a href="subjectDetailExpert?id=${item.id}" class="btn btn-info btn-sm">Detail</a></td>
+                                </tr>
+                            </c:forEach>
+                        </c:if>
+                        <!--expert-->
+                        <c:if test="${sessionScope.user.roleId == 3}">
+                            <c:forEach var="item" items="${listSubject}">
+                                <tr>
+                                    <td>${item.id}</td>
+                                    <td>${item.name}</td>
+                                    <td style="width: 20%"><img width="100%" src="${item.thumbnail}" alt="alt"/></td>
+                                    <td>${item.owner}</td>
+                                    <td>${item.dimensionName}</td>
+                                    <td>${item.numberOfLesson}</td>
+                                    <td>
+                                        <a
+                                            <c:if test="${item.status == 1}">class="btn btn-info btn-sm"</c:if>
+                                            <c:if test="${item.status == 2}">class="btn btn-danger btn-sm"</c:if>
+                                            ><c:if test="${item.status == 1}">Published</c:if><c:if test="${item.status == 2}">Unpublished</c:if></a>
+                                        </td>
+
+                                            <td><a href="subjectDetailExpert?id=${item.id}" class="btn btn-info btn-sm">Detail</a></td>
+                                </tr>
+                            </c:forEach>
+                        </c:if>
 
                     </tbody>
                 </table>
@@ -137,5 +173,8 @@
         <%@include file="/layout/footer.jsp"%>
 
         <%@include file="/layout/script.jsp" %>
+
+        <!--change status of subject-->
+        <script src="js/ChangeStatusOfSubject.js"></script>
     </body>
 </html>

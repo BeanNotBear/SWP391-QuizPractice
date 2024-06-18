@@ -362,7 +362,7 @@ public class BlogDAO extends DBContext {
             ps.setString(1, blog.getTitle());
             ps.setString(2, blog.getCategoryName());
             ps.setString(3, blog.getContent());
-            ps.setBoolean(4, blog.isStatus());
+            ps.setInt(4, blog.isStatus() ? 1 : 0);
 
             ps.setString(5, blog.getBriefinfo());
             ps.setString(6, blog.getThumbnail());

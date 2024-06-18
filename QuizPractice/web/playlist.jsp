@@ -7,30 +7,27 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Subject Detail</title>
-
-        <!-- font awesome cdn link  -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
-
         <!-- custom css file link  -->
         <link rel="stylesheet" href="css/style.css">
-
         <link rel="stylesheet" href="css/popup.css"/>
 
         <!-- Bootstrap file link  -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    </head>
 
+
+
+    </head>
     <body>
+
         <%@include file="/layout/header.jsp"%>
+
         <%@include file="/layout/sidebar.jsp"%>
-        <%@include file="layout/profile.jsp"%>
+        <%@include file="layout/profile.jsp" %>
         <!--change password pop-up-->
-        <%@include file="layout/changePassword.jsp"%>
-        <%@include file="layout/loader.jsp" %>
-        <%@include file="layout/login.jsp"%>
-        <%@include file="layout/register.jsp"%>
+        <%@include file="layout/changePassword.jsp" %>
 
         <section class="playlist-details">
             <c:set var="subject" value="${requestScope.subject}"/>
@@ -59,53 +56,41 @@
                     <div class="details">
                         <h3>${subject.name}</h3>
                         <p>${subject.description}</p>
-                        <h4>Sale price: <span>${subject.pricePackages.get(0).salePrice} VND</span></h4>
-                        <h4>Origin price: <span style="text-decoration: line-through">${subject.pricePackages.get(0).price} VND</span></h4>
+                        <c:if test="${!empty subject.pricePackages}">
+                            <h4>Sale price: <span>${subject.pricePackages.get(0).salePrice} VND</span></h4>
+                            <h4>Origin price: <span style="text-decoration: line-through">${subject.pricePackages.get(0).price} VND</span></h4>
+                        </c:if>
                         <c:forEach var="i" items="${subject.tags}">
                             <span class="card-text"><span class="badge badge-info">${i.tag}</span></span>
                             </c:forEach>
                         <br/>
                         <a href="<%=contextPath%>/teacher?id=${subject.creator.userId}" class="inline-btn">view profile</a>
-                        <a href="#" id="registerNowBtn" class="inline-btn">Register Now</a>
+                        <c:if test="${requestScope.status}"><a class="inline-btn">Registered</a></c:if>
+                        <c:if test="${!requestScope.status}"><a href="#" id="registerNowBtn" class="inline-btn">Register Now</a></c:if>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Register Subject Popup Modal -->
+            <div id="registerSubjectPopup" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <!-- Content will be loaded here by AJAX -->
                     </div>
                 </div>
             </div>
-        </section>
-
-        <!-- Register Subject Popup Modal -->
-        <div id="registerSubjectPopup" class="modal fade" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <!-- Content will be loaded here by AJAX -->
-                </div>
-            </div>
-        </div>
 
         <%@include file="/layout/footer.jsp" %>
 
-        <!--pop js-->
-        <script src="js/popup.js"></script>
-
-        <!--jquery-->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-        <!--swal-->
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-        <!-- custom js file link  -->
+        <!-- Custom JS File Link -->
         <script src="js/script.js"></script>
-        
-        <!--validate-->
-        <script src="js/validate.js"></script>
-
         <script>
             $(document).ready(function () {
-                // Load the register subject popup content
                 $("#registerNowBtn").on("click", function (event) {
                     event.preventDefault();
-                    var subjectId = '${subject.id}'; // Pass the subject ID to the modal
-                    var subjectName = '${subject.name}'; 
+                    var subjectId = '${subject.id}';
+                    var subjectName = '${subject.name}';
                     $.ajax({
                         url: "<%=contextPath%>/subjectRegister",
                         type: "GET",

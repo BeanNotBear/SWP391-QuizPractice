@@ -9,10 +9,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.PricePackage;
 import model.User;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-@WebServlet("/subjectRegister")
+@WebServlet(name = "SubjectRegisterController", urlPatterns = {"/subjectRegister", "/checkEmail"})
 public class SubjectRegisterController extends HttpServlet {
 
     @Override
@@ -25,12 +29,13 @@ public class SubjectRegisterController extends HttpServlet {
             SubjectDAO subjectDAO = SubjectDAO.getInstance();
             List<PricePackage> listPricePackage = subjectDAO.getPricePackageBySubjectId(subjectId);
 
-            // Đặt listPricePackage vào request attribute
+            // Set listPricePackage into request attribute
             request.setAttribute("listPricePackage", listPricePackage);
             request.setAttribute("subjectName", subjectName);
             request.setAttribute("subjectId", subjectId);
 
-            // Chuyển tiếp request tới JSP để hiển thị modal
+            // Forward request to JSP to display modal
+            //chú ý : SubjectRegister viết thương hay hoa
             request.getRequestDispatcher("/layout/SubjectRegisterPopUp.jsp").forward(request, response);
         } catch (NumberFormatException e) {
             e.printStackTrace();
@@ -44,42 +49,88 @@ public class SubjectRegisterController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        SubjectDAO subjectDAO = SubjectDAO.getInstance();
-        int pricePackageId = Integer.parseInt(request.getParameter("pricePackageId"));
-        int subjectId = Integer.parseInt(request.getParameter("subjectId"));
+        String servletPath = request.getServletPath();
 
-        //Neu user logged in thì add luôn vào bảng
-        User user = (User) request.getSession().getAttribute("user");
-        if (user != null) {
-            try {
-                subjectDAO.addNewSubjectRegister(subjectId, user.getUserId(), pricePackageId);
-            } catch (Exception ex) {
-                 PrintWriter out = response.getWriter();
-                 out.println("<p>" + ex + "</p>");
-            }
-        } 
-        
-        //Nếu chưa logged in thì tạo user vơi thông tin nhập vào và lấy id cho vào bảng
-        else {
-            String userName = request.getParameter("userName");
-            String email = request.getParameter("email");
-            String phoneNumber = request.getParameter("phoneNumber");
-            String gender = request.getParameter("gender");
-            
-            try {
-                subjectDAO.addNewUser(userName, email, phoneNumber, gender);
-                int userId = subjectDAO.getLastUserId(); 
-                subjectDAO.addNewSubjectRegister(subjectId, userId, pricePackageId);
-                PrintWriter out = response.getWriter();
-                out.println("<p>" + "Register successfully"+ "</p>");
-                
-            } catch (Exception ex) {
-                 PrintWriter out = response.getWriter();
-                 out.println("<p>" + ex + "</p>");
-            }
-
+        if ("/subjectRegister".equals(servletPath)) {
+            registerSubject(request, response);
+        } else if ("/checkEmail".equals(servletPath)) {
+            checkEmail(request, response);
         }
-
     }
 
+    private void registerSubject(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
+        JSONObject jsonResponse = new JSONObject();
+
+        try {
+            SubjectDAO subjectDAO = SubjectDAO.getInstance();
+            int pricePackageId = Integer.parseInt(request.getParameter("pricePackageId"));
+            int subjectId = Integer.parseInt(request.getParameter("subjectId"));
+
+            // If user is logged in, directly add to database
+            User user = (User) request.getSession().getAttribute("user");
+            if (user != null) {
+                subjectDAO.addNewSubjectRegister(subjectId, user.getUserId(), pricePackageId);
+            } else {
+                // If not logged in, create new user and then add to database
+                String userName = request.getParameter("userName");
+                String email = request.getParameter("email");
+                String phoneNumber = request.getParameter("phoneNumber");
+                String gender = request.getParameter("gender");
+
+                // Check if email already exists
+                boolean emailExists = subjectDAO.checkEmailExists(email);
+                if (emailExists) {
+                    jsonResponse.put("status", "error");
+                    jsonResponse.put("message", "Email already exists");
+                    out.print(jsonResponse.toString());
+                    out.flush();
+                    return;
+                }
+
+                // Add new user and get the generated userId
+                subjectDAO.addNewUser(userName, email, phoneNumber, gender);
+                int userId = subjectDAO.getLastUserId();
+                subjectDAO.addNewSubjectRegister(subjectId, userId, pricePackageId);
+            }
+
+            jsonResponse.put("status", "success");
+            jsonResponse.put("message", "Register successful!");
+        } catch (Exception ex) {
+            try {
+                ex.printStackTrace();
+                jsonResponse.put("status", "error");
+                jsonResponse.put("message", ex.getMessage());
+            } catch (JSONException ex1) {
+                Logger.getLogger(SubjectRegisterController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+        out.print(jsonResponse.toString());
+        out.flush();
+    }
+
+    private void checkEmail(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    response.setContentType("application/json");
+    PrintWriter out = response.getWriter();
+    JSONObject jsonResponse = new JSONObject();
+
+    try {
+        String email = request.getParameter("email");
+
+        SubjectDAO subjectDAO = SubjectDAO.getInstance();
+        boolean emailExists = subjectDAO.checkEmailExists(email);
+
+        jsonResponse.put("exists", emailExists); // Đảm bảo trả về JSON có thuộc tính exists
+    } catch (Exception ex) {
+        try {
+            ex.printStackTrace();
+            jsonResponse.put("exists", false);
+        } catch (JSONException ex1) {
+            Logger.getLogger(SubjectRegisterController.class.getName()).log(Level.SEVERE, null, ex1);
+        }
+    }
+    out.print(jsonResponse.toString());
+    out.flush();
+}
 }

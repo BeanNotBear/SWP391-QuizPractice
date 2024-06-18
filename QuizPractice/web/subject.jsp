@@ -52,12 +52,16 @@
                             <img src="${c.img}" alt="">
                             <span>${c.numberOfLesson} lesson</span>
                         </div>
-                        <h3 class="title">${c.name}</h3>
-                        <h4>Sale price: ${c.pricePackages.get(0).salePrice}VND</h4>
-                        <h4>Origin price: <span style="text-decoration: line-through">${c.pricePackages.get(0).price}VND</span></h4>
-                        <c:forEach var="i" items="${c.tags}">
-                            <span class="card-text"><span class="badge badge-info">${i.tag}</span></span>
-                            </c:forEach>
+                        <c:if test="${!empty c.pricePackages}">
+                            <h3 class="title">${c.name}</h3>
+                            <h4>Sale price: ${c.pricePackages.get(0).salePrice}VND</h4>
+                            <h4>Origin price: <span style="text-decoration: line-through">${c.pricePackages.get(0).price}VND</span></h4>
+                        </c:if>
+                        <c:if test="${!empty c.tags}">
+                            <c:forEach var="i" items="${c.tags}">
+                                <span class="card-text"><span class="badge badge-info">${i.tag}</span></span>
+                                </c:forEach>
+                            </c:if>
                         <br/>
                         <a href="subject-details?id=${c.id}" class="inline-btn">Details</a>
                         <a href="subject-register?id=${c.id}" class="inline-btn">Register</a>

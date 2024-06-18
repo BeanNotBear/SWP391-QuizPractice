@@ -3,17 +3,31 @@
 <%String contextPath = request.getContextPath();%>
 <div class="side-bar">
 
-<!--    <div id="close-btn">
-        <i class="fas fa-times"></i>
-    </div>-->
-<br/>
-<br/>
+    <!--    <div id="close-btn">
+            <i class="fas fa-times"></i>
+        </div>-->
+    <br/>
+    <br/>
 
     <c:if test="${sessionScope.user != null}">
         <div class="profile">
             <img src="<%=contextPath%>/${sessionScope.user.profileImg}" class="image" alt="">
             <h3 class="name">${sessionScope.user.fullName}</h3>
-            <p class="role">student</p>
+            <c:if test="${sessionScope.user.roleId == 1}">
+                <p class="role">Customer</p>
+            </c:if>
+            <c:if test="${sessionScope.user.roleId == 2}">
+                <p class="role">Admin</p>
+            </c:if>
+            <c:if test="${sessionScope.user.roleId == 3}">
+                <p class="role">Expert</p>
+            </c:if>
+            <c:if test="${sessionScope.user.roleId == 4}">
+                <p class="role">Sale</p>
+            </c:if>
+            <c:if test="${sessionScope.user.roleId == 4}">
+                <p class="role">Marketing</p>
+            </c:if>
             <a onclick="openPopUp2()" class="option-btn">view profile</a>
         </div>
     </c:if>
@@ -24,7 +38,7 @@
         <input type="hidden" name="typeSubmit" value="submitName">
         <button type="submit" class="fas fa-search"></button>
     </form>
-  
+
     <form action="<%=request.getContextPath()%>/subjectManager" method="post" class="form-inline" id="searchByDimension">
         <div class="form-group">
             <select id="dimension" name="dimensionId" class="form-control">
@@ -36,13 +50,13 @@
             <input type="hidden" name="typeSubmit" value="dimensionId">
         </div>
     </form>
-    
+
     <form action="<%=request.getContextPath()%>/subjectManager" method="post" class="form-inline" id="searchByStatus">
         <div class="form-group">
             <select id="status" name="status" class="form-control">
                 <option value="" disabled selected>Search by status</option>
-                <option value="true">Active</option>
-                <option value="false">Inactive</option>
+                <option value="true">Published</option>
+                <option value="false">Unpublished</option>
             </select>
             <input type="hidden" name="typeSubmit" value="status">
         </div>
@@ -51,11 +65,11 @@
 </div>
 
 <script>
-    document.getElementById('dimension').addEventListener('change', function() {
+    document.getElementById('dimension').addEventListener('change', function () {
         document.getElementById('searchByDimension').submit();
     });
 
-    document.getElementById('status').addEventListener('change', function() {
+    document.getElementById('status').addEventListener('change', function () {
         document.getElementById('searchByStatus').submit();
     });
 </script>
