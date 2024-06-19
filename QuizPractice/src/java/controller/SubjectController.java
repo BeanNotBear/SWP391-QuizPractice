@@ -10,6 +10,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import dto.SubjectDTO;
+import jakarta.servlet.http.HttpSession;
+import model.User;
 
 @WebServlet(name = "SubjectController", urlPatterns = {"/subject"})
 public class SubjectController extends HttpServlet {
@@ -28,10 +30,19 @@ public class SubjectController extends HttpServlet {
             // Parse the page parameter to an integer
             page = Integer.parseInt(pageParam);
         }
-        
+        HttpSession session = request.getSession();
         SubjectDAO subjectDAO = SubjectDAO.getInstance();
+        User user = (User) session.getAttribute("user");
+        
 
         List<SubjectDTO> listSubject = subjectDAO.allSubjectsWithConditions(searchParam, sort);
+        if (user != null) {
+            int userId = user.getUserId();
+            for (SubjectDTO subjectDTO : listSubject) {
+                boolean status = subjectDAO.checkSubjectRegisterById(subjectDTO.getId(), userId);
+                subjectDTO.setRegistered(status);
+            }
+        }
         System.out.println(listSubject);
         List<SubjectDTO> pagingSubject = subjectDAO.Paging(listSubject, page, pageSize);
         request.setAttribute("listC", pagingSubject);

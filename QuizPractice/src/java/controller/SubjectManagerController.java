@@ -151,7 +151,7 @@ public class SubjectManagerController extends HttpServlet {
 
             // Lấy trang hiện tại từ request
             int page = 1;
-            int recordsPerPage = 5;
+            int recordsPerPage = 10;
             if (request.getParameter("page") != null) {
                 page = Integer.parseInt(request.getParameter("page"));
             }
@@ -232,7 +232,7 @@ public class SubjectManagerController extends HttpServlet {
 
             // Lấy trang hiện tại từ request
             int page = 1;
-            int recordsPerPage = 5;
+            int recordsPerPage = 10;
             if (request.getParameter("page") != null) {
                 page = Integer.parseInt(request.getParameter("page"));
             }
@@ -269,13 +269,13 @@ public class SubjectManagerController extends HttpServlet {
 
             // Lấy trang hiện tại từ request
             int page = 1;
-            int recordsPerPage = 5;
+            int recordsPerPage = 10;
             if (request.getParameter("page") != null) {
                 page = Integer.parseInt(request.getParameter("page"));
             }
 
             lst = subjectDAO.getPaginationAdminManagerSubjectSearchByDimensionId(page, recordsPerPage, dimensionId, searchCondition, _status);
-            int totalRecords = subjectDAO.getTotalRecordsExpertManagerSubjectSearchByDimensionId(user.getUserId(), dimensionId);
+            int totalRecords = subjectDAO.getTotalRecordsAdminManagerSubjectSearchByDimensionId(dimensionId);
             int totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
 
             List<DimensionDTO> dimensionDTOs = new ArrayList<>();
@@ -306,13 +306,13 @@ public class SubjectManagerController extends HttpServlet {
 
             // Lấy trang hiện tại từ request
             int page = 1;
-            int recordsPerPage = 5;
+            int recordsPerPage = 10;
             if (request.getParameter("page") != null) {
                 page = Integer.parseInt(request.getParameter("page"));
             }
 
             lst = subjectDAO.getPaginationAdminManagerSubjectSearchByStatus(page, recordsPerPage, status, searchCondition, dimension);
-            int totalRecords = subjectDAO.getTotalRecordsExpertManagerSubjectSearchByStatus(user.getUserId(), status);
+            int totalRecords = subjectDAO.getTotalRecordsAdminManagerSubjectSearchByStatus(status);
             int totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
 
             List<DimensionDTO> dimensionDTOs = new ArrayList<>();

@@ -30,6 +30,16 @@
                 padding: 0;
                 margin: 0;
             }
+            .footer {
+                background: #f8f9fa;
+                text-align: center;
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                height: 15%;
+                z-index: 10; /* Giá trị z-index cao để đè lên sidebar */
+                padding-right: 20%;
+            }
             .subjectList {
                 margin-bottom: 50px;
             }
@@ -123,7 +133,7 @@
                             <th>Id</th>
                             <th>Title</th>
                             <th>Image</th>
-                            <th>BackLink</th>                         
+                            <th>BlackLink</th>                         
                             <th>Status</th>
                             <th>Detail</th>
                             <th>Delete</th>
@@ -134,7 +144,7 @@
                             <tr>
                                 <td>${item.getID()}</td>
                                 <td>${item.getTitle()}</td>
-                                <td><img width="30%" src="${item.getImage()}" alt="preview"/></td>
+                                <td>${item.getImage()}</td>
                                 <td>${item.getLinkUrl()}</td>
                                 <td>
                                     <label class="switch">  
@@ -201,7 +211,7 @@
                     </div>
                     <div class="modal-body">
                         <form id="addSliderForm">
-
+                            
                             <div class="form-group">
                                 <label for="title">Title:</label>
                                 <input type="text" class="form-control" id="title" name="title">
@@ -268,7 +278,7 @@
 
 
                             function addSlider() {
-
+                               
                                 var title = $('#title').val();
                                 var subTitle = $('#subTitle').val();
                                 var content = $('#content').val();
@@ -280,7 +290,7 @@
                                     url: 'addSlider', // Đổi thành URL của servlet xử lý thêm slider
                                     type: 'POST',
                                     data: {
-
+                                       
                                         title: title,
                                         subTitle: subTitle,
                                         content: content,

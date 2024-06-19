@@ -6,7 +6,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Post Detail</title>
+        <title>Quản lý blog</title>
 
         <!-- font awesome cdn link  -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
@@ -14,12 +14,13 @@
         <!-- custom css file link  -->
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/popup.css">
-        <link rel="stylesheet" href="css/postdetail.css">
 
         <!-- Bootstrap file link  -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+        <!-- Custom CSS to make the footer fixed -->
         <style>
             body {
                 padding: 0;
@@ -97,6 +98,7 @@
     <body>
         <%@include file="/layout/header.jsp"%>
 
+
         <section class="postDetail">
             <h1 class="heading text-center">Blog Detail Update</h1>
             <div class="container">
@@ -109,11 +111,13 @@
                             <i class="fa fa-upload"></i> Upload image
                         </button>
                         <!-- Input để chọn file ảnh, không hiển thị cho người dùng -->
-                        <input accept="image/png, image/gif, image/jpeg" type="file" id="fileInput" style="display: none;">
+                        <input accept="image/png, image/jpeg" type="file" id="fileInput" style="display: none;">
                     </div>
+                        
                     <div class="col-md-2"></div>
+                    
                     <div class="col-md-6">
-                        <form id="postUpdateForm" action="postdetail" method="post">
+                        <form action="postdetail" method="post" id="postUpdateForm">
                             <input type="hidden" id="id" name="id" value="<c:out value='${blog.id}'/>">
                             <input type="hidden" id="thumbnail" name="thumbnail" value="<c:out value='${blog.thumbnail}'/>">
                             <div class="form-group">
@@ -144,11 +148,10 @@
                             <div class="form-group">
                                 <label for="status">Status:</label>
                                 <br/>
-
-                                <label class="switch">  
-                                    <input <c:if test="${blog.status}">checked</c:if> type="checkbox" id="status" name="status">
-                                    <span class="slider round"></span>
-                                </label>
+                                <label class="switch">
+                                    <input type="checkbox" id="status" name="status" <c:if test="${blog.status}">checked</c:if>>
+                                        <span class="slider round"></span>
+                                    </label>
                                 </div>
                                 <button type="submit" class="btn btn-primary btn-sms">Save</button>
                             </form>
@@ -156,6 +159,7 @@
                     </div>
                 </div>
             </section>
+                                        
             <br/>
 
         <%@include file="/layout/footer.jsp" %>
@@ -167,8 +171,21 @@
             });
 
             document.getElementById('fileInput').addEventListener('change', function () {
-                
+                var file = this.files[0];
                 var formData = new FormData();
+
+                // Kiểm tra định dạng tệp
+                var allowedTypes = ['image/jpeg', 'image/png'];
+                if (allowedTypes.indexOf(file.type) === -1) {
+                    Swal.fire({
+                        title: "Only allowed to upload image formats: JPEG, PNG, GIF",
+                        icon: "error"
+                    }).then(() => {
+                        // Reset giá trị của input file để người dùng có thể chọn tệp khác
+                        document.getElementById('fileInput').value = "";
+                    });
+                    return;
+                }
 
                 formData.append('file', file);
 
@@ -201,7 +218,10 @@
                 xhr.send(formData);
             });
         </script>
-        <%@include file="/layout/script.jsp" %>
+
+        <%@include file="layout/script.jsp" %>
         <script src="js/ChangeStatusOfSubject.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js" integrity="sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     </body>
 </html>

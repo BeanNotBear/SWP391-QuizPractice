@@ -32,4 +32,5 @@ public class SubjectDTO {
     private User creator;
     private List<PricePackageDTO> pricePackages;
     private List<Tag> tags;
+    private boolean registered = false;
 }

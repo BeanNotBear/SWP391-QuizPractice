@@ -12,9 +12,12 @@ import java.sql.Date;
 public class Lesson {
     private int id;
     private String name;
-    private String content;
-    private String media;
-    private Date updatedAt;
+    private int creatorId;
+    private Date updateAt;
     private Date createdAt;
     private int status;
+    private String content;
+    private String media;
+    private int lessonIndex;
+    private String type;
 }

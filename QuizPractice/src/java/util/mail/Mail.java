@@ -88,7 +88,7 @@ public class Mail {
     }
 
     private static String buildEmailContent(String code, String linkActive) {
-        long expiryTime = System.currentTimeMillis() + (60 * 1000);
+        long expiryTime = System.currentTimeMillis() + (120 * 1000);
         // Build the email content dynamically using the provided code and linkActive
         return "<!DOCTYPE html>\n"
                 + "<html lang=\"en\">\n"

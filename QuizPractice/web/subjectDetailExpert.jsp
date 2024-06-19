@@ -74,13 +74,13 @@
             <h1 class="heading col-md-3">Subject Details              
             </h1>
             <div class="col-md-6"></div>
-            <a class="col-md-3" id="lessonManager">Lesson Manager</a>
+            <a class="col-md-3" id="lessonManager" href="lessonManager?subjectId=${subject.id}">Lesson Manager</a>
 
             <div class="container col-md-12" id="tabBar">
 
                 <ul class="nav nav-tabs">
                     <li class="active"><a data-toggle="tab" href="#home">Overview</a></li>
-<!--                    <li><a data-toggle="tab" href="#menu1">Category</a></li>-->
+                    <li><a data-toggle="tab" href="#menu1">Dimension</a></li>
                     <li><a data-toggle="tab" href="#menu2">Price Package</a></li>
                 </ul>
 

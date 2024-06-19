@@ -17,7 +17,7 @@ public class ChangeSliderController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Implement if needed, currently not used in this example
+        
     }
 
     @Override

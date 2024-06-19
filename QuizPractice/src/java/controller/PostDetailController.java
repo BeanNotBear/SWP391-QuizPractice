@@ -15,6 +15,8 @@ import org.json.JSONObject;
 @WebServlet(name = "PostDetailController", urlPatterns = {"/postdetail"})
 public class PostDetailController extends HttpServlet {
 
+    private int previous_id = -1;
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -24,12 +26,13 @@ public class PostDetailController extends HttpServlet {
         try {
             if (idParam != null && !idParam.isEmpty()) {
                 id = Integer.parseInt(idParam);
+                previous_id = id;
             }
         } catch (NumberFormatException e) {
             // Log lỗi nếu cần thiết
         }
 
-        if (id == -1) {
+        if (previous_id == -1) {
             // ID không hợp lệ hoặc không được truyền vào
             // Chuyển hướng đến trang lỗi hoặc trang mặc định
             response.sendRedirect("errorPage.jsp"); // hoặc trang mặc định
@@ -37,7 +40,7 @@ public class PostDetailController extends HttpServlet {
         }
 
         BlogDAO blogDao = BlogDAO.getInstance();
-        BlogManagerDetailDTO blog = blogDao.getBlogDetailDTOById(id);
+        BlogManagerDetailDTO blog = blogDao.getBlogDetailDTOById(previous_id);
 
         if (blog == null) {
             // Blog không tồn tại với ID đã cho

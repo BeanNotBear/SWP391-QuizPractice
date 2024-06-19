@@ -714,6 +714,25 @@ public class SubjectDAO extends DBContext {
         }
         return 0;
     }
+    
+    public int getTotalRecordsAdminManagerSubjectSearchByDimensionId(int dimensionId) {
+        String query = "SELECT COUNT(*) FROM subjects WHERE dimensionId = ?";
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, dimensionId);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                return id;
+            }
+
+        } catch (SQLException e) {
+            // Log the exception (if a logging framework is available)
+            e.printStackTrace(); // Replace with logger in real application
+        }
+        return 0;
+    }
 
     public int getTotalRecordsExpertManagerSubjectSearchByStatus(int userId, int status) {
         String query = "SELECT COUNT(*) FROM subjects WHERE creator_id = ? and status = ?";
@@ -734,16 +753,35 @@ public class SubjectDAO extends DBContext {
         }
         return 0;
     }
+    
+    public int getTotalRecordsAdminManagerSubjectSearchByStatus(int status) {
+        String query = "SELECT COUNT(*) FROM subjects WHERE status = ?";
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, status);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                return id;
+            }
+
+        } catch (SQLException e) {
+            // Log the exception (if a logging framework is available)
+            e.printStackTrace(); // Replace with logger in real application
+        }
+        return 0;
+    }
 
     public List<SubjectManagerDTO> getPaginationExpertManagerSubjectSearchBySubjectName(int userId, int page, int recordsPerPage, String searchName, int dimensionId, int statusCondition) {
         List<SubjectManagerDTO> lst = new ArrayList<>();
         int start = (page - 1) * recordsPerPage + 1;
         int end = start + recordsPerPage - 1;
         String condition = "";
-        if(dimensionId != -1) {
+        if (dimensionId != -1) {
             condition += "\n AND s.dimensionId = " + dimensionId;
         }
-        if(statusCondition != -1) {
+        if (statusCondition != -1) {
             condition += "\n AND s.status = " + statusCondition;
         }
         try {
@@ -812,10 +850,10 @@ public class SubjectDAO extends DBContext {
         int start = (page - 1) * recordsPerPage + 1;
         int end = start + recordsPerPage - 1;
         String condition = "";
-        if(!searchCondition.trim().equals("")) {
+        if (!searchCondition.trim().equals("")) {
             condition += "\n AND s.name LIKE " + "'%" + searchCondition + "%'";
         }
-        if(statusCondition != -1) {
+        if (statusCondition != -1) {
             condition += "\n AND s.status = " + statusCondition;
         }
         try {
@@ -884,10 +922,10 @@ public class SubjectDAO extends DBContext {
         int start = (page - 1) * recordsPerPage + 1;
         int end = start + recordsPerPage - 1;
         String condition = "";
-        if(!searchCondition.trim().equals("")) {
+        if (!searchCondition.trim().equals("")) {
             condition += "\n AND s.name LIKE " + "'%" + searchCondition + "%'";
         }
-        if(statusCondition != -1) {
+        if (statusCondition != -1) {
             condition += "\n AND s.status = " + statusCondition;
         }
         try {
@@ -1235,10 +1273,10 @@ public class SubjectDAO extends DBContext {
         int start = (page - 1) * recordsPerPage + 1;
         int end = start + recordsPerPage - 1;
         String condition = "";
-        if(!searchCondition.trim().equals("")) {
+        if (!searchCondition.trim().equals("")) {
             condition += "\n AND s.name LIKE " + "'%" + searchCondition + "%'";
         }
-        if(category != -1) {
+        if (category != -1) {
             condition += "\n AND s.dimensionId = " + category;
         }
         try {
@@ -1306,10 +1344,10 @@ public class SubjectDAO extends DBContext {
         int start = (page - 1) * recordsPerPage + 1;
         int end = start + recordsPerPage - 1;
         String condition = "";
-        if(!searchCondition.trim().equals("")) {
+        if (!searchCondition.trim().equals("")) {
             condition += "\n AND s.name LIKE " + "'%" + searchCondition + "%'";
         }
-        if(category != -1) {
+        if (category != -1) {
             condition += "\n AND s.dimensionId = " + category;
         }
         try {
@@ -1477,10 +1515,10 @@ public class SubjectDAO extends DBContext {
         int start = (page - 1) * recordsPerPage + 1;
         int end = start + recordsPerPage - 1;
         String condition = "";
-        if(dimensionId != -1) {
+        if (dimensionId != -1) {
             condition += "\n AND s.dimensionId = " + dimensionId;
         }
-        if(statusCondition != -1) {
+        if (statusCondition != -1) {
             condition += "\n AND s.status = " + statusCondition;
         }
         try {
@@ -1595,7 +1633,7 @@ public class SubjectDAO extends DBContext {
                 + "WHERE s.name = ? AND u.id = ?";
         try {
             ps = connection.prepareStatement(query);
-            ps.setString(1,subjectName);
+            ps.setString(1, subjectName);
             ps.setInt(2, userId);
             System.out.println("DK: " + ps.executeQuery().next());
             return ps.executeQuery().next();
@@ -1603,6 +1641,37 @@ public class SubjectDAO extends DBContext {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public void addNewUser(String userName, String email, String phoneNumber, String gender, String token) {
+        String query = "insert into users(full_name, email, phone_number, password, gender, created_at, role_id, status_id, token) "
+                + "values(?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
+        String password = "123";
+        int role = 1;
+        int status = 1;
+        int genderValue = gender.equalsIgnoreCase("male") ? 1 : 0;
+
+        try {
+            // Prepare the SQL query for execution
+            ps = connection.prepareStatement(query);
+
+            // Set parameters for the PreparedStatement
+            ps.setString(1, userName);
+            ps.setString(2, email);
+            ps.setString(3, phoneNumber);
+            ps.setString(4, password);
+            ps.setInt(5, genderValue);
+            ps.setDate(6, Date.valueOf(LocalDate.now()));
+            ps.setInt(7, role);
+            ps.setInt(8, status);
+            ps.setString(9, token);
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            // Log the exception (if a logging framework is available)
+            e.printStackTrace(); // Replace with logger in real application
+        }
     }
 
     public static void main(String[] args) {
