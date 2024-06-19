@@ -17,9 +17,10 @@ import model.User;
 @WebServlet("/subjectManager")
 public class SubjectManagerController extends HttpServlet {
 
-    private String searchCondition = "";
+    private String searchCondition = "%";
     private int _status = -1;
     private int dimension = -1;
+    private int page = 1;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -48,10 +49,14 @@ public class SubjectManagerController extends HttpServlet {
             // Lấy trang hiện tại từ request
 
             if (request.getParameter("page") != null) {
-                page = Integer.parseInt(request.getParameter("page"));
+                try {
+                    page = Integer.parseInt(request.getParameter("page"));
+                    this.page = page;
+                } catch (Exception e) {
+                }
             }
 
-            lst = subjectDAO.getPaginationExpertManagerSubject(user.getUserId(), page, recordsPerPage);
+            lst = subjectDAO.getPaginationExpertManagerSubject(user.getUserId(), this.page, recordsPerPage);
             totalRecords = subjectDAO.getTotalRecordsExpertManagerSubject(user.getUserId());
             totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
 
@@ -64,10 +69,14 @@ public class SubjectManagerController extends HttpServlet {
             request.setAttribute("totalPages", totalPages);
         } else if (user.getRoleId() == 2) {
             if (request.getParameter("page") != null) {
-                page = Integer.parseInt(request.getParameter("page"));
+                try {
+                    page = Integer.parseInt(request.getParameter("page"));
+                    this.page = page;
+                } catch (Exception e) {
+                }
             }
 
-            lst = subjectDAO.getPaginationAdmin(page, recordsPerPage);
+            lst = subjectDAO.getPaginationAdmin(this.page, recordsPerPage);
             totalRecords = subjectDAO.getTotalRecordSubject();
             totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
 
@@ -76,7 +85,7 @@ public class SubjectManagerController extends HttpServlet {
             request.setAttribute("dimensions", dimensionDTOs);
 
             request.setAttribute("listSubject", lst);
-            request.setAttribute("currentPage", page);
+            request.setAttribute("currentPage", this.page);
             request.setAttribute("totalPages", totalPages);
         }
         request.getRequestDispatcher("/subjectManager.jsp").forward(request, response);

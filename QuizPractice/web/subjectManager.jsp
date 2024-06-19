@@ -49,7 +49,9 @@
                 margin-bottom: 20px;
             }
 
-
+            .inline-form {
+                display: inline;
+            }
         </style>
     </head>
 
@@ -150,10 +152,12 @@
                                     <li class="active"><a href="#">${i}</a></li>
                                     </c:when>
                                     <c:otherwise>
-                                    <li><a href="subjectManager?page=${i}">${i}</a></li>
-                                    </c:otherwise>
-                                </c:choose>
-                            </c:forEach>
+                                    <li>
+                                        <a href="subjectManager?page=${i}">${i}</a>
+                                    </li>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>
 
                         <c:choose>
                             <c:when test="${currentPage < totalPages}">

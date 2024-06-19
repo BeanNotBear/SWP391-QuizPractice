@@ -132,46 +132,82 @@
         <section class="sliderList">
             <h1 class="heading text-center">Slider Detail</h1>
             <div class="container">
-                <form id="sliderForm" action="editSlider" method="POST">
-                    <input type="hidden" class="form-control" id="id" name="id" value="${slider.ID}">
-                <div class="form-group">
-                    <label for="title">Title:</label>
-                    <input type="text" class="form-control" id="title" name="title" value="${slider.title}">
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-3">
+                    <img src="<c:out value='${slider.image}'/>" alt="Slider Image" class="img-responsive" id="avatarImage">
+                    <br>
+                    <button type="button" class="btn btn-primary btn-sm" id="uploadButton">
+                        <i class="fa fa-upload"></i> Upload Image
+                    </button>
+                    <!-- Input for file selection, hidden from view -->
+                    <input type="file" id="fileInput" style="display: none;" accept="image/*">
                 </div>
-                <div class="form-group">
-                    <label for="subTitle">Sub Title:</label>
-                    <input type="text" class="form-control" id="subTitle" name="subTitle" value="${slider.subTitle}">
+                <div class="col-md-2"></div>
+                <div class="col-md-6">
+                    <form id="sliderForm" action="editSlider" method="POST">
+                        <input type="hidden" id="id" name="id" value="<c:out value='${slider.ID}'/>">
+                        <input type="hidden" id="thumbnail" name="image" value="<c:out value='${slider.image}'/>">
+
+                        <div class="form-group">
+                            <label for="title">Title:</label>
+                            <input type="text" class="form-control" id="title" name="title" value="<c:out value='${slider.title}'/>" placeholder="Enter title">
+                        </div>
+                        <div class="form-group">
+                            <label for="subTitle">Sub Title:</label>
+                            <input type="text" class="form-control" id="subTitle" name="subTitle" value="<c:out value='${slider.subTitle}'/>" placeholder="Enter sub title">
+                        </div>
+                        <div class="form-group">
+                            <label for="content">Content:</label>
+                            <textarea class="form-control" id="content" name="content" rows="5" placeholder="Enter content"><c:out value='${slider.content}'/></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="linkUrl">Link URL:</label>
+                            <input type="text" class="form-control" id="linkUrl" name="linkUrl" value="<c:out value='${slider.linkUrl}'/>" placeholder="Enter link URL">
+                        </div>
+                        <div class="form-group">
+                            <label for="status">Status:</label>
+                            <select class="form-control" id="status" name="status">
+                                <option value="0" <c:if test="${slider.status == 0}">selected</c:if>>Inactive</option>
+                                <option value="1" <c:if test="${slider.status == 1}">selected</c:if>>Active</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                    </form>
                 </div>
-                <div class="form-group">
-                    <label for="content">Content:</label>
-                    <textarea class="form-control" id="content" name="content" rows="5">${slider.content}</textarea>
-                </div>
-                <div class="form-group">
-                    <label for="image">Image:</label>
-                    <input type="text" class="form-control" id="image" name="image" value="${slider.image}">
-                </div>
-                <div class="form-group">
-                    <label for="linkUrl">Link URL:</label>
-                    <input type="text" class="form-control" id="linkUrl" name="linkUrl" value="${slider.linkUrl}">
-                </div>
-                <div class="form-group">
-                    <label for="status">Status:</label>
-                    <select class="form-control" id="status" name="status">
-                        <option value="0" ${slider.status == 0 ? 'selected' : ''}>Inactive</option>
-                        <option value="1" ${slider.status == 1 ? 'selected' : ''}>Active</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary" >Save</button>
-            </form>
             </div>
-        </section>
+        </div>
+    </section>
+    <br/>
 
+    <%@include file="/layout/footer.jsp" %>
 
+    <!-- Script for handling image upload -->
+    <script>
+        document.getElementById('uploadButton').addEventListener('click', function () {
+            document.getElementById('fileInput').click();
+        });
 
-        <%@include file="/layout/footer.jsp"%>
+        document.getElementById('fileInput').addEventListener('change', function () {
+            var formData = new FormData();
+            formData.append('file', this.files[0]);
 
-        <!-- side bar có thể thu nhỏ khi màn hình nhỏ  -->
-        <script src="js/script.js"></script>
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'upload', true);
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    var fileName = response.fileName;
+                    var avatarImage = document.getElementById('avatarImage');
+                    avatarImage.src = 'images/' + fileName; // Update the src of avatarImage
+                    console.log(fileName);
 
-    </body>
+                    // Update the hidden input value to save to database
+                    document.getElementById('thumbnail').value = 'images/' + fileName;
+                }
+            };
+            xhr.send(formData);
+        });
+    </script>
+</body>
 </html>
