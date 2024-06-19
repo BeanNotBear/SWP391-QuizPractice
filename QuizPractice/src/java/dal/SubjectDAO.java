@@ -735,11 +735,17 @@ public class SubjectDAO extends DBContext {
         return 0;
     }
 
-    public List<SubjectManagerDTO> getPaginationExpertManagerSubjectSearchBySubjectName(int userId, int page, int recordsPerPage, String searchName) {
+    public List<SubjectManagerDTO> getPaginationExpertManagerSubjectSearchBySubjectName(int userId, int page, int recordsPerPage, String searchName, int dimensionId, int statusCondition) {
         List<SubjectManagerDTO> lst = new ArrayList<>();
         int start = (page - 1) * recordsPerPage + 1;
         int end = start + recordsPerPage - 1;
-
+        String condition = "";
+        if(dimensionId != -1) {
+            condition += "\n AND s.dimensionId = " + dimensionId;
+        }
+        if(statusCondition != -1) {
+            condition += "\n AND s.status = " + statusCondition;
+        }
         try {
             String query = "WITH PagedResults AS (\n"
                     + "    SELECT \n"
@@ -749,7 +755,8 @@ public class SubjectDAO extends DBContext {
                     + "        d.DimensionName, \n"
                     + "        COUNT(sl.lesson_id) as NumberLesson,\n"
                     + "        s.status,\n"
-                    + "        ROW_NUMBER() OVER (ORDER BY s.creater_at) AS row_num\n"
+                    + "        ROW_NUMBER() OVER (ORDER BY s.creater_at) AS row_num,\n"
+                    + "        u.full_name"
                     + "    FROM \n"
                     + "        subjects s \n"
                     + "    LEFT JOIN \n"
@@ -760,6 +767,7 @@ public class SubjectDAO extends DBContext {
                     + "        [dbo].[users] u on u.id = s.creator_id\n"
                     + "    WHERE \n"
                     + "        s.creator_id = ? and s.name like ? \n"
+                    + condition
                     + "    GROUP BY \n"
                     + "        s.id, \n"
                     + "        s.name, \n"
@@ -794,15 +802,22 @@ public class SubjectDAO extends DBContext {
                 lst.add(subjectManagerDTO);
             }
         } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
         }
         return lst;
     }
 
-    public List<SubjectManagerDTO> getPaginationExpertManagerSubjectSearchByDimensionId(int userId, int page, int recordsPerPage, int dimensionId) {
+    public List<SubjectManagerDTO> getPaginationExpertManagerSubjectSearchByDimensionId(int userId, int page, int recordsPerPage, int dimensionId, String searchCondition, int statusCondition) {
         List<SubjectManagerDTO> lst = new ArrayList<>();
         int start = (page - 1) * recordsPerPage + 1;
         int end = start + recordsPerPage - 1;
-
+        String condition = "";
+        if(!searchCondition.trim().equals("")) {
+            condition += "\n AND s.name LIKE " + "'%" + searchCondition + "%'";
+        }
+        if(statusCondition != -1) {
+            condition += "\n AND s.status = " + statusCondition;
+        }
         try {
             String query = "WITH PagedResults AS (\n"
                     + "    SELECT \n"
@@ -823,7 +838,8 @@ public class SubjectDAO extends DBContext {
                     + "    LEFT JOIN \n"
                     + "        [dbo].[users] u on u.id = s.creator_id\n"
                     + "    WHERE \n"
-                    + "        s.creator_id = ? and s.dimensionId = ? \n"
+                    + "        s.creator_id = ? and s.dimensionId = ? "
+                    + condition
                     + "    GROUP BY \n"
                     + "        s.id, \n"
                     + "        s.name, \n"
@@ -858,15 +874,22 @@ public class SubjectDAO extends DBContext {
                 lst.add(subjectManagerDTO);
             }
         } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
         }
         return lst;
     }
 
-    public List<SubjectManagerDTO> getPaginationAdminManagerSubjectSearchByDimensionId(int page, int recordsPerPage, int dimensionId) {
+    public List<SubjectManagerDTO> getPaginationAdminManagerSubjectSearchByDimensionId(int page, int recordsPerPage, int dimensionId, String searchCondition, int statusCondition) {
         List<SubjectManagerDTO> lst = new ArrayList<>();
         int start = (page - 1) * recordsPerPage + 1;
         int end = start + recordsPerPage - 1;
-
+        String condition = "";
+        if(!searchCondition.trim().equals("")) {
+            condition += "\n AND s.name LIKE " + "'%" + searchCondition + "%'";
+        }
+        if(statusCondition != -1) {
+            condition += "\n AND s.status = " + statusCondition;
+        }
         try {
             String query = "WITH PagedResults AS (\n"
                     + "    SELECT \n"
@@ -888,6 +911,7 @@ public class SubjectDAO extends DBContext {
                     + "        [dbo].[users] u on u.id = s.creator_id\n"
                     + "    WHERE \n"
                     + "        s.dimensionId = ? \n"
+                    + condition
                     + "    GROUP BY \n"
                     + "        s.id, \n"
                     + "        s.name, \n"
@@ -1206,11 +1230,17 @@ public class SubjectDAO extends DBContext {
         return lst;
     }
 
-    public List<SubjectManagerDTO> getPaginationExpertManagerSubjectSearchByStatus(int userId, int page, int recordsPerPage, int statusInput) {
+    public List<SubjectManagerDTO> getPaginationExpertManagerSubjectSearchByStatus(int userId, int page, int recordsPerPage, int statusInput, String searchCondition, int category) {
         List<SubjectManagerDTO> lst = new ArrayList<>();
         int start = (page - 1) * recordsPerPage + 1;
         int end = start + recordsPerPage - 1;
-
+        String condition = "";
+        if(!searchCondition.trim().equals("")) {
+            condition += "\n AND s.name LIKE " + "'%" + searchCondition + "%'";
+        }
+        if(category != -1) {
+            condition += "\n AND s.dimensionId = " + category;
+        }
         try {
             String query = "WITH PagedResults AS (\n"
                     + "    SELECT \n"
@@ -1232,6 +1262,7 @@ public class SubjectDAO extends DBContext {
                     + "        [dbo].[users] u on u.id = s.creator_id\n"
                     + "    WHERE \n"
                     + "        s.creator_id = ? and s.status = ? \n"
+                    + condition
                     + "    GROUP BY \n"
                     + "        s.id, \n"
                     + "        s.name, \n"
@@ -1270,11 +1301,17 @@ public class SubjectDAO extends DBContext {
         return lst;
     }
 
-    public List<SubjectManagerDTO> getPaginationAdminManagerSubjectSearchByStatus(int page, int recordsPerPage, int statusInput) {
+    public List<SubjectManagerDTO> getPaginationAdminManagerSubjectSearchByStatus(int page, int recordsPerPage, int statusInput, String searchCondition, int category) {
         List<SubjectManagerDTO> lst = new ArrayList<>();
         int start = (page - 1) * recordsPerPage + 1;
         int end = start + recordsPerPage - 1;
-
+        String condition = "";
+        if(!searchCondition.trim().equals("")) {
+            condition += "\n AND s.name LIKE " + "'%" + searchCondition + "%'";
+        }
+        if(category != -1) {
+            condition += "\n AND s.dimensionId = " + category;
+        }
         try {
             String query = "WITH PagedResults AS (\n"
                     + "    SELECT \n"
@@ -1296,6 +1333,7 @@ public class SubjectDAO extends DBContext {
                     + "        [dbo].[users] u on u.id = s.creator_id\n"
                     + "    WHERE \n"
                     + "        s.status = ? \n"
+                    + condition
                     + "    GROUP BY \n"
                     + "        s.id, \n"
                     + "        s.name, \n"
@@ -1434,11 +1472,17 @@ public class SubjectDAO extends DBContext {
         return isSuccess;
     }
 
-    public List<SubjectManagerDTO> getPaginationAdminManagerSubjectSearchBySubjectName(int page, int recordsPerPage, String searchName) {
+    public List<SubjectManagerDTO> getPaginationAdminManagerSubjectSearchBySubjectName(int page, int recordsPerPage, String searchName, int dimensionId, int statusCondition) {
         List<SubjectManagerDTO> lst = new ArrayList<>();
         int start = (page - 1) * recordsPerPage + 1;
         int end = start + recordsPerPage - 1;
-
+        String condition = "";
+        if(dimensionId != -1) {
+            condition += "\n AND s.dimensionId = " + dimensionId;
+        }
+        if(statusCondition != -1) {
+            condition += "\n AND s.status = " + statusCondition;
+        }
         try {
             String query = "WITH PagedResults AS (\n"
                     + "    SELECT \n"
@@ -1460,6 +1504,7 @@ public class SubjectDAO extends DBContext {
                     + "        [dbo].[users] u on u.id = s.creator_id\n"
                     + "    WHERE \n"
                     + "        s.name like ? \n"
+                    + condition
                     + "    GROUP BY \n"
                     + "        s.id, \n"
                     + "        s.name, \n"
