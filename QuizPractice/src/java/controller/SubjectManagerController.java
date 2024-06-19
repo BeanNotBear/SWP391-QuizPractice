@@ -114,7 +114,7 @@ public class SubjectManagerController extends HttpServlet {
 
             // Lấy trang hiện tại từ request
             int page = 1;
-            int recordsPerPage = 5;
+            int recordsPerPage = 10;
             if (request.getParameter("page") != null) {
                 page = Integer.parseInt(request.getParameter("page"));
             }
@@ -188,7 +188,7 @@ public class SubjectManagerController extends HttpServlet {
 
             // Lấy trang hiện tại từ request
             int page = 1;
-            int recordsPerPage = 5;
+            int recordsPerPage = 10;
             if (request.getParameter("page") != null) {
                 page = Integer.parseInt(request.getParameter("page"));
             }
