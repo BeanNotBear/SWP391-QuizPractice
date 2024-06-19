@@ -16,11 +16,11 @@ import model.User;
 
 @WebServlet("/subjectManager")
 public class SubjectManagerController extends HttpServlet {
-    
+
     private String searchCondition = "";
     private int _status = -1;
     private int dimension = -1;
-    
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -35,7 +35,7 @@ public class SubjectManagerController extends HttpServlet {
             response.sendRedirect("/QuizPractice/"); // Thay đổi đường dẫn này tùy theo trang đăng nhập của bạn
             return;
         }
-        if(user.getRoleId() != 2 && user.getRoleId() != 3) {
+        if (user.getRoleId() != 2 && user.getRoleId() != 3) {
             response.sendError(404);
             return;
         }
@@ -87,7 +87,6 @@ public class SubjectManagerController extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         var user = (User) session.getAttribute("user");
-
         // User is an expert
         if (user.getRoleId() == 3) {
             filterByExpert(request, response);
@@ -132,6 +131,10 @@ public class SubjectManagerController extends HttpServlet {
             request.setAttribute("currentPage", page);
             request.setAttribute("totalPages", totalPages);
 
+            request.setAttribute("searchCondition", searchCondition);
+            request.setAttribute("dimension", dimension);
+            request.setAttribute("status", _status);
+
             request.getRequestDispatcher("/subjectManager.jsp").forward(request, response);
         } else if (type.equalsIgnoreCase("dimensionId")) {
             int dimensionId = Integer.parseInt(request.getParameter("dimensionId"));
@@ -165,6 +168,10 @@ public class SubjectManagerController extends HttpServlet {
             request.setAttribute("currentPage", page);
             request.setAttribute("totalPages", totalPages);
 
+            request.setAttribute("searchCondition", searchCondition);
+            request.setAttribute("dimension", dimension);
+            request.setAttribute("status", _status);
+
             request.getRequestDispatcher("/subjectManager.jsp").forward(request, response);
         } else if (type.equalsIgnoreCase("status")) {
             int status = request.getParameter("status").equalsIgnoreCase("true") ? 1 : 0;
@@ -197,6 +204,10 @@ public class SubjectManagerController extends HttpServlet {
             request.setAttribute("listSubject", lst);
             request.setAttribute("currentPage", page);
             request.setAttribute("totalPages", totalPages);
+
+            request.setAttribute("searchCondition", searchCondition);
+            request.setAttribute("dimension", dimension);
+            request.setAttribute("status", _status);
 
             request.getRequestDispatcher("/subjectManager.jsp").forward(request, response);
         }
@@ -238,6 +249,10 @@ public class SubjectManagerController extends HttpServlet {
             request.setAttribute("currentPage", page);
             request.setAttribute("totalPages", totalPages);
 
+            request.setAttribute("searchCondition", searchCondition);
+            request.setAttribute("dimension", dimension);
+            request.setAttribute("status", _status);
+
             request.getRequestDispatcher("/subjectManager.jsp").forward(request, response);
         } else if (type.equalsIgnoreCase("dimensionId")) {
             int dimensionId = Integer.parseInt(request.getParameter("dimensionId"));
@@ -251,7 +266,7 @@ public class SubjectManagerController extends HttpServlet {
                 response.sendRedirect("/QuizPractice/"); // Thay đổi đường dẫn này tùy theo trang đăng nhập của bạn
                 return;
             }
-            
+
             // Lấy trang hiện tại từ request
             int page = 1;
             int recordsPerPage = 5;
@@ -270,6 +285,10 @@ public class SubjectManagerController extends HttpServlet {
             request.setAttribute("listSubject", lst);
             request.setAttribute("currentPage", page);
             request.setAttribute("totalPages", totalPages);
+
+            request.setAttribute("searchCondition", searchCondition);
+            request.setAttribute("dimension", dimension);
+            request.setAttribute("status", _status);
 
             request.getRequestDispatcher("/subjectManager.jsp").forward(request, response);
         } else if (type.equalsIgnoreCase("status")) {
@@ -303,6 +322,10 @@ public class SubjectManagerController extends HttpServlet {
             request.setAttribute("listSubject", lst);
             request.setAttribute("currentPage", page);
             request.setAttribute("totalPages", totalPages);
+
+            request.setAttribute("searchCondition", searchCondition);
+            request.setAttribute("dimension", dimension);
+            request.setAttribute("status", _status);
 
             request.getRequestDispatcher("/subjectManager.jsp").forward(request, response);
         }

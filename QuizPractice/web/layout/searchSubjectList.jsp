@@ -34,7 +34,7 @@
     <br/>
 
     <form action="<%=request.getContextPath()%>/subjectManager" method="post" class="search-form">
-        <input type="text" name="subjectName" required placeholder="Subject" maxlength="100">
+        <input value="${requestScope.searchCondition}" type="text" name="subjectName" required placeholder="Subject" maxlength="100">
         <input type="hidden" name="typeSubmit" value="submitName">
         <button type="submit" class="fas fa-search"></button>
     </form>
@@ -44,7 +44,7 @@
             <select id="dimension" name="dimensionId" class="form-control">
                 <option value="" disabled selected>Search by category</option>
                 <c:forEach var="dimension" items="${dimensions}">
-                    <option value="${dimension.id}">${dimension.name}</option>
+                    <option <c:if test="${requestScope.dimension == dimension.id}">selected</c:if> value="${dimension.id}">${dimension.name}</option>
                 </c:forEach>
             </select>
             <input type="hidden" name="typeSubmit" value="dimensionId">
@@ -55,8 +55,8 @@
         <div class="form-group">
             <select id="status" name="status" class="form-control">
                 <option value="" disabled selected>Search by status</option>
-                <option value="true">Published</option>
-                <option value="false">Unpublished</option>
+                <option <c:if test="${requestScope.status == 1}">selected</c:if> value="true">Published</option>
+                <option <c:if test="${requestScope.status == 2}">selected</c:if> value="false">Unpublished</option>
             </select>
             <input type="hidden" name="typeSubmit" value="status">
         </div>
