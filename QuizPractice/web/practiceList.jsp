@@ -124,7 +124,7 @@
                                     <li class="active"><a href="#">${i}</a></li>
                                     </c:when>
                                     <c:otherwise>
-                                    <li><a href="practiceList?page=${i}">${i}</a></li>
+                                    <li><a href="praticeList?page=${i}">${i}</a></li>
                                     </c:otherwise>
                                 </c:choose>
                             </c:forEach>
@@ -132,7 +132,7 @@
                         <c:choose>
                             <c:when test="${currentPage < totalPages}">
                                 <li>
-                                    <a href="practiceList?page=${currentPage + 1}" aria-label="Next">
+                                    <a href="praticeList?page=${currentPage + 1}" aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>
                                     </a>
                                 </li>

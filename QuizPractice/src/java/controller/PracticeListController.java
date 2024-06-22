@@ -15,7 +15,7 @@ import model.User;
 
 @WebServlet(name="PracticeListController", urlPatterns={"/praticeList"})
 public class PracticeListController extends HttpServlet {
-
+    private int page = 1;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -33,10 +33,14 @@ public class PracticeListController extends HttpServlet {
         int page = 1;
         int recordsPerPage = 5;
         if (request.getParameter("page") != null) {
-            page = Integer.parseInt(request.getParameter("page"));
+            try {
+                page = Integer.parseInt(request.getParameter("page"));
+                this.page = page;
+            } catch (Exception e) {
+            }
         }
 
-        lst = practiceDAO.getPaginationPracticeList(user.getUserId(), page, recordsPerPage);
+        lst = practiceDAO.getPaginationPracticeList(user.getUserId(), this.page, recordsPerPage);
         int totalRecords = practiceDAO.getTotalRecords(user.getUserId());
         int totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
         
@@ -44,10 +48,10 @@ public class PracticeListController extends HttpServlet {
         request.setAttribute("subjects", listSubjectName);
          
         request.setAttribute("practices", lst);
-        request.setAttribute("currentPage", page);
+        request.setAttribute("currentPage", this.page);
         request.setAttribute("totalPages", totalPages);
 
-        request.getRequestDispatcher("/practiceList.jsp").forward(request, response);
+        request.getRequestDispatcher("practiceList.jsp").forward(request, response);
     }
 
    

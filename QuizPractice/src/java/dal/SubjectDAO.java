@@ -556,88 +556,6 @@ public class SubjectDAO extends DBContext {
         return false;
     }
 
-    public List<SubjectManagerDTO> getPaginationExpertManagerSubject(int userId, int page, int recordsPerPage) {
-        List<SubjectManagerDTO> lst = new ArrayList<>();
-        int start = (page - 1) * recordsPerPage + 1;
-        int end = start + recordsPerPage - 1;
-
-        try {
-            String query = "WITH PagedResults AS (\n"
-                    + "    SELECT \n"
-                    + "        s.id, \n"
-                    + "        s.name, \n"
-                    + "        s.img, \n"
-                    + "        d.DimensionName, \n"
-                    + "        COUNT(sl.lesson_id) AS NumberLesson,\n"
-                    + "        s.status,\n"
-                    + "        ROW_NUMBER() OVER (ORDER BY s.creater_at desc) AS row_num,\n"
-                    + "		u.full_name\n"
-                    + "    FROM \n"
-                    + "        subjects s \n"
-                    + "    LEFT JOIN \n"
-                    + "        Dimension d ON s.dimensionId = d.DimensionId\n"
-                    + "    LEFT JOIN \n"
-                    + "        subject_has_lesson sl ON sl.subject_id = s.id\n"
-                    + "	LEFT JOIN\n"
-                    + "		[dbo].[users] u on u.id = s.creator_id\n"
-                    + "    WHERE \n"
-                    + "        s.creator_id = ?\n"
-                    + "    GROUP BY \n"
-                    + "        s.id, \n"
-                    + "        s.name, \n"
-                    + "        s.img, \n"
-                    + "        d.DimensionName, \n"
-                    + "        s.status, \n"
-                    + "        s.creater_at,\n"
-                    + "		u.full_name\n"
-                    + ")\n"
-                    + "SELECT * \n"
-                    + "FROM PagedResults\n"
-                    + "WHERE row_num BETWEEN ? AND ?\n"
-                    + "ORDER BY row_num;";
-
-            ps = connection.prepareStatement(query);
-            ps.setInt(1, userId); // Thay đổi UserId tương ứng
-            ps.setInt(2, start);
-            ps.setInt(3, end);
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                int id = rs.getInt(1);
-                String name = rs.getString(2);
-                String thumbnail = rs.getString(3);
-                String dimensionName = rs.getString(4);
-                int numberOfLesson = rs.getInt(5);
-                int status = rs.getInt(6);
-                String fullName = rs.getString(8);
-
-                SubjectManagerDTO subjectManagerDTO = new SubjectManagerDTO(id, name, thumbnail, dimensionName, numberOfLesson, status, fullName);
-                lst.add(subjectManagerDTO);
-            }
-        } catch (SQLException ex) {
-        }
-        return lst;
-    }
-
-    public int getTotalRecordsExpertManagerSubject(int userId) {
-        String query = "SELECT COUNT(*) FROM subjects WHERE creator_id = ?";
-        try {
-            ps = connection.prepareStatement(query);
-            ps.setInt(1, userId);
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                int id = rs.getInt(1);
-                return id;
-            }
-
-        } catch (SQLException e) {
-            // Log the exception (if a logging framework is available)
-            e.printStackTrace(); // Replace with logger in real application
-        }
-        return 0;
-    }
-
     public int getTotalRecordSubject() {
         String query = "SELECT COUNT(*) FROM subjects";
         try {
@@ -674,317 +592,6 @@ public class SubjectDAO extends DBContext {
             e.printStackTrace(); // Replace with logger in real application
         }
         return 0;
-    }
-
-    public int getTotalRecordsAdminManagerSubjectSearchBySubjectName(String subjectName) {
-        String query = "SELECT COUNT(*) FROM subjects WHERE name like ?";
-        try {
-            ps = connection.prepareStatement(query);
-            ps.setString(1, "%" + subjectName + "%");
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                int total = rs.getInt(1);
-                return total;
-            }
-
-        } catch (SQLException e) {
-            // Log the exception (if a logging framework is available)
-            e.printStackTrace(); // Replace with logger in real application
-        }
-        return 0;
-    }
-
-    public int getTotalRecordsExpertManagerSubjectSearchByDimensionId(int userId, int dimensionId) {
-        String query = "SELECT COUNT(*) FROM subjects WHERE creator_id = ? and dimensionId = ?";
-        try {
-            ps = connection.prepareStatement(query);
-            ps.setInt(1, userId);
-            ps.setInt(2, dimensionId);
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                int id = rs.getInt(1);
-                return id;
-            }
-
-        } catch (SQLException e) {
-            // Log the exception (if a logging framework is available)
-            e.printStackTrace(); // Replace with logger in real application
-        }
-        return 0;
-    }
-    
-    public int getTotalRecordsAdminManagerSubjectSearchByDimensionId(int dimensionId) {
-        String query = "SELECT COUNT(*) FROM subjects WHERE dimensionId = ?";
-        try {
-            ps = connection.prepareStatement(query);
-            ps.setInt(1, dimensionId);
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                int id = rs.getInt(1);
-                return id;
-            }
-
-        } catch (SQLException e) {
-            // Log the exception (if a logging framework is available)
-            e.printStackTrace(); // Replace with logger in real application
-        }
-        return 0;
-    }
-
-    public int getTotalRecordsExpertManagerSubjectSearchByStatus(int userId, int status) {
-        String query = "SELECT COUNT(*) FROM subjects WHERE creator_id = ? and status = ?";
-        try {
-            ps = connection.prepareStatement(query);
-            ps.setInt(1, userId);
-            ps.setInt(2, status);
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                int id = rs.getInt(1);
-                return id;
-            }
-
-        } catch (SQLException e) {
-            // Log the exception (if a logging framework is available)
-            e.printStackTrace(); // Replace with logger in real application
-        }
-        return 0;
-    }
-    
-    public int getTotalRecordsAdminManagerSubjectSearchByStatus(int status) {
-        String query = "SELECT COUNT(*) FROM subjects WHERE status = ?";
-        try {
-            ps = connection.prepareStatement(query);
-            ps.setInt(1, status);
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                int id = rs.getInt(1);
-                return id;
-            }
-
-        } catch (SQLException e) {
-            // Log the exception (if a logging framework is available)
-            e.printStackTrace(); // Replace with logger in real application
-        }
-        return 0;
-    }
-
-    public List<SubjectManagerDTO> getPaginationExpertManagerSubjectSearchBySubjectName(int userId, int page, int recordsPerPage, String searchName, int dimensionId, int statusCondition) {
-        List<SubjectManagerDTO> lst = new ArrayList<>();
-        int start = (page - 1) * recordsPerPage + 1;
-        int end = start + recordsPerPage - 1;
-        String condition = "";
-        if (dimensionId != -1) {
-            condition += "\n AND s.dimensionId = " + dimensionId;
-        }
-        if (statusCondition != -1) {
-            condition += "\n AND s.status = " + statusCondition;
-        }
-        try {
-            String query = "WITH PagedResults AS (\n"
-                    + "    SELECT \n"
-                    + "        s.id, \n"
-                    + "        s.name, \n"
-                    + "        s.img,  \n"
-                    + "        d.DimensionName, \n"
-                    + "        COUNT(sl.lesson_id) as NumberLesson,\n"
-                    + "        s.status,\n"
-                    + "        ROW_NUMBER() OVER (ORDER BY s.creater_at) AS row_num,\n"
-                    + "        u.full_name"
-                    + "    FROM \n"
-                    + "        subjects s \n"
-                    + "    LEFT JOIN \n"
-                    + "        Dimension d ON s.dimensionId = d.DimensionId\n"
-                    + "    LEFT JOIN \n"
-                    + "        subject_has_lesson sl ON sl.subject_id = s.id\n"
-                    + "    LEFT JOIN \n"
-                    + "        [dbo].[users] u on u.id = s.creator_id\n"
-                    + "    WHERE \n"
-                    + "        s.creator_id = ? and s.name like ? \n"
-                    + condition
-                    + "    GROUP BY \n"
-                    + "        s.id, \n"
-                    + "        s.name, \n"
-                    + "        s.img, \n"
-                    + "        d.DimensionName, \n"
-                    + "        s.status, \n"
-                    + "        s.creater_at, \n"
-                    + "        u.full_name"
-                    + ")\n"
-                    + "SELECT * \n"
-                    + "FROM PagedResults\n"
-                    + "WHERE row_num BETWEEN ? AND ?\n"
-                    + "ORDER BY row_num";
-
-            ps = connection.prepareStatement(query);
-            ps.setInt(1, userId); // Thay đổi UserId tương ứng
-            ps.setString(2, "%" + searchName + "%");
-            ps.setInt(3, start);
-            ps.setInt(4, end);
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                int id = rs.getInt(1);
-                String name = rs.getString(2);
-                String thumbnail = rs.getString(3);
-                String dimensionName = rs.getString(4);
-                int numberOfLesson = rs.getInt(5);
-                int status = rs.getInt(6);
-                String fullName = rs.getString(8);
-
-                SubjectManagerDTO subjectManagerDTO = new SubjectManagerDTO(id, name, thumbnail, dimensionName, numberOfLesson, status, fullName);
-                lst.add(subjectManagerDTO);
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        }
-        return lst;
-    }
-
-    public List<SubjectManagerDTO> getPaginationExpertManagerSubjectSearchByDimensionId(int userId, int page, int recordsPerPage, int dimensionId, String searchCondition, int statusCondition) {
-        List<SubjectManagerDTO> lst = new ArrayList<>();
-        int start = (page - 1) * recordsPerPage + 1;
-        int end = start + recordsPerPage - 1;
-        String condition = "";
-        if (!searchCondition.trim().equals("")) {
-            condition += "\n AND s.name LIKE " + "'%" + searchCondition + "%'";
-        }
-        if (statusCondition != -1) {
-            condition += "\n AND s.status = " + statusCondition;
-        }
-        try {
-            String query = "WITH PagedResults AS (\n"
-                    + "    SELECT \n"
-                    + "        s.id, \n"
-                    + "        s.name, \n"
-                    + "        s.img, \n"
-                    + "        d.DimensionName, \n"
-                    + "        COUNT(sl.lesson_id) as NumberLesson,\n"
-                    + "        s.status,\n"
-                    + "        ROW_NUMBER() OVER (ORDER BY s.creater_at desc) AS row_num,\n"
-                    + "        u.full_name"
-                    + "    FROM \n"
-                    + "        subjects s \n"
-                    + "    LEFT JOIN \n"
-                    + "        Dimension d ON s.dimensionId = d.DimensionId\n"
-                    + "    LEFT JOIN \n"
-                    + "        subject_has_lesson sl ON sl.subject_id = s.id\n"
-                    + "    LEFT JOIN \n"
-                    + "        [dbo].[users] u on u.id = s.creator_id\n"
-                    + "    WHERE \n"
-                    + "        s.creator_id = ? and s.dimensionId = ? "
-                    + condition
-                    + "    GROUP BY \n"
-                    + "        s.id, \n"
-                    + "        s.name, \n"
-                    + "        s.img,  \n"
-                    + "        d.DimensionName, \n"
-                    + "        s.status, \n"
-                    + "        s.creater_at, \n"
-                    + "        u.full_name\n"
-                    + ")\n"
-                    + "SELECT * \n"
-                    + "FROM PagedResults\n"
-                    + "WHERE row_num BETWEEN ? AND ?\n"
-                    + "ORDER BY row_num";
-
-            ps = connection.prepareStatement(query);
-            ps.setInt(1, userId); // Thay đổi UserId tương ứng
-            ps.setInt(2, dimensionId);
-            ps.setInt(3, start);
-            ps.setInt(4, end);
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                int id = rs.getInt(1);
-                String name = rs.getString(2);
-                String thumbnail = rs.getString(3);
-                String dimensionName = rs.getString(4);
-                int numberOfLesson = rs.getInt(5);
-                int status = rs.getInt(6);
-                String fullName = rs.getString(8);
-
-                SubjectManagerDTO subjectManagerDTO = new SubjectManagerDTO(id, name, thumbnail, dimensionName, numberOfLesson, status, fullName);
-                lst.add(subjectManagerDTO);
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        }
-        return lst;
-    }
-
-    public List<SubjectManagerDTO> getPaginationAdminManagerSubjectSearchByDimensionId(int page, int recordsPerPage, int dimensionId, String searchCondition, int statusCondition) {
-        List<SubjectManagerDTO> lst = new ArrayList<>();
-        int start = (page - 1) * recordsPerPage + 1;
-        int end = start + recordsPerPage - 1;
-        String condition = "";
-        if (!searchCondition.trim().equals("")) {
-            condition += "\n AND s.name LIKE " + "'%" + searchCondition + "%'";
-        }
-        if (statusCondition != -1) {
-            condition += "\n AND s.status = " + statusCondition;
-        }
-        try {
-            String query = "WITH PagedResults AS (\n"
-                    + "    SELECT \n"
-                    + "        s.id, \n"
-                    + "        s.name, \n"
-                    + "        s.img, \n"
-                    + "        d.DimensionName, \n"
-                    + "        COUNT(sl.lesson_id) as NumberLesson,\n"
-                    + "        s.status,\n"
-                    + "        ROW_NUMBER() OVER (ORDER BY s.creater_at desc) AS row_num,\n"
-                    + "        u.full_name"
-                    + "    FROM \n"
-                    + "        subjects s \n"
-                    + "    LEFT JOIN \n"
-                    + "        Dimension d ON s.dimensionId = d.DimensionId\n"
-                    + "    LEFT JOIN \n"
-                    + "        subject_has_lesson sl ON sl.subject_id = s.id\n"
-                    + "    LEFT JOIN \n"
-                    + "        [dbo].[users] u on u.id = s.creator_id\n"
-                    + "    WHERE \n"
-                    + "        s.dimensionId = ? \n"
-                    + condition
-                    + "    GROUP BY \n"
-                    + "        s.id, \n"
-                    + "        s.name, \n"
-                    + "        s.img, \n"
-                    + "        d.DimensionName, \n"
-                    + "        s.status, \n"
-                    + "        s.creater_at, \n"
-                    + "        u.full_name\n"
-                    + ")\n"
-                    + "SELECT * \n"
-                    + "FROM PagedResults\n"
-                    + "WHERE row_num BETWEEN ? AND ?\n"
-                    + "ORDER BY row_num";
-
-            ps = connection.prepareStatement(query);
-            ps.setInt(1, dimensionId);
-            ps.setInt(2, start);
-            ps.setInt(3, end);
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                int id = rs.getInt(1);
-                String name = rs.getString(2);
-                String thumbnail = rs.getString(3);
-                String dimensionName = rs.getString(4);
-                int numberOfLesson = rs.getInt(5);
-                int status = rs.getInt(6);
-                String fullName = rs.getString(8);
-
-                SubjectManagerDTO subjectManagerDTO = new SubjectManagerDTO(id, name, thumbnail, dimensionName, numberOfLesson, status, fullName);
-                lst.add(subjectManagerDTO);
-            }
-        } catch (SQLException ex) {
-        }
-        return lst;
     }
 
     public boolean addSubjectPricePackage(int packageId, int subjectId) {
@@ -1268,147 +875,6 @@ public class SubjectDAO extends DBContext {
         return lst;
     }
 
-    public List<SubjectManagerDTO> getPaginationExpertManagerSubjectSearchByStatus(int userId, int page, int recordsPerPage, int statusInput, String searchCondition, int category) {
-        List<SubjectManagerDTO> lst = new ArrayList<>();
-        int start = (page - 1) * recordsPerPage + 1;
-        int end = start + recordsPerPage - 1;
-        String condition = "";
-        if (!searchCondition.trim().equals("")) {
-            condition += "\n AND s.name LIKE " + "'%" + searchCondition + "%'";
-        }
-        if (category != -1) {
-            condition += "\n AND s.dimensionId = " + category;
-        }
-        try {
-            String query = "WITH PagedResults AS (\n"
-                    + "    SELECT \n"
-                    + "        s.id, \n"
-                    + "        s.name, \n"
-                    + "        s.img, \n"
-                    + "        d.DimensionName, \n"
-                    + "        COUNT(sl.lesson_id) as NumberLesson,\n"
-                    + "        s.status,\n"
-                    + "        ROW_NUMBER() OVER (ORDER BY s.creater_at) AS row_num,\n"
-                    + "        u.full_name\n"
-                    + "    FROM \n"
-                    + "        subjects s \n"
-                    + "    LEFT JOIN \n"
-                    + "        Dimension d ON s.dimensionId = d.DimensionId\n"
-                    + "    LEFT JOIN \n"
-                    + "        subject_has_lesson sl ON sl.subject_id = s.id\n"
-                    + "    LEFT JOIN \n"
-                    + "        [dbo].[users] u on u.id = s.creator_id\n"
-                    + "    WHERE \n"
-                    + "        s.creator_id = ? and s.status = ? \n"
-                    + condition
-                    + "    GROUP BY \n"
-                    + "        s.id, \n"
-                    + "        s.name, \n"
-                    + "        s.img, \n"
-                    + "        d.DimensionName, \n"
-                    + "        s.status, \n"
-                    + "        s.creater_at,\n"
-                    + "        u.full_name\n"
-                    + ")\n"
-                    + "SELECT * \n"
-                    + "FROM PagedResults\n"
-                    + "WHERE row_num BETWEEN ? AND ?\n"
-                    + "ORDER BY row_num";
-
-            ps = connection.prepareStatement(query);
-            ps.setInt(1, userId); // Thay đổi UserId tương ứng
-            ps.setInt(2, statusInput);
-            ps.setInt(3, start);
-            ps.setInt(4, end);
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                int id = rs.getInt(1);
-                String name = rs.getString(2);
-                String thumbnail = rs.getString(3);
-                String dimensionName = rs.getString(4);
-                int numberOfLesson = rs.getInt(5);
-                int status = rs.getInt(6);
-                String fullName = rs.getString(8);
-
-                SubjectManagerDTO subjectManagerDTO = new SubjectManagerDTO(id, name, thumbnail, dimensionName, numberOfLesson, status, fullName);
-                lst.add(subjectManagerDTO);
-            }
-        } catch (SQLException ex) {
-        }
-        return lst;
-    }
-
-    public List<SubjectManagerDTO> getPaginationAdminManagerSubjectSearchByStatus(int page, int recordsPerPage, int statusInput, String searchCondition, int category) {
-        List<SubjectManagerDTO> lst = new ArrayList<>();
-        int start = (page - 1) * recordsPerPage + 1;
-        int end = start + recordsPerPage - 1;
-        String condition = "";
-        if (!searchCondition.trim().equals("")) {
-            condition += "\n AND s.name LIKE " + "'%" + searchCondition + "%'";
-        }
-        if (category != -1) {
-            condition += "\n AND s.dimensionId = " + category;
-        }
-        try {
-            String query = "WITH PagedResults AS (\n"
-                    + "    SELECT \n"
-                    + "        s.id, \n"
-                    + "        s.name, \n"
-                    + "        s.img, \n"
-                    + "        d.DimensionName, \n"
-                    + "        COUNT(sl.lesson_id) as NumberLesson,\n"
-                    + "        s.status,\n"
-                    + "        ROW_NUMBER() OVER (ORDER BY s.creater_at desc) AS row_num,\n"
-                    + "        u.full_name\n"
-                    + "    FROM \n"
-                    + "        subjects s \n"
-                    + "    LEFT JOIN \n"
-                    + "        Dimension d ON s.dimensionId = d.DimensionId\n"
-                    + "    LEFT JOIN \n"
-                    + "        subject_has_lesson sl ON sl.subject_id = s.id\n"
-                    + "    LEFT JOIN \n"
-                    + "        [dbo].[users] u on u.id = s.creator_id\n"
-                    + "    WHERE \n"
-                    + "        s.status = ? \n"
-                    + condition
-                    + "    GROUP BY \n"
-                    + "        s.id, \n"
-                    + "        s.name, \n"
-                    + "        s.img, \n"
-                    + "        d.DimensionName, \n"
-                    + "        s.status, \n"
-                    + "        s.creater_at, \n"
-                    + "        u.full_name \n"
-                    + ")\n"
-                    + "SELECT * \n"
-                    + "FROM PagedResults\n"
-                    + "WHERE row_num BETWEEN ? AND ?\n"
-                    + "ORDER BY row_num";
-
-            ps = connection.prepareStatement(query);
-            ps.setInt(1, statusInput);
-            ps.setInt(2, start);
-            ps.setInt(3, end);
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                int id = rs.getInt(1);
-                String name = rs.getString(2);
-                String thumbnail = rs.getString(3);
-                String dimensionName = rs.getString(4);
-                int numberOfLesson = rs.getInt(5);
-                int status = rs.getInt(6);
-                String fullName = rs.getString(8);
-
-                SubjectManagerDTO subjectManagerDTO = new SubjectManagerDTO(id, name, thumbnail, dimensionName, numberOfLesson, status, fullName);
-                lst.add(subjectManagerDTO);
-            }
-        } catch (SQLException ex) {
-        }
-        return lst;
-    }
-
     public void addNewSubjectRegister(int subjectId, int userId, int packageId) {
         // SQL query with placeholders for parameterized input
         String query = "insert into Subject_Register \n"
@@ -1432,67 +898,6 @@ public class SubjectDAO extends DBContext {
 
     }
 
-    public List<SubjectManagerDTO> getPaginationAdmin(int page, int recordsPerPage) {
-        List<SubjectManagerDTO> lst = new ArrayList<>();
-        int start = (page - 1) * recordsPerPage + 1;
-        int end = start + recordsPerPage - 1;
-        String query = "WITH PagedResults AS (\n"
-                + "    SELECT \n"
-                + "        s.id, \n"
-                + "        s.name, \n"
-                + "        s.img, \n"
-                + "        d.DimensionName, \n"
-                + "        COUNT(sl.lesson_id) AS NumberLesson,\n"
-                + "        s.status,\n"
-                + "        ROW_NUMBER() OVER (ORDER BY s.creater_at desc) AS row_num,\n"
-                + "        u.full_name\n"
-                + "    FROM \n"
-                + "        subjects s \n"
-                + "    LEFT JOIN \n"
-                + "        Dimension d ON s.dimensionId = d.DimensionId\n"
-                + "    LEFT JOIN \n"
-                + "        subject_has_lesson sl ON sl.subject_id = s.id\n"
-                + "	LEFT JOIN\n"
-                + "		[dbo].[users] u ON u.id = s.creator_id\n"
-                + "    GROUP BY \n"
-                + "        s.id, \n"
-                + "        s.name, \n"
-                + "        s.img, \n"
-                + "        d.DimensionName, \n"
-                + "        s.status, \n"
-                + "        s.creater_at,\n"
-                + "        u.full_name\n"
-                + ")\n"
-                + "SELECT * \n"
-                + "FROM PagedResults\n"
-                + "WHERE row_num BETWEEN ? AND ?\n"
-                + "ORDER BY row_num;";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, start);
-            preparedStatement.setInt(2, end);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-                int id = resultSet.getInt(1);
-                String name = resultSet.getString(2);
-                String thumbnail = resultSet.getString(3);
-                String dimensionName = resultSet.getString(4);
-                int numberOfLesson = resultSet.getInt(5);
-                int status = resultSet.getInt(6);
-                String fullName = resultSet.getString(8);
-
-                SubjectManagerDTO subjectManagerDTO = new SubjectManagerDTO(id, name, thumbnail, dimensionName, numberOfLesson, status, fullName);
-                lst.add(subjectManagerDTO);
-            }
-            preparedStatement.close();
-            resultSet.close();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return lst;
-    }
-
     public boolean changeStatusSubjectBySubjectId(int id, int statusId) {
         String query = "UPDATE [dbo].[subjects]\n"
                 + "SET update_at = GETDATE(),\n"
@@ -1508,76 +913,6 @@ public class SubjectDAO extends DBContext {
             java.util.logging.Logger.getLogger(SubjectDAO.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         return isSuccess;
-    }
-
-    public List<SubjectManagerDTO> getPaginationAdminManagerSubjectSearchBySubjectName(int page, int recordsPerPage, String searchName, int dimensionId, int statusCondition) {
-        List<SubjectManagerDTO> lst = new ArrayList<>();
-        int start = (page - 1) * recordsPerPage + 1;
-        int end = start + recordsPerPage - 1;
-        String condition = "";
-        if (dimensionId != -1) {
-            condition += "\n AND s.dimensionId = " + dimensionId;
-        }
-        if (statusCondition != -1) {
-            condition += "\n AND s.status = " + statusCondition;
-        }
-        try {
-            String query = "WITH PagedResults AS (\n"
-                    + "    SELECT \n"
-                    + "        s.id, \n"
-                    + "        s.name, \n"
-                    + "        s.img, \n"
-                    + "        d.DimensionName, \n"
-                    + "        COUNT(sl.lesson_id) as NumberLesson,\n"
-                    + "        s.status,\n"
-                    + "        ROW_NUMBER() OVER (ORDER BY s.creater_at desc) AS row_num,\n"
-                    + "        u.full_name\n"
-                    + "    FROM \n"
-                    + "        subjects s \n"
-                    + "    LEFT JOIN \n"
-                    + "        Dimension d ON s.dimensionId = d.DimensionId\n"
-                    + "    LEFT JOIN \n"
-                    + "        subject_has_lesson sl ON sl.subject_id = s.id\n"
-                    + "    LEFT JOIN \n"
-                    + "        [dbo].[users] u on u.id = s.creator_id\n"
-                    + "    WHERE \n"
-                    + "        s.name like ? \n"
-                    + condition
-                    + "    GROUP BY \n"
-                    + "        s.id, \n"
-                    + "        s.name, \n"
-                    + "        s.img, \n"
-                    + "        d.DimensionName, \n"
-                    + "        s.status, \n"
-                    + "        s.creater_at,\n"
-                    + "        u.full_name\n"
-                    + ")\n"
-                    + "SELECT * \n"
-                    + "FROM PagedResults\n"
-                    + "WHERE row_num BETWEEN ? AND ?\n"
-                    + "ORDER BY row_num";
-
-            ps = connection.prepareStatement(query);
-            ps.setString(1, "%" + searchName + "%");
-            ps.setInt(2, start);
-            ps.setInt(3, end);
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                int id = rs.getInt(1);
-                String name = rs.getString(2);
-                String thumbnail = rs.getString(3);
-                String dimensionName = rs.getString(4);
-                int numberOfLesson = rs.getInt(5);
-                int status = rs.getInt(6);
-                String fullName = rs.getString(8);
-
-                SubjectManagerDTO subjectManagerDTO = new SubjectManagerDTO(id, name, thumbnail, dimensionName, numberOfLesson, status, fullName);
-                lst.add(subjectManagerDTO);
-            }
-        } catch (SQLException ex) {
-        }
-        return lst;
     }
 
     public boolean checkSubjectRegisterById(int subId, int userId) {
@@ -1674,11 +1009,122 @@ public class SubjectDAO extends DBContext {
         }
     }
 
+    public List<SubjectManagerDTO> getSubjectsPagination(int roleId, int userId, int page, int recordsPerPage, String search, String categories, String statuses) {
+        StringBuilder query = new StringBuilder();
+        query.append("WITH PagedResults AS (\n")
+                .append("    SELECT \n")
+                .append("        s.id, \n")
+                .append("        s.name, \n")
+                .append("        s.img, \n")
+                .append("        d.DimensionName, \n")
+                .append("        COUNT(sl.lesson_id) AS NumberLesson, \n")
+                .append("        s.status, \n")
+                .append("        ROW_NUMBER() OVER (ORDER BY s.status) AS row_num, \n")
+                .append("        u.full_name \n")
+                .append("    FROM \n")
+                .append("        subjects s \n")
+                .append("    LEFT JOIN \n")
+                .append("        Dimension d ON s.dimensionId = d.DimensionId \n")
+                .append("    LEFT JOIN \n")
+                .append("        subject_has_lesson sl ON sl.subject_id = s.id \n")
+                .append("    LEFT JOIN \n")
+                .append("        users u ON u.id = s.creator_id \n")
+                .append("    WHERE 1 = 1\n");
+        if (roleId == 3) {
+            query.append("	AND creator_id = " + userId + "\n");
+        }
+        if(search != null) {
+            String condition = "%"+search+"%";
+            query.append("      AND s.name LIKE '" + condition + "'\n");
+        }
+        if(categories != null) {
+            String condition = "(" + categories + ")\n";
+            query.append("      AND d.dimensionId IN " + condition);
+        }
+        if(statuses != null) {
+            String condition = "(" + statuses + ")\n";
+            query.append("      AND s.status IN " + condition);
+        }
+        query.append("    GROUP BY \n")
+                .append("        s.id, \n")
+                .append("        s.name, \n")
+                .append("        s.img, \n")
+                .append("        d.DimensionName, \n")
+                .append("        s.status, \n")
+                .append("        s.creater_at, \n")
+                .append("        u.full_name \n")
+                .append(")\n")
+                .append("SELECT * \n")
+                .append("FROM PagedResults \n")
+                .append("WHERE row_num BETWEEN ? AND ? \n")
+                .append("ORDER BY row_num;");
+        List<SubjectManagerDTO> subjects = new ArrayList<>();
+        try {
+            ps = connection.prepareStatement(query.toString());
+
+            int start = (page - 1) * recordsPerPage + 1;
+            int end = start + recordsPerPage - 1;
+            ps.setInt(1, start);
+            ps.setInt(2, end);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                subjects.add(new SubjectManagerDTO(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getInt(5),
+                        rs.getInt(6),
+                        rs.getString(7)
+                ));
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return subjects;
+    }
+
+    public int geTotalRecords(int roleId, int userId, String search, String categories, String statuses) {
+        StringBuilder query = new StringBuilder("SELECT COUNT(*) FROM subjects s ")
+                .append("LEFT JOIN Dimension d ON s.dimensionId = d.DimensionId ")
+                .append("WHERE 1 = 1 ");
+        if (roleId == 3) {
+            query.append("AND s.creator_id = " + userId + "\n");
+        }
+        if(search != null) {
+            String condition = "%"+search+"%";
+            query.append("AND s.name LIKE '" + condition + "'\n");
+        }
+        if(categories != null) {
+            String condition = "(" + categories + ")\n";
+            query.append("      AND d.dimensionId IN " + condition);
+        }
+        if(statuses != null) {
+            String condition = "(" + statuses + ")\n";
+            query.append("      AND s.status IN " + condition);
+        }
+        try {
+            ps = connection.prepareStatement(query.toString());
+            rs = ps.executeQuery();
+            if(rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+        }
+        return 0;
+    }
+
     public static void main(String[] args) {
         // view all subjects in database with status = 1
         SubjectDAO c = new SubjectDAO();
 
-        System.out.println(c.insert("Test", "test", 1, 5, 1, true, "Test"));
-
+        List<SubjectManagerDTO> subjects = SubjectDAO.getInstance().getSubjectsPagination(3, 28, 1, 5, "s", "1,2,3,4", "2");
+        System.out.println(subjects.size());
+        for (SubjectManagerDTO subject : subjects) {
+            System.out.println(subject.toString());
+        }
+//        System.out.println(c.geTotalRecords(2, 1, null, "1,2,3,4", "1, 2"));
     }
 }

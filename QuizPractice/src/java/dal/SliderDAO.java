@@ -68,10 +68,10 @@ public class SliderDAO extends DBContext {
             ps.setString(1, title);
             ps.setString(2, subTitle);
             ps.setString(3, content);
-            ps.setString(4, image); 
+            ps.setString(4, image);
             ps.setString(5, linkUrl);
             ps.setInt(6, status);
-            ps.setInt(7,sliderId);
+            ps.setInt(7, sliderId);
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
@@ -82,15 +82,15 @@ public class SliderDAO extends DBContext {
         }
         return updated;
     }
-    
-     public Slider getSliderById(int id) {
+
+    public Slider getSliderById(int id) {
         String query = "select * from Slider where ID = ?";
         try {
             ps = connection.prepareStatement(query);
             ps.setInt(1, id);
             rs = ps.executeQuery();
 
-            while (rs.next()) {       
+            while (rs.next()) {
                 String title = rs.getString(2);
                 String subTitle = rs.getString(3);
                 String content = rs.getString(4);
@@ -111,7 +111,6 @@ public class SliderDAO extends DBContext {
         }
         return null;
     }
-    
 
     public int getStatus(int id) {
         String query = "select Status from Slider where ID = ?";
@@ -217,7 +216,10 @@ public class SliderDAO extends DBContext {
     public List<Slider> listTop8Slider() {
         List<Slider> listSliders = new ArrayList<>();
         try {
-            String query = "SELECT TOP 8 * FROM slider order by ID desc";
+            String query = "SELECT * \n"
+                    + "FROM slider \n"
+                    + "WHERE Status = 1\n"
+                    + "order by ID desc";
 
             ps = connection.prepareStatement(query);
             rs = ps.executeQuery();

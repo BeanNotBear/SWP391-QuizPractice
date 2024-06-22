@@ -22,10 +22,6 @@
 
         <!-- Custom CSS to make the footer fixed -->
         <style>
-            /*            body {
-                            padding: 0;
-                            margin: 0;
-                        }*/
             .subjectList {
                 margin-bottom: 50px;
             }
@@ -45,26 +41,44 @@
             }
 
             #newSubject{
-                text-decoration: underline;
-                margin-bottom: 20px;
+                text-decoration: underline
             }
 
             .inline-form {
                 display: inline;
             }
+
+            .onheadtable {
+                display: flex;
+                align-items: center;
+            }
+
+            .search-form {
+                width: 20%;
+                margin-left: 72%;
+                margin-bottom: 10px;
+            }
         </style>
+        <link rel="stylesheet" href="css/virtual-select.min.css"/>
     </head>
 
-    <body>
+    <body id="content">
         <%@include file="/layout/header.jsp"%>
         <%@include file="/layout/searchSubjectList.jsp"%>
 
         <section class="subjectList">
             <h1 class="heading text-center">Subject list</h1>
             <div class="container">
-                <c:if test="${sessionScope.user.roleId == 2}">
-                    <a href="newSubject" id="newSubject">New Subject</a>
-                </c:if>
+                <div class="onheadtable">
+                    <c:if test="${sessionScope.user.roleId == 2}">
+                        <a href="newSubject" id="newSubject">New Subject</a>
+                    </c:if>
+                    <form action="<%=request.getContextPath()%>/subjectManager" method="post" class="search-form">
+                        <input value="${requestScope.search}" id="subjectName" type="text" name="subjectName" required placeholder="Search Subject" maxlength="100">
+                        <input type="hidden" name="typeSubmit" value="submitName">
+                        <button class="fas fa-search"></button>
+                    </form>
+                </div>
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
@@ -88,49 +102,24 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!--admin-->
-                        <c:if test="${sessionScope.user.roleId == 2}">
-                            <c:forEach var="item" items="${listSubject}">
-                                <tr>
-                                    <td>${item.id}</td>
-                                    <td>${item.name}</td>
-                                    <td style="width: 20%"><img width="100%" src="${item.thumbnail}" alt="alt"/></td>
-                                    <td>${item.owner}</td>
-                                    <td>${item.dimensionName}</td>
-                                    <td>${item.numberOfLesson}</td>
-                                    <td>
-                                        <a onclick="changeStatus(this, ${item.id})" 
-                                           <c:if test="${item.status == 1}">class="btn btn-info btn-sm"</c:if>
-                                           <c:if test="${item.status == 2}">class="btn btn-danger btn-sm"</c:if>
-                                           ><c:if test="${item.status == 1}">Published</c:if><c:if test="${item.status == 2}">Unpublished</c:if></a>
-                                        </td>
+                        <c:forEach var="item" items="${listSubject}">
+                            <tr>
+                                <td>${item.id}</td>
+                                <td>${item.name}</td>
+                                <td style="width: 20%"><img width="100%" src="${item.thumbnail}" alt="alt"/></td>
+                                <td>${item.owner}</td>
+                                <td>${item.dimensionName}</td>
+                                <td>${item.numberOfLesson}</td>
+                                <td>
+                                    <a 
+                                        <c:if test="${item.status == 1}">class="btn btn-info btn-sm"</c:if>
+                                        <c:if test="${item.status == 2}">class="btn btn-danger btn-sm"</c:if>
+                                        ><c:if test="${item.status == 1}">Published</c:if><c:if test="${item.status == 2}">Unpublished</c:if></a>
+                                    </td>
 
-                                            <td><a href="subjectDetailExpert?id=${item.id}" class="btn btn-info btn-sm">Detail</a></td>
-                                </tr>
-                            </c:forEach>
-                        </c:if>
-                        <!--expert-->
-                        <c:if test="${sessionScope.user.roleId == 3}">
-                            <c:forEach var="item" items="${listSubject}">
-                                <tr>
-                                    <td>${item.id}</td>
-                                    <td>${item.name}</td>
-                                    <td style="width: 20%"><img width="100%" src="${item.thumbnail}" alt="alt"/></td>
-                                    <td>${item.owner}</td>
-                                    <td>${item.dimensionName}</td>
-                                    <td>${item.numberOfLesson}</td>
-                                    <td>
-                                        <a
-                                            <c:if test="${item.status == 1}">class="btn btn-info btn-sm"</c:if>
-                                            <c:if test="${item.status == 2}">class="btn btn-danger btn-sm"</c:if>
-                                            ><c:if test="${item.status == 1}">Published</c:if><c:if test="${item.status == 2}">Unpublished</c:if></a>
-                                        </td>
-
-                                            <td><a href="subjectDetailExpert?id=${item.id}" class="btn btn-info btn-sm">Detail</a></td>
-                                </tr>
-                            </c:forEach>
-                        </c:if>
-
+                                        <td><a href="subjectDetailExpert?id=${item.id}" class="btn btn-info btn-sm">Detail</a></td>
+                            </tr>
+                        </c:forEach>
                     </tbody>
                 </table>
                 <!-- Pagination -->
@@ -139,7 +128,7 @@
                         <c:choose>
                             <c:when test="${currentPage > 1}">
                                 <li>
-                                    <a href="subjectManager?page=${currentPage - 1}" aria-label="Previous">
+                                    <a onclick="getPage(this, ${currentPage - 1})" aria-label="Previous">
                                         <span aria-hidden="true">&laquo;</span>
                                     </a>
                                 </li>
@@ -153,7 +142,7 @@
                                     </c:when>
                                     <c:otherwise>
                                     <li>
-                                        <a href="subjectManager?page=${i}">${i}</a>
+                                        <a onclick="getPage(this, ${i})">${i}</a>
                                     </li>
                                 </c:otherwise>
                             </c:choose>
@@ -162,7 +151,7 @@
                         <c:choose>
                             <c:when test="${currentPage < totalPages}">
                                 <li>
-                                    <a href="subjectManager?page=${currentPage + 1}" aria-label="Next">
+                                    <a onclick="getPage(this, ${currentPage + 1})" aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>
                                     </a>
                                 </li>
@@ -180,5 +169,29 @@
 
         <!--change status of subject-->
         <script src="js/ChangeStatusOfSubject.js"></script>
+        <script src="js/virtual-select.min.js"></script>
+        <script src="js/Pagination.js"></script>
+        <script src="js/filterSubject.js"></script>
+        <script>
+            VirtualSelect.init({
+                ele: '#mutipleSelect'
+            });
+        </script>
+
+        <script>
+            VirtualSelect.init({
+                ele: '#status-search'
+            });
+        </script>
+
+        <script>
+            VirtualSelect.init({
+                ele: '#mutipleSelect',
+                options: myOptions,
+                search: true,
+                searchGroup: true, // Include group title for searching
+                searchByStartsWith: true // Search options by startsWith() method
+            });
+        </script>
     </body>
 </html>
