@@ -13,4 +13,5 @@ import lombok.ToString;
 public class ExpertDTO {
     private int id;
     private String name;
+    private String email;
 }

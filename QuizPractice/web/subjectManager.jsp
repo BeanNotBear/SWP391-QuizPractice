@@ -26,7 +26,7 @@
                 margin-bottom: 50px;
             }
             #searchByDimension, #searchByStatus {
-                margin-left: 5%;
+                margin-left: 0;
                 padding: 5% 10%;
             }
             .heading {
@@ -173,25 +173,23 @@
         <script src="js/Pagination.js"></script>
         <script src="js/filterSubject.js"></script>
         <script>
-            VirtualSelect.init({
-                ele: '#mutipleSelect'
-            });
+                                        VirtualSelect.init({
+                                            ele: '#mutipleSelect'
+                                        });
         </script>
 
         <script>
             VirtualSelect.init({
                 ele: '#status-search'
             });
-        </script>
+        </script> 
 
         <script>
-            VirtualSelect.init({
-                ele: '#mutipleSelect',
-                options: myOptions,
-                search: true,
-                searchGroup: true, // Include group title for searching
-                searchByStartsWith: true // Search options by startsWith() method
-            });
+            const categories2 = $("#selectedCategory").val().toString().split(',');
+            document.querySelector('#mutipleSelect').setValue(categories2);
+            const status2 = $("#selectedStatus").val().toString().split(',');
+            document.querySelector('#status-search').setValue(status2);
+            console.log(status2);
         </script>
     </body>
 </html>

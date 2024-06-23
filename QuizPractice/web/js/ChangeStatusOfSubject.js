@@ -92,10 +92,10 @@ $("#newSubject").submit(function (e) {
     var formData = {
         img: $("#img").val(),
         name: $("#name").val().trim(),
-        dimensionId: $("#category").val(),
+        dimensionId: $("#categories1").val(),
         feature: $("#feature").val(),
         expertId: $("#experts").val(),
-        statusId: $("#statusSubject").val(),
+        statusId: $("#status1").val(),
         description: $("#description").val()
     };
     console.log(formData);

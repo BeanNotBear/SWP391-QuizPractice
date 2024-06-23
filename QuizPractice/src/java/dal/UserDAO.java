@@ -346,7 +346,8 @@ public class UserDAO extends DBContext {
             while (rs.next()) {
                 experts.add(new ExpertDTO(
                         rs.getInt(1),
-                        rs.getString(2)
+                        rs.getString(2),
+                        rs.getString(3)
                 ));
             }
         } catch (Exception e) {

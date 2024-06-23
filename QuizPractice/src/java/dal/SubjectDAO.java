@@ -1020,7 +1020,8 @@ public class SubjectDAO extends DBContext {
                 .append("        COUNT(sl.lesson_id) AS NumberLesson, \n")
                 .append("        s.status, \n")
                 .append("        ROW_NUMBER() OVER (ORDER BY s.status) AS row_num, \n")
-                .append("        u.full_name \n")
+                .append("        u.full_name, \n")
+                .append("        u.[email] \n")
                 .append("    FROM \n")
                 .append("        subjects s \n")
                 .append("    LEFT JOIN \n")
@@ -1052,7 +1053,8 @@ public class SubjectDAO extends DBContext {
                 .append("        d.DimensionName, \n")
                 .append("        s.status, \n")
                 .append("        s.creater_at, \n")
-                .append("        u.full_name \n")
+                .append("        u.full_name, \n")
+                .append("        u.[email] \n")
                 .append(")\n")
                 .append("SELECT * \n")
                 .append("FROM PagedResults \n")
@@ -1075,7 +1077,7 @@ public class SubjectDAO extends DBContext {
                         rs.getString(4),
                         rs.getInt(5),
                         rs.getInt(6),
-                        rs.getString(7)
+                        rs.getString(8) + " (" + rs.getString(9) + ")"
                 ));
             }
             rs.close();

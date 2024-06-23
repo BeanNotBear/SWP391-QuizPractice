@@ -30,6 +30,8 @@
     <br/>
 
     <form action="<%=request.getContextPath()%>/subjectManager" method="post" class="form-inline" id="searchByDimension">
+        <input type="hidden" id="selectedCategory" value="${requestScope.categories}">
+        <input type="hidden" id="selectedStatus" value="${requestScope.status}">
         <div class="form-group">
             <label>Category</label>
             <select id="mutipleSelect" multiple name="native-select" placeholder="Select Category" data-search="true" data-silent-initial-value-set="true">
@@ -46,6 +48,7 @@
             </select>
         </div>
         <input type="button" class="btn btn-primary" id="filter" value="Filter">
+        <a href="subjectManager" class="btn btn-danger">Reset filter and search</a>
     </form>
     <br/>
 </div>
@@ -58,4 +61,4 @@
     document.getElementById('status').addEventListener('change', function () {
         document.getElementById('searchByStatus').submit();
     });
-</script>
+</script> 

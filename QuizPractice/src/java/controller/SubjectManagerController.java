@@ -74,6 +74,8 @@ public class SubjectManagerController extends HttpServlet {
         System.out.println(totalPages);
         List<DimensionDTO> dimensions = SubjectDAO.getInstance().getListDimensionDTO();
         List<SubjectManagerDTO> subjects = SubjectDAO.getInstance().getSubjectsPagination(user.getRoleId(), user.getUserId(), page, recordPerPage, this.search, this.categories, this.statuses);
+        request.setAttribute("categories", this.categories);
+        request.setAttribute("status", this.statuses);
         request.setAttribute("search", this.search);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);

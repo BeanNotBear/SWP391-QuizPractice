@@ -113,6 +113,7 @@
                 display: none;
             }
         </style>
+        <link rel="stylesheet" href="css/virtual-select.min.css"/>
     </head>
 
     <body>
@@ -146,8 +147,7 @@
 
                             <div class="form-group">
                                 <label for="category">Category:</label>
-                                <select required id="category" name="dimensionId" class="form-control">
-                                    <option value="" disabled selected>Select category</option>
+                                <select required id="categories1" name="native-select" placeholder="Please select an category" data-search="true" data-silent-initial-value-set="true">
                                     <c:forEach var="dimension" items="${dimensions}">
                                         <option value="${dimension.id}">${dimension.name}</option>
                                     </c:forEach>
@@ -165,21 +165,19 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="experts">Owner:</label>
-                                <select required id="experts" name="expertId" class="form-control">
-                                    <option value="" disabled selected>Select owner</option>
+                                <label for="experts">Owner(Expert):</label>
+                                <select required id="experts" name="native-select" placeholder="Please select an expert" data-search="true" data-silent-initial-value-set="true">
                                     <c:forEach var="expert" items="${experts}">
-                                        <option value="${expert.id}">${expert.name}</option>
+                                        <option value="${expert.id}">${expert.name} (${expert.email})</option>
                                     </c:forEach>
                                 </select>
                             </div>
 
                             <div class="form-group">
                                 <label for="statusSubject">Status:</label>
-                                <select required id="statusSubject" name="statusId" class="form-control">
-                                    <option value="" disabled selected>Select status</option>
-                                    <option value="1">Published</option>
+                                <select required id="status1" name="native-select" placeholder="Select a status" data-search="true" data-silent-initial-value-set="true">
                                     <option value="2">Unpublished</option>
+                                    <option value="1">Published</option>
                                 </select>
                             </div>
 
@@ -245,7 +243,22 @@
                                         xhr.send(formData);
                                     });
         </script>
-
+        <script src="js/virtual-select.min.js"></script>
+        <script>
+                                    VirtualSelect.init({
+                                        ele: '#experts'
+                                    });
+        </script>
+        <script>
+            VirtualSelect.init({
+                ele: '#categories1'
+            });
+        </script>
+        <script>
+            VirtualSelect.init({
+                ele: '#status1'
+            });
+        </script>
         <script src="js/validateSubject.js"></script>
         <!-- Bootstrap Toggle JS and CSS (optional) -->
         <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
