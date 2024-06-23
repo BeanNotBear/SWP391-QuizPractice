@@ -81,7 +81,7 @@ $("#newSubject").submit(function (e) {
     const subjectName = nameInput.value;
     const descriptionTextarea = document.getElementById('description');
     const description = descriptionTextarea.value.trim();
-    const regex = /^[A-Za-z0-9\s]{3,50}$/;
+    const regex = /^[A-Za-z0-9\s!@#\$%\^\&*\)\(+=._-]{3,50}$/;
     if (!regex.test(subjectName.trim()) || description === "") {
         Swal.fire({
             title: "Hey bro please fill all field of subject!!!!",

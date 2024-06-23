@@ -8,6 +8,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.Slider;
 
 @WebServlet("/editSlider")
@@ -19,13 +20,12 @@ public class EditSliderController extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         SliderDAO sliderDAO = SliderDAO.getInstance();
         Slider s = sliderDAO.getSliderById(id);
-        
+
         request.setAttribute("slider", s);
 
         request.getRequestDispatcher("sliderDetailManager.jsp")
                 .forward(request, response);
     }
-
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -37,16 +37,19 @@ public class EditSliderController extends HttpServlet {
         String linkUrl = request.getParameter("linkUrl");
         int status = Integer.parseInt(request.getParameter("status"));
         int id = Integer.parseInt(request.getParameter("id"));
-        
+
         //  public boolean editSlider(String title, String subTitle, String content, String image, String linkUrl, int status, int sliderId) {
         SliderDAO sliderDAO = SliderDAO.getInstance();
         boolean s = sliderDAO.editSlider(title, subTitle, content, image, linkUrl, status, id);
-        if(s){
-           response.sendRedirect("sliderManager");
-        }else{
-            response.sendRedirect("error.jsp");
+        
+        HttpSession session = request.getSession();
+        if (s) {
+            session.setAttribute("successMessage", "Slider edited successfully.");
+        } else {
+            session.setAttribute("errorMessage", "Failed to edit the slider.");
         }
-
+//        request.getRequestDispatcher("/sliderManager").forward(request, response);
+         response.sendRedirect("sliderManager");
     }
 
 }

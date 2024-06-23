@@ -193,6 +193,81 @@ public class SliderDAO extends DBContext {
         return lst;
     }
 
+    public List<Slider> getPaginationSliderAll(int page, int recordsPerPage, Integer status, String search) {
+        updateNull();
+        List<Slider> lst = new ArrayList<>();
+        int start = (page - 1) * recordsPerPage + 1;
+        int end = start + recordsPerPage - 1;
+
+        try {
+            StringBuilder query = new StringBuilder("WITH PagedResults AS (");
+            query.append("    SELECT *, ROW_NUMBER() OVER (ORDER BY CreatedAt) AS row_num ");
+            query.append("    FROM Slider ");
+            query.append("    WHERE 1=1 ");
+
+            if (status != null && status != -1) {
+                query.append("AND Status = ? ");
+            }
+
+            if (search != null && !search.isEmpty()) {
+                query.append("AND (Title LIKE ? OR LinkUrl LIKE ?) ");
+            }
+
+            query.append(") ");
+            query.append("SELECT * FROM PagedResults ");
+            query.append("WHERE row_num BETWEEN ? AND ? ");
+            query.append("ORDER BY row_num;");
+
+            ps = connection.prepareStatement(query.toString());
+            int paramIndex = 1;
+
+            if (status != null && status != -1) {
+                ps.setInt(paramIndex++, status);
+            }
+
+            if (search != null && !search.isEmpty()) {
+                ps.setString(paramIndex++, "%" + search + "%");
+                ps.setString(paramIndex++, "%" + search + "%");
+            }
+
+            ps.setInt(paramIndex++, start);
+            ps.setInt(paramIndex++, end);
+
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                String title = rs.getString(2);
+                String subTitle = rs.getString(3);
+                String content = rs.getString(4);
+                String image = rs.getString(5);
+                String linkUrl = rs.getString(6);
+                Date createdAt = rs.getDate(7);
+                int createdBy = rs.getInt(8);
+                int tmpStatus = rs.getInt(9);
+                int sliderStatus = tmpStatus == 1 ? 1 : 0;
+
+                Slider s = new Slider(id, title, subTitle, content, image, linkUrl, createdAt, createdBy, sliderStatus);
+                lst.add(s);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (rs != null) try {
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if (ps != null) try {
+                ps.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return lst;
+    }
+
     public int getTotalRecordSlider() {
         String query = "select count(*) as total from Slider";
         try {
@@ -212,14 +287,77 @@ public class SliderDAO extends DBContext {
         return 0;
     }
 
+    
+   
+    public void updateNull(){  
+        String query = "UPDATE Slider SET Status = 0 WHERE Status IS NULL";
+        try {
+            ps = connection.prepareStatement(query);
+            ps.executeUpdate();
+            
+        } catch (SQLException ex) {
+            ex.printStackTrace(); // Handle exception properly in a production environment
+        }
+       
+    }
+    
+    public int getTotalRecordSliderAll(Integer status, String search) {
+        int totalRecords = 0;
+        
+        updateNull();
+        try {
+            StringBuilder query = new StringBuilder("SELECT COUNT(*) AS total FROM Slider WHERE 1=1 ");
+
+            if (status != null && status != -1) {
+                query.append("AND Status = ? ");
+            }
+
+            if (search != null && !search.isEmpty()) {
+                query.append("AND (Title LIKE ? OR LinkUrl LIKE ?) ");
+            }
+
+            ps = connection.prepareStatement(query.toString());
+            int paramIndex = 1;
+
+            if (status != null && status != -1) {
+                ps.setInt(paramIndex++, status);
+            }
+
+            if (search != null && !search.isEmpty()) {
+                ps.setString(paramIndex++, "%" + search + "%");
+                ps.setString(paramIndex++, "%" + search + "%");
+            }
+
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                totalRecords = rs.getInt("total");
+            }
+
+        } catch (SQLException e) {
+            // Log the exception (if a logging framework is available)
+            e.printStackTrace(); // Replace with logger in real application
+        } finally {
+            if (rs != null) try {
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if (ps != null) try {
+                ps.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return totalRecords;
+    }
+
     //Query
     public List<Slider> listTop8Slider() {
         List<Slider> listSliders = new ArrayList<>();
         try {
-            String query = "SELECT * \n"
-                    + "FROM slider \n"
-                    + "WHERE Status = 1\n"
-                    + "order by ID desc";
+            String query = "SELECT TOP 8 * FROM slider where Status = 1 order by ID desc";
 
             ps = connection.prepareStatement(query);
             rs = ps.executeQuery();

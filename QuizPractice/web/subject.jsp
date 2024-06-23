@@ -29,7 +29,7 @@
         <%@include file="layout/profile.jsp" %>
         <!-- Change password pop-up -->
         <%@include file="layout/changePassword.jsp" %>
-
+        <%@include file="layout/loader.jsp" %>
         <section class="courses">
             <div>
                 <h1 class="heading">Our subjects</h1>

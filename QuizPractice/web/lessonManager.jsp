@@ -24,23 +24,15 @@
         <link rel="stylesheet" href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css">
         <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
         <style>
             body {
                 padding: 0;
                 margin: 0;
             }
-            .footer {
-                background: #f8f9fa;
-                text-align: center;
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-                height: 10%;
-                z-index: 10; /* Giá trị z-index cao để đè lên sidebar */
-                padding-left: 2%;
-            }
-
-
         </style>
 
         <script>
@@ -84,6 +76,17 @@
                 const href = "lessonManager?subjectId=${subjectId}&searchName=" + name + "&searchType=" + type + "&searchStatus=" + status + "&page=" + page;
                 window.location.href = href;  // Chuyển hướng người dùng đến URL
             }
+        </script>
+
+        <script>
+            $(document).ready(function () {
+            <c:if test="${not empty successMessage}">
+                 toastr.success('${successMessage}');
+            </c:if>
+            <c:if test="${not empty errorMessage}">
+                 toastr.error('${errorMessage}');
+            </c:if>
+            });
         </script>
 
     </head>

@@ -24,6 +24,9 @@
         <link rel="stylesheet" href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css">
         <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <!-- Custom CSS to make the footer fixed -->
         <style>
             body {
@@ -41,7 +44,6 @@
                 text-align: center;
             }
             .side-bar {
-                padding-top: 6%;
                 z-index: 1; /* Giá trị z-index thấp hơn để bị đè */
             }
             nav {
@@ -107,198 +109,273 @@
             .slider.round:before {
                 border-radius: 50%;
             }
+
+            img{
+                margin-left: 35%;
+            }
         </style>
+
+        <script>
+            $(document).ready(function () {
+            <c:if test="${not empty successMessage}">
+                toastr.success('${successMessage}');
+            </c:if>
+            <c:if test="${not empty errorMessage}">
+                toastr.error('${errorMessage}');
+            </c:if>
+            });
+        </script>
     </head>
 
     <body>
+
         <%@include file="/layout/header.jsp"%>
 
         <section class="sliderList">
             <h1 class="heading text-center">Slider List</h1>
             <div class="container">
-                <a type="button" data-toggle="modal" data-target="#myModal" id="newSubject">New Slider</a>
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Title</th>
-                            <th>Image</th>
-                            <th>BackLink</th>                         
-                            <th>Status</th>
-                            <th>Detail</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach var="item" items="${listSlider}">
-                            <tr>
-                                <td>${item.getID()}</td>
-                                <td>${item.getTitle()}</td>
-                                <td><img width="30%" src="${item.getImage()}" alt="preview"/></td>
-                                <td>${item.getLinkUrl()}</td>
-                                <td>
-                                    <label class="switch">  
-                                        <input type="checkbox" id="status" name="status" <c:if test="${item.getStatus() == 1}">checked</c:if> onchange="toggleStatus(${item.getID()})"/>
-                                            <span class="slider round"></span>
-                                        </label>
-                                    </td>
+                <!-- Search Form -->
+                <form class="form-inline" method="GET" action="sliderManager" id="searchForm">
+                    <div class="form-group col-sm-2">
+                        <select class="form-control" id="searchStatus" name="searchStatus" onchange="document.getElementById('searchForm').submit()">
+                            <option value="">All</option>
+                            <option value="1" <c:if test="${searchStatus == '1'}">selected</c:if>>Active</option>
+                            <option value="0" <c:if test="${searchStatus == '0'}">selected</c:if>>Inactive</option>                           
+                            </select>
+                        </div>
 
 
-                                    <td><a href="editSlider?id=${item.getID()}" class="btn btn-info btn-sm">Detail</a></td>
-                            </tr>
-                        </c:forEach>
-                    </tbody>
-                </table>
-                <!-- Pagination -->
-                <nav aria-label="Page navigation">
-                    <ul class="pagination">
-                        <c:choose>
-                            <c:when test="${currentPage > 1}">
-                                <li>
-                                    <a href="sliderManager?page=${currentPage - 1}" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                    </a>
-                                </li>
-                            </c:when>
-                        </c:choose>
-
-                        <c:forEach var="i" begin="1" end="${totalPages}">
-                            <c:choose>
-                                <c:when test="${i == currentPage}">
-                                    <li class="active"><a href="#">${i}</a></li>
-                                    </c:when>
-                                    <c:otherwise>
-                                    <li><a href="sliderManager?page=${i}">${i}</a></li>
-                                    </c:otherwise>
-                                </c:choose>
-                            </c:forEach>
-
-                        <c:choose>
-                            <c:when test="${currentPage < totalPages}">
-                                <li>
-                                    <a href="sliderManager?page=${currentPage + 1}" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                    </a>
-                                </li>
-                            </c:when>
-                        </c:choose>
-                    </ul>
-                </nav>
+                        <div class="form-group col-sm-8">
+                            <input type="text" class="form-control" id="searchTitle" name="searchTitle" value="${searchTitle}" placeholder="Tiltle or black link">
+                    </div>
+                    <div class="form-group col-sm-0">
+                        <a type="button" data-toggle="modal" data-target="#myModal" id="newSubject" class="">New Slider</a>
+                    </div>
             </div>
-        </section>
+        </form>
         <br/>
 
-        <!-- Modal -->
-        <div id="myModal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
 
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Add New Slider</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form id="addSliderForm">
 
-                            <div class="form-group">
-                                <label for="title">Title:</label>
-                                <input type="text" class="form-control" id="title" name="title">
-                            </div>
-                            <div class="form-group">
-                                <label for="subTitle">Sub Title:</label>
-                                <input type="text" class="form-control" id="subTitle" name="subTitle">
-                            </div>
-                            <div class="form-group">
-                                <label for="content">Content:</label>
-                                <textarea class="form-control" id="content" name="content"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="image">Image:</label>
-                                <input type="text" class="form-control" id="image" name="image">
-                            </div>
-                            <div class="form-group">
-                                <label for="linkUrl">Link URL:</label>
-                                <input type="text" class="form-control" id="linkUrl" name="linkUrl">
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="addSlider()">Add</button>
-                    </div>
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Image</th>
+                    <th>BackLink</th>                         
+                    <th>Status</th>
+                    <th>Detail</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="item" items="${listSlider}">
+                    <tr>
+                        <td>${item.getID()}</td>
+                        <td>${item.getTitle()}</td>
+                        <td style="width: 20%"><img style="max-width: 100%; margin-left: 0" src="${item.getImage()}" alt="alt"/></td>
+                        <td>${item.getLinkUrl()}</td>
+                        <td>
+                            <label class="switch">  
+                                <input type="checkbox" id="status" name="status" <c:if test="${item.getStatus() == 1}">checked</c:if> onchange="toggleStatus(${item.getID()})"/>
+                                    <span class="slider round"></span>
+                                </label>
+                            </td>
+
+
+                            <td><a href="editSlider?id=${item.getID()}" class="btn btn-info btn-sm">Detail</a></td>                             
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+        <!-- Pagination -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <c:choose>
+                    <c:when test="${currentPage > 1}">
+                        <li>
+                            <a href="sliderManager?page=${currentPage - 1}&searchStatus=${param.searchStatus}&searchTitle=${param.searchTitle}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    </c:when>
+                </c:choose>
+
+                <c:forEach var="i" begin="1" end="${totalPages}">
+                    <c:choose>
+                        <c:when test="${i == currentPage}">
+                            <li class="active"><a href="#">${i}</a></li>
+                            </c:when>
+                            <c:otherwise>
+                            <li><a href="sliderManager?page=${i}&searchStatus=${param.searchStatus}&searchTitle=${param.searchTitle}">${i}</a></li>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+
+                <c:choose>
+                    <c:when test="${currentPage < totalPages}">
+                        <li>
+                            <a href="sliderManager?page=${currentPage + 1}&searchStatus=${param.searchStatus}&searchTitle=${param.searchTitle}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </c:when>
+                </c:choose>
+            </ul>
+        </nav>
+    </div>
+</section>
+<br/>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add New Slider</h4>
+            </div>
+            <div class="modal-body">
+                <img src="images/slider2.jpg" alt="Slider Image" class="img-responsive" id="avatarImage" width="200px">
+                <br>
+
+                <div class="row">
+                    <div class="col-sm-5"></div>
+                    <button type="button" class="btn btn-primary btn-sm col-sm-3" id="uploadButton">
+                        <i class="fa fa-upload"></i> Upload Image
+                    </button>
+                    <div class="col-sm-5"></div>
                 </div>
 
+                <input type="file" id="fileInput" style="display: none;" accept="image/*">
+
+                <form id="addSliderForm">
+                    <input type="hidden" id="thumbnail" name="image" />
+
+                    <div class="form-group">
+                        <label for="title">Title:</label>
+                        <input required type="text" class="form-control" id="title" name="title"  placeholder="Enter title">
+                    </div>
+                    <div class="form-group">
+                        <label for="subTitle">Sub Title:</label>
+                        <input required type="text" class="form-control" id="subTitle" name="subTitle"  placeholder="Enter sub title">
+                    </div>
+                    <div class="form-group">
+                        <label for="content">Content:</label>
+                        <textarea required class="form-control" id="content" name="content" rows="5" placeholder="Enter content"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="linkUrl">Link URL:</label>
+                        <input required type="text" class="form-control" id="linkUrl" name="linkUrl" placeholder="Enter link URL">
+                    </div>
+                </form>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="addSlider()">Add</button>
             </div>
         </div>
 
+    </div>
+</div>
 
-        <%@include file="/layout/footer.jsp"%>
 
-        <!-- side bar có thể thu nhỏ khi màn hình nhỏ  -->
-        <script src="js/script.js"></script>
-        <script>
-                            function toggleStatus(id) {
-                                $.ajax({
-                                    url: 'changeSliderStatus',
-                                    type: 'POST',
-                                    data: {id: id},
-                                    success: function (response) {
-                                        // Handle success response
-                                        alert('Status changed successfully' + id);
-                                    },
-                                    error: function (error) {
-                                        // Handle error response
-                                        alert('Failed to change status' + id);
-                                    }
-                                });
+<%@include file="/layout/footer.jsp"%>
+
+<!-- side bar có thể thu nhỏ khi màn hình nhỏ  -->
+<script src="js/script.js"></script>
+
+<script>
+                    document.getElementById('uploadButton').addEventListener('click', function () {
+                        document.getElementById('fileInput').click();
+                    });
+
+                    document.getElementById('fileInput').addEventListener('change', function () {
+                        var formData = new FormData();
+                        formData.append('file', this.files[0]);
+
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('POST', 'upload', true);
+                        xhr.onload = function () {
+                            if (xhr.status === 200) {
+                                var response = JSON.parse(xhr.responseText);
+                                var fileName = response.fileName;
+                                var avatarImage = document.getElementById('avatarImage');
+                                avatarImage.src = 'images/' + fileName; // Update the src of avatarImage
+                                console.log(fileName);
+
+                                // Update the hidden input value to save to database
+                                document.getElementById('thumbnail').value = 'images/' + fileName;
                             }
+                        };
+                        xhr.send(formData);
+                    });
+</script>
+<script>
+    function toggleStatus(id) {
+        $.ajax({
+            url: 'changeSlider',
+            type: 'POST',
+            data: {id: id},
+            success: function (response) {
+                toastr.success('Status changed successfully for ID ' + id);
+            },
+            error: function (error) {
+                toastr.error('Failed to change status for ID ' + id);
+            }
+        });
+    }
 
-                            function confirmDelete(id) {
-                                if (confirm('Are you sure you want to delete this slider?')) {
-                                    // Uncomment the next line to actually delete
-                                    // window.location.href = 'deleteSlider?id=' + id;
-                                }
-                            }
+    function confirmDelete(id) {
+        if (confirm('Are you sure you want to delete this slider?')) {
+            // Uncomment the next line to actually delete
+            // window.location.href = 'deleteSlider?id=' + id;
+        }
+    }
 
-                            $(document).ready(function () {
-                                $('.status-toggle').bootstrapToggle();
-                            });
+    $(document).ready(function () {
+        $('.status-toggle').bootstrapToggle();
+    });
 
 
-                            function addSlider() {
+    function addSlider() {
 
-                                var title = $('#title').val();
-                                var subTitle = $('#subTitle').val();
-                                var content = $('#content').val();
-                                var image = $('#image').val();
-                                var linkUrl = $('#linkUrl').val();
+        var title = $('#title').val();
+        var subTitle = $('#subTitle').val();
+        var content = $('#content').val();
+        var image = $('#thumbnail').val();
+        var linkUrl = $('#linkUrl').val();
 
-                                // Perform AJAX POST request to servlet
-                                $.ajax({
-                                    url: 'addSlider', // Đổi thành URL của servlet xử lý thêm slider
-                                    type: 'POST',
-                                    data: {
+        // Perform AJAX POST request to servlet
+        $.ajax({
+            url: 'addSlider', // Đổi thành URL của servlet xử lý thêm slider
+            type: 'POST',
+            data: {
 
-                                        title: title,
-                                        subTitle: subTitle,
-                                        content: content,
-                                        image: image,
-                                        linkUrl: linkUrl
-                                    },
-                                    success: function (response) {
-                                        // Handle success response
-                                        alert('Slider added successfully');
-                                        $('#myModal').modal('hide');  // Đóng modal sau khi thêm thành công
-                                        // Nạp lại danh sách slider hoặc làm gì đó để cập nhật giao diện
-                                    },
-                                    error: function (error) {
-                                        // Handle error response
-                                        alert('Failed to add slider');
-                                        console.error(error);
-                                    }
-                                });
-                            }
+                title: title,
+                subTitle: subTitle,
+                content: content,
+                image: image,
+                linkUrl: linkUrl
+            },
+            success: function (response) {
+                toastr.success('Slider added successfully');
+                $('#myModal').modal('hide');  // Close the modal after successful addition
+                // Reload the slider list or update the UI as needed
+            },
+            error: function (error) {
+                toastr.error('Failed to add slider');
+                console.error(error);
+            }
+        });
+    }
 
-        </script>
-    </body>
+</script>
+</body>
 </html>

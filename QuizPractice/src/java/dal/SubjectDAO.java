@@ -434,45 +434,85 @@ public class SubjectDAO extends DBContext {
         return 0;
     }
 
-    public List<MyRegisterDTO> getPaginationRegisterSubjectSearch(int userId, int page, int recordsPerPage, String searchName) {
+    public List<MyRegisterDTO> getPaginationRegisterSubjectAll(int userId, int page, int recordsPerPage, Integer dimensionId, String subjectName, String description) {
         List<MyRegisterDTO> lst = new ArrayList<>();
         int start = (page - 1) * recordsPerPage + 1;
         int end = start + recordsPerPage - 1;
 
         try {
-            String query = "WITH PagedResults AS (\n"
-                    + "    SELECT r.id,s.name AS subject_name, r.CreatedAt, p.name AS package_name, p.original_price, r.Status,\n"
-                    + "           ROW_NUMBER() OVER (ORDER BY r.CreatedAt) AS row_num\n"
-                    + "    FROM Subject_Register r \n"
-                    + "    LEFT JOIN subjects s ON r.SubjectId = s.id \n"
-                    + "\n"
-                    + "    LEFT JOIN package_price p ON p.id = r.PackageId\n"
-                    + "    WHERE r.UserId = ? and s.name like ?\n"
-                    + ")\n"
-                    + "SELECT * \n"
-                    + "FROM PagedResults\n"
-                    + "WHERE row_num BETWEEN ? AND ?\n"
-                    + "ORDER BY row_num;";
+            StringBuilder query = new StringBuilder("WITH PagedResults AS (")
+                    .append("    SELECT r.id, s.name AS subject_name, r.CreatedAt, p.name AS package_name, p.original_price, r.Status,")
+                    .append("           ROW_NUMBER() OVER (ORDER BY r.CreatedAt) AS row_num")
+                    .append("    FROM Subject_Register r")
+                    .append("    LEFT JOIN subjects s ON r.SubjectId = s.id")
+                    .append("    LEFT JOIN package_price p ON p.id = r.PackageId")
+                    .append("    WHERE r.UserId = ?");
 
-            ps = connection.prepareStatement(query);
-            ps.setInt(1, userId); // Thay đổi UserId tương ứng
-            ps.setString(2, "%" + searchName + "%");
-            ps.setInt(3, start);
-            ps.setInt(4, end);
+            if (dimensionId != null && dimensionId != -1) {
+                query.append(" AND s.dimensionId = ?");
+            }
+            if (subjectName != null && !subjectName.isEmpty()) {
+                query.append(" AND s.name LIKE ?");
+            }
+            if (description != null && !description.isEmpty()) {
+                query.append(" AND s.description LIKE ?");
+            }
+
+            query.append(")")
+                    .append("SELECT * ")
+                    .append("FROM PagedResults ")
+                    .append("WHERE row_num BETWEEN ? AND ? ")
+                    .append("ORDER BY row_num;");
+
+            ps = connection.prepareStatement(query.toString());
+            int paramIndex = 1;
+            System.out.println("User ID: " + userId);
+            ps.setInt(paramIndex++, userId);
+
+            if (dimensionId != null && dimensionId != -1) {
+                System.out.println("Dimension ID: " + dimensionId);
+                ps.setInt(paramIndex++, dimensionId);
+            }
+            if (subjectName != null && !subjectName.isEmpty()) {
+                System.out.println("Subject Name: " + subjectName);
+                ps.setString(paramIndex++, "%" + subjectName + "%");
+            }
+            if (description != null && !description.isEmpty()) {
+                System.out.println("Description: " + description);
+                ps.setString(paramIndex++, "%" + description + "%");
+            }
+
+            System.out.println("Start: " + start);
+            ps.setInt(paramIndex++, start);
+
+            System.out.println("End: " + end);
+            ps.setInt(paramIndex++, end);
+
             rs = ps.executeQuery();
-
             while (rs.next()) {
                 int id = rs.getInt(1);
-                String subjectName = rs.getString(2);
-                Date duration = rs.getDate(3);
+                String subjectNameResult = rs.getString(2);
+                Date createdAt = rs.getDate(3);
                 String packageName = rs.getString(4);
                 double originalPrice = rs.getDouble(5);
                 String status = rs.getString(6);
 
-                MyRegisterDTO p = new MyRegisterDTO(id, subjectName, duration, packageName, originalPrice, status);
-                lst.add(p);
+                MyRegisterDTO register = new MyRegisterDTO(id, subjectNameResult, createdAt, packageName, originalPrice, status);
+                lst.add(register);
             }
         } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (rs != null) try {
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if (ps != null) try {
+                ps.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return lst;
     }
@@ -518,22 +558,58 @@ public class SubjectDAO extends DBContext {
         return lst;
     }
 
-    public int getTotalRecords(int userId) {
-        String query = "SELECT COUNT(*) FROM Subject_Register WHERE UserId = ?";
+    public int getTotalRecords(int userId, Integer dimensionId, String subjectName, String description) {
+        StringBuilder query = new StringBuilder("SELECT COUNT(*) FROM Subject_Register r ")
+                .append("LEFT JOIN subjects s ON r.SubjectId = s.id ")
+                .append("WHERE r.UserId = ?");
+
+        if (dimensionId != null) {
+            query.append(" AND s.dimensionId = ?");
+        }
+        if (subjectName != null && !subjectName.isEmpty()) {
+            query.append(" AND s.name LIKE ?");
+        }
+        if (description != null && !description.isEmpty()) {
+            query.append(" AND s.description LIKE ?");
+        }
+
         try {
-            ps = connection.prepareStatement(query);
-            ps.setInt(1, userId);
+            ps = connection.prepareStatement(query.toString());
+            int paramIndex = 1;
+            ps.setInt(paramIndex++, userId);
+
+            if (dimensionId != null) {
+                ps.setInt(paramIndex++, dimensionId);
+            }
+            if (subjectName != null && !subjectName.isEmpty()) {
+                ps.setString(paramIndex++, "%" + subjectName + "%");
+            }
+            if (description != null && !description.isEmpty()) {
+                ps.setString(paramIndex++, "%" + description + "%");
+            }
+
             rs = ps.executeQuery();
 
-            while (rs.next()) {
-                int id = rs.getInt(1);
-                return id;
+            if (rs.next()) {
+                return rs.getInt(1);
             }
 
         } catch (SQLException e) {
             // Log the exception (if a logging framework is available)
             e.printStackTrace(); // Replace with logger in real application
+        } finally {
+            if (rs != null) try {
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if (ps != null) try {
+                ps.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+
         return 0;
     }
 

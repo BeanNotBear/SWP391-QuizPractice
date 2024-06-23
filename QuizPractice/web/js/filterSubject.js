@@ -1,6 +1,14 @@
 $("#filter").on('click', function () {
     const categories = $('#mutipleSelect').val().toString();
     const status = $('#status-search').val().toString();
+    if ((!categories || categories === "") && (!status || status === "")) {
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "You must select value before filter"
+        });
+        return;
+    }
     $.ajax({
         type: 'POST',
         url: "subjectManager",

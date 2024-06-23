@@ -39,7 +39,7 @@ public class LoginController extends HttpServlet {
         JSONObject jsonResponse = new JSONObject();
         boolean isSuccess = true;
         boolean isActive = true;
-
+        System.out.println("pass: " + password);
         // Encrypt the password using SHA-512
         password = Security.encryptToSHA512(password);
 

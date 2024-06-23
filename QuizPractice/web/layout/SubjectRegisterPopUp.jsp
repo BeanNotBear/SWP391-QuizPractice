@@ -80,124 +80,130 @@
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
             <script>
                 <c:if test="${sessionScope.user == null}">
-            function validatePhoneNumber(input) {
-                var phoneNumber = input.value.trim();
-                var errorElement = document.getElementById('phoneError');
-                const regex = /^(\+84|0)(1|2|3|4|5|6|7|8|9)\d{8}$/;
+                function validatePhoneNumber(input) {
+                    var phoneNumber = input.value.trim();
+                    var errorElement = document.getElementById('phoneError');
+                    const regex = /^(\+84|0)(1|2|3|4|5|6|7|8|9)\d{8}$/;
 
-                // Kiểm tra nếu không phải là số
-                if (!phoneNumber.match(regex)) {
-                    errorElement.textContent = 'Phone number should only contain digits (0-9).';
-                    input.setCustomValidity('Invalid input. Only digits allowed.');
-                } else {
-                    errorElement.textContent = '';
-                    input.setCustomValidity('');
-                }
-            }
-
-            function validateUserName(input) {
-                var userName = input.value.trim();
-                var errorElement = document.getElementById('userNameError');
-                const regex = /^[A-Za-z\s]+$/;
-                const multipleSpacesRegex = / {2,}/;
-
-                if (!userName.match(regex)) {
-                    errorElement.textContent = 'Username should contain only letters, spaces, and no special characters.';
-                    input.setCustomValidity('Invalid input. Only letters and single spaces allowed.');
-                } else if (multipleSpacesRegex.test(userName)) {
-                    errorElement.textContent = 'Username should not contain multiple consecutive spaces.';
-                    input.setCustomValidity('Invalid input. Multiple consecutive spaces are not allowed.');
-                } else {
-                    errorElement.textContent = '';
-                    input.setCustomValidity('');
-                }
-            }
-                </c:if>
-
-            $(document).ready(function () {
-                $("#userName").on('input', function () {
-                    validateUserName(this);
-                });
-
-                $("#email").on('input', function () {
-                    validateEmail(this);
-                });
-
-                function validateEmail(input) {
-                    var email = input.value.trim();
-                    var errorElement = document.getElementById('emailError');
-                    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-                    if (!email.match(regex)) {
-                        errorElement.textContent = 'Invalid email format.';
-                        input.setCustomValidity('Invalid email format.');
+                    // Kiểm tra nếu không phải là số
+                    if (!phoneNumber.match(regex)) {
+                        errorElement.textContent = 'Phone number should only contain digits (0-9).';
+                        input.setCustomValidity('Invalid input. Only digits allowed.');
                     } else {
                         errorElement.textContent = '';
                         input.setCustomValidity('');
                     }
                 }
 
-                $("#registerSubjectForm").submit(function (e) {
-                    e.preventDefault();
+                function validateUserName(input) {
+                    var userName = input.value.trim();
+                    var errorElement = document.getElementById('userNameError');
+                    const regex = /^[A-Za-z\s]+$/;
+                    const multipleSpacesRegex = / {2,}/;
 
-                    // Validate the entire form using HTML5 built-in validation
-                    if (this.checkValidity()) {
-                        var email = $("#email").val();
-                        // Check if email already exists
-                        $.ajax({
-                            type: 'POST',
-                            url: 'checkEmail',
-                            data: {email: email},
-                            success: function (data) {
-                                if (data.exists) {
-                                    Swal.fire({
-                                        title: "Email already exists!",
-                                        icon: "error"
-                                    });
-                                } else {
-                                    // Proceed with registration
-                                    $.ajax({
-                                        type: 'POST',
-                                        url: 'subjectRegister',
-                                        data: $("#registerSubjectForm").serialize(),
-                                        success: function (data) {
-                                            if (data.status === "success") {
+                    if (!userName.match(regex)) {
+                        errorElement.textContent = 'Username should contain only letters, spaces, and no special characters.';
+                        input.setCustomValidity('Invalid input. Only letters and single spaces allowed.');
+                    } else if (multipleSpacesRegex.test(userName)) {
+                        errorElement.textContent = 'Username should not contain multiple consecutive spaces.';
+                        input.setCustomValidity('Invalid input. Multiple consecutive spaces are not allowed.');
+                    } else {
+                        errorElement.textContent = '';
+                        input.setCustomValidity('');
+                    }
+                }
+                </c:if>
+
+                $(document).ready(function () {
+                    $("#userName").on('input', function () {
+                        validateUserName(this);
+                    });
+
+                    $("#email").on('input', function () {
+                        validateEmail(this);
+                    });
+
+                    function validateEmail(input) {
+                        var email = input.value.trim();
+                        var errorElement = document.getElementById('emailError');
+                        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+                        if (!email.match(regex)) {
+                            errorElement.textContent = 'Invalid email format.';
+                            input.setCustomValidity('Invalid email format.');
+                        } else {
+                            errorElement.textContent = '';
+                            input.setCustomValidity('');
+                        }
+                    }
+
+                    $("#registerSubjectForm").submit(function (e) {
+                        e.preventDefault();
+
+                        // Validate the entire form using HTML5 built-in validation
+                        if (this.checkValidity()) {
+                            var email = $("#email").val();
+                            // Check if email already exists
+                            $.ajax({
+                                type: 'POST',
+                                url: 'checkEmail',
+                                data: {email: email},
+                                success: function (data) {
+                                    if (data.exists) {
+                                        Swal.fire({
+                                            title: "Email already exists!",
+                                            icon: "error"
+                                        });
+                                    } else {
+                                        // Proceed with registration
+                                        $.ajax({
+                                            type: 'POST',
+                                            url: 'subjectRegister',
+                                            data: $("#registerSubjectForm").serialize(),
+                                            beforeSend: function () {
+                                                $("#loading").css('display', 'flex');
+                                            },
+                                            complete: function () {
+                                                $("#loading").css('display', 'none');
+                                            },
+                                            success: function (data) {
+                                                if (data.status === "success") {
+                                                    Swal.fire({
+                                                        title: data.message,
+                                                        icon: "success"
+                                                    }).then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            window.location.reload();
+                                                        }
+                                                    });
+                                                } else {
+                                                    Swal.fire({
+                                                        title: data.message,
+                                                        icon: "error"
+                                                    });
+                                                }
+                                            },
+                                            error: function (xhr, status, error) {
                                                 Swal.fire({
-                                                    title: data.message,
-                                                    icon: "success"
-                                                }).then((result) => {
-                                                    if (result.isConfirmed) {
-                                                        window.location.reload();
-                                                    }
-                                                });
-                                            } else {
-                                                Swal.fire({
-                                                    title: data.message,
+                                                    title: "An error occurred",
+                                                    text: xhr.responseText,
                                                     icon: "error"
                                                 });
                                             }
-                                        },
-                                        error: function (xhr, status, error) {
-                                            Swal.fire({
-                                                title: "An error occurred",
-                                                text: xhr.responseText,
-                                                icon: "error"
-                                            });
-                                        }
+                                        });
+                                    }
+                                },
+                                error: function (xhr, status, error) {
+                                    Swal.fire({
+                                        title: "An error occurred",
+                                        text: xhr.responseText,
+                                        icon: "error"
                                     });
                                 }
-                            },
-                            error: function (xhr, status, error) {
-                                Swal.fire({
-                                    title: "An error occurred",
-                                    text: xhr.responseText,
-                                    icon: "error"
-                                });
-                            }
-                        });
-                    }
+                            });
+                        }
+                    });
                 });
-            });
 
             </script>
         </div>

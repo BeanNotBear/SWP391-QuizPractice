@@ -28,7 +28,7 @@
         <%@include file="layout/profile.jsp" %>
         <!--change password pop-up-->
         <%@include file="layout/changePassword.jsp" %>
-
+        <%@include file="layout/loader.jsp" %>
         <section class="playlist-details">
             <c:set var="subject" value="${requestScope.subject}"/>
             <h1 class="heading">Subject details</h1>

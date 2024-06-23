@@ -82,6 +82,20 @@ public class LessonManagerController extends HttpServlet {
         request.setAttribute("searchName", name);
         request.setAttribute("searchType", type);
         request.setAttribute("searchStatus", status);
+        
+        // Get messages from session and set them as request attributes
+        String successMessage = (String) session.getAttribute("successMessage");
+        String errorMessage = (String) session.getAttribute("errorMessage");
+
+         if (successMessage != null) {
+            request.setAttribute("successMessage", successMessage);
+            session.removeAttribute("successMessage");
+        }
+
+        if (errorMessage != null) {
+            request.setAttribute("errorMessage", errorMessage);
+            session.removeAttribute("errorMessage");
+        }
 
 //        request.getRequestDispatcher("/lessonManager.jsp").forward(request, response);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/lessonManager.jsp");
@@ -106,18 +120,24 @@ public class LessonManagerController extends HttpServlet {
             User user = (User) session.getAttribute("user");
             lessonDAO.insertLesson(name, content, media, lessonIndex, type, user.getUserId());
             int lessonId = lessonDAO.getIdAddCurrent();
-            lessonDAO.insertSubjectLesson(subjectId, lessonId);
-            
+            boolean s = lessonDAO.insertSubjectLesson(subjectId, lessonId);
+
             request.setAttribute("subjectId", subjectId);
-            String path = "lessonManager?subjectId="+subjectId;
+
+            if (s) {
+                session.setAttribute("successMessage", "Lesson add successfully.");
+            } else {
+                session.setAttribute("errorMessage", "Failed to add the lesson.");
+            }
+
+            String path = "lessonManager?subjectId=" + subjectId;
             response.sendRedirect(path);
 //        request.getRequestDispatcher("/lessonManager.jsp").forward(request, response);
-           
-           // request.getRequestDispatcher(path).forward(request, response);
 
+            // request.getRequestDispatcher(path).forward(request, response);
             // Logic to add the new lesson
             // Redirect or forward after adding the lesson
-        }else if("editForm".equals(formType)){
+        } else if ("editForm".equals(formType)) {
             // Handle the form submission for adding a new lesson
             String name = request.getParameter("name");
             String content = request.getParameter("content");
@@ -126,27 +146,40 @@ public class LessonManagerController extends HttpServlet {
             int subjectId = Integer.parseInt(request.getParameter("subjectId"));
             String type = request.getParameter("type");
             int id = Integer.parseInt(request.getParameter("id"));
-             
+
             LessonDAO lessonDAO = LessonDAO.getInstance();
             HttpSession session = request.getSession();
             User user = (User) session.getAttribute("user");
-            
-            lessonDAO.updateLesson(name, content, media, lessonIndex, type, id);
-            
-            
+
+            boolean s = lessonDAO.updateLesson(name, content, media, lessonIndex, type, id);
+
             request.setAttribute("subjectId", subjectId);
-            String path = "lessonManager?subjectId="+subjectId;
+           
+            if (s) {
+                session.setAttribute("successMessage", "Lesson edited successfully.");
+            } else {
+                session.setAttribute("errorMessage", "Failed to edit the Lesson.");
+            }
+
+            String path = "lessonManager?subjectId=" + subjectId;
             response.sendRedirect(path);
 
         } else if ("toggleStatus".equals(formType)) {
             int lessonId = Integer.parseInt(request.getParameter("id"));
             int status = Integer.parseInt(request.getParameter("status"));
             int subjectId = Integer.parseInt(request.getParameter("subjectId"));
-            
+
             LessonDAO lessonDAO = LessonDAO.getInstance();
-            lessonDAO.updateStatus(status, lessonId);
+            boolean s = lessonDAO.updateStatus(status, lessonId);
             request.setAttribute("subjectId", subjectId);
-            String path = "lessonManager?subjectId="+subjectId;
+            HttpSession session = request.getSession();
+             if (s) {
+                session.setAttribute("successMessage", "Lesson edited successfully.");
+            } else {
+                session.setAttribute("errorMessage", "Failed to edit the Lesson.");
+            }
+            
+            String path = "lessonManager?subjectId=" + subjectId;
             response.sendRedirect(path);
         }
     }

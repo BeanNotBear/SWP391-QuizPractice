@@ -33,7 +33,6 @@
                 text-align: center;
             }
             .side-bar {
-                padding-top: 6%;
                 z-index: 1; /* Giá trị z-index thấp hơn để bị đè */
             }
             nav{

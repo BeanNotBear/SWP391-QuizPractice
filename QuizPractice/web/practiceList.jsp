@@ -26,6 +26,14 @@
                 padding: 0;
                 margin: 0;
             }
+            .footer {
+                background: #f8f9fa;
+                text-align: center;
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                height: 15%;
+            }
             #topTable {
                 margin-bottom: 0.5%;
             }
@@ -36,12 +44,12 @@
                 margin-top: -25px;
             }
         </style>
-        
-        
+
+
         <!-- JavaScript to submit form on combobox change -->
         <script>
-            $(document).ready(function() {
-                $('#subjectSelect').change(function() {
+            $(document).ready(function () {
+                $('#subjectSelect').change(function () {
                     $('#subjectForm').submit();
                 });
             });
@@ -70,7 +78,7 @@
                     </div>
                     <div class="col-md-5"></div>
                     <div class="col-md-2">
-                        <a href="newPractice" class="btn btn-primary">New Practice</a>
+                        <a href="/QuizPractice/newPractice" class="btn btn-primary">New Practice</a>
                     </div>
                     <div class="col-md-2">
                         <button class="btn btn-primary">Simulation Exam</button>
@@ -124,7 +132,7 @@
                                     <li class="active"><a href="#">${i}</a></li>
                                     </c:when>
                                     <c:otherwise>
-                                    <li><a href="praticeList?page=${i}">${i}</a></li>
+                                    <li><a href="practiceList?page=${i}">${i}</a></li>
                                     </c:otherwise>
                                 </c:choose>
                             </c:forEach>
@@ -132,7 +140,7 @@
                         <c:choose>
                             <c:when test="${currentPage < totalPages}">
                                 <li>
-                                    <a href="praticeList?page=${currentPage + 1}" aria-label="Next">
+                                    <a href="practiceList?page=${currentPage + 1}" aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>
                                     </a>
                                 </li>

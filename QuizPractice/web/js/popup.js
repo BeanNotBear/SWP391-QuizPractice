@@ -59,7 +59,7 @@ function openPopUp3() {
 $("#login-form").submit(function (e) {
     e.preventDefault();
     const  email = $("#email").val();
-    const  password = $(":password").val();
+    const  password = $("#passowrd").val();
     const  formData = {
         email: email,
         password: password

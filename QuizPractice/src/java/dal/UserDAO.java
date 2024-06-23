@@ -355,4 +355,22 @@ public class UserDAO extends DBContext {
         
         return experts;
     }
+    
+    public int getLastUserId() {
+        String query = "SELECT @@IDENTITY AS LastInsertedId";
+        try {
+            ps = connection.prepareStatement(query);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                return id;
+            }
+
+        } catch (SQLException e) {
+            // Log the exception (if a logging framework is available)
+            e.printStackTrace(); // Replace with logger in real application
+        }
+        return 0;
+    }
 }

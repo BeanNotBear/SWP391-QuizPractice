@@ -4,7 +4,7 @@ function validateSubjectName() {
     const subjectName = nameInput.value;
 
     // Regular expression to allow only letters and spaces (minimum 3 characters, maximum 50 characters)
-    const regex = /^[A-Za-z0-9\s]{3,50}$/;
+    const regex = /^[A-Za-z0-9\s!@#\$%\^\&*\)\(+=._-]{3,50}$/;
 
     if (regex.test(subjectName.trim())) {
         errorMessage.style.display = 'none';

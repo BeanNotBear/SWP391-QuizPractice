@@ -18,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import util.mail.Mail;
 import util.security.CodeVerify;
+import util.security.Security;
 
 @WebServlet(name = "SubjectRegisterController", urlPatterns = {"/subjectRegister", "/checkEmail"})
 public class SubjectRegisterController extends HttpServlet {
@@ -64,7 +65,7 @@ public class SubjectRegisterController extends HttpServlet {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
         JSONObject jsonResponse = new JSONObject();
-        UserDAO userDAO = UserDAO.getInstance();
+        
         try {
             SubjectDAO subjectDAO = SubjectDAO.getInstance();
             int pricePackageId = Integer.parseInt(request.getParameter("pricePackageId"));
@@ -79,10 +80,20 @@ public class SubjectRegisterController extends HttpServlet {
             } else {
                 // If not logged in, create new user and then add to database
                 String userName = request.getParameter("userName");
-                String email = request.getParameter("email");
-                String phoneNumber = request.getParameter("phoneNumber");
-                String gender = request.getParameter("gender");
+            String email = request.getParameter("email");
+            String phoneNumber = request.getParameter("phoneNumber");
+            String gender = request.getParameter("gender");
+            String password = "123";//default
+            String token = CodeVerify.generateVerificationCode();
+            password = Security.encryptToSHA512(password);
 
+            User user2 = new User();
+            user2.setFullName(userName);
+            user2.setEmail(email);
+            user2.setPhoneNumber(phoneNumber);
+            user2.setGender(Boolean.parseBoolean(gender));
+            user2.setPassword(password);
+            user2.setToken(token);
                 // Check if email already exists
                 boolean emailExists = subjectDAO.checkEmailExists(email);
                 if (emailExists) {
@@ -92,14 +103,13 @@ public class SubjectRegisterController extends HttpServlet {
                     out.flush();
                     return;
                 }
-
-                // Generate a verification token
-                String token = CodeVerify.generateVerificationCode();
-                // Add new user with the token
-                subjectDAO.addNewUser(userName, email, phoneNumber, gender, token);
+             
+                //subjectDAO.addNewUser(userName, email,phoneNumber ,password, gender, token);
+                UserDAO userDAO = UserDAO.getInstance();
+                userDAO.insert(user2);
 
                 // Get the generated userId
-                int userId = subjectDAO.getLastUserId();
+                int userId = userDAO.getLastUserId();
                 subjectDAO.addNewSubjectRegister(subjectId, userId, pricePackageId);
 
                 // Construct the activation link
@@ -111,7 +121,8 @@ public class SubjectRegisterController extends HttpServlet {
                 // Send verification email
                 Mail.sendMailVerify(email, token, activeLink);
                 jsonResponse.put("status", "success");
-                jsonResponse.put("message", "Register successful - Please check your email to verify your account.");
+                jsonResponse.put("message", "Register successful - Please check your email to verify your account."
+                        + "/n Check your email and login with password : 123");
             }
         } catch (Exception ex) {
             try {

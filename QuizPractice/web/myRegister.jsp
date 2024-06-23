@@ -12,22 +12,11 @@
         <!-- custom css file link  -->
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/popup.css">
-        <link rel="stylesheet" href="css/myRegister.css">
         <!-- Bootstrap file link  -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <style>
-            .footer {
-                background: #f8f9fa;
-                text-align: center;
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-                height: 15%;
-                padding-right: 12%;
-                padding-top: -110px;
-            }
         </style>
     </head>
     <body>
@@ -35,7 +24,7 @@
         <%@ include file="/layout/searchMyRegister.jsp" %>
 
         <section class="my-register">
-            <h1 class="heading text-center">Khóa học đã đăng ký</h1>
+            <h1 class="heading text-center">Subject registered</h1>
             <div class="container">
                 <table class="table table-bordered table-hover">
                     <thead>
@@ -74,7 +63,7 @@
                         <c:choose>
                             <c:when test="${currentPage > 1}">
                                 <li>
-                                    <a href="myRegister?page=${currentPage - 1}" aria-label="Previous">
+                                    <a href="myRegister?page=${currentPage - 1}&searchName=${searchName}&searchContent=${searchContent}&searchDimensionId=${searchDimensionId}" aria-label="Previous">
                                         <span aria-hidden="true">&laquo;</span>
                                     </a>
                                 </li>
@@ -87,7 +76,7 @@
                                     <li class="active"><a href="#">${i}</a></li>
                                     </c:when>
                                     <c:otherwise>
-                                    <li><a href="myRegister?page=${i}">${i}</a></li>
+                                    <li><a href="myRegister?page=${i}&searchName=${searchName}&searchContent=${searchContent}&searchDimensionId=${searchDimensionId}">${i}</a></li>
                                     </c:otherwise>
                                 </c:choose>
                             </c:forEach>
@@ -95,7 +84,7 @@
                         <c:choose>
                             <c:when test="${currentPage < totalPages}">
                                 <li>
-                                    <a href="myRegister?page=${currentPage + 1}" aria-label="Next">
+                                    <a href="myRegister?page=${currentPage + 1}&searchName=${searchName}&searchContent=${searchContent}&searchDimensionId=${searchDimensionId}" aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>
                                     </a>
                                 </li>
@@ -118,7 +107,7 @@
                                                         type: "GET",
                                                         url: "deleteRegister?id=" + id,
                                                         success: function (data) {
-                                                            window.location.href = "myRegister?page=${currentPage}";
+                                                            window.location.href = "myRegister?page=${currentPage}&searchName=${searchName}&searchContent=${searchContent}&searchDimensionId=${searchDimensionId}";
                                                         },
                                                         error: function (xhr, status, error) {
                                                             console.error(xhr.responseText);

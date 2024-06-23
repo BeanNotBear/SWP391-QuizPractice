@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import model.User;
 
-@WebServlet(name="PracticeListController", urlPatterns={"/praticeList"})
+@WebServlet(name="PracticeListController", urlPatterns={"/practiceList"})
 public class PracticeListController extends HttpServlet {
     private int page = 1;
     @Override
