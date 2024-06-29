@@ -24,51 +24,37 @@
 
         <!-- Custom CSS to make the footer fixed -->
         <style>
-            body {
-                padding: 0;
+            html, body {
+                height: 100%;
                 margin: 0;
+                display: flex;
+                flex-direction: column;
             }
             .footer {
-                background: #f8f9fa;
+                width: 100%;
+                background-color: var(--white);
+                color: var(--main-color);
+                padding: 10px;
                 text-align: center;
-                padding: 0;
+                font-family: Arial, sans-serif;
+                border-top: 1px solid;
+            }
+            div.mce-fullscreen {
                 position: fixed;
-                bottom: 0;
-                width: 100%;
-                height: 20%;
+                top: 0;
+                left: 0;
+                margin-top: 70.96px;
             }
-            .subjectDetailExpert {
-                margin-bottom: 100px;
-            }
-            nav {
-                margin-top: -25px;
-            }
-
-            img {
-                width: 100%;
-            }
-            button {
-                width: 20%;
-            }
-
-            #lessonManager, #addDimensionButton {
-                padding-top: 20px;
-                text-decoration: underline;
-            }
-
-            #tabBar {
-
-            }
-
-            #home {
-                margin-top: 5%;
-                margin-bottom: 13%;
+            .custom-btn {
+                width: 83.64px !important;
             }
         </style>
+        <link rel="stylesheet" href="css/virtual-select.min.css"/>
     </head>
 
     <body>
         <%@include file="/layout/header.jsp"%>
+        <%@include file="layout/sidebar.jsp" %>
 
         <section class="subjectDetailExpert">
             <h1 class="heading col-md-3">Subject Details              
@@ -80,16 +66,20 @@
 
                 <ul class="nav nav-tabs">
                     <li class="active"><a data-toggle="tab" href="#home">Overview</a></li>
-                    <li><a data-toggle="tab" href="#menu1">Dimension</a></li>
-                    <li><a data-toggle="tab" href="#menu2">Price Package</a></li>
+                    <li><a data-toggle="tab" href="#menu1">Lesson (${requestScope.noOfLessons})</a></li>
+                    <li><a data-toggle="tab" href="#menu2">Price Package (${requestScope.noOfPackage})</a></li>
+                    <li><a data-toggle="tab" href="#menu3">Assign Expert</a></li>
+                    <li><a data-toggle="tab" href="#menu4">Student (${requestScope.noOfStudents})</a></li>
                 </ul>
 
                 <div class="tab-content">
                     <div id="home" class="tab-pane fade in active">
+                        <h3>Overview</h3>
                         <div class="container">
                             <div class="row">
-                                <div class="col-md-2"></div>
+                                <!--                                <div class="col-md-2"></div>-->
                                 <div class="col-md-3">
+
                                     <img src="${subject.img}" alt="Ảnh Subject" class="img-responsive" id="avatarImage">
                                     <br>
                                     <button type="button" class="btn btn-primary btn-sm" id="uploadButton">
@@ -110,8 +100,7 @@
 
                                         <div class="form-group">
                                             <label for="category">Category:</label>
-                                            <select id="dimension" name="dimensionId" class="form-control">
-                                                <option value="" disabled selected>Select dimension</option>
+                                            <select id="categorySelect" name="dimensionId" placeholder="Select Category" data-search="true" data-silent-initial-value-set="true">
                                                 <c:forEach var="dimension" items="${dimensions}">
                                                     <option value="${dimension.id}" <c:if test="${dimension.id == subject.dimensionId}">selected</c:if>>${dimension.name}</option>
                                                 </c:forEach>
@@ -119,8 +108,23 @@
                                         </div>
 
                                         <div class="form-group">
+                                            <label>Owner(Expert):</label>
+                                            <br>
+                                            <div id="expertProfile" class="form-group row">
+                                                <img class="col-md-3" src="${requestScope.owner.img}" alt="alt"/>
+                                                <div class="col-md-6">
+                                                    <div>Full Name: ${requestScope.owner.name}</div>
+                                                    <div>Gender: ${requestScope.owner.gender == 1 ? "Male" : "Female"}</div>
+                                                    <div>Email: ${requestScope.owner.email}</div>
+                                                    <div>Phone Number: ${requestScope.owner.phoneNumber}</div>
+                                                    <div>Joined Date: ${requestScope.owner.date}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
                                             <label for="description">Description: </label>
-                                            <textarea id="description" name="description" class="form-control" rows="5" placeholder="Enter description">${subject.description}</textarea>
+                                            <textarea id="description" name="description" class="form-control textEditor" rows="5" placeholder="Enter description">${subject.description}</textarea>
                                         </div>
 
                                         <button type="submit" class="btn btn-primary btn-sm col-md-2">Save</button>
@@ -133,28 +137,32 @@
                     </div>
 
                     <div id="menu1" class="tab-pane fade">
-                        <h3 class="col-md-3">Dimension</h3>
+                        <h3 class="col-md-3">Lesson</h3>
                         <div class="col-md-6"></div>
-                        <a class="col-md-3" id="addDimensionButton">Add Dimension</a>
+                        <c:if test="${sessionScope.user.roleId == 3}">
+                            <a class="col-md-3" id="addDimensionButton">Add Lesson</a>
+                        </c:if>
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>DimensionId</th>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Lesson Index</th>
                                     <th>Type</th>
-                                    <th>DimensionName</th>
-                                    <th>Actions</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <c:forEach var="dimension" items="${dimensionList}">
+                                <c:forEach var="lesson" items="${lessons}">
                                     <tr>
-                                        <td>${dimension.getDimensionId()}</td>
-                                        <td>${dimension.getType()}</td>
-                                        <td>${dimension.getDimensionName()}</td>
+                                        <td>${lesson.id}</td>
+                                        <td>${lesson.name}</td>
+                                        <td>${lesson.lessonIndex}</td>
+                                        <td>${lesson.type}</td>
                                         <td>
-                                            <button type="button" class="btn btn-primary btn-sm col-md-2" onclick="editDimension(${dimension.getDimensionId()})">Edit</button>
                                             <div class="col-md-1"></div>
-                                            <button type="button" class="btn btn-danger btn-sm col-md-2" onclick="confirmDelete(${dimension.getDimensionId()})">Delete</button>                                        </td>
+                                            <button type="button" class="btn btn-sm btn-success col-md-2 custom-btn">Detail</button>
+                                        </td>
                                     </tr>
                                 </c:forEach>
                             </tbody>
@@ -200,13 +208,91 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <div id="menu3" class="tab-pane fade">
+                        <h3 class="col-md-3">Expert</h3>
+                        <div class="col-md-6"></div>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>PackageName</th>
+                                    <th>Duration</th>
+                                    <th>Price</th>
+                                    <th>Sale Price</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach var="mypackage" items="${packageList}">
+                                    <tr>
+                                        <td>${mypackage.getId()}</td>
+                                        <td>${mypackage.getPackageName()}</td>
+                                        <td>${mypackage.getDuration()}</td>   
+                                        <td>${mypackage.getPrice()}</td>
+                                        <td>${mypackage.getSalePrice()}</td>
+                                        <td>${mypackage.getStatus()}</td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${mypackage.getStatus() eq 'active'}">
+                                                    <a href="#" class="btn btn-warning btn-sm" onclick="changeStatus(${mypackage.getId()}, 'inactive',${subject.id})">Inactive</a>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <a href="#" class="btn btn-success btn-sm" onclick="changeStatus(${mypackage.getId()}, 'active',${subject.id})">Active</a>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="menu4" class="tab-pane fade">
+                        <h3 class="col-md-3">Package Price</h3>
+                        <div class="col-md-6"></div>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>PackageName</th>
+                                    <th>Duration</th>
+                                    <th>Price</th>
+                                    <th>Sale Price</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach var="mypackage" items="${packageList}">
+                                    <tr>
+                                        <td>${mypackage.getId()}</td>
+                                        <td>${mypackage.getPackageName()}</td>
+                                        <td>${mypackage.getDuration()}</td>   
+                                        <td>${mypackage.getPrice()}</td>
+                                        <td>${mypackage.getSalePrice()}</td>
+                                        <td>${mypackage.getStatus()}</td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${mypackage.getStatus() eq 'active'}">
+                                                    <a href="#" class="btn btn-warning btn-sm" onclick="changeStatus(${mypackage.getId()}, 'inactive',${subject.id})">Inactive</a>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <a href="#" class="btn btn-success btn-sm" onclick="changeStatus(${mypackage.getId()}, 'active',${subject.id})">Active</a>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </section>
         <br/>
-
         <%@include file="/layout/footer.jsp" %>
-
         <!-- Edit Dimension Modal -->
         <div id="editDimensionModal" class="modal fade" role="dialog">
             <div class="modal-dialog">
@@ -437,7 +523,16 @@
                 }
             }
         </script>
+        <script src="https://cdn.jsdelivr.net/npm/@tinymce/tinymce-webcomponent@2/dist/tinymce-webcomponent.min.js"></script>
         <!-- side bar có thể thu nhỏ khi màn hình nhỏ  -->
         <script src="js/script.js"></script>
+        <script src="js/virtual-select.min.js"></script>
+        <script src="js/tinymce/tinymce.min.js"></script>
+        <script src="js/textEditor.js"></script>
+        <script>
+            VirtualSelect.init({
+                ele: '#categorySelect'
+            });
+        </script> 
     </body>
 </html>

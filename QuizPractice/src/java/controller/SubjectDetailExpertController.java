@@ -1,7 +1,12 @@
 package controller;
 
+import dal.LessonDAO;
+import dal.PricePackageDAO;
 import dal.SubjectDAO;
+import dal.UserDAO;
 import dto.DimensionDTO;
+import dto.LessonSubjectDTO;
+import dto.OwnerDTO;
 import dto.SubjectPackagePriceDTO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -40,13 +45,32 @@ public class SubjectDetailExpertController extends HttpServlet {
         dimensionList = subjectDAO.getListDimension();
         request.setAttribute("dimensionList", dimensionList);
         
+        List<LessonSubjectDTO> lessons = new ArrayList<>();
+        lessons = LessonDAO.getInstance().getLessonsBySubjectId(id, 1, 10);
+        request.setAttribute("lessons", lessons);
+        
         Subject subject = subjectDAO.getSubjectById(id);
         request.setAttribute("subject", subject);
         
+        OwnerDTO ownerDTO = new OwnerDTO();
+        ownerDTO = UserDAO.getInstance().getOnwerBySubjectId(id);
+        request.setAttribute("owner", ownerDTO);
         
         List<SubjectPackagePriceDTO> packageList = new ArrayList<>();
         packageList = subjectDAO.getListSubjectPackagePriceDTO(id);
-         request.setAttribute("packageList", packageList);
+        request.setAttribute("packageList", packageList);
+        
+        int numberOfPackagePrice = 0;
+        numberOfPackagePrice = PricePackageDAO.getInstance().getNumberOfPricePackagesBySubjectId(id);
+        request.setAttribute("noOfPackage", numberOfPackagePrice);
+        
+        int numberOfLesson = 0;
+        numberOfLesson = LessonDAO.getInstance().getNumberOfLessonsBySubjectId(id);
+        request.setAttribute("noOfLessons", numberOfLesson);
+        
+        int numberOfStudent = 0;
+        numberOfStudent = UserDAO.getInstance().getNumberOfStudentsBySubjectId(id);
+        request.setAttribute("noOfStudents", numberOfStudent);
         
         request.getRequestDispatcher("subjectDetailExpert.jsp").forward(request, response);
     }

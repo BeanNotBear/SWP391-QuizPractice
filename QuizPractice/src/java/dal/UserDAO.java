@@ -2,6 +2,7 @@ package dal;
 
 import context.DBContext;
 import dto.ExpertDTO;
+import dto.OwnerDTO;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -352,10 +353,10 @@ public class UserDAO extends DBContext {
             }
         } catch (Exception e) {
         }
-        
+
         return experts;
     }
-    
+
     public int getLastUserId() {
         String query = "SELECT @@IDENTITY AS LastInsertedId";
         try {
@@ -372,5 +373,51 @@ public class UserDAO extends DBContext {
             e.printStackTrace(); // Replace with logger in real application
         }
         return 0;
+    }
+
+    public int getNumberOfStudentsBySubjectId(int subjectId) {
+        String query = "SELECT COUNT(UserId)\n"
+                + "FROM [SWP391_G6].[dbo].[Subject_Register]\n"
+                + "WHERE SubjectId = ?";
+        int numberOfStudents = 0;
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, subjectId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                numberOfStudents = rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return numberOfStudents;
+    }
+
+    public OwnerDTO getOnwerBySubjectId(int subjectId) {
+        String query = "SELECT u.[full_name]\n"
+                + "      ,u.[email]\n"
+                + "      ,u.[phone_number]\n"
+                + "      ,u.[gender]\n"
+                + "      ,u.[profile_img]\n"
+                + "      ,u.[created_at]\n"
+                + "FROM [SWP391_G6].[dbo].[users] AS u\n"
+                + "INNER JOIN subjects AS s ON s.creator_id = u.id\n"
+                + "WHERE s.id = ?";
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, subjectId);
+            rs = ps.executeQuery();
+            if(rs.next()) {
+                return new OwnerDTO(rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3), 
+                        rs.getString(5),
+                        rs.getInt(4),
+                        rs.getDate(6));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

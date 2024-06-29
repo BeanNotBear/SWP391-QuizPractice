@@ -1,6 +1,7 @@
 package dal;
 
 import context.DBContext;
+import dto.LessonSubjectDTO;
 import java.sql.SQLException;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -218,14 +219,14 @@ public class LessonDAO extends DBContext {
         }
         return updated;
     }
-    
+
     public boolean updateStatus(int status, int lessonId) {
         boolean updated = false;
         String query = "update lessons set status = ? where id = ?";
         try {
             ps = connection.prepareStatement(query);
             ps.setInt(1, status);
-            ps.setInt(2,lessonId);
+            ps.setInt(2, lessonId);
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
@@ -236,9 +237,8 @@ public class LessonDAO extends DBContext {
         }
         return updated;
     }
-    
-    
-     public int getUserIdBySubjectId(int subjectId) {
+
+    public int getUserIdBySubjectId(int subjectId) {
         String sql = "select creator_id from subjects where id = ?";
 
         try {
@@ -254,8 +254,8 @@ public class LessonDAO extends DBContext {
 
         return 0; // Default return value if no count retrieved
     }
-    
-     public Lesson getLessonById(int lessonId) {
+
+    public Lesson getLessonById(int lessonId) {
         String sql = "select * from lessons where id=?";
 
         try {
@@ -274,16 +274,71 @@ public class LessonDAO extends DBContext {
                 int lessonIndex = rs.getInt(9);
                 String Type = rs.getString(10);
                 Lesson lesson = new Lesson(id, name, creator_id, update_at, created_at, status, content, media, lessonIndex, Type);
-                
+
                 return lesson;
             }
         } catch (SQLException ex) {
-            ex.printStackTrace(); 
+            ex.printStackTrace();
         }
 
-        return null; 
-     }
-    
+        return null;
+    }
+
+    public List<LessonSubjectDTO> getLessonsBySubjectId(int subjectId, int page, int recordsPerPage) {
+        int start = (page - 1) * recordsPerPage + 1;
+        int end = start + recordsPerPage - 1;
+        List<LessonSubjectDTO> lessons = new ArrayList<>();
+        StringBuilder query = new StringBuilder();
+        query.append("WITH PageResult AS (");
+        query.append("  SELECT l.[id], ");
+        query.append("         l.[name], ");
+        query.append("         l.[content], ");
+        query.append("         l.[LessonIndex], ");
+        query.append("         l.[Type], ");
+        query.append("         ROW_NUMBER() OVER (ORDER BY l.[id]) AS row_num ");
+        query.append("  FROM [SWP391_G6].[dbo].[lessons] AS l ");
+        query.append("  INNER JOIN [dbo].[subject_has_lesson] AS sl ON sl.lesson_id = l.id ");
+        query.append("  INNER JOIN [dbo].[subjects] AS s ON s.id = sl.subject_id ");
+        query.append("  WHERE sl.subject_id = ? ");
+        query.append(") ");
+        query.append("SELECT * FROM PageResult ");
+        query.append("WHERE row_num BETWEEN ? AND ?;");
+        try {
+            ps = connection.prepareStatement(query.toString());
+            ps.setInt(1, subjectId);
+            ps.setInt(2, start);
+            ps.setInt(3, end);
+            rs = ps.executeQuery();
+            while (rs.next()) {                
+                lessons.add(new LessonSubjectDTO(rs.getInt(1), 
+                        rs.getString(2), 
+                        rs.getString(3), 
+                        rs.getInt(4), 
+                        rs.getString(5)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return lessons;
+    }
+
+    public int getNumberOfLessonsBySubjectId(int subjectId) {
+        String query = "SELECT COUNT(lesson_id) AS NumberOfLessons\n"
+                + "FROM [SWP391_G6].[dbo].[subject_has_lesson]\n"
+                + "WHERE subject_id = ?";
+        int numberOfLessons = 0;
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, subjectId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                numberOfLessons = rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return numberOfLessons;
+    }
 
     public static void main(String[] args) {
         LessonDAO lessonDAO = new LessonDAO();
