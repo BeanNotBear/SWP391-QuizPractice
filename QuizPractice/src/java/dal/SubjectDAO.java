@@ -1110,15 +1110,15 @@ public class SubjectDAO extends DBContext {
         if (roleId == 3) {
             query.append("	AND creator_id = " + userId + "\n");
         }
-        if(search != null) {
-            String condition = "%"+search+"%";
+        if (search != null) {
+            String condition = "%" + search + "%";
             query.append("      AND s.name LIKE '" + condition + "'\n");
         }
-        if(categories != null) {
+        if (categories != null) {
             String condition = "(" + categories + ")\n";
             query.append("      AND d.dimensionId IN " + condition);
         }
-        if(statuses != null) {
+        if (statuses != null) {
             String condition = "(" + statuses + ")\n";
             query.append("      AND s.status IN " + condition);
         }
@@ -1171,27 +1171,44 @@ public class SubjectDAO extends DBContext {
         if (roleId == 3) {
             query.append("AND s.creator_id = " + userId + "\n");
         }
-        if(search != null) {
-            String condition = "%"+search+"%";
+        if (search != null) {
+            String condition = "%" + search + "%";
             query.append("AND s.name LIKE '" + condition + "'\n");
         }
-        if(categories != null) {
+        if (categories != null) {
             String condition = "(" + categories + ")\n";
             query.append("      AND d.dimensionId IN " + condition);
         }
-        if(statuses != null) {
+        if (statuses != null) {
             String condition = "(" + statuses + ")\n";
             query.append("      AND s.status IN " + condition);
         }
         try {
             ps = connection.prepareStatement(query.toString());
             rs = ps.executeQuery();
-            if(rs.next()) {
+            if (rs.next()) {
                 return rs.getInt(1);
             }
         } catch (Exception e) {
         }
         return 0;
+    }
+
+    public boolean assignExpertForSubject(int subjectId, int expertId) {
+        boolean isSuccess = false;
+        String query = "UPDATE [dbo].[subjects]\n"
+                + "SET [creator_id] = ?\n"
+                + "WHERE [id] = ?";
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, expertId);
+            ps.setInt(2, subjectId);
+            ps.executeUpdate();
+            isSuccess = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return isSuccess;
     }
 
     public static void main(String[] args) {

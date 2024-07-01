@@ -2,6 +2,7 @@ package dal;
 
 import context.DBContext;
 import dto.LessonSubjectDTO;
+import dto.OwnerDTO;
 import java.sql.SQLException;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -295,7 +296,7 @@ public class LessonDAO extends DBContext {
         query.append("         l.[content], ");
         query.append("         l.[LessonIndex], ");
         query.append("         l.[Type], ");
-        query.append("         ROW_NUMBER() OVER (ORDER BY l.[id]) AS row_num ");
+        query.append("         ROW_NUMBER() OVER (ORDER BY l.[LessonIndex]) AS row_num ");
         query.append("  FROM [SWP391_G6].[dbo].[lessons] AS l ");
         query.append("  INNER JOIN [dbo].[subject_has_lesson] AS sl ON sl.lesson_id = l.id ");
         query.append("  INNER JOIN [dbo].[subjects] AS s ON s.id = sl.subject_id ");
@@ -309,11 +310,11 @@ public class LessonDAO extends DBContext {
             ps.setInt(2, start);
             ps.setInt(3, end);
             rs = ps.executeQuery();
-            while (rs.next()) {                
-                lessons.add(new LessonSubjectDTO(rs.getInt(1), 
-                        rs.getString(2), 
-                        rs.getString(3), 
-                        rs.getInt(4), 
+            while (rs.next()) {
+                lessons.add(new LessonSubjectDTO(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getInt(4),
                         rs.getString(5)));
             }
         } catch (Exception e) {

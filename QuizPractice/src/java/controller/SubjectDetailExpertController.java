@@ -28,53 +28,57 @@ public class SubjectDetailExpertController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String tempId = request.getParameter("id");
+        HttpSession session = request.getSession();
         int id = 0;
-        if(tempId != null){
+        if (tempId != null) {
             id = Integer.parseInt(tempId);
+        } else {
+            request.getRequestDispatcher("error.jsp").forward(request, response);
         }
-        else{
-           request.getRequestDispatcher("error.jsp").forward(request, response);
-        }
-        
+        session.setAttribute("subjectId", id);
         SubjectDAO subjectDAO = SubjectDAO.getInstance();
         List<DimensionDTO> dimensionDTOs = new ArrayList<>();
         dimensionDTOs = subjectDAO.getListDimensionDTO();
         request.setAttribute("dimensions", dimensionDTOs);
-                
+
         List<Dimension> dimensionList = new ArrayList<>();
         dimensionList = subjectDAO.getListDimension();
         request.setAttribute("dimensionList", dimensionList);
-        
+
         List<LessonSubjectDTO> lessons = new ArrayList<>();
         lessons = LessonDAO.getInstance().getLessonsBySubjectId(id, 1, 10);
         request.setAttribute("lessons", lessons);
-        
+
         Subject subject = subjectDAO.getSubjectById(id);
         request.setAttribute("subject", subject);
-        
+
         OwnerDTO ownerDTO = new OwnerDTO();
         ownerDTO = UserDAO.getInstance().getOnwerBySubjectId(id);
         request.setAttribute("owner", ownerDTO);
         
+        session.setAttribute("ownerId", ownerDTO.getId());
+        
+        List<OwnerDTO> experts = UserDAO.getInstance().getExpertPagination(1, 5, ownerDTO.getId(), "");
+        request.setAttribute("experts", experts);
+        
         List<SubjectPackagePriceDTO> packageList = new ArrayList<>();
         packageList = subjectDAO.getListSubjectPackagePriceDTO(id);
         request.setAttribute("packageList", packageList);
-        
+
         int numberOfPackagePrice = 0;
         numberOfPackagePrice = PricePackageDAO.getInstance().getNumberOfPricePackagesBySubjectId(id);
         request.setAttribute("noOfPackage", numberOfPackagePrice);
-        
+
         int numberOfLesson = 0;
         numberOfLesson = LessonDAO.getInstance().getNumberOfLessonsBySubjectId(id);
         request.setAttribute("noOfLessons", numberOfLesson);
-        
+
         int numberOfStudent = 0;
         numberOfStudent = UserDAO.getInstance().getNumberOfStudentsBySubjectId(id);
         request.setAttribute("noOfStudents", numberOfStudent);
-        
+
         request.getRequestDispatcher("subjectDetailExpert.jsp").forward(request, response);
     }
-
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -82,13 +86,12 @@ public class SubjectDetailExpertController extends HttpServlet {
         SubjectDAO subjectDAO = SubjectDAO.getInstance();
         String tempId = request.getParameter("id");
         int id = 0;
-        if(tempId != null){
+        if (tempId != null) {
             id = Integer.parseInt(tempId);
+        } else {
+            request.getRequestDispatcher("error.jsp").forward(request, response);
         }
-        else{
-           request.getRequestDispatcher("error.jsp").forward(request, response);
-        }
-       
+
         System.out.println(id);
         String img = request.getParameter("img");
         System.out.println(img);
@@ -107,12 +110,12 @@ public class SubjectDetailExpertController extends HttpServlet {
         if (user == null) {
             response.sendRedirect("/QuizPractice/"); // Thay đổi đường dẫn này tùy theo trang đăng nhập của bạn
             return;
-        } else {           
-            boolean row = subjectDAO.updateSubject(id,name, img, dimensionId,description);
+        } else {
+            boolean row = subjectDAO.updateSubject(id, name, img, dimensionId, description);
             if (row) {
                 response.sendRedirect("subjectDetailExpert?id=" + id); // Thay đổi đường dẫn này tùy theo trang đăng nhập của bạn
                 return;
-            }else{
+            } else {
                 response.sendRedirect("/QuizPractice/error.jsp");
             }
         }

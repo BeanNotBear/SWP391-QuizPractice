@@ -48,6 +48,123 @@
             .custom-btn {
                 width: 83.64px !important;
             }
+            .faq {
+                width: 1123.94px;
+            }
+            .accordion {
+                background-color: white;
+                color: rgba(0, 0, 0, 0.8);
+                cursor: pointer;
+                width: 100%;
+                padding: 2rem 2.5rem;
+                border: none;
+                outline: none;
+                transition: 0.4s;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-weight: bold;
+            }
+
+            .accordion i {
+                font-size: 1.6rem;
+            }
+
+            .active1,
+            .accordion:hover {
+                background-color: #f1f7f5;
+            }
+            .pannel {
+                padding: 0 2rem 2.5rem 2rem;
+                background-color: white;
+                overflow: hidden;
+                background-color: #f1f7f5;
+                display: none;
+                box-sizing: border-box;
+            }
+            .pannel p {
+                color: rgba(0, 0, 0, 0.7);
+                line-height: 1.4;
+            }
+
+            .faq {
+                border: 1px solid rgba(0, 0, 0, 0.2);
+                margin: 10px 0;
+            }
+            .faq.active1 {
+                border: none;
+            }
+            #searchExpert {
+                margin-left: 830px;
+                width: 300px;
+            }
+            .epxertImg {
+                width: 100px;
+                height: 100px;
+            }
+            .switch {
+                position: relative;
+                display: inline-block;
+                width: 60px;
+                height: 34px;
+            }
+
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                border-radius: 30px;
+                background-color: #ccc;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+
+            .slider:before {
+                border-radius: 30px;
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 26px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+
+            input:checked + .slider {
+                background-color: #2196F3;
+            }
+
+            input:focus + .slider {
+                box-shadow: 0 0 1px #2196F3;
+            }
+
+            input:checked + .slider:before {
+                -webkit-transform: translateX(26px);
+                -ms-transform: translateX(26px);
+                transform: translateX(26px);
+            }
+            #statusForm {
+                text-align: center;
+                height: 34px;
+                width: 200px;
+            }
+            .stt {
+                font-weight: normal;
+            }
+            .stt-ex {
+                width: 100px;
+            }
         </style>
         <link rel="stylesheet" href="css/virtual-select.min.css"/>
     </head>
@@ -68,7 +185,9 @@
                     <li class="active"><a data-toggle="tab" href="#home">Overview</a></li>
                     <li><a data-toggle="tab" href="#menu1">Lesson (${requestScope.noOfLessons})</a></li>
                     <li><a data-toggle="tab" href="#menu2">Price Package (${requestScope.noOfPackage})</a></li>
-                    <li><a data-toggle="tab" href="#menu3">Assign Expert</a></li>
+                        <c:if test="${sessionScope.user.roleId == 2}">
+                        <li><a data-toggle="tab" href="#menu3">Assign Expert</a></li>
+                        </c:if>
                     <li><a data-toggle="tab" href="#menu4">Student (${requestScope.noOfStudents})</a></li>
                 </ul>
 
@@ -90,12 +209,25 @@
                                 <div class="col-md-1"></div>
 
                                 <div class="col-md-6">
-                                    <form action="subjectDetailExpert" method="POST">
+                                    <form id="subjectForm" action="subjectDetailExpert" method="POST">
                                         <input type="hidden" id="img" name="img" value="${subject.img}">
                                         <input type="hidden" id="id" name="id" value="${subject.id}">
                                         <div class="form-group">
                                             <label for="name">Name:</label>
                                             <input type="text" id="name" name="name" class="form-control" placeholder="Enter subject name" value="${subject.name}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="subjectStatus">Status:</label>
+                                            <c:if test="${sessionScope.user.roleId == 2}">
+                                                <input <c:if test="${subject.status == 1}">checked</c:if> type="radio" name="status" value="1">
+                                                    <label class="stt">Publish</label>
+                                                    <input <c:if test="${subject.status == 2}">checked</c:if> type="radio" name="status" value="2">
+                                                    <label class="stt">Unpublish</label>
+                                            </c:if>
+                                            <c:if test="${sessionScope.user.roleId == 3}">
+                                                <c:if test="${subject.status == 1}"><a class="btn btn-primary stt-ex">Published</a></c:if>
+                                                <c:if test="${subject.status == 2}"><a class="btn btn-danger stt-ex">Unpublished</a></c:if>
+                                            </c:if>
                                         </div>
 
                                         <div class="form-group">
@@ -137,36 +269,24 @@
                     </div>
 
                     <div id="menu1" class="tab-pane fade">
-                        <h3 class="col-md-3">Lesson</h3>
-                        <div class="col-md-6"></div>
+                        <h3>Lesson</h3>
                         <c:if test="${sessionScope.user.roleId == 3}">
                             <a class="col-md-3" id="addDimensionButton">Add Lesson</a>
                         </c:if>
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Lesson Index</th>
-                                    <th>Type</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach var="lesson" items="${lessons}">
-                                    <tr>
-                                        <td>${lesson.id}</td>
-                                        <td>${lesson.name}</td>
-                                        <td>${lesson.lessonIndex}</td>
-                                        <td>${lesson.type}</td>
-                                        <td>
-                                            <div class="col-md-1"></div>
-                                            <button type="button" class="btn btn-sm btn-success col-md-2 custom-btn">Detail</button>
-                                        </td>
-                                    </tr>
-                                </c:forEach>
-                            </tbody>
-                        </table>
+                        <c:forEach var="i" items="${lessons}">
+                            <div class="faq">
+                                <button class="accordion">
+                                    Lesson ${i.lessonIndex} : ${i.name}
+                                    <i class="fa-solid fa-chevron-down"></i>
+                                </button>
+                                <div class="pannel">
+                                    <div>Type: <b><i>${i.type}</i></b></div>
+                                    <p>
+                                        Content: ${i.content}
+                                    </p>
+                                </div>
+                            </div> 
+                        </c:forEach>
                     </div>
 
                     <div id="menu2" class="tab-pane fade">
@@ -181,7 +301,9 @@
                                     <th>Price</th>
                                     <th>Sale Price</th>
                                     <th>Status</th>
-                                    <th>Action</th>
+                                        <c:if test="${sessionScope.user.roleId == 2}">
+                                        <th>Action</th>
+                                        </c:if>
                                 </tr>
                             </thead>
                             <tbody>
@@ -193,16 +315,19 @@
                                         <td>${mypackage.getPrice()}</td>
                                         <td>${mypackage.getSalePrice()}</td>
                                         <td>${mypackage.getStatus()}</td>
-                                        <td>
-                                            <c:choose>
-                                                <c:when test="${mypackage.getStatus() eq 'active'}">
-                                                    <a href="#" class="btn btn-warning btn-sm" onclick="changeStatus(${mypackage.getId()}, 'inactive',${subject.id})">Inactive</a>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <a href="#" class="btn btn-success btn-sm" onclick="changeStatus(${mypackage.getId()}, 'active',${subject.id})">Active</a>
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </td>
+                                        <c:if test="${sessionScope.user.roleId == 2}">
+                                            <td>
+                                                <c:choose>
+                                                    <c:when test="${mypackage.getStatus() eq 'active'}">
+                                                        <a href="#" class="btn btn-warning btn-sm" onclick="changeStatus(${mypackage.getId()}, 'inactive',${subject.id})">Inactive</a>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <a href="#" class="btn btn-success btn-sm" onclick="changeStatus(${mypackage.getId()}, 'active',${subject.id})">Active</a>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </td>
+                                        </c:if>
+
                                     </tr>
                                 </c:forEach>
                             </tbody>
@@ -211,42 +336,41 @@
 
                     <div id="menu3" class="tab-pane fade">
                         <h3 class="col-md-3">Expert</h3>
+                        <div>
+                            <input onkeyup="searchExpert(this)" id="searchExpert" class="search-input" type="text" name="name" placeholder="Seach expert">
+                        </div>
                         <div class="col-md-6"></div>
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>Id</th>
-                                    <th>PackageName</th>
-                                    <th>Duration</th>
-                                    <th>Price</th>
-                                    <th>Sale Price</th>
-                                    <th>Status</th>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone Number</th>
+                                    <th>Gender</th>
+                                    <th>Joined Date</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <c:forEach var="mypackage" items="${packageList}">
+                            <tbody id="expertTab">
+                                <c:forEach var="e" items="${experts}">
                                     <tr>
-                                        <td>${mypackage.getId()}</td>
-                                        <td>${mypackage.getPackageName()}</td>
-                                        <td>${mypackage.getDuration()}</td>   
-                                        <td>${mypackage.getPrice()}</td>
-                                        <td>${mypackage.getSalePrice()}</td>
-                                        <td>${mypackage.getStatus()}</td>
+                                        <td>${e.id}</td>
+                                        <td><img class="epxertImg" src="${e.img}" alt="alt"/></td>
+                                        <td>${e.name}</td>   
+                                        <td>${e.email}</td>
+                                        <td>${e.phoneNumber}</td>
+                                        <td>${e.gender == 1 ? "Male" : "Female"}</td>
+                                        <td>${e.date}</td>
                                         <td>
-                                            <c:choose>
-                                                <c:when test="${mypackage.getStatus() eq 'active'}">
-                                                    <a href="#" class="btn btn-warning btn-sm" onclick="changeStatus(${mypackage.getId()}, 'inactive',${subject.id})">Inactive</a>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <a href="#" class="btn btn-success btn-sm" onclick="changeStatus(${mypackage.getId()}, 'active',${subject.id})">Active</a>
-                                                </c:otherwise>
-                                            </c:choose>
+                                            <a onclick="assignExpert(${e.id})" class="btn btn-success btn-sm">Assign</a>
                                         </td>
                                     </tr>
                                 </c:forEach>
                             </tbody>
                         </table>
+                        <a onclick="loadMoreExpert()" >Load More <i class="fa-solid fa-chevron-down"></i></a>
                     </div>
 
                     <div id="menu4" class="tab-pane fade">
@@ -534,5 +658,37 @@
                 ele: '#categorySelect'
             });
         </script> 
+        <script>
+            var acc = document.getElementsByClassName("accordion");
+            var i;
+
+            for (i = 0; i < acc.length; i++) {
+                acc[i].addEventListener("click", function () {
+                    this.classList.toggle("active1");
+                    this.parentElement.classList.toggle("active1");
+
+                    var pannel = this.nextElementSibling;
+
+                    if (pannel.style.display === "block") {
+                        pannel.style.display = "none";
+                    } else {
+                        pannel.style.display = "block";
+                    }
+                });
+            }
+        </script>
+        <script src="js/LoadMore.js"></script>
+        <script>
+            onunload = function () {
+            <%
+                    session.setAttribute("page", null);
+                    session.setAttribute("search", "");
+            %>
+            };
+        </script>
+        <script src="js/Searching.js"></script>
+        <script src="js/AssignExpert.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </body>
 </html>

@@ -122,7 +122,7 @@ public class UserDAO extends DBContext {
                 + "           ,[password]\n"
                 + "           ,[created_at]\n"
                 + "           ,[updated_at]\n"
-                + "           ,[role_id]\n"
+                + "           ,[role_id]role\n"
                 + "           ,[status_id]\n"
                 + "           ,[token])\n"
                 + "     VALUES\n"
@@ -394,7 +394,8 @@ public class UserDAO extends DBContext {
     }
 
     public OwnerDTO getOnwerBySubjectId(int subjectId) {
-        String query = "SELECT u.[full_name]\n"
+        String query = "SELECT u.[id]\n"
+                + "      ,u.[full_name]\n"
                 + "      ,u.[email]\n"
                 + "      ,u.[phone_number]\n"
                 + "      ,u.[gender]\n"
@@ -408,16 +409,61 @@ public class UserDAO extends DBContext {
             ps.setInt(1, subjectId);
             rs = ps.executeQuery();
             if(rs.next()) {
-                return new OwnerDTO(rs.getString(1),
+                return new OwnerDTO( rs.getInt(1),
                         rs.getString(2),
-                        rs.getString(3), 
-                        rs.getString(5),
-                        rs.getInt(4),
-                        rs.getDate(6));
+                        rs.getString(3),
+                        rs.getString(4), 
+                        rs.getString(6),
+                        rs.getInt(5),
+                        rs.getDate(7));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
+    }
+    
+    public List<OwnerDTO> getExpertPagination(int page, int recordsPerPage, int currentOwner, String search) {
+        String query = "WITH PageResult AS (\n"
+                + "	SELECT [id]\n"
+                + "	  ,[full_name]\n"
+                + "      ,[email]\n"
+                + "      ,[phone_number]\n"
+                + "      ,[gender]\n"
+                + "      ,[profile_img]\n"
+                + "      ,[created_at]\n"
+                + "	  ,ROW_NUMBER() OVER (ORDER BY [id]) AS row_num\n"
+                + "  FROM [SWP391_G6].[dbo].[users]\n"
+                + "  WHERE [id] <> ? AND ([full_name] LIKE ? OR [email] LIKE ? OR [phone_number] LIKE ?) AND [role_id] = 3"
+                + ")\n"
+                + "SELECT *\n"
+                + "FROM PageResult\n"
+                + "WHERE row_num BETWEEN ? AND ?;";
+        List<OwnerDTO> experts = new ArrayList<>();
+        int start = (page - 1) * recordsPerPage + 1;
+        int end = start + recordsPerPage - 1;
+        String searchCondition = "%" + search + "%";
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, currentOwner);
+            ps.setString(2, searchCondition);
+            ps.setString(3, searchCondition);
+            ps.setString(4, searchCondition);
+            ps.setInt(5, start);
+            ps.setInt(6, end);
+            rs = ps.executeQuery();
+            while(rs.next()) {
+                experts.add(new OwnerDTO( rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4), 
+                        rs.getString(6),
+                        rs.getInt(5),
+                        rs.getDate(7)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return experts;
     }
 }

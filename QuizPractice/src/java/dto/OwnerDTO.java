@@ -12,6 +12,7 @@ import java.sql.Date;
 @ToString
 @SuppressWarnings("all")
 public class OwnerDTO {
+    private int id;
     private String name;
     private String email;
     private String phoneNumber;
