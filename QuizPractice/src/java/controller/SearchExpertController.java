@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
+// search expert
 @WebServlet(name="SearchExpertController", urlPatterns={"/searchExpert"})
 public class SearchExpertController extends HttpServlet {
    
