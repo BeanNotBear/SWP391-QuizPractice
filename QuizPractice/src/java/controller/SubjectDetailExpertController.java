@@ -21,6 +21,7 @@ import model.Dimension;
 import model.Subject;
 import model.User;
 
+// Subject Detail
 @WebServlet("/subjectDetailExpert")
 public class SubjectDetailExpertController extends HttpServlet {
 
@@ -102,9 +103,6 @@ public class SubjectDetailExpertController extends HttpServlet {
         String description = request.getParameter("description");
         System.out.println(description);
 
-        //creator_id
-        //creater_at
-        //status=1
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         if (user == null) {
