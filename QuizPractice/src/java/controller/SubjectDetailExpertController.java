@@ -21,7 +21,6 @@ import model.Dimension;
 import model.Subject;
 import model.User;
 
-// Subject Detail
 @WebServlet("/subjectDetailExpert")
 public class SubjectDetailExpertController extends HttpServlet {
 
