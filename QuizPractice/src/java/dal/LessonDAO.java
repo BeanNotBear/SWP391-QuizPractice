@@ -285,7 +285,7 @@ public class LessonDAO extends DBContext {
         return null;
     }
 
-    public List<LessonSubjectDTO> getLessonsBySubjectId(int subjectId, int page, int recordsPerPage) {
+    public List<LessonSubjectDTO> getLessonsBySubjectId(int subjectId, int page, int recordsPerPage, String search) {
         int start = (page - 1) * recordsPerPage + 1;
         int end = start + recordsPerPage - 1;
         List<LessonSubjectDTO> lessons = new ArrayList<>();
@@ -300,15 +300,20 @@ public class LessonDAO extends DBContext {
         query.append("  FROM [SWP391_G6].[dbo].[lessons] AS l ");
         query.append("  INNER JOIN [dbo].[subject_has_lesson] AS sl ON sl.lesson_id = l.id ");
         query.append("  INNER JOIN [dbo].[subjects] AS s ON s.id = sl.subject_id ");
-        query.append("  WHERE sl.subject_id = ? ");
+        query.append("  WHERE sl.subject_id = ?  AND (l.[name] LIKE ? OR l.[content] LIKE ? OR l.[LessonIndex] LIKE ? OR l.[Type] LIKE ?) ");
         query.append(") ");
         query.append("SELECT * FROM PageResult ");
         query.append("WHERE row_num BETWEEN ? AND ?;");
         try {
+            String searchCondition = "%" + search + "%";
             ps = connection.prepareStatement(query.toString());
             ps.setInt(1, subjectId);
-            ps.setInt(2, start);
-            ps.setInt(3, end);
+            ps.setString(2, searchCondition);
+            ps.setString(3, searchCondition);
+            ps.setString(4, searchCondition);
+            ps.setString(5, searchCondition);
+            ps.setInt(6, start);
+            ps.setInt(7, end);
             rs = ps.executeQuery();
             while (rs.next()) {
                 lessons.add(new LessonSubjectDTO(rs.getInt(1),

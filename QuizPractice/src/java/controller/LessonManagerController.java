@@ -39,9 +39,11 @@ public class LessonManagerController extends HttpServlet {
         System.out.println("subjectId " + subjectId);
 //         System.out.println("userId "+user.getUserId());
         System.out.println("expertId " + expertId);
-        if (user == null || expertId == 0 || user.getUserId() != expertId) {
-            response.sendRedirect("/QuizPractice/"); // Thay đổi đường dẫn này tùy theo trang đăng nhập của bạn
-            return;
+        if (user.getRoleId() != 2) {
+            if (user == null || expertId == 0 || user.getUserId() != expertId) {
+                response.sendRedirect("/QuizPractice/"); // Thay đổi đường dẫn này tùy theo trang đăng nhập của bạn
+                return;
+            }
         }
 
         // Lấy trang hiện tại từ request
@@ -82,12 +84,12 @@ public class LessonManagerController extends HttpServlet {
         request.setAttribute("searchName", name);
         request.setAttribute("searchType", type);
         request.setAttribute("searchStatus", status);
-        
+
         // Get messages from session and set them as request attributes
         String successMessage = (String) session.getAttribute("successMessage");
         String errorMessage = (String) session.getAttribute("errorMessage");
 
-         if (successMessage != null) {
+        if (successMessage != null) {
             request.setAttribute("successMessage", successMessage);
             session.removeAttribute("successMessage");
         }
@@ -154,7 +156,7 @@ public class LessonManagerController extends HttpServlet {
             boolean s = lessonDAO.updateLesson(name, content, media, lessonIndex, type, id);
 
             request.setAttribute("subjectId", subjectId);
-           
+
             if (s) {
                 session.setAttribute("successMessage", "Lesson edited successfully.");
             } else {
@@ -173,12 +175,12 @@ public class LessonManagerController extends HttpServlet {
             boolean s = lessonDAO.updateStatus(status, lessonId);
             request.setAttribute("subjectId", subjectId);
             HttpSession session = request.getSession();
-             if (s) {
+            if (s) {
                 session.setAttribute("successMessage", "Lesson edited successfully.");
             } else {
                 session.setAttribute("errorMessage", "Failed to edit the Lesson.");
             }
-            
+
             String path = "lessonManager?subjectId=" + subjectId;
             response.sendRedirect(path);
         }

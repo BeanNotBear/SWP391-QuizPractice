@@ -46,7 +46,7 @@ public class SubjectDetailExpertController extends HttpServlet {
         request.setAttribute("dimensionList", dimensionList);
 
         List<LessonSubjectDTO> lessons = new ArrayList<>();
-        lessons = LessonDAO.getInstance().getLessonsBySubjectId(id, 1, 10);
+        lessons = LessonDAO.getInstance().getLessonsBySubjectId(id, 1, 5, "");
         request.setAttribute("lessons", lessons);
 
         Subject subject = subjectDAO.getSubjectById(id);

@@ -94,9 +94,14 @@
             .faq.active1 {
                 border: none;
             }
+            .search-input {
+                width: 300px;
+            }
             #searchExpert {
                 margin-left: 830px;
-                width: 300px;
+            }
+            #searchLesson {
+                margin-left: 540px;
             }
             .epxertImg {
                 width: 100px;
@@ -218,21 +223,15 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="subjectStatus">Status:</label>
-                                            <c:if test="${sessionScope.user.roleId == 2}">
-                                                <input <c:if test="${subject.status == 1}">checked</c:if> type="radio" name="status" value="1">
-                                                    <label class="stt">Publish</label>
-                                                    <input <c:if test="${subject.status == 2}">checked</c:if> type="radio" name="status" value="2">
-                                                    <label class="stt">Unpublish</label>
-                                            </c:if>
-                                            <c:if test="${sessionScope.user.roleId == 3}">
-                                                <c:if test="${subject.status == 1}"><a class="btn btn-primary stt-ex">Published</a></c:if>
-                                                <c:if test="${subject.status == 2}"><a class="btn btn-danger stt-ex">Unpublished</a></c:if>
-                                            </c:if>
-                                        </div>
+                                            <input <c:if test="${sessionScope.user.roleId != 2}">disabled=""</c:if> <c:if test="${subject.status == 1}">checked</c:if> type="radio" name="status" value="1">
+                                                <label class="stt">Publish</label>
+                                                    <input <c:if test="${sessionScope.user.roleId != 2}">disabled=""</c:if> <c:if test="${subject.status == 2}">checked</c:if> type="radio" name="status" value="2">
+                                                <label class="stt">Unpublish</label>
+                                            </div>
 
-                                        <div class="form-group">
-                                            <label for="category">Category:</label>
-                                            <select id="categorySelect" name="dimensionId" placeholder="Select Category" data-search="true" data-silent-initial-value-set="true">
+                                            <div class="form-group">
+                                                <label for="category">Category:</label>
+                                                <select id="categorySelect" name="dimensionId" placeholder="Select Category" data-search="true" data-silent-initial-value-set="true">
                                                 <c:forEach var="dimension" items="${dimensions}">
                                                     <option value="${dimension.id}" <c:if test="${dimension.id == subject.dimensionId}">selected</c:if>>${dimension.name}</option>
                                                 </c:forEach>
@@ -270,23 +269,25 @@
 
                     <div id="menu1" class="tab-pane fade">
                         <h3>Lesson</h3>
-                        <c:if test="${sessionScope.user.roleId == 3}">
-                            <a class="col-md-3" id="addDimensionButton">Add Lesson</a>
-                        </c:if>
-                        <c:forEach var="i" items="${lessons}">
-                            <div class="faq">
-                                <button class="accordion">
-                                    Lesson ${i.lessonIndex} : ${i.name}
-                                    <i class="fa-solid fa-chevron-down"></i>
-                                </button>
-                                <div class="pannel">
-                                    <div>Type: <b><i>${i.type}</i></b></div>
-                                    <p>
-                                        Content: ${i.content}
-                                    </p>
-                                </div>
-                            </div> 
-                        </c:forEach>
+                        <a class="col-md-3" id="addLessonbtn">Add Lesson</a>
+                        <input id="searchLesson" onkeyup="searchLesson(this)" class="search-input" type="text" name="search" placeholder="Search Lesson">
+                        <div id="lessonContent">
+                            <c:forEach var="i" items="${lessons}">
+                                <div class="faq">
+                                    <button class="accordion">
+                                        Lesson ${i.lessonIndex} : ${i.name}
+                                        <i class="fa-solid fa-chevron-down"></i>
+                                    </button>
+                                    <div class="pannel">
+                                        <div>Type: <b><i>${i.type}</i></b></div>
+                                        <p>
+                                            Content: ${i.content}
+                                        </p>
+                                    </div>
+                                </div> 
+                            </c:forEach>
+                        </div>
+                        <a onclick="loadMoreLesson()" >Load More <i class="fa-solid fa-chevron-down"></i></a>
                     </div>
 
                     <div id="menu2" class="tab-pane fade">
@@ -417,17 +418,15 @@
         </section>
         <br/>
         <%@include file="/layout/footer.jsp" %>
-        <!-- Edit Dimension Modal -->
-        <div id="editDimensionModal" class="modal fade" role="dialog">
+        <div id="addLesson" class="modal fade" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Edit Dimension</h4>
+                        <h4 class="modal-title">Add Lesson</h4>
                     </div>
                     <div class="modal-body">
-                        <form id="editDimensionForm">
-                            <input type="hidden" id="editDimensionId" name="dimensionId">
+                        <form id="addLesson">
                             <div class="form-group">
                                 <label for="editDimensionType">Type:</label>
                                 <input type="text" id="editDimensionType" name="type" class="form-control">
@@ -442,56 +441,6 @@
                             </div>
                             <button type="button" class="btn btn-primary" id="saveDimensionChanges">Save Changes</button>
                         </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-        <!-- Add Dimension Modal -->
-        <div id="addDimensionModal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Add Dimension</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form id="addDimensionForm">
-                            <div class="form-group">
-                                <label for="addDimensionType">Type:</label>
-                                <input type="text" id="addDimensionType" name="type" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="addDimensionName">Dimension Name:</label>
-                                <input type="text" id="addDimensionName" name="dimensionName" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="addDescription">Description:</label>
-                                <input type="text" id="addDescription" name="description" class="form-control">
-                            </div>
-                            <button type="button" class="btn btn-primary" id="saveNewDimension">Save Dimension</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Delete Dimension Confirmation Modal -->
-        <div id="deleteDimensionModal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Confirm Delete</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p>Are you sure you want to delete this dimension?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-danger" id="deleteDimensionBtn">Delete</button>
                     </div>
                 </div>
             </div>
@@ -522,108 +471,6 @@
                 };
                 xhr.send(formData);
             });
-
-            function editDimension(id) {
-                $.ajax({
-                    type: 'GET',
-                    url: 'editDimension',
-                    data: {id: id},
-                    success: function (response) {
-                        if (response.success) {
-                            var dimension = response.dimension;
-                            console.log(dimension.Description + "----------------------");
-                            $('#editDimensionId').val(dimension.DimensionId);
-                            $('#editDimensionType').val(dimension.Type);
-                            $('#editDimensionName').val(dimension.DimensionName);
-                            $('#editDescription').val(dimension.Description);
-                            $('#editDimensionModal').modal('show');
-                        } else {
-                            alert('Failed to fetch dimension details');
-                        }
-                    },
-                    error: function () {
-                        alert('An error occurred while fetching dimension details');
-                    }
-                });
-            }
-
-            document.getElementById('saveDimensionChanges').addEventListener('click', function () {
-                var formData = $('#editDimensionForm').serialize();
-                $.ajax({
-                    type: 'POST',
-                    url: 'editDimension',
-                    data: formData,
-                    success: function (response) {
-                        if (response.success) {
-                            $('#editDimensionModal').modal('hide');
-                            // Optionally reload the page or update the table
-                            location.reload(); // Reload the page to see the updated data
-                        } else {
-                            alert('Failed to save changes');
-                        }
-                    },
-                    error: function () {
-                        alert('An error occurred while saving changes');
-                    }
-                });
-            });
-
-
-
-            // Function to handle adding a new dimension
-            document.getElementById('addDimensionButton').addEventListener('click', function () {
-                $('#addDimensionModal').modal('show');
-            });
-
-            // Function to handle saving a new dimension via AJAX
-            document.getElementById('saveNewDimension').addEventListener('click', function () {
-                var formData = $('#addDimensionForm').serialize();
-                $.ajax({
-                    type: 'POST',
-                    url: 'addDimension', // URL to your servlet for adding a dimension
-                    data: formData,
-                    success: function (response) {
-                        if (response.success) {
-                            $('#addDimensionModal').modal('hide');
-                            // Optionally reload the page or update the dimension list
-                            location.reload(); // Reload the page to see the updated data
-                        } else {
-                            alert('Failed to add dimension');
-                        }
-                    },
-                    error: function () {
-                        alert('An error occurred while adding dimension');
-                    }
-                });
-            });
-
-
-            // Function to handle delete confirmation
-            function confirmDelete(dimensionId) {
-                $('#deleteDimensionModal').modal('show');
-                $('#deleteDimensionBtn').unbind().click(function () {
-                    // AJAX call to delete dimension
-                    $.ajax({
-                        type: 'POST',
-                        url: 'deleteDimension', // Replace with your URL for deleting dimension
-                        data: {id: dimensionId},
-                        success: function (response) {
-                            if (response.result) {
-                                // Optionally update the UI after successful deletion
-                                location.reload(); // Reload the page to reflect changes
-                            } else {
-                                //alert('Failed to delete dimension');
-                                location.reload();
-                            }
-                        },
-                        error: function () {
-                            alert('Error occurred while deleting dimension');
-                        }
-                    });
-                    $('#deleteDimensionModal').modal('hide');
-                });
-            }
-
 
             // Function to handle status change
             function changeStatus(packageId, newStatus, subjectId) {
@@ -658,31 +505,15 @@
                 ele: '#categorySelect'
             });
         </script> 
-        <script>
-            var acc = document.getElementsByClassName("accordion");
-            var i;
-
-            for (i = 0; i < acc.length; i++) {
-                acc[i].addEventListener("click", function () {
-                    this.classList.toggle("active1");
-                    this.parentElement.classList.toggle("active1");
-
-                    var pannel = this.nextElementSibling;
-
-                    if (pannel.style.display === "block") {
-                        pannel.style.display = "none";
-                    } else {
-                        pannel.style.display = "block";
-                    }
-                });
-            }
-        </script>
+        <script src="js/SubjectDetails.js"></script>
         <script src="js/LoadMore.js"></script>
         <script>
             onunload = function () {
             <%
                     session.setAttribute("page", null);
                     session.setAttribute("search", "");
+                    session.setAttribute("pageLesson", null);
+                    session.setAttribute("searchLesson", "");
             %>
             };
         </script>
