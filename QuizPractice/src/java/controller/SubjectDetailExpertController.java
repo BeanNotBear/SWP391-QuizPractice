@@ -83,39 +83,7 @@ public class SubjectDetailExpertController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        SubjectDAO subjectDAO = SubjectDAO.getInstance();
-        String tempId = request.getParameter("id");
-        int id = 0;
-        if (tempId != null) {
-            id = Integer.parseInt(tempId);
-        } else {
-            request.getRequestDispatcher("error.jsp").forward(request, response);
-        }
-
-        System.out.println(id);
-        String img = request.getParameter("img");
-        System.out.println(img);
-        String name = request.getParameter("name");
-        System.out.println(name);
-        int dimensionId = Integer.parseInt(request.getParameter("dimensionId"));
-        System.out.println(dimensionId);
-        String description = request.getParameter("description");
-        System.out.println(description);
-
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            response.sendRedirect("/QuizPractice/"); // Thay đổi đường dẫn này tùy theo trang đăng nhập của bạn
-            return;
-        } else {
-            boolean row = subjectDAO.updateSubject(id, name, img, dimensionId, description);
-            if (row) {
-                response.sendRedirect("subjectDetailExpert?id=" + id); // Thay đổi đường dẫn này tùy theo trang đăng nhập của bạn
-                return;
-            } else {
-                response.sendRedirect("/QuizPractice/error.jsp");
-            }
-        }
+        
     }
 
 }

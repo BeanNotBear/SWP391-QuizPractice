@@ -101,7 +101,7 @@
                 margin-left: 830px;
             }
             #searchLesson {
-                margin-left: 540px;
+                margin-left: 820px;
             }
             .epxertImg {
                 width: 100px;
@@ -170,6 +170,12 @@
             .stt-ex {
                 width: 100px;
             }
+/*            #cateMsg {
+                display: none;
+            }*/
+            .msg {
+                display: none;
+            }
         </style>
         <link rel="stylesheet" href="css/virtual-select.min.css"/>
     </head>
@@ -219,7 +225,8 @@
                                         <input type="hidden" id="id" name="id" value="${subject.id}">
                                         <div class="form-group">
                                             <label for="name">Name:</label>
-                                            <input type="text" id="name" name="name" class="form-control" placeholder="Enter subject name" value="${subject.name}">
+                                            <input onkeyup="validateName(this)" type="text" id="name" name="name" class="form-control" placeholder="Enter subject name" value="${subject.name}">
+                                            <div id="name-err" class="danger_msg msg">Name cannot be empty</div>
                                         </div>
                                         <div class="form-group">
                                             <label for="subjectStatus">Status:</label>
@@ -231,11 +238,12 @@
 
                                             <div class="form-group">
                                                 <label for="category">Category:</label>
-                                                <select id="categorySelect" name="dimensionId" placeholder="Select Category" data-search="true" data-silent-initial-value-set="true">
+                                                <select required id="categorySelect" name="dimensionId" placeholder="Select Category" data-search="true" data-silent-initial-value-set="true">
                                                 <c:forEach var="dimension" items="${dimensions}">
                                                     <option value="${dimension.id}" <c:if test="${dimension.id == subject.dimensionId}">selected</c:if>>${dimension.name}</option>
                                                 </c:forEach>
                                             </select>
+                                            <div id="cateMsg" class="danger_msg msg">Must select category</div>
                                         </div>
 
                                         <div class="form-group">
@@ -255,10 +263,11 @@
 
                                         <div class="form-group">
                                             <label for="description">Description: </label>
-                                            <textarea id="description" name="description" class="form-control textEditor" rows="5" placeholder="Enter description">${subject.description}</textarea>
+                                            <textarea id="desContent" required id="description" name="description" class="form-control textEditor" rows="5" placeholder="Enter description">${subject.description}</textarea>
+                                            <div id="desMsg" class="danger_msg msg">Description can not be empty!</div>
                                         </div>
 
-                                        <button type="submit" class="btn btn-primary btn-sm col-md-2">Save</button>
+                                        <input onclick="saveChangeSubject(this)" class="btn btn-primary btn-sm col-md-2" type="button" value="Save"/>
                                         <div class="col-md-1"></div>
                                         <a href="/QuizPractice/subjectManager" class="btn btn-primary btn-sm col-md-2">Back to list</a>
                                     </form>
@@ -269,7 +278,7 @@
 
                     <div id="menu1" class="tab-pane fade">
                         <h3>Lesson</h3>
-                        <a class="col-md-3" id="addLessonbtn">Add Lesson</a>
+                        <!--<a class="col-md-3" id="addLessonbtn">Add Lesson</a>-->
                         <input id="searchLesson" onkeyup="searchLesson(this)" class="search-input" type="text" name="search" placeholder="Search Lesson">
                         <div id="lessonContent">
                             <c:forEach var="i" items="${lessons}">
@@ -418,33 +427,33 @@
         </section>
         <br/>
         <%@include file="/layout/footer.jsp" %>
-        <div id="addLesson" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Add Lesson</h4>
+        <!--        <div id="addLesson" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Add Lesson</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form id="addLesson">
+                                    <div class="form-group">
+                                        <label for="editDimensionType">Type:</label>
+                                        <input type="text" id="editDimensionType" name="type" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="editDimensionName">Dimension Name:</label>
+                                        <input type="text" id="editDimensionName" name="dimensionName" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="editDescription">Description:</label>
+                                        <input type="text" id="editDescription" name="description" class="form-control">
+                                    </div>
+                                    <button type="button" class="btn btn-primary" id="saveDimensionChanges">Save Changes</button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        <form id="addLesson">
-                            <div class="form-group">
-                                <label for="editDimensionType">Type:</label>
-                                <input type="text" id="editDimensionType" name="type" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="editDimensionName">Dimension Name:</label>
-                                <input type="text" id="editDimensionName" name="dimensionName" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="editDescription">Description:</label>
-                                <input type="text" id="editDescription" name="description" class="form-control">
-                            </div>
-                            <button type="button" class="btn btn-primary" id="saveDimensionChanges">Save Changes</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+                </div>-->
 
         <script>
             document.getElementById('uploadButton').addEventListener('click', function () {
@@ -519,6 +528,7 @@
         </script>
         <script src="js/Searching.js"></script>
         <script src="js/AssignExpert.js"></script>
+        <script src="js/SaveChangeSubbject.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </body>
