@@ -53,3 +53,20 @@ function loadMoreLesson() {
 
 // Call this function initially to attach listeners to the existing elements
 attachAccordionListeners();
+
+function loadMoreLearner() {
+    $.ajax({
+        url: "loadmoreexpert",
+        type: 'GET',
+        beforeSend: function () {
+            $("#loading").css('display', 'flex');
+        },
+        complete: function () {
+            $("#loading").css('display', 'none');
+        },
+        success: function (data) {
+            let row = document.getElementById("learnerContent");
+            row.innerHTML += data;
+        }
+    });
+}

@@ -97,7 +97,7 @@
             .search-input {
                 width: 300px;
             }
-            #searchExpert {
+            #searchExpert, #searchLearner {
                 margin-left: 830px;
             }
             #searchLesson {
@@ -199,7 +199,7 @@
                         <c:if test="${sessionScope.user.roleId == 2}">
                         <li><a data-toggle="tab" href="#menu3">Assign Expert</a></li>
                         </c:if>
-                    <li><a data-toggle="tab" href="#menu4">Student (${requestScope.noOfStudents})</a></li>
+                    <li><a data-toggle="tab" href="#menu4">Learner (${requestScope.noOfStudents})</a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -227,16 +227,17 @@
                                             <label for="name">Name:</label>
                                             <input onkeyup="validateName(this)" type="text" id="name" name="name" class="form-control" placeholder="Enter subject name" value="${subject.name}">
                                             <div id="name-err" class="danger_msg msg">Name cannot be empty</div>
-                                        </div>
-                                        <div class="form-group">
+                                       </div>
+                                            
+                                       <div class="form-group">
                                             <label for="subjectStatus">Status:</label>
                                             <input <c:if test="${sessionScope.user.roleId != 2}">disabled=""</c:if> <c:if test="${subject.status == 1}">checked</c:if> type="radio" name="status" value="1">
                                                 <label class="stt">Publish</label>
                                                     <input <c:if test="${sessionScope.user.roleId != 2}">disabled=""</c:if> <c:if test="${subject.status == 2}">checked</c:if> type="radio" name="status" value="2">
                                                 <label class="stt">Unpublish</label>
-                                            </div>
+                                       </div>
 
-                                            <div class="form-group">
+                                       <div class="form-group">
                                                 <label for="category">Category:</label>
                                                 <select required id="categorySelect" name="dimensionId" placeholder="Select Category" data-search="true" data-silent-initial-value-set="true">
                                                 <c:forEach var="dimension" items="${dimensions}">
@@ -244,7 +245,7 @@
                                                 </c:forEach>
                                             </select>
                                             <div id="cateMsg" class="danger_msg msg">Must select category</div>
-                                        </div>
+                                       </div>
 
                                         <div class="form-group">
                                             <label>Owner(Expert):</label>
@@ -263,7 +264,7 @@
 
                                         <div class="form-group">
                                             <label for="description">Description: </label>
-                                            <textarea id="desContent" required id="description" name="description" class="form-control textEditor" rows="5" placeholder="Enter description">${subject.description}</textarea>
+                                            <textarea required id="description" name="description" class="form-control textEditor" rows="5" placeholder="Enter description">${subject.description}</textarea>
                                             <div id="desMsg" class="danger_msg msg">Description can not be empty!</div>
                                         </div>
 
@@ -384,43 +385,34 @@
                     </div>
 
                     <div id="menu4" class="tab-pane fade">
-                        <h3 class="col-md-3">Package Price</h3>
+                        <h3 class="col-md-3">Learners</h3>
+                        <input onkeyup="searchLearner(this)" placeholder="Search learner" id="searchLearner" class="search-input" type="text">
                         <div class="col-md-6"></div>
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>Id</th>
-                                    <th>PackageName</th>
-                                    <th>Duration</th>
-                                    <th>Price</th>
-                                    <th>Sale Price</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
+                                    <th>Full Name</th>
+                                    <th>Avatar</th>
+                                    <th>Email</th>
+                                    <th>Gender</th>
+                                    <th>Phone Number</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <c:forEach var="mypackage" items="${packageList}">
+                            <tbody id="learnerContent">
+                                <c:forEach var="learner" items="${requestScope.learners}">
                                     <tr>
-                                        <td>${mypackage.getId()}</td>
-                                        <td>${mypackage.getPackageName()}</td>
-                                        <td>${mypackage.getDuration()}</td>   
-                                        <td>${mypackage.getPrice()}</td>
-                                        <td>${mypackage.getSalePrice()}</td>
-                                        <td>${mypackage.getStatus()}</td>
-                                        <td>
-                                            <c:choose>
-                                                <c:when test="${mypackage.getStatus() eq 'active'}">
-                                                    <a href="#" class="btn btn-warning btn-sm" onclick="changeStatus(${mypackage.getId()}, 'inactive',${subject.id})">Inactive</a>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <a href="#" class="btn btn-success btn-sm" onclick="changeStatus(${mypackage.getId()}, 'active',${subject.id})">Active</a>
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </td>
+                                        <td>${learner.id()}</td>
+                                        <td>${learner.fullName()}</td>
+                                        <td><img src="${learner.profileImg()}" alt="avatar"/></td>   
+                                        <td>${learner.email()}</td>
+                                        <td>${learner.gender() == 1 ? "Male" : "Female"}</td>
+                                        <td>${learner.phoneNumber()}</td>
                                     </tr>
                                 </c:forEach>
                             </tbody>
                         </table>
+                        <a onclick="loadMoreLearner()">Load More <i class="fa-solid fa-chevron-down"></i></a>
                     </div>
                 </div>
             </div>
@@ -523,6 +515,8 @@
                     session.setAttribute("search", "");
                     session.setAttribute("pageLesson", null);
                     session.setAttribute("searchLesson", "");
+                    session.setAttribute("leanerPage", null);
+                    session.setAttribute("searchLearner", "");
             %>
             };
         </script>

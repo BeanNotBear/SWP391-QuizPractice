@@ -1,22 +1,43 @@
 function saveChangeSubject(e) {
-    Swal.fire({
-        title: "Do you want to save the changes?",
-        showDenyButton: true,
-        showCancelButton: true,
-        confirmButtonText: "Save",
-        denyButtonText: `Don't Save`
-    }).then((result) => {
-        if (result.isConfirmed) {
-            Swal.fire("Changes are saved", "", "success").then(rs => {
-                if (rs.isConfirmed) {
-                    window.location.reload();
-                }
-            });
-        } else if (result.isDenied) {
-            Swal.fire("Changes are not saved", "", "info");
-        }
-    });
+    const regex = /^[A-Za-z0-9\s!@#\$%\^\&*\)\(+=._-]{3,50}$/;
+    if (regex.test($("#name").val().trim()) && $("#categorySelect").val() !== "" &&  tinymce.get('description').getContent() != "") {
+        Swal.fire({
+            title: "Do you want to save the changes?",
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Save",
+            denyButtonText: `Don't Save`
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "subjectDetailExpert",
+                    type: 'POST',
+                    data: {
+                        name: $("#name").val(),
+                        status: $('input[name="status"]:checked').val(),
+                        category: $("#categorySelect").val(),
+                        description: tinymce.get('description').getContent(),
+                        img: $("#img").val()
+                    },
+                    success: function () {
+                        Swal.fire("Changes are saved", "", "success").then((rs) => {
+                            if (rs.isConfirmed) {
+                                window.location.reload();
+                            }
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        Swal.fire("An error occurred", "", "error");
+                        console.error("Error details:", status, error);
+                    }
+                });
+            } else if (result.isDenied) {
+                Swal.fire("Changes are not saved", "", "info");
+            }
+        });
+    }
 }
+
 
 document.querySelector('#categorySelect').addEventListener('change', function () {
     if (this.value === "") {
@@ -40,28 +61,3 @@ function validateName(e) {
         $(errorMessage).css('display', 'block');
     }
 }
-
-document.querySelector('#desContent').addEventListener("keyup", function () {
-    const errorMessage = $("#desMsg");
-    const content = $("#desContent").val();
-    if (content.trim() === "") {
-        $(errorMessage).css('display', 'block');
-    } else {
-        $(errorMessage).css('display', 'none');
-    }
-});
-
-tinymce.init({
-    selector: '#desContent',
-    setup: function (editor) {
-        editor.on('keyup', function (e) {
-            const errorMessage = $("#desMsg");
-            const content = $(e).val();
-            if (content.trim() === "") {
-                $(errorMessage).css('display', 'block');
-            } else {
-                $(errorMessage).css('display', 'none');
-            }
-        });
-    }
-});

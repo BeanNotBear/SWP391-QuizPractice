@@ -328,7 +328,7 @@ public class LessonDAO extends DBContext {
         return lessons;
     }
 
-    public int getNumberOfLessonsBySubjectId(int subjectId) {
+        public int getNumberOfLessonsBySubjectId(int subjectId) {
         String query = "SELECT COUNT(lesson_id) AS NumberOfLessons\n"
                 + "FROM [SWP391_G6].[dbo].[subject_has_lesson]\n"
                 + "WHERE subject_id = ?";

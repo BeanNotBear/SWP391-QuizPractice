@@ -11,13 +11,22 @@ tinymce.init({
             'bullist numlist outdent indent | link image | print preview media fullscreen | ' +
             'forecolor backcolor emoticons',
     menu: {
-        edit: { title: 'Edit', items: 'undo redo | cut copy paste pastetext | selectall | searchreplace' },
-        view: { title: 'View', items: 'code revisionhistory | visualaid visualchars visualblocks | spellchecker | preview fullscreen | showcomments' },
-        insert: { title: 'Insert', items: 'image link media addcomment pageembed codesample inserttable | math | charmap emoticons hr | pagebreak nonbreaking anchor tableofcontents | insertdatetime' },
-        format: { title: 'Format', items: 'bold italic underline strikethrough superscript subscript codeformat | styles blocks fontfamily fontsize align lineheight | forecolor backcolor | language | removeformat' },
-        tools: { title: 'Tools', items: 'spellchecker spellcheckerlanguage | a11ycheck code wordcount' },
-        table: { title: 'Table', items: 'inserttable | cell row column | advtablesort | tableprops deletetable' }
+        edit: {title: 'Edit', items: 'undo redo | cut copy paste pastetext | selectall | searchreplace'},
+        view: {title: 'View', items: 'code revisionhistory | visualaid visualchars visualblocks | spellchecker | preview fullscreen | showcomments'},
+        insert: {title: 'Insert', items: 'image link media addcomment pageembed codesample inserttable | math | charmap emoticons hr | pagebreak nonbreaking anchor tableofcontents | insertdatetime'},
+        format: {title: 'Format', items: 'bold italic underline strikethrough superscript subscript codeformat | styles blocks fontfamily fontsize align lineheight | forecolor backcolor | language | removeformat'},
+        tools: {title: 'Tools', items: 'spellchecker spellcheckerlanguage | a11ycheck code wordcount'},
+        table: {title: 'Table', items: 'inserttable | cell row column | advtablesort | tableprops deletetable'}
     },
     menubar: 'file edit view insert format tools table',
-    content_style: 'body{font-family:Helvetica,Arial,sans-serif; font-size:16px}'
+    content_style: 'body{font-family:Helvetica,Arial,sans-serif; font-size:16px}',
+    setup: (editor) => {
+        editor.on('keyup', (e) => {
+            if (tinymce.get('description').getContent() === "") {
+                $("#desMsg").css('display', 'block');
+            } else {
+                $("#desMsg").css('display', 'none');
+            }
+        });
+    }
 });

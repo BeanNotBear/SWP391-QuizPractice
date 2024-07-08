@@ -874,23 +874,30 @@ public class SubjectDAO extends DBContext {
         return subject;
     }
 
-    public boolean updateSubject(int id, String name, String img, int dimensionId, String description) {
+    public boolean updateSubject(int id, String name, int status, String img, int category, String description) {
         boolean updated = false;
-        String query = "update subjects set name=? ,img=?, description=?, dimensionId=?, update_at=GETDATE() where id=?";
+        String query = "UPDATE [dbo].[subjects]\n"
+                + "   SET [name] = ?\n"
+                + "      ,[update_at] = GETDATE()\n"
+                + "      ,[status] = ?\n"
+                + "      ,[img] = ?\n"
+                + "      ,[description] = ?\n"
+                + "      ,[dimensionId] = ?\n"
+                + " WHERE [id] = ?";
         try {
             ps = connection.prepareStatement(query);
             ps.setString(1, name);
-            ps.setString(2, img);
-            ps.setString(3, description);
-            ps.setInt(4, dimensionId);
-            ps.setInt(5, id);
-
+            ps.setInt(2, status);
+            ps.setString(3, img);
+            ps.setString(4, description);
+            ps.setInt(5, category);
+            ps.setInt(6, id);
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
                 updated = true;
             }
         } catch (SQLException ex) {
-
+            ex.printStackTrace();
         }
         return updated;
     }

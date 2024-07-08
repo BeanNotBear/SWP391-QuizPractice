@@ -2,6 +2,7 @@ package dal;
 
 import context.DBContext;
 import dto.ExpertDTO;
+import dto.LearnerDTO;
 import dto.OwnerDTO;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -408,11 +409,11 @@ public class UserDAO extends DBContext {
             ps = connection.prepareStatement(query);
             ps.setInt(1, subjectId);
             rs = ps.executeQuery();
-            if(rs.next()) {
-                return new OwnerDTO( rs.getInt(1),
+            if (rs.next()) {
+                return new OwnerDTO(rs.getInt(1),
                         rs.getString(2),
                         rs.getString(3),
-                        rs.getString(4), 
+                        rs.getString(4),
                         rs.getString(6),
                         rs.getInt(5),
                         rs.getDate(7));
@@ -422,7 +423,7 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
-    
+
     public List<OwnerDTO> getExpertPagination(int page, int recordsPerPage, int currentOwner, String search) {
         String query = "WITH PageResult AS (\n"
                 + "	SELECT [id]\n"
@@ -452,11 +453,11 @@ public class UserDAO extends DBContext {
             ps.setInt(5, start);
             ps.setInt(6, end);
             rs = ps.executeQuery();
-            while(rs.next()) {
-                experts.add(new OwnerDTO( rs.getInt(1),
+            while (rs.next()) {
+                experts.add(new OwnerDTO(rs.getInt(1),
                         rs.getString(2),
                         rs.getString(3),
-                        rs.getString(4), 
+                        rs.getString(4),
                         rs.getString(6),
                         rs.getInt(5),
                         rs.getDate(7)));
@@ -465,5 +466,50 @@ public class UserDAO extends DBContext {
             e.printStackTrace();
         }
         return experts;
+    }
+
+    public List<LearnerDTO> getLearnersBySubjectId(int subjectId, int page, int recordsPerPage, String search) {
+        String query = "With PageResult AS (\n"
+                + "	SELECT u.id, \n"
+                + "	u.full_name, \n"
+                + "	u.email, \n"
+                + "	u.gender, \n"
+                + "	u.phone_number, \n"
+                + "	u.profile_img,\n"
+                + "	ROW_NUMBER() OVER (ORDER BY u.id) AS row_num\n"
+                + "	FROM users AS u\n"
+                + "	INNER JOIN Subject_Register AS sj ON u.id = sj.UserId\n"
+                + "	WHERE sj.SubjectId = ? AND (u.id LIKE ? OR u.full_name LIKE ? OR u.email LIKE ? OR u.phone_number LIKE ?)"
+                + ")\n"
+                + "SELECT *\n"
+                + "FROM PageResult\n"
+                + "WHERE row_num BETWEEN ? AND ?";
+        List<LearnerDTO> learners = new ArrayList<>();
+        int start = (page - 1) * recordsPerPage + 1;
+        int end = start + recordsPerPage - 1;
+        String searchCondition = "%" + search + "%";
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, subjectId);
+            ps.setString(2, searchCondition);
+            ps.setString(3, searchCondition);
+            ps.setString(4, searchCondition);
+            ps.setString(5, searchCondition);
+            ps.setInt(6, start);
+            ps.setInt(7, end);
+            rs = ps.executeQuery();
+            while (rs.next()) {                
+                learners.add(new LearnerDTO(rs.getInt(1), 
+                    rs.getString(2), 
+                    rs.getString(3), 
+                    rs.getInt(4), 
+                    rs.getString(5), 
+                    rs.getString(6)));
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return learners;
     }
 }

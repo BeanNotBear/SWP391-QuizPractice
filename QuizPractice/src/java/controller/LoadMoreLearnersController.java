@@ -1,7 +1,7 @@
 package controller;
 
-import dal.LessonDAO;
-import dto.LessonSubjectDTO;
+import dal.UserDAO;
+import dto.LearnerDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,9 +11,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
+import org.apache.catalina.Session;
 
-@WebServlet(name = "LoadMoreLessonController", urlPatterns = {"/loadmorelesson"})
-public class LoadMoreLessonController extends HttpServlet {
+@WebServlet(name = "LoadMoreLearnersController", urlPatterns = {"/loadmoreexpert"})
+public class LoadMoreLearnersController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -26,37 +27,34 @@ public class LoadMoreLessonController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        int subjectId = (int) session.getAttribute("subjectId");
-        int page;
-        int recordsPerPage = 5;
-        if (session.getAttribute("pageLesson") == null) {
-            page = 2;
-        } else {
-            page = (int) session.getAttribute("pageLesson");
-        }
-        String search = (String)session.getAttribute("searchLesson");
-        session.setAttribute("pageLesson", page + 1);
-        List<LessonSubjectDTO> lessons = LessonDAO.getInstance().getLessonsBySubjectId(subjectId, page, recordsPerPage, search);
-        if (lessons.size() != 0) {
-            for (LessonSubjectDTO lesson : lessons) {
-                out.println("<div class=\"faq\">\n"
-                        + "                                <button class=\"accordion\">\n"
-                        + "                                    Lesson " + lesson.getLessonIndex() + " : " + lesson.getName() + "\n"
-                        + "                                    <i class=\"fa-solid fa-chevron-down\"></i>\n"
-                        + "                                </button>\n"
-                        + "                                <div class=\"pannel\">\n"
-                        + "                                    <div>Type: <b><i>" + lesson.getType() + "</i></b></div>\n"
-                        + "                                    <p>\n"
-                        + "                                        Content: " + lesson.getContent() + "\n"
-                        + "                                    </p>\n"
-                        + "                                </div>\n"
-                        + "                            </div>");
+        try (PrintWriter out = response.getWriter()) {
+            int page;
+            int recordsPerPage = 5;
+            HttpSession session = request.getSession();
+            if (session.getAttribute("leanerPage") == null) {
+                page = 2;
+            } else {
+                page = (int) session.getAttribute("leanerPage");
+            }
+
+            String search = (String) session.getAttribute("searchLearner");
+            int subjectId = (int) session.getAttribute("subjectId");
+            session.setAttribute("leanerPage", page + 1);
+
+            List<LearnerDTO> learners = UserDAO.getInstance().getLearnersBySubjectId(subjectId, page, recordsPerPage, search);
+            for (LearnerDTO learner : learners) {
+                String gender = learner.gender() == 1 ? "Male" : "Female";
+                out.println("<tr>\n"
+                        + "                                        <td>" + learner.id() + "</td>\n"
+                        + "                                        <td>" + learner.fullName() + "</td>\n"
+                        + "                                        <td><img src=\"" + learner.profileImg() + "\" alt=\"avatar\"/></td>   \n"
+                        + "                                        <td>" + learner.email() + "</td>\n"
+                        + "                                        <td>" + gender + "</td>\n"
+                        + "                                        <td>" + learner.phoneNumber() + "</td>\n"
+                        + "                                    </tr>");
             }
         }
-        out.close();
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

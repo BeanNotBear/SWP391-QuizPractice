@@ -5,6 +5,7 @@ import dal.PricePackageDAO;
 import dal.SubjectDAO;
 import dal.UserDAO;
 import dto.DimensionDTO;
+import dto.LearnerDTO;
 import dto.LessonSubjectDTO;
 import dto.OwnerDTO;
 import dto.SubjectPackagePriceDTO;
@@ -20,16 +21,16 @@ import java.util.List;
 import model.Dimension;
 import model.Subject;
 import model.User;
+import org.apache.http.HttpResponse;
 
 @WebServlet("/subjectDetailExpert")
 public class SubjectDetailExpertController extends HttpServlet {
-
+    int id = 0;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String tempId = request.getParameter("id");
         HttpSession session = request.getSession();
-        int id = 0;
         if (tempId != null) {
             id = Integer.parseInt(tempId);
         } else {
@@ -58,6 +59,9 @@ public class SubjectDetailExpertController extends HttpServlet {
         
         session.setAttribute("ownerId", ownerDTO.getId());
         
+        List<LearnerDTO> learners = UserDAO.getInstance().getLearnersBySubjectId(id, 1, 5, "");
+        request.setAttribute("learners", learners);
+        
         List<OwnerDTO> experts = UserDAO.getInstance().getExpertPagination(1, 5, ownerDTO.getId(), "");
         request.setAttribute("experts", experts);
         
@@ -83,7 +87,22 @@ public class SubjectDetailExpertController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String name = request.getParameter("name");
+        String txtStatus = request.getParameter("status");
+        String txtCategory = request.getParameter("category");
+        String description = request.getParameter("description");
+        String img = request.getParameter("img");
+        boolean feature = true;
         
+        try {
+            int status = Integer.parseInt(txtStatus);
+            System.out.println("status: " + status);
+            int category = Integer.parseInt(txtCategory);
+            SubjectDAO.getInstance().updateSubject(id, name, status, img, category, description);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        }
     }
 
 }

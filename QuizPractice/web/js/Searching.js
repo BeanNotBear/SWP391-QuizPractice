@@ -56,5 +56,24 @@ function searchLesson(search) {
         }
     });
 }
-
 attachAccordionListeners();
+
+function searchLearner(search) {
+    $.ajax({
+        url: "searchlearner",
+        data: {
+            searchLearner: $(search).val()
+        },
+        type: 'GET',
+        beforeSend: function () {
+            $("#loading").css('display', 'flex');
+        },
+        complete: function () {
+            $("#loading").css('display', 'none');
+        },
+        success: function (data) {
+            let row = document.getElementById("learnerContent");
+            row.innerHTML = data;
+        }
+    });
+}
