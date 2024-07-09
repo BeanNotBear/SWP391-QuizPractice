@@ -170,11 +170,29 @@
             .stt-ex {
                 width: 100px;
             }
-/*            #cateMsg {
-                display: none;
-            }*/
+            /*            #cateMsg {
+                            display: none;
+                        }*/
             .msg {
                 display: none;
+            }
+            .popup {
+                display: none;
+                position: fixed;
+                z-index: 1000;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+                /*    display: flex;*/
+                align-items: center;
+                justify-content: center;
+            }
+
+            .form-popup {
+                margin-top: 100px;
             }
         </style>
         <link rel="stylesheet" href="css/virtual-select.min.css"/>
@@ -199,7 +217,7 @@
                         <c:if test="${sessionScope.user.roleId == 2}">
                         <li><a data-toggle="tab" href="#menu3">Assign Expert</a></li>
                         </c:if>
-                    <li><a data-toggle="tab" href="#menu4">Learner (${requestScope.noOfStudents})</a></li>
+                    <li><a data-toggle="tab" href="#menu4">Learners (${requestScope.noOfStudents})</a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -227,17 +245,17 @@
                                             <label for="name">Name:</label>
                                             <input onkeyup="validateName(this)" type="text" id="name" name="name" class="form-control" placeholder="Enter subject name" value="${subject.name}">
                                             <div id="name-err" class="danger_msg msg">Name cannot be empty</div>
-                                       </div>
-                                            
-                                       <div class="form-group">
+                                        </div>
+
+                                        <div class="form-group">
                                             <label for="subjectStatus">Status:</label>
                                             <input <c:if test="${sessionScope.user.roleId != 2}">disabled=""</c:if> <c:if test="${subject.status == 1}">checked</c:if> type="radio" name="status" value="1">
                                                 <label class="stt">Publish</label>
                                                     <input <c:if test="${sessionScope.user.roleId != 2}">disabled=""</c:if> <c:if test="${subject.status == 2}">checked</c:if> type="radio" name="status" value="2">
                                                 <label class="stt">Unpublish</label>
-                                       </div>
+                                            </div>
 
-                                       <div class="form-group">
+                                            <div class="form-group">
                                                 <label for="category">Category:</label>
                                                 <select required id="categorySelect" name="dimensionId" placeholder="Select Category" data-search="true" data-silent-initial-value-set="true">
                                                 <c:forEach var="dimension" items="${dimensions}">
@@ -245,7 +263,7 @@
                                                 </c:forEach>
                                             </select>
                                             <div id="cateMsg" class="danger_msg msg">Must select category</div>
-                                       </div>
+                                        </div>
 
                                         <div class="form-group">
                                             <label>Owner(Expert):</label>
@@ -285,7 +303,7 @@
                             <c:forEach var="i" items="${lessons}">
                                 <div class="faq">
                                     <button class="accordion">
-                                        Lesson ${i.lessonIndex} : ${i.name}
+                                        ${i.lessonIndex} : ${i.name}
                                         <i class="fa-solid fa-chevron-down"></i>
                                     </button>
                                     <div class="pannel">
@@ -302,22 +320,26 @@
 
                     <div id="menu2" class="tab-pane fade">
                         <h3 class="col-md-3">Package Price</h3>
-                        <div class="col-md-6"></div>
+                        <a style="margin-left: 1000px;" onclick="showPopUp('Add New')">Add Package Price</a>
+                        <div style="padding-left: 0; margin-bottom: 10px" class="col-md-6">
+                            <input onkeyup="searchPricePackage(this)" class="search-input" type="text" placeholder="Search Price Package">
+                        </div>
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>Id</th>
                                     <th>PackageName</th>
-                                    <th>Duration</th>
-                                    <th>Price</th>
-                                    <th>Sale Price</th>
+                                    <th>Duration (Month)</th>
+                                    <th>Price (VND)</th>
+                                    <th>Sale Price (VND)</th>
+                                    <th>Original Price (VND)</th>
                                     <th>Status</th>
                                         <c:if test="${sessionScope.user.roleId == 2}">
                                         <th>Action</th>
                                         </c:if>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="pricePackageContent">
                                 <c:forEach var="mypackage" items="${packageList}">
                                     <tr>
                                         <td>${mypackage.getId()}</td>
@@ -325,17 +347,19 @@
                                         <td>${mypackage.getDuration()}</td>   
                                         <td>${mypackage.getPrice()}</td>
                                         <td>${mypackage.getSalePrice()}</td>
+                                        <td>${mypackage.getOriginalPrice()}</td>
                                         <td>${mypackage.getStatus()}</td>
                                         <c:if test="${sessionScope.user.roleId == 2}">
                                             <td>
                                                 <c:choose>
                                                     <c:when test="${mypackage.getStatus() eq 'active'}">
-                                                        <a href="#" class="btn btn-warning btn-sm" onclick="changeStatus(${mypackage.getId()}, 'inactive',${subject.id})">Inactive</a>
+                                                        <a href="#" class="btn btn-danger btn-sm" onclick="changeStatus(${mypackage.getId()}, 'inactive',${subject.id})">Inactive</a>
                                                     </c:when>
                                                     <c:otherwise>
                                                         <a href="#" class="btn btn-success btn-sm" onclick="changeStatus(${mypackage.getId()}, 'active',${subject.id})">Active</a>
                                                     </c:otherwise>
                                                 </c:choose>
+                                                <a onclick="showPopUpEdit(event, 'Edit')" class="btn btn-warning btn-sm edit-btn">Edit</a>
                                             </td>
                                         </c:if>
 
@@ -343,6 +367,7 @@
                                 </c:forEach>
                             </tbody>
                         </table>
+                        <a onclick="loaadMorePackagePrice()" >Load More <i class="fa-solid fa-chevron-down"></i></a>
                     </div>
 
                     <div id="menu3" class="tab-pane fade">
@@ -419,33 +444,81 @@
         </section>
         <br/>
         <%@include file="/layout/footer.jsp" %>
-        <!--        <div id="addLesson" class="modal fade" role="dialog">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title">Add Lesson</h4>
-                            </div>
-                            <div class="modal-body">
-                                <form id="addLesson">
-                                    <div class="form-group">
-                                        <label for="editDimensionType">Type:</label>
-                                        <input type="text" id="editDimensionType" name="type" class="form-control">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="editDimensionName">Dimension Name:</label>
-                                        <input type="text" id="editDimensionName" name="dimensionName" class="form-control">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="editDescription">Description:</label>
-                                        <input type="text" id="editDescription" name="description" class="form-control">
-                                    </div>
-                                    <button type="button" class="btn btn-primary" id="saveDimensionChanges">Save Changes</button>
-                                </form>
-                            </div>
-                        </div>
+        <div id="addLesson" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Add Lesson</h4>
                     </div>
-                </div>-->
+                    <div class="modal-body">
+                        <form id="addLesson">
+                            <div class="form-group">
+                                <label for="name">Name:</label>
+                                <input type="text" id="name" name="name" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="editDimensionName">Dimension Name:</label>
+                                <input type="text" id="editDimensionName" name="dimensionName" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="editDescription">Description:</label>
+                                <input type="text" id="editDescription" name="description" class="form-control">
+                            </div>
+                            <button type="button" class="btn btn-primary" id="saveDimensionChanges">Save Changes</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--add package price pop up-->
+        <div id="modalPackage" class="popup" role="dialog">
+            <div class="form-container">
+                <div>
+                    <div>
+                        <form class="form-popup">
+                            <button onclick="hidePopUp()" type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4>Package Price</h4>
+                            <input id="packageId" type="hidden">
+                            <div class="form-group">
+                                <label for="packageName">Name:</label>
+                                <input onkeyup="validatePackageName(this)" type="text" id="packageName" name="packageName" class="form-control">
+                                <div id="namePkMsg" class="msg danger_msg">Name cannot be empty</div>
+                            </div>
+                            <div class="form-group">
+                                <label for=packageDuration>Duration (month):</label>
+                                <input onkeyup="validateDuration(this)" type=number id="packageDuration" name="packageDuration" class="form-control">
+                                <div id="durationMsg" class="msg danger_msg"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="salePrice">Sale Price (vnd):</label>
+                                <input onkeyup="validateSalePrice(this)" type="number" id="salePrice" name="salePrice" class="form-control">
+                                <div id="salePriceMsg" class="msg danger_msg"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="price">Price (vnd):</label>
+                                <input onkeyup="validatePrice(this)" type="number" id="price" name="price" class="form-control">
+                                <div id="priceMsg" class="msg danger_msg"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="originalPrice">Original Price (vnd):</label>
+                                <input onkeyup="validateOriginalPrice(this)" type="number" id="originalPrice" name="originalPrice" class="form-control">
+                                <div id="originalPriceMsg" class="msg danger_msg"></div>
+                            </div>
+                            <!--                            <div class="form-group">
+                                                            <label for="statusPackagePrice">Status:</label>
+                                                            <select class="form-group" id="statusPackagePrice">
+                                                                <option value="active">Active</option>
+                                                                <option selected value="inactive">Inactive</option>
+                                                            </select>
+                                                        </div>-->
+                            <button onclick="addNew()" onmouseover="addPackagePrice(this)" type="button" class="btn btn-primary" id="addPackage">Add New</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <script>
             document.getElementById('uploadButton').addEventListener('click', function () {
@@ -517,12 +590,16 @@
                     session.setAttribute("searchLesson", "");
                     session.setAttribute("leanerPage", null);
                     session.setAttribute("searchLearner", "");
+                    session.setAttribute("pagePackage", null);
+                    session.setAttribute("searchPackage", "");
             %>
             };
         </script>
         <script src="js/Searching.js"></script>
         <script src="js/AssignExpert.js"></script>
         <script src="js/SaveChangeSubbject.js"></script>
+        <script src="js/PackagePrice.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js" integrity="sha512-ykZ1QQr0Jy/4ZkvKuqWn4iF3lqPZyij9iRv6sGqLRdTPkY69YX6+7wvVGmsdBbiIfN/8OdsI7HABjvEok6ZopQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </body>

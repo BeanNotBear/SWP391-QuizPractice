@@ -670,62 +670,63 @@ public class SubjectDAO extends DBContext {
         return 0;
     }
 
-    public boolean addSubjectPricePackage(int packageId, int subjectId) {
-        boolean updated = false;
-        String query = "insert into subject_has_price_package values(?,?)";
-        try {
-            ps = connection.prepareStatement(query);
-            ps.setInt(1, subjectId);
-            ps.setInt(2, packageId);
-
-            int rowsAffected = ps.executeUpdate();
-            if (rowsAffected > 0) {
-                updated = true;
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace(); // Handle exception properly in a production environment
-        }
-        return updated;
-    }
-
-    public boolean deleteSubjectPricePackage(int packageId, int subjectId) {
-        boolean updated = false;
-        String query = "delete from subject_has_price_package where subject_id=? and price_package_id=?";
-        try {
-            ps = connection.prepareStatement(query);
-            ps.setInt(1, subjectId);
-            ps.setInt(2, packageId);
-
-            int rowsAffected = ps.executeUpdate();
-            if (rowsAffected > 0) {
-                updated = true;
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace(); // Handle exception properly in a production environment
-        }
-        return updated;
-    }
-
-    public List<SubjectPackagePriceDTO> getListSubjectPackagePriceDTO(int subjectId) {
+    public List<SubjectPackagePriceDTO> getListSubjectPackagePriceDTO(int subjectId, int page, int recordsPerPage, String search) {
         List<SubjectPackagePriceDTO> lst = new ArrayList<>();
-
+        int start = (page - 1) * recordsPerPage + 1;
+        int end = start + recordsPerPage - 1;
         try {
-            String query = "SELECT \n"
-                    + "    pp.*,\n"
-                    + "    CASE \n"
-                    + "        WHEN EXISTS (\n"
-                    + "            SELECT 1 \n"
-                    + "            FROM subject_has_price_package shpp \n"
-                    + "            WHERE shpp.price_package_id = pp.id \n"
-                    + "              AND shpp.subject_id = ?\n"
-                    + "        ) THEN 'active'\n"
-                    + "        ELSE 'inactive'\n"
-                    + "    END AS status\n"
-                    + "FROM \n"
-                    + "package_price pp";
+            String searchCondition = "%" + search + "%";
+            System.out.println(search);
+            String query = "WITH PageResult AS (\n"
+                    + "    SELECT \n"
+                    + "        pp.*,\n"
+                    + "        CASE \n"
+                    + "            WHEN EXISTS (\n"
+                    + "                SELECT 1 \n"
+                    + "                FROM subject_has_price_package shpp \n"
+                    + "                WHERE shpp.price_package_id = pp.id \n"
+                    + "                  AND shpp.subject_id = ?\n"
+                    + "            ) THEN 'active'\n"
+                    + "            ELSE 'unused'\n"
+                    + "        END AS [status]\n"
+                    + "    FROM \n"
+                    + "        package_price pp\n"
+                    + "    WHERE \n"
+                    + "        (pp.name LIKE ? OR\n"
+                    + "         pp.duration LIKE ? OR\n"
+                    + "         pp.price LIKE ? OR\n"
+                    + "         pp.sale_price LIKE ? OR\n"
+                    + "         pp.original_price LIKE ? OR\n"
+                    + "         CASE \n"
+                    + "            WHEN EXISTS (\n"
+                    + "                SELECT 1 \n"
+                    + "                FROM subject_has_price_package shpp \n"
+                    + "                WHERE shpp.price_package_id = pp.id \n"
+                    + "                  AND shpp.subject_id = ?\n"
+                    + "            ) THEN 'active'\n"
+                    + "            ELSE 'unused'\n"
+                    + "        END LIKE ?)\n"
+                    + "),\n"
+                    + "NumberedResult AS (\n"
+                    + "    SELECT *,\n"
+                    + "        ROW_NUMBER() OVER (ORDER BY [status]) AS row_num\n"
+                    + "    FROM PageResult\n"
+                    + ")\n"
+                    + "SELECT *\n"
+                    + "FROM NumberedResult\n"
+                    + "WHERE row_num BETWEEN ? AND ?;";
 
             ps = connection.prepareStatement(query);
             ps.setInt(1, subjectId);
+            ps.setString(2, searchCondition);
+            ps.setString(3, searchCondition);
+            ps.setString(4, searchCondition);
+            ps.setString(5, searchCondition);
+            ps.setString(6, searchCondition);
+            ps.setInt(7, subjectId);
+            ps.setString(8, searchCondition);
+            ps.setInt(9, start);
+            ps.setInt(10, end);
             rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -734,9 +735,10 @@ public class SubjectDAO extends DBContext {
                 int duration = rs.getInt(3);
                 double salePrice = rs.getDouble(4);
                 double price = rs.getDouble(5);
+                double originalPrice = rs.getDouble(6);
                 String status = rs.getString(7);
 
-                SubjectPackagePriceDTO s = new SubjectPackagePriceDTO(id, name, duration, price, salePrice, status);
+                SubjectPackagePriceDTO s = new SubjectPackagePriceDTO(id, name, duration, salePrice, price, originalPrice, status);
                 lst.add(s);
             }
         } catch (SQLException ex) {

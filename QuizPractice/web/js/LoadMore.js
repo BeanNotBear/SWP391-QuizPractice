@@ -70,3 +70,20 @@ function loadMoreLearner() {
         }
     });
 }
+
+function loaadMorePackagePrice() {
+    $.ajax({
+        url: "loadmorepackageprice",
+        type: 'GET',
+        beforeSend: function () {
+            $("#loading").css('display', 'flex');
+        },
+        complete: function () {
+            $("#loading").css('display', 'none');
+        },
+        success: function (data) {
+            let row = document.getElementById("pricePackageContent");
+            row.innerHTML += data;
+        }
+    });
+}

@@ -1,6 +1,7 @@
 package controller;
 
 import com.google.gson.Gson;
+import dal.PricePackageDAO;
 import dal.SubjectDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -20,12 +21,11 @@ public class ChangePackageStatusController extends HttpServlet {
         String status = request.getParameter("status");
         int subjectId = Integer.parseInt(request.getParameter("subjectId"));
         System.out.println(packageId + status + subjectId);
-        SubjectDAO subjectDAO = SubjectDAO.getInstance();
         boolean result = false;
         if (status.equalsIgnoreCase("active")) {
-            result = subjectDAO.addSubjectPricePackage(packageId, subjectId);
+            result = PricePackageDAO.getInstance().addSubjectPricePackage(packageId, subjectId);
         } else {
-            result = subjectDAO.deleteSubjectPricePackage(packageId, subjectId);
+            result = PricePackageDAO.getInstance().deleteSubjectPricePackage(packageId, subjectId);
         }
 
         response.setContentType("application/json");

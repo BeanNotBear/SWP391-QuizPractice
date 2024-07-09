@@ -66,7 +66,7 @@ public class SubjectDetailExpertController extends HttpServlet {
         request.setAttribute("experts", experts);
         
         List<SubjectPackagePriceDTO> packageList = new ArrayList<>();
-        packageList = subjectDAO.getListSubjectPackagePriceDTO(id);
+        packageList = subjectDAO.getListSubjectPackagePriceDTO(id, 1, 5, "");
         request.setAttribute("packageList", packageList);
 
         int numberOfPackagePrice = 0;

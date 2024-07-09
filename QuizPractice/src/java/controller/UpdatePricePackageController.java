@@ -1,7 +1,7 @@
 package controller;
 
-import dal.LessonDAO;
-import dto.LessonSubjectDTO;
+import dal.PricePackageDAO;
+import dto.SubjectPackagePriceDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -10,10 +10,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.List;
+import org.json.JSONObject;
 
-@WebServlet(name = "LoadMoreLessonController", urlPatterns = {"/loadmorelesson"})
-public class LoadMoreLessonController extends HttpServlet {
+@WebServlet(name = "UpdatePricePackageController", urlPatterns = {"/EditPricePackage"})
+public class UpdatePricePackageController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -26,37 +26,36 @@ public class LoadMoreLessonController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        int subjectId = (int) session.getAttribute("subjectId");
-        int page;
-        int recordsPerPage = 5;
-        if (session.getAttribute("pageLesson") == null) {
-            page = 2;
-        } else {
-            page = (int) session.getAttribute("pageLesson");
+        try (PrintWriter out = response.getWriter()) {
+            JSONObject jsonResponse = new JSONObject();
+            HttpSession session = request.getSession();
+
+            String txtId = request.getParameter("id");
+            String name = request.getParameter("name");
+            String txtDuration = request.getParameter("duration");
+            String txtPrice = request.getParameter("price");
+            String txtSalePrice = request.getParameter("salePrice");
+            String txtOriginalPrice = request.getParameter("originalPrice");
+
+            int id = Integer.parseInt(txtId);
+            int duration = Integer.parseInt(txtDuration);
+            double price = Double.parseDouble(txtPrice);
+            double salePrice = Double.parseDouble(txtSalePrice);
+            double originalPrice = Double.parseDouble(txtOriginalPrice);
+
+            SubjectPackagePriceDTO packagePriceDTO = new SubjectPackagePriceDTO(id,
+                    name,
+                    duration,
+                    salePrice,
+                    price,
+                    originalPrice,
+                    null);
+
+            PricePackageDAO.getInstance().UpdatePricePackageById(packagePriceDTO);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        String search = (String)session.getAttribute("searchLesson");
-        session.setAttribute("pageLesson", page + 1);
-        List<LessonSubjectDTO> lessons = LessonDAO.getInstance().getLessonsBySubjectId(subjectId, page, recordsPerPage, search);
-        if (lessons.size() != 0) {
-            for (LessonSubjectDTO lesson : lessons) {
-                out.println("<div class=\"faq\">\n"
-                        + "                                <button class=\"accordion\">\n"
-                        + "                                    " + lesson.getLessonIndex() + " : " + lesson.getName() + "\n"
-                        + "                                    <i class=\"fa-solid fa-chevron-down\"></i>\n"
-                        + "                                </button>\n"
-                        + "                                <div class=\"pannel\">\n"
-                        + "                                    <div>Type: <b><i>" + lesson.getType() + "</i></b></div>\n"
-                        + "                                    <p>\n"
-                        + "                                        Content: " + lesson.getContent() + "\n"
-                        + "                                    </p>\n"
-                        + "                                </div>\n"
-                        + "                            </div>");
-            }
-        }
-        out.close();
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

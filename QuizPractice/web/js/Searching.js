@@ -2,7 +2,7 @@ function searchExpert(search) {
     $.ajax({
         url: "searchExpert",
         data: {
-            search: $(search).val()
+            search: $(search).val().trim()
         },
         type: 'GET',
         beforeSend: function () {
@@ -40,7 +40,7 @@ function searchLesson(search) {
     $.ajax({
         url: "searchLesson",
         data: {
-            searchLesson: $(search).val()
+            searchLesson: $(search).val().trim()
         },
         type: 'GET',
         beforeSend: function () {
@@ -62,7 +62,7 @@ function searchLearner(search) {
     $.ajax({
         url: "searchlearner",
         data: {
-            searchLearner: $(search).val()
+            searchLearner: $(search).val().trim()
         },
         type: 'GET',
         beforeSend: function () {
@@ -73,6 +73,26 @@ function searchLearner(search) {
         },
         success: function (data) {
             let row = document.getElementById("learnerContent");
+            row.innerHTML = data;
+        }
+    });
+}
+
+function searchPricePackage(search) {
+    $.ajax({
+        url: "searchpackageprice",
+        data: {
+            searchPackage: $(search).val().trim()
+        },
+        type: 'GET',
+        beforeSend: function () {
+            $("#loading").css('display', 'flex');
+        },
+        complete: function () {
+            $("#loading").css('display', 'none');
+        },
+        success: function (data) {
+            let row = document.getElementById("pricePackageContent");
             row.innerHTML = data;
         }
     });

@@ -15,6 +15,7 @@ public class SubjectPackagePriceDTO {
     private String packageName;
     private int duration;
     private double salePrice;
-    private double price;   
+    private double price; 
+    private double originalPrice;
     private String status;
 }
