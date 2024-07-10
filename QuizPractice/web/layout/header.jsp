@@ -141,7 +141,7 @@
                             <li><a href="<%=request.getContextPath()%>/subject">Subject</a></li>
                             <li><a href="<%=request.getContextPath()%>/myRegister">My Register</a></li>
                             <li><a href="<%=request.getContextPath()%>/myregister">Register Subject</a></li>
-                            <li><a href="<%=request.getContextPath()%>/myregister">Simulate Exam</a></li> 
+                            <li><a href="<%=request.getContextPath()%>/quizDoneList">Simulate Exam</a></li> 
                             <li><a href="<%=request.getContextPath()%>/practiceList">Practice List</a></li>
                             </c:when>
                             
@@ -151,8 +151,8 @@
                                 <li><a href="<%=request.getContextPath()%>/subjectManager">Subject Manager</a></li>
                                 <li><a href="<%=request.getContextPath()%>/newmenu3">User List</a></li>
                                 <li><a href="<%=request.getContextPath()%>/newmenu3">Dashboard</a></li>
-                                <li><a href="<%=request.getContextPath()%>/newmenu3">Question Manager</a></li>   
-                                <li><a href="<%=request.getContextPath()%>/newmenu3">Quiz Manager</a></li>   
+                                <li><a href="<%=request.getContextPath()%>/questionList">Question Manager</a></li>   
+                                <li><a href="<%=request.getContextPath()%>/quizManager">Quiz Manager</a></li>   
                            
                             </c:when>
                                 <c:when test="${sessionScope.user.roleId == 4}">
@@ -168,9 +168,9 @@
                             </c:when>
                                 <c:when test="${sessionScope.user.roleId == 3 }">
                                 <li><a href="<%=request.getContextPath()%>/home">Home</a></li>
-                                <li><a href="<%=request.getContextPath()%>/newmenu2">Question Manager</a></li>
+                                <li><a href="<%=request.getContextPath()%>/questionList">Question Manager</a></li>
                                 <li><a href="<%=request.getContextPath()%>/subjectManager">Subject Manager</a></li>
-                                <li><a href="<%=request.getContextPath()%>/newmenu3">Quiz Manager</a></li>
+                                <li><a href="<%=request.getContextPath()%>/quizManager">Quiz Manager</a></li>
                                 
                            
                             </c:when>

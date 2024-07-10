@@ -320,7 +320,6 @@ public class BlogDAO extends DBContext {
                     + "FROM blogs \n"
                     + "WHERE status = 1 \n"
                     + "ORDER BY created_at DESC";
-
             ps = connection.prepareStatement(query);
             rs = ps.executeQuery();
             while (rs.next()) {

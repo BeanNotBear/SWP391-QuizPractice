@@ -7,7 +7,7 @@ tinymce.init({
         'searchreplace', 'wordcount', 'visualblocks', 'code', 'fullscreen', 'insertdatetime', 'media',
         'table', 'emoticons', 'template', 'codesample'
     ],
-    toolbar: 'undo redo | styles | bold italic underline | alignleft aligncenter alignright alignjustify |' +
+    toolbar: 'fontfamily fontsize | undo redo | styles | bold italic underline | alignleft aligncenter alignright alignjustify |' +
             'bullist numlist outdent indent | link image | print preview media fullscreen | ' +
             'forecolor backcolor emoticons',
     menu: {

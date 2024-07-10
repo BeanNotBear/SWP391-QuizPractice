@@ -303,7 +303,7 @@
                             <c:forEach var="i" items="${lessons}">
                                 <div class="faq">
                                     <button class="accordion">
-                                        ${i.lessonIndex} : ${i.name}
+                                        Lesson ${i.lessonIndex} : ${i.name}
                                         <i class="fa-solid fa-chevron-down"></i>
                                     </button>
                                     <div class="pannel">
@@ -315,6 +315,7 @@
                                 </div> 
                             </c:forEach>
                         </div>
+                        <c:set var="pageLess" value="${sessionScope.pageLesson != null ? sessionScope.pageLesson : 1}"/>
                         <a onclick="loadMoreLesson()" >Load More <i class="fa-solid fa-chevron-down"></i></a>
                     </div>
 
@@ -526,7 +527,20 @@
             });
 
             document.getElementById('fileInput').addEventListener('change', function () {
+                var file = this.files[0];
                 var formData = new FormData();
+                formData.append('file', this.files[0]);
+                var allowedTypes = ['image/jpeg', 'image/png'];
+                if (allowedTypes.indexOf(file.type) === -1) {
+                    Swal.fire({
+                        title: "Only allowed to upload image formats: JPEG, PNG",
+                        icon: "error"
+                    }).then(() => {
+                        // Reset giá trị của input file để người dùng có thể chọn tệp khác
+                        document.getElementById('fileInput').value = "";
+                    });
+                    return;
+                }
                 formData.append('file', this.files[0]);
 
                 var xhr = new XMLHttpRequest();
@@ -599,6 +613,7 @@
         <script src="js/AssignExpert.js"></script>
         <script src="js/SaveChangeSubbject.js"></script>
         <script src="js/PackagePrice.js"></script>
+        <script src="js/logout.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js" integrity="sha512-ykZ1QQr0Jy/4ZkvKuqWn4iF3lqPZyij9iRv6sGqLRdTPkY69YX6+7wvVGmsdBbiIfN/8OdsI7HABjvEok6ZopQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

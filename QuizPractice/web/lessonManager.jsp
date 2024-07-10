@@ -4,7 +4,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="X-UA-Compatible="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Lesson Manager</title>
 
@@ -26,12 +26,17 @@
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+        <!-- CKEditor CDN -->
+        <script src="https://cdn.ckeditor.com/4.14.1/standard/ckeditor.js"></script>
 
         <style>
             body {
                 padding: 0;
                 margin: 0;
+            }
+            a {
+                z-index: 0 !important;
             }
         </style>
 
@@ -63,16 +68,6 @@
                 const type = $('#searchType').val();
                 const status = $('#searchStatus').val();
 
-//                $.get("lessonManager?subjectId=${subjectId}", {
-//                    searchName: name,
-//                    searchType: type,
-//                    searchStatus: status,
-//                    page: page
-//                }, function (data) {
-//                    $('section.subjectList').html(data);
-//                });
-
-                // Xây dựng URL
                 const href = "lessonManager?subjectId=${subjectId}&searchName=" + name + "&searchType=" + type + "&searchStatus=" + status + "&page=" + page;
                 window.location.href = href;  // Chuyển hướng người dùng đến URL
             }
@@ -108,7 +103,6 @@
                             <option value="content" ${searchType == 'content' ? 'selected' : ''}>Content</option>
                             <option value="quiz" ${searchType == 'quiz' ? 'selected' : ''}>Quiz</option>
                         </select>
-
                     </div>
                     <div class="col-md-2">
                         <select class="form-control" id="searchStatus" name="searchStatus" form="searchForm">
@@ -118,12 +112,9 @@
                         </select>
                     </div>
                     <div class="col-md-2">
-                        <!--                        <a href="addLesson" class="btn btn-success">Add Lesson</a>-->
-                        <!-- Button to Open the Modal -->
                         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addLessonModal">
                             Add New Lesson
                         </button>
-
                     </div>
                 </div>
 
@@ -151,7 +142,7 @@
                                 <td>${lesson.type}</td>
                                 <td>${lesson.status == 1 ? 'Active' : 'Inactive'}</td>
                                 <td>
-                                    <a href="javascript:void(0);" class="btn btn-primary col-md-5" data-toggle="modal" data-target="#editLessonModal" onclick="editLesson(${lesson.id})">Edit</a>
+                                    <a href="javascript:void(0);" class="btn btn-primary col-md-5" data-toggle="modal" data-target="#editLessonModal" onclick="editLesson(${lesson.id})">Details</a>
                                     <span class="col-md-1"></span>
                                     <form action="lessonManager" method="post" class="col-md-5">
                                         <input type="hidden" name="id" value="${lesson.id}">
@@ -243,7 +234,7 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="editModalLabel">Edit Lesson</h5>
+                            <h5 class="modal-title" id="editModalLabel">Lesson Details</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -286,7 +277,27 @@
         </section>
 
         <%@include file="/layout/footer.jsp"%>
+
+        <!-- Initialize CKEditor for the content field in the addLessonForm -->
         <script>
+            $(document).ready(function () {
+                CKEDITOR.replace('content');
+            });
+
+            // Initialize CKEditor for the content field in the editLessonForm when the modal is shown
+            $('#editLessonModal').on('shown.bs.modal', function () {
+                if (!CKEDITOR.instances['editContent']) {
+                    CKEDITOR.replace('editContent');
+                }
+            });
+
+            // Remove CKEditor instance when the edit modal is hidden
+            $('#editLessonModal').on('hidden.bs.modal', function () {
+                if (CKEDITOR.instances['editContent']) {
+                    CKEDITOR.instances['editContent'].destroy(true);
+                }
+            });
+
             function editLesson(id) {
                 $.ajax({
                     url: 'getLessonById', // URL to the controller method

@@ -15,7 +15,7 @@ public class Subject {
     private int id;
     private String name;
     private int creatorId;
-    private Date creatorAt;
+    private Date createdAt;
     private Date updateAt;
     private int status;
     private String img;

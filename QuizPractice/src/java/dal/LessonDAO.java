@@ -1,6 +1,7 @@
 package dal;
 
 import context.DBContext;
+import dto.LessonDTO;
 import dto.LessonSubjectDTO;
 import dto.OwnerDTO;
 import java.sql.SQLException;
@@ -328,7 +329,7 @@ public class LessonDAO extends DBContext {
         return lessons;
     }
 
-        public int getNumberOfLessonsBySubjectId(int subjectId) {
+    public int getNumberOfLessonsBySubjectId(int subjectId) {
         String query = "SELECT COUNT(lesson_id) AS NumberOfLessons\n"
                 + "FROM [SWP391_G6].[dbo].[subject_has_lesson]\n"
                 + "WHERE subject_id = ?";
@@ -344,6 +345,56 @@ public class LessonDAO extends DBContext {
             e.printStackTrace();
         }
         return numberOfLessons;
+    }
+
+    public int getTotaPageLesson(int subjectId, String search, int recordPerPage) {
+        String query = "DECLARE @TotalRecords INT;\n"
+                + "DECLARE @PageSize INT = ?;\n"
+                + "\n"
+                + "SELECT @TotalRecords = COUNT(*)\n"
+                + "FROM [SWP391_G6].[dbo].[lessons] AS l\n"
+                + "INNER JOIN [dbo].[subject_has_lesson] AS sl ON sl.lesson_id = l.id\n"
+                + "INNER JOIN [dbo].[subjects] AS s ON s.id = sl.subject_id\n"
+                + "WHERE sl.subject_id = ? AND (l.[name] LIKE ? OR l.[content] LIKE ? OR l.[LessonIndex] LIKE ? OR l.[Type] LIKE ?);\n"
+                + "\n"
+                + "DECLARE @TotalPages INT;\n"
+                + "SET @TotalPages = CEILING(CAST(@TotalRecords AS FLOAT) / CAST(@PageSize AS FLOAT));\n"
+                + "SELECT @TotalPages";
+        int totalPage = 0;
+        try {
+            search = "%" + search + "%";
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, recordPerPage);
+            ps.setInt(2, subjectId);
+            ps.setString(3, search);
+            ps.setString(4, search);
+            ps.setString(5, search);
+            ps.setString(6, search);
+            
+           rs = ps.executeQuery();
+           if(rs.next()) {
+               totalPage = rs.getInt(1);
+           }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return totalPage;
+    }
+    
+    public List<LessonDTO> getLessonsBySubjectId(String subjectId) throws SQLException {
+        List<LessonDTO> lessons = new ArrayList<>();
+        String query = "SELECT l.id, l.name FROM lessons l " +
+                       "JOIN subject_has_lesson shl ON l.id = shl.lesson_id " +
+                       "WHERE shl.subject_id = ?";
+         ps = connection.prepareStatement(query);
+        ps.setString(1, subjectId);
+         rs = ps.executeQuery();
+
+        while (rs.next()) {
+            lessons.add(new LessonDTO(rs.getInt("id"), rs.getString("name")));
+        }
+
+        return lessons;
     }
 
     public static void main(String[] args) {

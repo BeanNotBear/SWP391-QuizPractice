@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import dto.PricePackageDTO;
 import dto.SubjectDTO;
+import dto.SubjectLoadDTO;
 import dto.SubjectManagerDTO;
 import dto.SubjectPackagePriceDTO;
 import java.time.LocalDate;
@@ -1218,6 +1219,19 @@ public class SubjectDAO extends DBContext {
             e.printStackTrace();
         }
         return isSuccess;
+    }
+
+    public List<SubjectLoadDTO> getAllSubjects() throws SQLException {
+        List<SubjectLoadDTO> subjects = new ArrayList<>();
+        String query = "SELECT id, name FROM subjects";
+        ps = connection.prepareStatement(query);
+        rs = ps.executeQuery();
+
+        while (rs.next()) {
+            subjects.add(new SubjectLoadDTO(rs.getInt("id"), rs.getString("name")));
+        }
+
+        return subjects;
     }
 
     public static void main(String[] args) {

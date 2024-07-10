@@ -47,7 +47,7 @@ public class SearchLessonController extends HttpServlet {
         for (LessonSubjectDTO lesson : lessons) {
             out.println("<div class=\"faq\">\n"
                     + "                                <button class=\"accordion\">\n"
-                    + "                                  " + lesson.getLessonIndex() + " : " + lesson.getName() + "\n"
+                    + "                                  Lesson " + lesson.getLessonIndex() + " : " + lesson.getName() + "\n"
                     + "                                    <i class=\"fa-solid fa-chevron-down\"></i>\n"
                     + "                                </button>\n"
                     + "                                <div class=\"pannel\">\n"

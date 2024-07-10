@@ -20,12 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Dimension;
 import model.Subject;
-import model.User;
-import org.apache.http.HttpResponse;
 
 @WebServlet("/subjectDetailExpert")
 public class SubjectDetailExpertController extends HttpServlet {
+
     int id = 0;
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -37,36 +37,34 @@ public class SubjectDetailExpertController extends HttpServlet {
             request.getRequestDispatcher("error.jsp").forward(request, response);
         }
         session.setAttribute("subjectId", id);
-        SubjectDAO subjectDAO = SubjectDAO.getInstance();
         List<DimensionDTO> dimensionDTOs = new ArrayList<>();
-        dimensionDTOs = subjectDAO.getListDimensionDTO();
+        dimensionDTOs = SubjectDAO.getInstance().getListDimensionDTO();
         request.setAttribute("dimensions", dimensionDTOs);
 
-        List<Dimension> dimensionList = new ArrayList<>();
-        dimensionList = subjectDAO.getListDimension();
-        request.setAttribute("dimensionList", dimensionList);
-
+//        List<Dimension> dimensionList = new ArrayList<>();
+//        dimensionList = subjectDAO.getListDimension();
+//        request.setAttribute("dimensionList", dimensionList);
         List<LessonSubjectDTO> lessons = new ArrayList<>();
         lessons = LessonDAO.getInstance().getLessonsBySubjectId(id, 1, 5, "");
         request.setAttribute("lessons", lessons);
 
-        Subject subject = subjectDAO.getSubjectById(id);
+        Subject subject = SubjectDAO.getInstance().getSubjectById(id);
         request.setAttribute("subject", subject);
 
         OwnerDTO ownerDTO = new OwnerDTO();
         ownerDTO = UserDAO.getInstance().getOnwerBySubjectId(id);
         request.setAttribute("owner", ownerDTO);
-        
+
         session.setAttribute("ownerId", ownerDTO.getId());
-        
+
         List<LearnerDTO> learners = UserDAO.getInstance().getLearnersBySubjectId(id, 1, 5, "");
         request.setAttribute("learners", learners);
-        
+
         List<OwnerDTO> experts = UserDAO.getInstance().getExpertPagination(1, 5, ownerDTO.getId(), "");
         request.setAttribute("experts", experts);
-        
+
         List<SubjectPackagePriceDTO> packageList = new ArrayList<>();
-        packageList = subjectDAO.getListSubjectPackagePriceDTO(id, 1, 5, "");
+        packageList = SubjectDAO.getInstance().getListSubjectPackagePriceDTO(id, 1, 5, "");
         request.setAttribute("packageList", packageList);
 
         int numberOfPackagePrice = 0;
@@ -93,7 +91,7 @@ public class SubjectDetailExpertController extends HttpServlet {
         String description = request.getParameter("description");
         String img = request.getParameter("img");
         boolean feature = true;
-        
+
         try {
             int status = Integer.parseInt(txtStatus);
             System.out.println("status: " + status);

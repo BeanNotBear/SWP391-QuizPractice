@@ -10,6 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 import context.DBContext;
 import dto.PracticeListDTO;
+import model.Question;
+import dto.QuestionDTO;
+import model.Answer;
+import model.Practice;
+import model.QuestionStatus;
 
 /**
  *
@@ -233,6 +238,150 @@ public class PracticeDAO extends DBContext {
             e.printStackTrace(); // Replace with logger in real application
         }
         return 0;
+    }
+
+    public List<Question> getQuestionsByPracticeId(int practiceId) throws SQLException {
+        String query = "SELECT q.* FROM questions q JOIN Practice_Question pq ON q.id = pq.QuestionId WHERE pq.PracticeId = ?";
+        ps = connection.prepareStatement(query);
+        ps.setInt(1, practiceId);
+        rs = ps.executeQuery();
+
+        List<Question> questions = new ArrayList<>();
+        while (rs.next()) {
+            Question question = new Question(
+                    rs.getInt("id"),
+                    rs.getString("detail"),
+                    rs.getString("Suggestion"),
+                    rs.getString("Status"),
+                    rs.getString("Media")
+            );
+            questions.add(question);
+        }
+        return questions;
+    }
+
+    public List<QuestionDTO> getFilteredQuestions(int practiceId, String type) throws SQLException {
+        String query = "SELECT q.* FROM questions q "
+                + "JOIN Practice_Question pq ON q.id = pq.QuestionId "
+                + "WHERE pq.PracticeId = ?";
+
+        switch (type) {
+            case "answered":
+                query += " AND pq.YourAnswer IS NOT NULL";
+                break;
+            case "unanswered":
+                query += " AND pq.YourAnswer IS NULL";
+                break;
+            case "marked":
+                query += " AND pq.IsMarked = 1";
+                break;
+            case "all":
+            default:
+                break;
+        }
+
+        ps = connection.prepareStatement(query);
+        ps.setInt(1, practiceId);
+        rs = ps.executeQuery();
+
+        List<QuestionDTO> questions = new ArrayList<>();
+        int questionNumber = 1;
+        while (rs.next()) {
+            QuestionDTO question = new QuestionDTO(
+                    rs.getInt("id"),
+                    rs.getString("detail"),
+                    rs.getString("suggestion"),
+                    rs.getString("status"),
+                    rs.getString("media"),
+                    questionNumber++
+            );
+            questions.add(question);
+        }
+        return questions;
+    }
+    
+    public List<QuestionStatus> getAllQuestionsStatus(int practiceId) throws SQLException {
+        String query = "SELECT pq.QuestionId, q.detail, pq.YourAnswer "
+                + "FROM Practice_Question pq "
+                + "JOIN questions q ON pq.QuestionId = q.id "
+                + "WHERE pq.PracticeId = ?";
+        ps = connection.prepareStatement(query);
+        ps.setInt(1, practiceId);
+        rs = ps.executeQuery();
+
+        List<QuestionStatus> questionStatuses = new ArrayList<>();
+        while (rs.next()) {
+            int questionId = rs.getInt("QuestionId");
+            String detail = rs.getString("detail");
+            int yourAnswer = rs.getInt("YourAnswer");
+            QuestionStatus status = new QuestionStatus(questionId, detail, yourAnswer);
+            questionStatuses.add(status);
+        }
+        return questionStatuses;
+    }
+    
+    public Practice getPracticeById(int practiceId) throws SQLException {
+        String query = "SELECT * FROM Practices WHERE id = ?";
+        ps = connection.prepareStatement(query);
+        ps.setInt(1, practiceId);
+        rs = ps.executeQuery();
+
+        if (rs.next()) {
+            Practice practice = new Practice(
+                    rs.getInt("id"),
+                    rs.getInt("UserId"),
+                    rs.getInt("SubjectId"),
+                    rs.getString("LessonName"),
+                    rs.getInt("NumberQuestion"),
+                    rs.getTimestamp("CreatedAt"),
+                    rs.getInt("NumberCorrect"),
+                    rs.getInt("Duration")
+            );
+            return practice;
+        }
+        return null;
+    }
+    
+    public String getSubjectNameById(int subjectId) throws SQLException {
+        String query = "SELECT name FROM subjects WHERE id = ?";
+        ps = connection.prepareStatement(query);
+        ps.setInt(1, subjectId);
+        rs = ps.executeQuery();
+
+        if (rs.next()) {
+            return rs.getString("name");
+        }
+        return null;
+    }
+    
+     public List<Answer> getAnswersByQuestionId(int questionId) throws SQLException {
+        String query = "SELECT a.* FROM answers a JOIN question_has_answer qha ON a.id = qha.answer_id WHERE qha.question_id = ?";
+        ps = connection.prepareStatement(query);
+        ps.setInt(1, questionId);
+        rs = ps.executeQuery();
+
+        List<Answer> answers = new ArrayList<>();
+        while (rs.next()) {
+            Answer answer = new Answer(
+                    rs.getInt("id"),
+                    rs.getString("answer_detail"),
+                    rs.getTimestamp("created_at"),
+                    rs.getTimestamp("update_at"),
+                    rs.getInt("creator_id"),
+                    rs.getBoolean("is_correct")
+            );
+            answers.add(answer);
+        }
+        return answers;
+    }
+     
+    public void markQuestionForReview(int practiceId, int questionId) throws SQLException {
+        String query = "UPDATE Practice_Question SET IsMarked = 1 WHERE PracticeId = ? AND QuestionId = ?";
+        ps = connection.prepareStatement(query);
+        ps.setInt(1, practiceId);
+        ps.setInt(2, questionId);
+        ps.executeUpdate();
+
     }
 
     public static void main(String[] args) {

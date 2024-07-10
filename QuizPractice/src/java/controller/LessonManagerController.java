@@ -39,11 +39,9 @@ public class LessonManagerController extends HttpServlet {
         System.out.println("subjectId " + subjectId);
 //         System.out.println("userId "+user.getUserId());
         System.out.println("expertId " + expertId);
-        if (user.getRoleId() != 2) {
-            if (user == null || expertId == 0 || user.getUserId() != expertId) {
-                response.sendRedirect("/QuizPractice/"); // Thay đổi đường dẫn này tùy theo trang đăng nhập của bạn
-                return;
-            }
+        if (user == null || expertId == 0 || user.getUserId() != expertId) {
+            response.sendRedirect("/QuizPractice/"); // Thay đổi đường dẫn này tùy theo trang đăng nhập của bạn
+            return;
         }
 
         // Lấy trang hiện tại từ request
@@ -117,11 +115,22 @@ public class LessonManagerController extends HttpServlet {
             int subjectId = Integer.parseInt(request.getParameter("subjectId"));
             String type = request.getParameter("type");
 
+            // Print out the values for debugging
+            System.out.println("Add Lesson Form Data:");
+            System.out.println("Name: " + name);
+            System.out.println("Content: " + content);
+            System.out.println("Media: " + media);
+            System.out.println("Lesson Index: " + lessonIndex);
+            System.out.println("Subject ID: " + subjectId);
+            System.out.println("Type: " + type);
+
             LessonDAO lessonDAO = LessonDAO.getInstance();
             HttpSession session = request.getSession();
             User user = (User) session.getAttribute("user");
+            
             lessonDAO.insertLesson(name, content, media, lessonIndex, type, user.getUserId());
             int lessonId = lessonDAO.getIdAddCurrent();
+            System.out.println(lessonId + "-------------------");
             boolean s = lessonDAO.insertSubjectLesson(subjectId, lessonId);
 
             request.setAttribute("subjectId", subjectId);
