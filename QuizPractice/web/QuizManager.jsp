@@ -50,71 +50,7 @@
                 margin-top: -25px;
             }
         </style>
-
-        <script>
-            $(document).ready(function () {
-                $('#searchForm').submit(function (event) {
-                    event.preventDefault();
-                    $.ajax({
-                        url: 'quizManager',
-                        type: 'POST',
-                        data: $(this).serialize(),
-                        success: function (response) {
-                            $('#results').html($(response).find('#results').html());
-                            $('#pagination').html($(response).find('#pagination').html());
-                        }
-                    });
-                });
-
-                $(document).on('click', '.edit-quiz', function () {
-                    var quizId = $(this).data('id');
-                    $.ajax({
-                        url: 'getQuizById',
-                        type: 'GET',
-                        data: {id: quizId},
-                        success: function (response) {
-                            var quiz = JSON.parse(response);
-                            $('#editQuizForm #quizId').val(quiz.id);
-                            $('#editQuizForm #quizName').val(quiz.name);
-                            $('#editQuizForm #subjectId').val(quiz.subjectId);
-                            $('#editQuizForm #level').val(quiz.level);
-                            $('#editQuizForm #numberQuestion').val(quiz.numberQuestion);
-                            $('#editQuizForm #duration').val(quiz.duration);
-                            $('#editQuizModal').modal('show');
-                        }
-                    });
-                });
-
-                $(document).on('click', '.delete-quiz', function () {
-                    var quizId = $(this).data('id');
-                    $.ajax({
-                        url: 'deleteQuiz',
-                        type: 'POST',
-                        data: {id: quizId},
-                        success: function (response) {
-                            toastr.success("Successfully deleted quiz");
-                            $('#searchForm').submit();
-                        }
-                    });
-                });
-
-                $('#saveQuiz').click(function () {
-                    $.ajax({
-                        url: 'editQuiz',
-                        type: 'POST',
-                        data: $('#editQuizForm').serialize(),
-                        success: function (response) {
-                            toastr.success("Edit successfully!");
-                            $('#editQuizModal').modal('hide');
-                            $('#searchForm').submit();
-                        }
-                    });
-                });
-            });
-        </script>
-
     </head>
-
     <body>
         <%@include file="/layout/header.jsp"%>
 
@@ -123,9 +59,9 @@
 
             <div id="topTable" class="container">
                 <div class="row">
-                    
-                    <form id="searchForm" method="post">
-                       <div class="col-md-3">
+
+                    <form id="searchForm" method="post" action="quizManager">
+                        <div class="col-md-3">
                             <select id="subjectId" name="subjectId" class="form-control">
                                 <option value="">Select Subject</option>
                                 <c:forEach var="subject" items="${subjects}">
@@ -133,25 +69,19 @@
                                 </c:forEach>
                             </select>
                         </div>
-                       
-                        
                         <div class="col-md-2">
                             <input type="text" id="subjectName" name="subjectName" class="form-control" placeholder="Search by Subject Name" value="${param.subjectName}">
                         </div>
-                        
                         <div class="col-md-2">
                             <input type="text" id="quizName" name="quizName" class="form-control" placeholder="Search by Quiz Name" value="${param.quizName}">
                         </div>
-                        
                         <div class="col-md-2">
-<!--                            <button type="submit" style="margin-bottom: 10px" class="btn btn-primary">Search</button>-->
-                        <button type="submit" style="margin-bottom: 10px;padding-top: 0px;margin-top: 0px;border-top-width: 4px;" class="btn btn-primary">Search</button>
-                        </div> 
-                        <div class="col-md-2">
-                            <button style="display: none" type="submit" class="btn btn-primary">Search</button>
+                            <button style="margin: 0;" type="submit" class="btn btn-primary">Search</button>
                         </div>
                     </form>
-                        
+
+
+
                     <div class="col-md-2 text-right">
                         <a href="AddQuiz" >Add New Quiz</a>
                     </div>
@@ -166,9 +96,9 @@
                             <th>Name</th>
                             <th>Subject</th>
                             <th>Level</th>
-                            <th>#Questions</th>
-                            <th>Duration</th>
-                            <th>Type</th>>
+                            <th>Total Questions</th>
+                            <th>Duration (Minutes)</th>
+                            <th>Type</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -184,7 +114,9 @@
                                 <td>${quiz.type}</td>
 
                                 <td class="row">
-                                    <button class="btn btn-info  col-md-3" data-id="${quiz.id}"><a href="quizdetail?id=${quiz.id}">Edit</a></button>
+
+                                    <a class="btn btn-info  col-md-3" href="quizdetail?id=${quiz.id}">Edit</a>
+                                    <!--<button  data-id=""></button>-->
 
                                     <span class="col-md-1"></span>
                                     <button class="btn btn-danger delete-quiz col-md-3" data-id="${quiz.id}">Delete</button>
@@ -281,5 +213,122 @@
 
         <!-- side bar có thể thu nhỏ khi màn hình nhỏ  -->
         <script src="js/script.js"></script>
+        <script src="js/logout.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                <script>
+//            $(document).ready(function () {
+//                $('#searchForm').submit(function (event) {
+//                    event.preventDefault();
+//                    $.ajax({
+//                        url: 'quizManager',
+//                        type: 'POST',
+//                        data: $(this).serialize(),
+//                        success: function (response) {
+//                            $('#results').html($(response).find('#results').html());
+//                            $('#pagination').html($(response).find('#pagination').html());
+//                        }
+//                    });
+//                });
+
+            $(document).on('click', '.edit-quiz', function () {
+                var quizId = $(this).data('id');
+                $.ajax({
+                    url: 'getQuizById',
+                    type: 'GET',
+                    data: {id: quizId},
+                    success: function (response) {
+                        var quiz = JSON.parse(response);
+                        $('#editQuizForm #quizId').val(quiz.id);
+                        $('#editQuizForm #quizName').val(quiz.name);
+                        $('#editQuizForm #subjectId').val(quiz.subjectId);
+                        $('#editQuizForm #level').val(quiz.level);
+                        $('#editQuizForm #numberQuestion').val(quiz.numberQuestion);
+                        $('#editQuizForm #duration').val(quiz.duration);
+                        $('#editQuizModal').modal('show');
+                    }
+                });
+            });
+
+            $(document).on('click', '.delete-quiz', function () {
+                var quizId = $(this).data('id');
+                var userConfirmed = window.confirm("Are you sure you want to delete this quiz?");
+
+
+                if (userConfirmed) {
+                    $.ajax({
+                        url: 'deleteQuiz',
+                        type: 'POST',
+                        data: {id: quizId},
+                        success: function (response) {
+                            toastr.success("Delete successfully!");
+                            $('#searchForm').submit();
+                        },
+                        error: function (xhr, status, error) {
+                            toastr.error("An error occurred while deleting the quiz.");
+                        }
+                    });
+                }
+            });
+
+            $('#saveQuiz').click(function () {
+                $.ajax({
+                    url: 'editQuiz',
+                    type: 'POST',
+                    data: $('#editQuizForm').serialize(),
+                    success: function (response) {
+                        toastr.success("Edit successfully!");
+                        $('#editQuizModal').modal('hide');
+                        $('#searchForm').submit();
+                    }
+                });
+            });
+
+            function fetchLessons(subjectId, targetSelect) {
+                $.ajax({
+                    url: 'fetchLessons',
+                    type: 'GET',
+                    data: {subjectId: subjectId},
+                    success: function (response) {
+                        $(targetSelect).html(response);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("AJAX Error: ", status, error);
+                    }
+                });
+            }
+
+            // Event listeners for subject change
+            $('#subjectId').change(function () {
+                fetchLessons($(this).val(), '#lessonId');
+            });
+
+            $('#popupSubjectId').change(function () {
+                fetchLessons($(this).val(), '#popupLessonId');
+            });
+
+            // Fetch lessons on page load if subject is selected
+            if ($('#subjectId').val() !== "") {
+                fetchLessons($('#subjectId').val(), '#lessonId');
+            }
+            if ($('#popupSubjectId').val() !== "") {
+                fetchLessons($('#popupSubjectId').val(), '#popupLessonId');
+            }
+
+            // Handle search form submission
+            $('#searchForm').submit(function (event) {
+                event.preventDefault();
+                $.ajax({
+                    url: 'quizManager',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function (response) {
+                        $('#results').html($(response).find('#results').html());
+                        $('#pagination').html($(response).find('#pagination').html());
+                    }
+                });
+            });
+
+        </script>
     </body>
 </html>

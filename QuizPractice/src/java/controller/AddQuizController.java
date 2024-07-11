@@ -59,17 +59,21 @@ public class AddQuizController extends HttpServlet {
         int duration = Integer.parseInt(request.getParameter("duration"));
         int subjectId = Integer.parseInt(request.getParameter("subject"));
         int lessonId = Integer.parseInt(request.getParameter("lesson"));
+        String type = request.getParameter("type");
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
 
-        
+        System.out.println(user);
         QuizDAO quizDAO = QuizDAO.getInstance();
         try {
-            int newQuizId = quizDAO.addNewQuiz(name, level, numberQuestion, duration, user.getUserId(), subjectId, lessonId);
+            int newQuizId = quizDAO.addNewQuiz(name, level, numberQuestion, duration, type,user.getUserId(), subjectId, lessonId);
             quizDAO.updateLessonQuizId(lessonId, newQuizId);
-            response.sendRedirect("AddQuiz?quizId=" + newQuizId + "&name=" + name + "&level=" + level + "&numberQuestion=" + numberQuestion + "&duration=" + duration + "&subject=" + subjectId + "&lesson=" + lessonId);
+            response.sendRedirect("AddQuiz?quizId=" + newQuizId + "&name=" + name + "&level=" + level + "&numberQuestion=" + numberQuestion + "&duration=" + duration+"&type="+type + "&subject=" + subjectId + "&lesson=" + lessonId);
+            
+            System.out.println(newQuizId + "    "+lessonId);
         } catch (SQLException e) {
-            e.printStackTrace();
+            
+            
             response.sendRedirect("error.jsp");
         }
     }

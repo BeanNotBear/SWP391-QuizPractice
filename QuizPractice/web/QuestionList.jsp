@@ -344,7 +344,7 @@
                                 <input type="file" class="form-control" id="file" name="file" accept=".xlsx" required>
                             </div>
                             <div class="form-group">
-                                <a href="./excel/test.xlsx" class="btn btn-link">Download Sample Template</a>
+                                <a href="./excel/test.xlsx" class="btn btn-link" download>Download Sample Template</a>
                             </div>
                             <button type="submit" class="btn btn-primary">Import Questions</button>
                         </form>
@@ -358,5 +358,8 @@
 
         <!-- side bar có thể thu nhỏ khi màn hình nhỏ  -->
         <script src="js/script.js"></script>
+        <script src="js/logout.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </body>
 </html>

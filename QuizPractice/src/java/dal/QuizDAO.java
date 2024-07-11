@@ -7,13 +7,13 @@ import dto.QuizDoneDTO;
 import dto.QuizLessonDTO;
 import dto.QuizSubjectDTO;
 import java.sql.SQLException;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Lesson;
 import model.Question;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class QuizDAO extends DBContext {
 
@@ -210,18 +210,18 @@ public class QuizDAO extends DBContext {
         return lessons;
     }
 
-    public int addNewQuiz(String name, String level, int numberQuestion, int duration, int createdBy, int subjectId, int lessonId) throws SQLException {
+    public int addNewQuiz(String name, String level, int numberQuestion, int duration, String type, int createdBy, int subjectId, int lessonId) throws SQLException {
         String sql = "INSERT INTO Quizs "
-                + "VALUES (?, ?, ?, ?, null, GETDATE(),?,null, null, ?, ?,1)";
-
+                + "VALUES (?, ?, ?, ?, ?, GETDATE(),?,null, null, ?, ?,1)";
         ps = connection.prepareStatement(sql, ps.RETURN_GENERATED_KEYS);
         ps.setString(1, name);
         ps.setString(2, level);
         ps.setInt(3, numberQuestion);
         ps.setInt(4, duration);
-        ps.setInt(5, createdBy);
-        ps.setInt(6, subjectId);
-        ps.setInt(7, lessonId);
+        ps.setString(5, type);
+        ps.setInt(6, createdBy);
+        ps.setInt(7, subjectId);
+        ps.setInt(8, lessonId);
 
         ps.executeUpdate();
 
@@ -438,6 +438,93 @@ public class QuizDAO extends DBContext {
         rs = ps.executeQuery();
         if (rs.next()) {
             return rs.getInt("Total");
+        }
+
+        return 0;
+    }
+
+    public List<QuizDTO> searchQuizzes(String subjectId, String subjectName, String quizName, int page, int recordsPerPage) throws SQLException {
+        List<QuizDTO> quizzes = new ArrayList<>();
+        StringBuilder query = new StringBuilder("SELECT q.id, q.name, s.name AS subject_name, q.level, q.numberQuestion, q.duration, q.type ");
+        query.append("FROM Quizs q ");
+        query.append("JOIN subjects s ON q.subjectId = s.id ");
+        query.append("WHERE q.DeleteFlag = 1 ");
+
+        if (subjectId != null && !subjectId.isEmpty()) {
+            query.append("AND s.id = ? ");
+        }
+        if (subjectName != null && !subjectName.isEmpty()) {
+            query.append("AND s.name LIKE ? ");
+        }
+        if (quizName != null && !quizName.isEmpty()) {
+            query.append("AND q.name LIKE ? ");
+        }
+        query.append("ORDER BY q.id OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+
+        try (PreparedStatement ps = connection.prepareStatement(query.toString())) {
+            int index = 1;
+
+            if (subjectId != null && !subjectId.isEmpty()) {
+                ps.setString(index++, subjectId);
+            }
+            if (subjectName != null && !subjectName.isEmpty()) {
+                ps.setString(index++, "%" + subjectName + "%");
+            }
+            if (quizName != null && !quizName.isEmpty()) {
+                ps.setString(index++, "%" + quizName + "%");
+            }
+            ps.setInt(index++, (page - 1) * recordsPerPage);
+            ps.setInt(index, recordsPerPage);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    quizzes.add(new QuizDTO(
+                            rs.getInt("id"),
+                            rs.getString("name"),
+                            rs.getString("subject_name"),
+                            rs.getString("level"),
+                            rs.getInt("numberQuestion"),
+                            rs.getInt("duration"),
+                            rs.getString("type")
+                    ));
+                }
+            }
+        }
+
+        return quizzes;
+    }
+
+    public int getTotalRecords(String subjectId, String subjectName, String quizName) throws SQLException {
+        StringBuilder query = new StringBuilder("SELECT COUNT(*) FROM Quizs q JOIN subjects s ON q.subjectId = s.id WHERE q.DeleteFlag = 1 ");
+
+        if (subjectId != null && !subjectId.isEmpty()) {
+            query.append("AND s.id = ? ");
+        }
+        if (subjectName != null && !subjectName.isEmpty()) {
+            query.append("AND s.name LIKE ? ");
+        }
+        if (quizName != null && !quizName.isEmpty()) {
+            query.append("AND q.name LIKE ? ");
+        }
+
+        try (PreparedStatement ps = connection.prepareStatement(query.toString())) {
+            int index = 1;
+
+            if (subjectId != null && !subjectId.isEmpty()) {
+                ps.setString(index++, subjectId);
+            }
+            if (subjectName != null && !subjectName.isEmpty()) {
+                ps.setString(index++, "%" + subjectName + "%");
+            }
+            if (quizName != null && !quizName.isEmpty()) {
+                ps.setString(index++, "%" + quizName + "%");
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
         }
 
         return 0;

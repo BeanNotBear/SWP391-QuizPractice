@@ -100,11 +100,22 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="duration">Duration (minutes):</label>
-                                    <input type="number" class="form-control" id="duration" name="duration" value="${param.duration}" <c:if test="${not empty param.quizId}">disabled</c:if> required>
+                                    <input type="number" class="form-control" id="duration" name="duration" 
+                                           value="${param.duration}" 
+                                    <c:if test="${not empty param.quizId}">disabled</c:if> 
+                                        required oninput="validateDuration()">
+                                    <small id="durationError" class="form-text text-danger" style="display:none;">Please enter a positive integer.</small>
                                 </div>
+
+
+
                                 <div class="form-group">
                                     <label for="numberQuestion">Number of Questions:</label>
-                                    <input type="number" class="form-control" id="numberQuestion" name="numberQuestion" value="${param.numberQuestion}" <c:if test="${not empty param.quizId}">disabled</c:if> required>
+                                    <input type="number" class="form-control" id="numberQuestion" name="numberQuestion" 
+                                           value="${param.numberQuestion}" 
+                                    <c:if test="${not empty param.quizId}">disabled</c:if> 
+                                        required oninput="validateNumberOfQuestions()">
+                                    <small id="numberQuestionError" class="form-text text-danger" style="display:none;">Please enter a positive integer.</small>
                                 </div>
                                 <button type="submit" class="btn btn-primary " <c:if test="${not empty param.quizId}">style="display:none"</c:if>>Add Quiz</button>
                             </div>
@@ -136,6 +147,8 @@
                                                 <input type="hidden" name="duration" value="${param.duration}">
                                                 <input type="hidden" name="subject" value="${param.subject}">
                                                 <input type="hidden" name="lesson" value="${param.lesson}">
+                                                <input type="hidden" name="type" value="${param.type}">
+
                                                 <button type="submit" class="btn btn-danger">Delete</button>
                                             </form>
                                         </td>
@@ -152,6 +165,7 @@
                                 <input type="hidden" name="duration" value="${param.duration}">
                                 <input type="hidden" name="subject" value="${param.subject}">
                                 <input type="hidden" name="lesson" value="${param.lesson}">
+                                <input type="hidden" name="type" value="${param.type}">
 
                                 <button type="submit" class="btn btn-success">Add More</button>
                             </form>
@@ -186,6 +200,39 @@
             });
 
 
+        </script>
+        <script src="js/logout.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script>
+            function validateDuration() {
+                var durationInput = document.getElementById('duration');
+                var durationError = document.getElementById('durationError');
+                var value = durationInput.value;
+
+                // Check if the value is a positive integer
+                if (!Number.isInteger(Number(value)) || value <= 0) {
+                    durationError.style.display = 'block';
+                    durationInput.setCustomValidity('Invalid field.');
+                } else {
+                    durationError.style.display = 'none';
+                    durationInput.setCustomValidity('');
+                }
+            }
+            function validateNumberOfQuestions() {
+                var numberQuestionInput = document.getElementById('numberQuestion');
+                var numberQuestionError = document.getElementById('numberQuestionError');
+                var value = numberQuestionInput.value;
+
+                // Check if the value is a positive integer
+                if (!Number.isInteger(Number(value)) || value <= 0) {
+                    numberQuestionError.style.display = 'block';
+                    numberQuestionInput.setCustomValidity('Invalid field.');
+                } else {
+                    numberQuestionError.style.display = 'none';
+                    numberQuestionInput.setCustomValidity('');
+                }
+            }
         </script>
     </body>
 </html>

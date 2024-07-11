@@ -111,7 +111,7 @@
                                 <td>${quiz.numberQuestion}</td>
                                 <td>${quiz.duration}</td>
                                 <td><fmt:formatNumber value="${quiz.score}" pattern="0.##"/>%</td>
-                                <td><a href="quizReview?studentTakeQuizId=${studentTakeQuizId}" class="btn btn-info btn-sm">View</a></td>
+                                <td><a href="quizReview?practiceId=${quiz.id}" class="btn btn-info btn-sm">View</a></td>
                             </tr>
                         </c:forEach>
                     </tbody>
@@ -157,6 +157,7 @@
         <br/>
 
         <%@include file="/layout/footer.jsp"%>
+        <script src="js/logout.js"></script>
 
         <!-- side bar có thể thu nhỏ khi màn hình nhỏ  -->
         <script src="js/script.js"></script>

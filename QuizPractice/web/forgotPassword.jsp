@@ -111,4 +111,5 @@
     </body>
     <%@include file="layout/footer.jsp" %>
     <script src="js/script.js"></script>
+    <script src="js/logout.js"></script>
 </html>

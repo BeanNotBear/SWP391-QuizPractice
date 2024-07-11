@@ -31,10 +31,14 @@ public class SubjectDetailExpertController extends HttpServlet {
             throws ServletException, IOException {
         String tempId = request.getParameter("id");
         HttpSession session = request.getSession();
-        if (tempId != null) {
-            id = Integer.parseInt(tempId);
-        } else {
-            request.getRequestDispatcher("error.jsp").forward(request, response);
+        try {
+            if (tempId != null) {
+                int tid = Integer.parseInt(tempId);
+                id = tid;
+            } else {
+                request.getRequestDispatcher("error.jsp").forward(request, response);
+            }
+        } catch (Exception e) {
         }
         session.setAttribute("subjectId", id);
         List<DimensionDTO> dimensionDTOs = new ArrayList<>();

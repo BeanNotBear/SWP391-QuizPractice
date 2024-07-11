@@ -321,9 +321,11 @@
 
                     <div id="menu2" class="tab-pane fade">
                         <h3 class="col-md-3">Package Price</h3>
-                        <a style="margin-left: 1000px;" onclick="showPopUp('Add New')">Add Package Price</a>
+                        <c:if test="${sessionScope.user.roleId == 2}">
+                            <a style="margin-left: 1000px;" onclick="showPopUp('Add New')">Add Package Price</a>
+                        </c:if>
                         <div style="padding-left: 0; margin-bottom: 10px" class="col-md-6">
-                            <input onkeyup="searchPricePackage(this)" class="search-input" type="text" placeholder="Search Price Package">
+                            <input <c:if test="${sessionScope.user.roleId == 3}"> style="margin-left: 550px; margin-top: 10px;" </c:if> onkeyup="searchPricePackage(this)" class="search-input" type="text" placeholder="Search Price Package">
                         </div>
                         <table class="table table-bordered">
                             <thead>
@@ -483,27 +485,27 @@
                             <h4>Package Price</h4>
                             <input id="packageId" type="hidden">
                             <div class="form-group">
-                                <label for="packageName">Name:</label>
+                                <label for="packageName">Name: <span class="danger_msg">(require)</span></label>
                                 <input onkeyup="validatePackageName(this)" type="text" id="packageName" name="packageName" class="form-control">
                                 <div id="namePkMsg" class="msg danger_msg">Name cannot be empty</div>
                             </div>
                             <div class="form-group">
-                                <label for=packageDuration>Duration (month):</label>
+                                <label for=packageDuration>Duration (month): <span class="danger_msg">(require)</span></label>
                                 <input onkeyup="validateDuration(this)" type=number id="packageDuration" name="packageDuration" class="form-control">
                                 <div id="durationMsg" class="msg danger_msg"></div>
                             </div>
                             <div class="form-group">
-                                <label for="salePrice">Sale Price (vnd):</label>
+                                <label for="salePrice">Sale Price (vnd): <span class="danger_msg">(require)</span></label>
                                 <input onkeyup="validateSalePrice(this)" type="number" id="salePrice" name="salePrice" class="form-control">
                                 <div id="salePriceMsg" class="msg danger_msg"></div>
                             </div>
                             <div class="form-group">
-                                <label for="price">Price (vnd):</label>
+                                <label for="price">Price (vnd): <span class="danger_msg">(require)</span></label>
                                 <input onkeyup="validatePrice(this)" type="number" id="price" name="price" class="form-control">
                                 <div id="priceMsg" class="msg danger_msg"></div>
                             </div>
                             <div class="form-group">
-                                <label for="originalPrice">Original Price (vnd):</label>
+                                <label for="originalPrice">Original Price (vnd): <span class="danger_msg">(require)</span></label>
                                 <input onkeyup="validateOriginalPrice(this)" type="number" id="originalPrice" name="originalPrice" class="form-control">
                                 <div id="originalPriceMsg" class="msg danger_msg"></div>
                             </div>

@@ -39,10 +39,10 @@ public class LessonManagerController extends HttpServlet {
         System.out.println("subjectId " + subjectId);
 //         System.out.println("userId "+user.getUserId());
         System.out.println("expertId " + expertId);
-        if (user == null || expertId == 0 || user.getUserId() != expertId) {
-            response.sendRedirect("/QuizPractice/"); // Thay đổi đường dẫn này tùy theo trang đăng nhập của bạn
-            return;
-        }
+//        if (user == null || expertId == 0 || user.getUserId() != expertId) {
+//            response.sendRedirect("/QuizPractice/"); // Thay đổi đường dẫn này tùy theo trang đăng nhập của bạn
+//            return;
+//        }
 
         // Lấy trang hiện tại từ request
         int page = 1;

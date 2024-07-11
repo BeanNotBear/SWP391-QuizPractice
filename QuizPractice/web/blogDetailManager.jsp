@@ -113,9 +113,9 @@
                         <!-- Input để chọn file ảnh, không hiển thị cho người dùng -->
                         <input accept="image/png, image/jpeg" type="file" id="fileInput" style="display: none;">
                     </div>
-                        
+
                     <div class="col-md-2"></div>
-                    
+
                     <div class="col-md-6">
                         <form action="postdetail" method="post" id="postUpdateForm">
                             <input type="hidden" id="id" name="id" value="<c:out value='${blog.id}'/>">
@@ -159,7 +159,7 @@
                     </div>
                 </div>
             </section>
-                                        
+
             <br/>
 
         <%@include file="/layout/footer.jsp" %>
@@ -218,6 +218,8 @@
                 xhr.send(formData);
             });
         </script>
+        <script src="js/logout.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <%@include file="layout/script.jsp" %>
         <script src="js/ChangeStatusOfSubject.js"></script>

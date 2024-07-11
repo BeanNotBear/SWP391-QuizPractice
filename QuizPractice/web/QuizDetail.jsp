@@ -95,28 +95,28 @@
 
         <!-- Custom JavaScript -->
         <script>
-    //        $(document).ready(function() {
-    //            // X? lý khi form submit
-    //            $('form').submit(function(event) {
-    //                event.preventDefault(); // Ng?n ch?n hành ??ng m?c ??nh c?a form
-    //                
-    //                // L?y giá tr? c?a các tr??ng input
-    //                var quizId = $('#id').val();
-    //                var quizName = $('#quizName').val();
-    //                var subjectId = $('#subjectId').val();
-    //                var level = $('#level').val();
-    //                var numberQuestion = $('#numberQuestion').val();
-    //                var duration = $('#duration').val();
-    //                var type = $('#type').val();
-    //                
-    //                // Th?c hi?n các x? lý l?u d? li?u ? ?ây (ví d?: g?i AJAX request)
-    //
-    //                // Hi?n th? thông báo thành công b?ng toastr
-    //                toastr.success('Update Succsesfully !!', 'Thông báo');
-    //
-    //                // N?u mu?n chuy?n h??ng sau khi l?u thành công, s? d?ng window.location.href = 'url_chuyen_huong';
-    //            });
-    //        });
+            //        $(document).ready(function() {
+            //            // X? lý khi form submit
+            //            $('form').submit(function(event) {
+            //                event.preventDefault(); // Ng?n ch?n hành ??ng m?c ??nh c?a form
+            //                
+            //                // L?y giá tr? c?a các tr??ng input
+            //                var quizId = $('#id').val();
+            //                var quizName = $('#quizName').val();
+            //                var subjectId = $('#subjectId').val();
+            //                var level = $('#level').val();
+            //                var numberQuestion = $('#numberQuestion').val();
+            //                var duration = $('#duration').val();
+            //                var type = $('#type').val();
+            //                
+            //                // Th?c hi?n các x? lý l?u d? li?u ? ?ây (ví d?: g?i AJAX request)
+            //
+            //                // Hi?n th? thông báo thành công b?ng toastr
+            //                toastr.success('Update Succsesfully !!', 'Thông báo');
+            //
+            //                // N?u mu?n chuy?n h??ng sau khi l?u thành công, s? d?ng window.location.href = 'url_chuyen_huong';
+            //            });
+            //        });
 
             $(document).ready(function () {
                 // X? lý khi form submit
@@ -230,6 +230,9 @@
             <br/>
 
         <%@include file="/layout/footer.jsp" %>
+        <script src="js/logout.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <!-- Include other scripts as needed -->
         <script src="js/ChangeStatusOfSubject.js"></script>
