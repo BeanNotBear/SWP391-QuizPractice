@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller;
 
 import com.google.gson.Gson;
@@ -10,7 +6,6 @@ import dal.SubjectDAO;
 import dto.QuizDTO;
 import dto.SubjectLoadDTO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -25,10 +20,6 @@ import model.User;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- *
- * @author DELL
- */
 @WebServlet(name = "QuizdetailController", urlPatterns = {"/quizdetail"})
 public class QuizdetailController extends HttpServlet {
 
@@ -93,60 +84,6 @@ public class QuizdetailController extends HttpServlet {
 
     }
 
-//    @Override
-//    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-//            throws ServletException, IOException {
-//
-//        try {
-//
-//            int id = Integer.parseInt(request.getParameter("id"));
-//            String name = request.getParameter("quizName");
-//            String level = request.getParameter("level");
-//            int numberQuestion = Integer.parseInt(request.getParameter("numberQuestion"));
-//            int duration = Integer.parseInt(request.getParameter("duration"));
-//            int subjectId = Integer.parseInt(request.getParameter("subjectId"));
-//            String type = request.getParameter("type");
-//
-//            JSONObject jsonObject = new JSONObject();
-//
-//            QuizDTO quiz = new QuizDTO(id, name, null, level, numberQuestion, duration, type);
-//            quiz.setSubjectId(subjectId);
-//
-//            QuizDAO quizDAO = QuizDAO.getInstance();
-//            boolean updated = quizDAO.updateQuiz(quiz);
-//            System.out.println(quiz);
-//            //try {
-////            boolean success = quizDAO.updateQuiz(quiz);
-////            if (success) {
-////                response.setStatus(HttpServletResponse.SC_OK);
-////                response.getWriter().write(gson.toJson(new QuizdetailController.ResponseMessage("Quiz updated successfully")));
-////            } else {
-////                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to update quiz.");
-////            }
-////        } catch (SQLException e) {
-////            throw new ServletException("Database access error", e);
-////        }
-//            try {
-//                if (updated) {
-//                    String successMessage = "Update succesfully!";
-//                    jsonObject.put("status", "success");
-//                    jsonObject.put("message", successMessage);
-//                } else {
-//                    jsonObject.put("status", "error");
-//                    jsonObject.put("message", "Update fail!");
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            response.setContentType("application/json");
-//            response.getWriter().write(jsonObject.toString());
-//            response.setStatus(HttpServletResponse.SC_OK);
-//
-//        } catch (SQLException ex) {
-//            Logger.getLogger(QuizdetailController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//
-//    }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

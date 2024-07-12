@@ -77,12 +77,6 @@ public class QuizReviewController extends HttpServlet {
     }
 }
 
-
-
-
-
-
-
 //    package controller;
 //
 //import dal.PracticeDAO;
@@ -181,21 +175,4 @@ public class QuizReviewController extends HttpServlet {
 //    }
 //}
 //
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

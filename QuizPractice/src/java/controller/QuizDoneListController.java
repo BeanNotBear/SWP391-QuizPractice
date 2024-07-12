@@ -29,7 +29,7 @@ public class QuizDoneListController extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-         if (user == null) {
+        if (user == null) {
             response.sendRedirect("/QuizPractice");
             return;
         }
