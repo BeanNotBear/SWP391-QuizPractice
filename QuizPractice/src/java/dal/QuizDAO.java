@@ -14,6 +14,8 @@ import java.util.logging.Logger;
 import model.Question;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import model.StudentQuizQuestion;
+import model.StudentTakeQuiz;
 
 public class QuizDAO extends DBContext {
 
@@ -376,7 +378,7 @@ public class QuizDAO extends DBContext {
         List<QuizDoneDTO> doneQuizzes = new ArrayList<>();
         int start = (page - 1) * recordsPerPage;
         String sql = "SELECT q.Id, q.Name AS QuizName, q.Level, q.NumberQuestion, q.Duration, "
-                + "(stq.NumberCorrect * 100.0 / q.NumberQuestion) AS Score, s.Name AS SubjectName "
+                + "(stq.NumberCorrect * 100.0 / q.NumberQuestion) AS Score, s.Name AS SubjectName, stq.Id AS stqId "
                 + "FROM Quizs q "
                 + "JOIN Student_Take_Quiz stq ON q.Id = stq.QuizId "
                 + "JOIN subjects s ON q.SubjectId = s.id "
@@ -408,8 +410,9 @@ public class QuizDAO extends DBContext {
             int duration = rs.getInt("Duration");
             double score = rs.getDouble("Score");
             String subjectNameRes = rs.getString("SubjectName");
+            int stdId = rs.getInt("stqId");
 
-            doneQuizzes.add(new QuizDoneDTO(id, quizNameRes, level, numberQuestion, duration, score, subjectNameRes));
+            doneQuizzes.add(new QuizDoneDTO(id, quizNameRes, level, numberQuestion, duration, score, subjectNameRes, stdId));
         }
 
         return doneQuizzes;
@@ -528,6 +531,77 @@ public class QuizDAO extends DBContext {
         }
 
         return 0;
+    }
+
+    public StudentTakeQuiz getStudentTakeQuizById(int stqId) throws SQLException {
+        String query = "SELECT * FROM Student_Take_Quiz WHERE Id = ?";
+        ps = connection.prepareStatement(query);
+        ps.setInt(1, stqId);
+        rs = ps.executeQuery();
+        if (rs.next()) {
+            return new StudentTakeQuiz(
+                    rs.getInt("Id"),
+                    rs.getInt("UserId"),
+                    rs.getInt("QuizId"),
+                    rs.getInt("NumberCorrect")
+            );
+        }
+        return null;
+    }
+
+    public int getIdAddCurrent() {
+        String sql = "SELECT @@IDENTITY AS LastInsertedId;";
+
+        try {
+            ps = connection.prepareStatement(sql.toString());
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace(); // Handle or log exception as needed
+        }
+
+        return 0; // Default return value if no count retrieved
+    }
+
+    public int createStudentTakeQuiz(StudentTakeQuiz quiz) throws SQLException {
+        String query = "INSERT INTO Student_Take_Quiz (UserId, QuizId, NumberCorrect,CreatedAt) VALUES (?, ?, ?, GETDATE())";
+        ps = connection.prepareStatement(query);
+        ps.setInt(1, quiz.getUserId());
+        ps.setInt(2, quiz.getQuizId());
+        ps.setObject(3, quiz.getNumberCorrect());
+        ps.executeUpdate();
+        
+        return getIdAddCurrent();
+    }
+
+    public List<StudentQuizQuestion> getStudentQuizQuestionsByQuizId(int stqId) throws SQLException {
+        String query = "SELECT * FROM Student_Quiz_Question WHERE StudentQuizId = ?";
+        ps = connection.prepareStatement(query);
+        ps.setInt(1, stqId);
+        rs = ps.executeQuery();
+        List<StudentQuizQuestion> questions = new ArrayList<>();
+        while (rs.next()) {
+            questions.add(new StudentQuizQuestion(
+                    rs.getInt("id"),
+                    rs.getInt("StudentQuizId"),
+                    rs.getInt("QuestionId"),
+                    rs.getInt("YourAnswer"),
+                    rs.getBoolean("IsMarked")
+            ));
+        }
+        return questions;
+    }
+
+    public void createStudentQuizQuestion(StudentQuizQuestion question) throws SQLException {
+        String query = "INSERT INTO Student_Quiz_Question (StudentQuizId, QuestionId, YourAnswer, IsMarked) VALUES (?, ?, ?, ?)";
+        ps = connection.prepareStatement(query);
+        ps.setInt(1, question.getStudentQuizId());
+        ps.setInt(2, question.getQuestionId());
+        ps.setObject(3, question.getYourAnswer());
+        ps.setObject(4, question.getIsMarked());
+        ps.executeUpdate();
     }
 
 }

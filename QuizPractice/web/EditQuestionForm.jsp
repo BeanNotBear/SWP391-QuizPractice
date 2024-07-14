@@ -2,11 +2,11 @@
     <input type="hidden" name="id" value="${question.id}">
     <div class="form-group">
         <label for="detail">Detail:</label>
-        <input type="text" class="form-control" id="detail" name="detail" value="${question.detail}">
+        <input type="text" class="form-control" id="detail" name="detail" value="${question.detail}" required>
     </div>
     <div class="form-group">
         <label for="suggestion">Suggestion:</label>
-        <input type="text" class="form-control" id="suggestion" name="suggestion" value="${question.suggestion}">
+        <input type="text" class="form-control" id="suggestion" name="suggestion" value="${question.suggestion}" required>
     </div>
     <div class="form-group">
         <label for="status">Status:</label>

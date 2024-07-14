@@ -30,24 +30,48 @@ public class ImportQuestionController extends HttpServlet {
         String subjectId = request.getParameter("subjectId");
         String lessonId = request.getParameter("lessonId");
 
-        System.out.println("Go importtttt");
+        if (filePart == null || filePart.getSize() == 0) {
+            response.getWriter().write("Fail to add, question file is empty");
+            return;
+        }
+
         List<QuestionImport> questions = new ArrayList<>();
         try (InputStream fileContent = filePart.getInputStream();
              Workbook workbook = new XSSFWorkbook(fileContent)) {
             
             Sheet sheet = workbook.getSheetAt(0);
+            if (sheet.getPhysicalNumberOfRows() <= 1) {
+                response.getWriter().write("Fail to add, question file is empty");
+                return;
+            }
+
             for (Row row : sheet) {
                 if (row.getRowNum() == 0) continue; // Skip header row
-                String detail = row.getCell(0).getStringCellValue();
-                String suggestion = row.getCell(1).getStringCellValue();
-                int status = (int) row.getCell(2).getNumericCellValue();
-                String media = row.getCell(3) != null ? row.getCell(3).getStringCellValue() : null;
+                if (row.getPhysicalNumberOfCells() < 3) {
+                    response.getWriter().write("Wrong format question");
+                    return;
+                }
+
+                String detail = getStringCellValue(row.getCell(0));
+                String suggestion = getStringCellValue(row.getCell(1));
+                if (detail.isEmpty() || suggestion.isEmpty()) {
+                    response.getWriter().write("Not except field empty");
+                    return;
+                }
+
+                int status;
+                try {
+                    status = (int) row.getCell(2).getNumericCellValue();
+                } catch (Exception e) {
+                    response.getWriter().write("Wrong format question");
+                    return;
+                }
+                String media = row.getCell(3) != null ? getStringCellValue(row.getCell(3)) : null;
                 questions.add(new QuestionImport(detail, suggestion, status, media));
-                
-                System.out.println(detail+suggestion+ status+ media);
             }
         } catch (Exception e) {
-            throw new ServletException("Error reading Excel file", e);
+            response.getWriter().write("Error reading Excel file");
+            return;
         }
 
         QuestionDAO questionDAO = QuestionDAO.getInstance();
@@ -55,9 +79,13 @@ public class ImportQuestionController extends HttpServlet {
             for (QuestionImport question : questions) {
                 questionDAO.addQuestion(question, subjectId, lessonId);
             }
-            response.sendRedirect("questionList"); // Redirect to the question list page
+            response.getWriter().write("Questions imported successfully");
         } catch (SQLException e) {
-            throw new ServletException("Database access error", e);
+            response.getWriter().write("Database access error");
         }
+    }
+
+    private String getStringCellValue(Cell cell) {
+        return cell == null ? "" : cell.toString().trim();
     }
 }

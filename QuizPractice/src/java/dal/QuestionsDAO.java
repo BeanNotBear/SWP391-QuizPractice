@@ -127,14 +127,58 @@ public class QuestionsDAO extends DBContext {
         }
     }
 
-    public List<QuestionReviewDTO> getQuestionsForReview(int practiceId) throws SQLException {
+//    public List<QuestionReviewDTO> getQuestionsForReview(int practiceId) throws SQLException {
+//        List<QuestionReviewDTO> questions = new ArrayList<>();
+//
+//        String query = "SELECT q.id, q.detail, q.Suggestion, q.Status, q.Media, pq.YourAnswer FROM questions q "
+//                + "RIGHT JOIN practice_question pq ON q.id = pq.QuestionId "
+//                + "WHERE pq.PracticeId = ?";
+//        PreparedStatement ps = connection.prepareStatement(query);
+//        ps.setInt(1, practiceId);
+//        ResultSet rs = ps.executeQuery();
+//
+//        while (rs.next()) {
+//            int questionId = rs.getInt("id");
+//            String detail = rs.getString("detail");
+//            String suggestion = rs.getString("suggestion");
+//            String status = rs.getString("status");
+//            String media = rs.getString("media");
+//            int yourAnswer = rs.getInt("YourAnswer");
+//
+//            List<Answer> answers = getAnswersByQuestionId(questionId);
+//
+//            QuestionReviewDTO questionDTO = new QuestionReviewDTO(questionId, detail, suggestion, status, media, yourAnswer, answers);
+//            questions.add(questionDTO);
+//        }
+//
+//        return questions;
+//    }
+    public List<QuestionReviewDTO> getQuestionsForReview(Integer practiceId, Integer quizId) throws SQLException {
         List<QuestionReviewDTO> questions = new ArrayList<>();
 
-        String query = "SELECT q.id, q.detail, q.Suggestion, q.Status, q.Media, pq.YourAnswer FROM questions q "
-                + "RIGHT JOIN practice_question pq ON q.id = pq.QuestionId "
-                + "WHERE pq.PracticeId = ?";
+        String query = "";
+        if (quizId != null && quizId > 0) {
+            query = "SELECT q.id, q.detail, q.suggestion, q.status, q.media, sq.YourAnswer "
+                    + "FROM questions q "
+                    + "JOIN Student_Quiz_Question sq ON q.id = sq.QuestionId "
+                    + "JOIN Student_Take_Quiz stq ON sq.StudentQuizId = stq.id "
+                    + "WHERE stq.id = ?";
+        } else if (practiceId != null && practiceId > 0) {
+            query = "SELECT q.id, q.detail, q.suggestion, q.status, q.media, pq.YourAnswer "
+                    + "FROM questions q "
+                    + "RIGHT JOIN practice_question pq ON q.id = pq.QuestionId "
+                    + "WHERE pq.PracticeId = ?";
+        } else {
+            throw new IllegalArgumentException("Either practiceId or quizId must be provided.");
+        }
+
         PreparedStatement ps = connection.prepareStatement(query);
-        ps.setInt(1, practiceId);
+        if (quizId != null && !quizId.equals("")) {
+            ps.setInt(1, quizId);
+        } else {
+            ps.setInt(1, practiceId);
+        }
+
         ResultSet rs = ps.executeQuery();
 
         while (rs.next()) {
@@ -233,8 +277,9 @@ public class QuestionsDAO extends DBContext {
         QuestionsDAO questionDAO = QuestionsDAO.getInstance();
 
         try {
-            int practiceId = 1002; // Example practiceId
-            List<QuestionReviewDTO> questions = questionDAO.getQuestionsForReview(practiceId);
+            int practiceId = 0; // Example practiceId
+            int quizId = 2;
+            List<QuestionReviewDTO> questions = questionDAO.getQuestionsForReview(practiceId, quizId);
 
             for (QuestionReviewDTO question : questions) {
                 System.out.println("Question ID: " + question.getId());

@@ -40,8 +40,13 @@ public class QuizDoneListController extends HttpServlet {
         int page = 1;
         int recordsPerPage = 4;
 
-        if (request.getParameter("page") != null) {
-            page = Integer.parseInt(request.getParameter("page"));
+        try {
+            if (request.getParameter("page") != null) {
+                page = Integer.parseInt(request.getParameter("page"));
+            }
+        } catch (NumberFormatException ex) {
+            response.sendRedirect("quizDoneList");
+            return;
         }
 
         try {

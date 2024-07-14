@@ -8,6 +8,26 @@ public class QuizDoneDTO {
     private int duration;
     private double score;
     private String subjectName;
+    private int stqId;
+
+    public int getStqId() {
+        return stqId;
+    }
+
+    public void setStqId(int stqId) {
+        this.stqId = stqId;
+    }
+
+    public QuizDoneDTO(int id, String quizName, String level, int numberQuestion, int duration, double score, String subjectName, int stqId) {
+        this.id = id;
+        this.quizName = quizName;
+        this.level = level;
+        this.numberQuestion = numberQuestion;
+        this.duration = duration;
+        this.score = score;
+        this.subjectName = subjectName;
+        this.stqId = stqId;
+    }
 
     public QuizDoneDTO(int id, String quizName, String level, int numberQuestion, int duration, double score, String subjectName) {
         this.id = id;

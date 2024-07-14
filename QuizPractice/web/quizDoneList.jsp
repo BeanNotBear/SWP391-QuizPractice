@@ -111,7 +111,12 @@
                                 <td>${quiz.numberQuestion}</td>
                                 <td>${quiz.duration}</td>
                                 <td><fmt:formatNumber value="${quiz.score}" pattern="0.##"/>%</td>
-                                <td><a href="quizReview?practiceId=${quiz.id}" class="btn btn-info btn-sm">View</a></td>
+<!--                                <td><a href="quizReview?practiceId=${quiz.id}" class="btn btn-info btn-sm">View</a></td>-->
+                                <!--                                <td><a href="quizReview?practiceId=1002" class="btn btn-info btn-sm">View</a></td>-->
+                                <td><a href="quizReview?quizId=${quiz.stqId}" class="btn btn-info btn-sm">View</a>
+
+                                   <a href="startNewQuiz?stqId=${quiz.stqId}" class="btn btn-success btn-sm">Start</a>
+<!--                                     <a href="quizHandle?practiceId=1002" class="btn btn-success btn-sm">Start</a>-->
                             </tr>
                         </c:forEach>
                     </tbody>

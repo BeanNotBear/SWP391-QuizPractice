@@ -143,27 +143,7 @@ public class LessonDAO extends DBContext {
         return 0; // Default return value if no count retrieved
     }
 
-    public boolean insertLesson(String name, String content, String media, int lessonIndex, String Type, int userId) {
-        boolean updated = false;
-        String query = "insert into lessons values(?,?,null,GETDATE(),1,?,?,?,?)";
-        try {
-            ps = connection.prepareStatement(query);
-            ps.setString(1, name);
-            ps.setInt(2, userId);
-            ps.setString(3, content);
-            ps.setString(4, media);
-            ps.setInt(5, lessonIndex);
-            ps.setString(6, Type);
-
-            int rowsAffected = ps.executeUpdate();
-            if (rowsAffected > 0) {
-                updated = true;
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return updated;
-    }
+   
 
     public int getIdAddCurrent() {
         String sql = "SELECT @@IDENTITY AS LastInsertedId;";
@@ -397,6 +377,52 @@ public class LessonDAO extends DBContext {
         return lessons;
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+   
+
+   
+
+    public boolean insertLesson(String name, String content, String media, int lessonIndex, String Type, int userId) {
+        boolean updated = false;
+        String query = "insert into lessons values(?,?,null,GETDATE(),1,?,?,?,?,null)";
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, name);
+            ps.setInt(2, userId);
+            ps.setString(3, content);
+            ps.setString(4, media);
+            ps.setInt(5, lessonIndex);
+            ps.setString(6, Type);
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                updated = true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return updated;
+    }
+
+    
+  
+   
+  
+ 
+   
+    
+    
+    
     public static void main(String[] args) {
         LessonDAO lessonDAO = new LessonDAO();
         System.out.println(lessonDAO.getLessonsBySubjectWithPaging(2, 1, 5, null, null, "quiz"));

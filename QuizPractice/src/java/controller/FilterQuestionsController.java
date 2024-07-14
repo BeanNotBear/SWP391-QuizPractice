@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import dal.PracticeDAO;
 import dto.QuestionDTO;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,6 +13,7 @@ import java.io.PrintWriter;
 import java.util.List;
 import model.Question;
 
+@WebServlet("/FilterQuestions")
 public class FilterQuestionsController extends HttpServlet {
 
     @Override
@@ -20,13 +22,23 @@ public class FilterQuestionsController extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        int practiceId = Integer.parseInt(request.getParameter("practiceId"));
+        int practiceId = -1;  // Set default value
+        int stqId = -1;
+        String practiceIdParam = request.getParameter("practiceId");
+        if (practiceIdParam != null && !practiceIdParam.isEmpty()) {
+            practiceId = Integer.parseInt(practiceIdParam);
+        }
+
+        String stqIdParam = request.getParameter("stqId");
+        if (stqIdParam != null && !stqIdParam.isEmpty()) {
+            stqId = Integer.parseInt(stqIdParam);
+        }
         String type = request.getParameter("type");
 
        try {
             PracticeDAO practiceDAO = PracticeDAO.getInstance();
-            List<Question> allQuestions = practiceDAO.getQuestionsByPracticeId(practiceId);
-            List<QuestionDTO> filteredQuestions = practiceDAO.getFilteredQuestions(practiceId, type);
+            List<Question> allQuestions = practiceDAO.getQuestionsByPracticeId(practiceId,stqId);
+            List<QuestionDTO> filteredQuestions = practiceDAO.getFilteredQuestions(practiceId,stqId, type);
 
             // Gán questionNumber cho từng QuestionDTO
             for (QuestionDTO questionDTO : filteredQuestions) {

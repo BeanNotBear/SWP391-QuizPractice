@@ -205,7 +205,7 @@
                                     <label for="content">Content:</label>
                                     <textarea class="form-control" id="content" name="content" required></textarea>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" id="mediaGroup">
                                     <label for="media">Media:</label>
                                     <input type="text" class="form-control" id="media" name="media">
                                 </div>
@@ -214,7 +214,7 @@
                                     <input type="number" class="form-control" id="lessonIndex" name="lessonIndex" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="type">Type:</label>
+                                    <label for="type">Type:</label> 
                                     <select class="form-control" id="type" name="type">
                                         <option value="content">Content</option>
                                         <option value="quiz">Quiz</option>
@@ -249,7 +249,7 @@
                                     <label for="editContent">Content:</label>
                                     <textarea class="form-control" id="editContent" name="content" required></textarea>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" id="editMediaGroup">
                                     <label for="editMedia">Media:</label>
                                     <input type="text" class="form-control" id="editMedia" name="media">
                                 </div>
@@ -282,20 +282,56 @@
         <script>
             $(document).ready(function () {
                 CKEDITOR.replace('content');
-            });
+                
+                // Initialize CKEditor for the content field in the editLessonForm when the modal is shown
+                $('#editLessonModal').on('shown.bs.modal', function () {
+                    if (!CKEDITOR.instances['editContent']) {
+                        CKEDITOR.replace('editContent');
+                    }
+                });
 
-            // Initialize CKEditor for the content field in the editLessonForm when the modal is shown
-            $('#editLessonModal').on('shown.bs.modal', function () {
-                if (!CKEDITOR.instances['editContent']) {
-                    CKEDITOR.replace('editContent');
-                }
-            });
+                // Remove CKEditor instance when the edit modal is hidden
+                $('#editLessonModal').on('hidden.bs.modal', function () {
+                    if (CKEDITOR.instances['editContent']) {
+                        CKEDITOR.instances['editContent'].destroy(true);
+                    }
+                });
 
-            // Remove CKEditor instance when the edit modal is hidden
-            $('#editLessonModal').on('hidden.bs.modal', function () {
-                if (CKEDITOR.instances['editContent']) {
-                    CKEDITOR.instances['editContent'].destroy(true);
-                }
+                // Check lesson index value before submitting the add lesson form
+                $('#addLessonForm').submit(function (event) {
+                    var lessonIndex = $('#lessonIndex').val();
+                    if (!lessonIndex || lessonIndex <= 0) {
+                        alert('Please enter a valid Lesson Index greater than 0.');
+                        event.preventDefault();
+                    }
+                });
+
+                // Check lesson index value before submitting the edit lesson form
+                $('#editLessonForm').submit(function (event) {
+                    var lessonIndex = $('#editLessonIndex').val();
+                    if (!lessonIndex || lessonIndex <= 0) {
+                        alert('Please enter a valid Lesson Index greater than 0.');
+                        event.preventDefault();
+                    }
+                });
+
+                // Toggle media input visibility based on type selection for add lesson form
+                $('#type').change(function () {
+                    if ($(this).val() === 'quiz') {
+                        $('#mediaGroup').hide();
+                    } else {
+                        $('#mediaGroup').show();
+                    }
+                }).trigger('change');
+
+                // Toggle media input visibility based on type selection for edit lesson form
+                $('#editType').change(function () {
+                    if ($(this).val() === 'quiz') {
+                        $('#editMediaGroup').hide();
+                    } else {
+                        $('#editMediaGroup').show();
+                    }
+                }).trigger('change');
             });
 
             function editLesson(id) {
@@ -310,7 +346,7 @@
                         $('#editLessonForm #editContent').val(data.content);
                         $('#editLessonForm #editMedia').val(data.media);
                         $('#editLessonForm #editLessonIndex').val(data.lessonIndex);
-                        $('#editLessonForm #editType').val(data.type);
+                        $('#editLessonForm #editType').val(data.type).trigger('change');
 
                         // Show the modal
                         $('#editLessonModal').modal('show');

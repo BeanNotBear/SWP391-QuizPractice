@@ -106,206 +106,196 @@
             }
         </style>
     </head>
-    <body>
-        <%@ include file="/layout/header.jsp" %>
+<body>
+    <%@ include file="/layout/header.jsp" %>
 
-        <div class="container" id="all">
-            <br/>
-            <h2 class="text-center pt-3">Quiz Review - ${subjectName}</h2>
-            <div class="question-info row">
-                <h3 class="col-md-3">Lesson: ${lessonName}</h3>
-                <div class="col-md-6"></div>
-                <h4 class="col-md-3 ">Question ${currentQuestion} of ${totalQuestions}</h4>
-
-                <h4 class="col-md-2 text-primary"> ${result} point</h4>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">Question Detail</div>
-                <div class="panel-body">
-                    <p>${questionDetail}</p>
-                    <c:forEach var="answer" items="${questions[currentQuestion-1].answers}">
-                        <div class="alert ${answer.correct ? 'alert-success' : 'alert-default'}">
-                            <label>
-                                <input type="radio" name="answer" value="${answer.id}" disabled ${answer.id == questions[currentQuestion-1].yourAnswer ? 'checked' : ''}>
-                                ${answer.answerDetail}
-                            </label>
-                        </div>
-                    </c:forEach>
-                </div>
-            </div>
-            <div class="question-nav row">
-                <c:if test="${currentQuestion > 1}">
-                    <a href="QuizReview?practiceId=${practiceId}&questionNumber=${currentQuestion - 1}" class="btn btn-primary col-md-2">Previous Question</a>
-                </c:if>
-                <div class="col-md-1"></div>
-                <c:if test="${currentQuestion < totalQuestions}">
-                    <a href="QuizReview?practiceId=${practiceId}&questionNumber=${currentQuestion + 1}" class="btn btn-primary col-md-2">Next Question</a>
-                </c:if>
-                <div class="col-md-1"></div>
-                <div class="col-md-2">
-                    <button class="btn btn-info btn-block" onclick="peekAnswer(${param.practiceId}, ${currentQuestion})">Explain</button>
-                </div>
-                <div class="col-md-1"></div>
-                <div class="col-md-2">
-                    <button class="btn btn-primary btn-danger" onclick="viewProgress()">Review Progress</button>
-                </div>
-            </div>
-            <br/>
+    <div class="container" id="all">
+        <br/>
+        <h2 class="text-center pt-3">Quiz Review - ${subjectName}</h2>
+        <div class="question-info row">
+            <h3 class="col-md-3">Lesson: ${lessonName}</h3>
+            <div class="col-md-6"></div>
+            <h4 class="col-md-3 ">Question ${currentQuestion} of ${totalQuestions}</h4>
+            <h4 class="col-md-2 text-primary"> ${result} point</h4>
         </div>
-
-        <form id="quizForm" method="post" action="QuizReview">
-
-            <input type="hidden" name="practiceId" id="practiceId" value="${param.practiceId}">
-            <input type="hidden" name="questionId" id="questionId" value="${questionId}">
-            <input type="hidden" name="questionNumber" id="questionNumber" value="${currentQuestion}">
-            <input type="hidden" name="totalQuestions" id="totalQuestions" value="${totalQuestions}">
-            <input type="hidden" name="action" id="action" value="">
-        </form>
-
-        <%@ include file="/layout/footer.jsp" %>
-
-        Review Progress Modal 
-        <div class="modal fade" id="reviewProgressModal" tabindex="-1" role="dialog" aria-labelledby="reviewProgressModalLabel">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="reviewProgressModalLabel">Review Progress</h4>
+        <div class="panel panel-default">
+            <div class="panel-heading">Question Detail</div>
+            <div class="panel-body">
+                <p>${questionDetail}</p>
+                <c:forEach var="answer" items="${questions[currentQuestion-1].answers}">
+                    <div class="alert ${answer.correct ? 'alert-success' : 'alert-default'}">
+                        <label>
+                            <input type="radio" name="answer" value="${answer.id}" disabled ${answer.id == questions[currentQuestion-1].yourAnswer ? 'checked' : ''}>
+                            ${answer.answerDetail}
+                        </label>
                     </div>
-                    <div class="modal-body">
-                        <div class="btn-group" role="group">
-                            <div style="display: flex; width: 100%;">
-                                <button type="button" class="btn btn-secondary" onclick="filterQuestions('all')">All Questions</button>
-                                <button type="button" class="btn btn-secondary" onclick="filterQuestions('answered')">Answered</button>
-                                <button type="button" class="btn btn-secondary" onclick="filterQuestions('unanswered')">Unanswered</button>
-                                <button type="button" class="btn btn-secondary" onclick="filterQuestions('marked')">Marked</button>
+                </c:forEach>
+            </div>
+        </div>
+        <div class="question-nav row">
+            <c:if test="${currentQuestion > 1}">
+                <a href="quizReview?practiceId=${practiceId}&questionNumber=${currentQuestion - 1}&quizId=${stqId}" class="btn btn-primary col-md-2">Previous Question</a>
+            </c:if>
+            <div class="col-md-1"></div>
+            <c:if test="${currentQuestion < totalQuestions}">
+                <a href="quizReview?practiceId=${practiceId}&questionNumber=${currentQuestion + 1}&quizId=${stqId}" class="btn btn-primary col-md-2">Next Question</a>
+            </c:if>
+            <div class="col-md-1"></div>
+            <div class="col-md-2">
+                <button class="btn btn-info btn-block" onclick="peekAnswer(${practiceId}, ${currentQuestion}, ${stqId})">Explain</button>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-2">
+                <button class="btn btn-primary btn-danger" onclick="viewProgress()">Review Progress</button>
+            </div>
+        </div>
+        <br/>
+    </div>
 
-                            </div>
-                        </div>
-                        <hr>
-                        <div id="questionsList">
+    <form id="quizForm" method="post" action="QuizReview">
+        <input type="hidden" name="practiceId" id="practiceId" value="${param.practiceId}">
+        <input type="hidden" name="questionId" id="questionId" value="${questionId}">
+        <input type="hidden" name="questionNumber" id="questionNumber" value="${currentQuestion}">
+        <input type="hidden" name="totalQuestions" id="totalQuestions" value="${totalQuestions}">
+        <input type="hidden" name="action" id="action" value="">
+    </form>
 
+    <%@ include file="/layout/footer.jsp" %>
+
+    <div class="modal fade" id="reviewProgressModal" tabindex="-1" role="dialog" aria-labelledby="reviewProgressModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="reviewProgressModalLabel">Review Progress</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="btn-group" role="group">
+                        <div style="display: flex; width: 100%;">
+                            <button type="button" class="btn btn-secondary" onclick="filterQuestions('all')">All Questions</button>
+                            <button type="button" class="btn btn-secondary" onclick="filterQuestions('answered')">Answered</button>
+                            <button type="button" class="btn btn-secondary" onclick="filterQuestions('unanswered')">Unanswered</button>
+                            <button type="button" class="btn btn-secondary" onclick="filterQuestions('marked')">Marked</button>
                         </div>
                     </div>
+                    <hr>
+                    <div id="questionsList"></div>
                 </div>
             </div>
         </div>
-        Peek Answer Modal 
-        <div class="modal fade" id="peekAnswerModal" tabindex="-1" role="dialog" aria-labelledby="peekAnswerModalLabel">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="peekAnswerModalLabel">Explain</h4>
-                    </div>
-                    <div class="modal-body">
-                        <h5>Answer:</h5>
-                        <p id="peekAnswer"></p>
-                        <h5>Suggestion:</h5>
-                        <p id="peekSuggestion"></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
+    </div>
+
+    <div class="modal fade" id="peekAnswerModal" tabindex="-1" role="dialog" aria-labelledby="peekAnswerModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="peekAnswerModalLabel">Explain</h4>
+                </div>
+                <div class="modal-body">
+                    <h5>Answer:</h5>
+                    <p id="peekAnswer"></p>
+                    <h5>Suggestion:</h5>
+                    <p id="peekSuggestion"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
+    </div>
 
+    <script src="js/script.js"></script>
+    <script>
+        function navigateQuestion(practiceId, questionNumber, action) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('practiceId', practiceId);
+            url.searchParams.set('currentQuestion', questionNumber);
+            url.searchParams.set('action', action);
+            window.location.href = url.toString();
+        }
 
-        <script src="js/script.js"></script>
-        <script>
-                                    function navigateQuestion(practiceId, questionNumber, action) {
-                                        const url = new URL(window.location.href);
-                                        url.searchParams.set('practiceId', practiceId);
-                                        url.searchParams.set('currentQuestion', questionNumber);
-                                        url.searchParams.set('action', action);
-                                        window.location.href = url.toString();
-                                    }
+        function filterQuestions(type) {
+            fetch(`FilterQuestions?practiceId=${practiceId}&stqId=${stqId}&type=` + type)
+                .then(response => response.json())
+                .then(data => displayQuestions(data));
+        }
 
+        function displayQuestions(questions) {
+            const questionsList = document.getElementById('questionsList');
+            questionsList.innerHTML = '';
+            let row = document.createElement('div');
+            row.classList.add('question-row');
 
+            questions.forEach((question, index) => {
+                const questionItem = document.createElement('div');
+                questionItem.classList.add('question-btn');
 
-                                    function filterQuestions(type) {
-                                        fetch(`FilterQuestions?practiceId=${practiceId}&type=` + type)
-                                                .then(response => response.json())
-                                                .then(data => displayQuestions(data));
-                                    }
+                const link = document.createElement('a');
+                link.href = `quizReview?practiceId=${practiceId}&questionNumber=` + question.questionNumber+"&quizId=${stqId}";
+                link.className = 'btn btn-primary col-md-12';
+                link.textContent = question.questionNumber;
 
-                                    function displayQuestions(questions) {
-                                        const questionsList = document.getElementById('questionsList');
-                                        questionsList.innerHTML = '';
-                                        let row = document.createElement('div');
-                                        row.classList.add('question-row');
+                questionItem.appendChild(link);
+                row.appendChild(questionItem);
 
-                                        questions.forEach((question, index) => {
-                                            const questionItem = document.createElement('div');
-                                            questionItem.classList.add('question-btn');
+                if ((index + 1) % 5 === 0) {
+                    questionsList.appendChild(row);
+                    row = document.createElement('div');
+                    row.classList.add('question-row');
+                }
+            });
 
-                                            // Create an anchor tag for navigation
-                                            const link = document.createElement('a');
-                                            link.href = `QuizReview?practiceId=${practiceId}&questionNumber=` + question.questionNumber;
-                                            link.className = 'btn btn-primary col-md-12';
-                                            link.textContent = question.questionNumber;
+            if (row.children.length > 0) {
+                questionsList.appendChild(row);
+            }
+        }
 
-                                            questionItem.appendChild(link);
-                                            row.appendChild(questionItem);
+        function viewProgress() {
+            $.ajax({
+                type: "GET",
+                url: "ReviewProgress",
+                data: {
+                    practiceId: ${practiceId},
+                    stqId: ${stqId}
+                },
+                success: function (response) {
+                    displayQuestions(response);
+                    $('#reviewProgressModal').modal('show');
+                },
+                error: function () {
+                    console.log("Error saving progress.");
+                }
+            });
+        }
 
-                                            if ((index + 1) % 5 === 0) {
-                                                questionsList.appendChild(row);
-                                                row = document.createElement('div');
-                                                row.classList.add('question-row');
-                                            }
-                                        });
+        function peekAnswer(practiceId, questionNumber, stqId) {
+            $.ajax({
+                type: "GET",
+                url: "PeekAnswer",
+                data: {
+                    practiceId: practiceId,
+                    questionNumber: questionNumber,
+                    stqId: stqId
+                },
+                success: function (response) {
+                    $('#peekAnswer').text(response.answerDetail);
+                    $('#peekSuggestion').text(response.suggestion);
+                    $('#peekAnswerModal').modal('show');
+                },
+                error: function () {
+                    console.log("Error peeking answer.");
+                }
+            });
+        }
 
-                                        if (row.children.length > 0) {
-                                            questionsList.appendChild(row);
-                                        }
-                                    }
-
-
-                                    function viewProgress() {
-                                        $.ajax({
-                                            type: "GET",
-                                            url: "ReviewProgress",
-                                            data: {
-                                                practiceId: ${practiceId}
-
-                                            },
-                                            success: function () {
-                                                $('#reviewProgressModal').modal('show');
-                                            },
-                                            error: function () {
-                                                console.log("Error saving progress.");
-                                            }
-                                        });
-                                    }
-                                    function peekAnswer(practiceId, questionNumber) {
-                                        $.ajax({
-                                            type: "GET",
-                                            url: "PeekAnswer",
-                                            data: {
-                                                practiceId: practiceId,
-                                                questionNumber: questionNumber
-                                            },
-                                            success: function (response) {
-                                                $('#peekAnswer').text(response.answerDetail);
-                                                $('#peekSuggestion').text(response.suggestion);
-                                                $('#peekAnswerModal').modal('show');
-                                            },
-                                            error: function (error) {
-                                                console.log("Error peeking answer.");
-                                            }
-                                        });
-                                    }
-
-                                    $(document).ready(function () {
-                                        const urlParams = new URLSearchParams(window.location.search);
-                                        if (urlParams.get('finished') === 'true') {
-                                            alert('Quiz has finished');
-                                        }
-                                    });
-
-        </script>
-        <script src="js/logout.js"></script>
-    </body>
+        $(document).ready(function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('finished') === 'true') {
+                alert('Quiz has finished');
+            }
+        });
+    </script>
+    <script src="js/logout.js"></script>
+</body>
 </html>
-

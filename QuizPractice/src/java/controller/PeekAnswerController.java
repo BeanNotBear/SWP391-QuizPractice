@@ -2,6 +2,7 @@ package controller;
 
 import dal.PracticeDAO;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,17 +16,29 @@ import model.Question;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+@WebServlet("/PeekAnswer")
 public class PeekAnswerController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int practiceId = Integer.parseInt(request.getParameter("practiceId"));
+        int practiceId = -1;  // Set default value
+        int stqId = -1;
         int questionNumber = Integer.parseInt(request.getParameter("questionNumber"));
 
+         String practiceIdParam = request.getParameter("practiceId");
+        if (practiceIdParam != null && !practiceIdParam.isEmpty()) {
+            practiceId = Integer.parseInt(practiceIdParam);
+        }
+        
+         String stqIdParam = request.getParameter("stqId");
+        if (stqIdParam != null && !stqIdParam.isEmpty()) {
+            stqId = Integer.parseInt(stqIdParam);
+        }
+        
         try {
             PracticeDAO practiceDAO = PracticeDAO.getInstance();
-            List<Question> questions = practiceDAO.getQuestionsByPracticeId(practiceId);
+            List<Question> questions = practiceDAO.getQuestionsByPracticeId(practiceId,stqId);
             Question currentQuestion = questions.get(questionNumber - 1);
             List<Answer> answers = practiceDAO.getAnswersByQuestionId(currentQuestion.getId());
 

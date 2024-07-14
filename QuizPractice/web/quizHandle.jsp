@@ -308,7 +308,7 @@
         <script>
                             let totalTime = ${remainingTime}; // Remaining time in seconds from the controller
                             const timerElement = document.getElementById('timer');
-
+                            console.log("fdsafsdafsd"+totalTime);
                             function startTimer(duration, display) {
                                 let timer = duration, hours, minutes, seconds;
                                 setInterval(function () {
@@ -332,6 +332,7 @@
                             window.onload = function () {
                                 startTimer(totalTime, timerElement);
                             };
+
 
                             function navigateQuestion(practiceId, questionNumber, action) {
                                 const form = document.getElementById('quizForm');
