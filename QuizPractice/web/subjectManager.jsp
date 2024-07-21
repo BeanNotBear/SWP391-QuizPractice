@@ -14,7 +14,6 @@
         <!-- custom css file link  -->
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/popup.css">
-
         <!-- Bootstrap file link  -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>

@@ -150,7 +150,7 @@
                                 <li><a href="<%=request.getContextPath()%>/newSubject">New Subject</a></li>
                                 <li><a href="<%=request.getContextPath()%>/subjectManager">Subject Manager</a></li>
                                 <li><a href="<%=request.getContextPath()%>/newmenu3">User List</a></li>
-                                <li><a href="<%=request.getContextPath()%>/newmenu3">Dashboard</a></li>
+                                <li><a href="<%=request.getContextPath()%>/dashboard">Dashboard</a></li>
                                 <li><a href="<%=request.getContextPath()%>/questionList">Question Manager</a></li>   
                                 <li><a href="<%=request.getContextPath()%>/quizManager">Quiz Manager</a></li>   
                            
