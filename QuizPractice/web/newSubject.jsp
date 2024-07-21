@@ -183,7 +183,7 @@
 
                             <div class="form-group">
                                 <label for="description">Description: </label>
-                                <textarea onkeyup="validateDescription()" required id="description" name="description" class="form-control" rows="5" placeholder="Enter description"></textarea>
+                                <textarea onkeyup="validateDescription()" required id="description" name="description" class="form-control textEditor" rows="5" placeholder="Enter description"></textarea>
                                 <span id="error-message-description" class="error">Please enter a description.</span>
                             </div>
                             <button type="submit" class="btn btn-primary btn-sm col-md-2">Save</button>
@@ -260,6 +260,10 @@
             });
         </script>
         <script src="js/validateSubject.js"></script>
+        <script src="js/tinymce/tinymce.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@tinymce/tinymce-webcomponent@2/dist/tinymce-webcomponent.min.js"></script>
+        <script src="js/textEditor.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js" integrity="sha512-ykZ1QQr0Jy/4ZkvKuqWn4iF3lqPZyij9iRv6sGqLRdTPkY69YX6+7wvVGmsdBbiIfN/8OdsI7HABjvEok6ZopQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <!-- Bootstrap Toggle JS and CSS (optional) -->
         <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
         <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>

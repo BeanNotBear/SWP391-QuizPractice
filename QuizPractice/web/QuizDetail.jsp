@@ -119,11 +119,10 @@
             //        });
 
             $(document).ready(function () {
-                // X? lý khi form submit
                 $('form').submit(function (event) {
                     event.preventDefault(); // Ng?n ch?n hành ??ng m?c ??nh c?a form
 
-                    // L?y giá tr? c?a các tr??ng input
+                    // L?y giá tr? c?a các tr??ng nh?p li?u
                     var quizId = $('#id').val();
                     var quizName = $('#quizName').val();
                     var subjectId = $('#subjectId').val();
@@ -131,8 +130,21 @@
                     var numberQuestion = $('#numberQuestion').val();
                     var duration = $('#duration').val();
                     var type = $('#type').val();
+                    var passRate = $('#passRate').val();
 
-                    // T?o object JSON ?? g?i lên server (có th? s? d?ng FormData n?u c?n)
+                    // Ki?m tra các tr??ng không ???c ?? tr?ng
+                    if (!quizName || !subjectId || !level || !numberQuestion || !duration || !type || !passRate) {
+                        toastr.error('All fields are required!', 'Error');
+                        return;
+                    }
+
+                    // Ki?m tra các tr??ng nh?p s? ph?i l?n h?n 0
+                    if (numberQuestion <= 0 || duration <= 0 || passRate <= 0) {
+                        toastr.error('Number of Questions, Duration, and Pass Rate must be greater than 0!', 'Error');
+                        return;
+                    }
+
+                    // T?o object JSON ?? g?i lên server
                     var formData = {
                         id: quizId,
                         quizName: quizName,
@@ -140,7 +152,8 @@
                         level: level,
                         numberQuestion: numberQuestion,
                         duration: duration,
-                        type: type
+                        type: type,
+                        passRate: passRate
                     };
 
                     // G?i AJAX request ?? l?u d? li?u vào c? s? d? li?u
@@ -149,14 +162,10 @@
                         url: 'quizdetail', // ???ng d?n x? lý d? li?u
                         data: formData, // D? li?u c?n g?i ?i
                         success: function (response) {
-                            // X? lý khi g?i d? li?u thành công
-                            toastr.success('Update Successfully!', 'Thông báo');
-
-                            // N?u mu?n chuy?n h??ng sau khi l?u thành công, s? d?ng window.location.href = 'url_chuyen_huong';
+                            toastr.success('Update Successfully!', 'Success');
                         },
                         error: function (error) {
-                            // X? lý khi g?i d? li?u th?t b?i
-                            toastr.error('Failed to update!', 'Thông báo');
+                            toastr.error('Failed to update!', 'Error');
                         }
                     });
                 });
@@ -219,6 +228,10 @@
                                     <option value="Muti-choice" <c:if test="${quizID.type == 'Muti-choice'}">selected</c:if>>Muti-choice</option>
                                     <option value="Essay" <c:if test="${quizID.type == 'Essay'}">selected</c:if>>Essay</option>
                                     </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="passrate">Passrate (%)</label>
+                                    <input type="number" class="form-control" id="passRate" name="passRate" value="50" required>
                                 </div>
                                 <button type="submit" class="btn btn-primary btn-sms">Save</button>
                             </div>

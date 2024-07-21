@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -91,18 +92,12 @@
                 animation: progress 0.4s ease-in-out forwards;
                 opacity: 0;
             }
-            .skill-per.${name} {
-                width: ${percent}%;
-                animation-delay: 0.3s;
-            }
-            .skill-per.javascript{
-                width: 50%;
-                animation-delay: 0.3s;
-            }
-            .skill-per.nodejs{
-                width: 30.25%;
-                animation-delay: 0.3s;
-            }
+            <c:forEach var="i" items="${subjectInProgress}">
+                .skill-per.${i.subjectName} {
+                    width: ${i.progress}%;
+                    animation-delay: 0.3s;
+                }
+            </c:forEach>
             @keyframes progress {
                 0%{
                     width: 0;
@@ -148,87 +143,32 @@
             <div class="container col-md-12" id="tabBar">
 
                 <ul class="nav nav-tabs">
-                    <li class="active"><a data-toggle="tab" href="#home">In Progress (10)</a></li>
-                    <li><a data-toggle="tab" href="#menu1">Complete (10)</a></li>
+                    <li class="active"><a data-toggle="tab" href="#home">In Progress</a></li>
+                    <li><a data-toggle="tab" href="#menu1">Complete</a></li>
                 </ul>
                 <div class="tab-content">
                     <div id="home" class="tab-pane fade in active">
                         <div style="width: 1130px" class="courses">
                             <h3>In progress</h3>
                             <div class="box-container">
-
-                                <div class="box">
-                                    <div class="thumb">
-                                        <img src="images/thumb-1.png" alt="">
-                                        <span>10 videos</span>
-                                    </div>
-                                    <h3 class="title">complete HTML tutorial</h3>
-                                    <div class="skill-box">
-                                        <div class="skill-bar">
-                                            <span class="skill-per css">
-                                                <span class="tooltip1">${percent}%</span>
-                                            </span>
+                                <c:forEach var="s" items="${subjectInProgress}">
+                                    <div style="width: 367.6px" class="box">
+                                        <div class="thumb">
+                                            <img style="width: 325.062px" src="${s.thumbnail}" alt="">
+                                            <span>${s.numberOfLessons} Lessons</span>
                                         </div>
-                                        <span>Overall Progress</span>
-                                    </div>
-                                    <a href="playlist.html" class="inline-btn">Go to subject</a>
-                                </div>
-                                <div class="box">
-                                    <div class="thumb">
-                                        <img src="images/thumb-1.png" alt="">
-                                        <span>10 videos</span>
-                                    </div>
-                                    <h3 class="title">complete HTML tutorial</h3>
-                                    <div class="skill-box">
-                                        <div class="skill-bar">
-                                            <span class="skill-per nodejs">
-                                                <span class="tooltip1">30.23%</span>
-                                            </span>
+                                        <h3 class="title">${s.subjectName}</h3>
+                                        <div class="skill-box">
+                                            <div class="skill-bar">
+                                                <span class="skill-per ${s.subjectName}">
+                                                    <span class="tooltip1">${s.progress}%</span>
+                                                </span>
+                                            </div>
+                                            <span>Overall Progress</span>
                                         </div>
-                                        <span>Overall Progress</span>
+                                        <a href="learning?subjectId=${s.subjectId}" class="inline-btn">Go to subject</a>
                                     </div>
-                                    <a href="playlist.html" class="inline-btn">Go to subject</a>
-                                </div>
-                                <div class="box">
-                                    <div class="thumb">
-                                        <img src="images/thumb-1.png" alt="">
-                                        <span>10 videos</span>
-                                    </div>
-                                    <h3 class="title">complete HTML tutorial</h3>
-                                    <a href="playlist.html" class="inline-btn">Go to subject</a>
-                                </div>
-                                <div class="box">
-                                    <div class="thumb">
-                                        <img src="images/thumb-1.png" alt="">
-                                        <span>10 videos</span>
-                                    </div>
-                                    <h3 class="title">complete HTML tutorial</h3>
-                                    <a href="playlist.html" class="inline-btn">Go to subject</a>
-                                </div>
-                                <div class="box">
-                                    <div class="thumb">
-                                        <img src="images/thumb-1.png" alt="">
-                                        <span>10 videos</span>
-                                    </div>
-                                    <h3 class="title">complete HTML tutorial</h3>
-                                    <a href="playlist.html" class="inline-btn">Go to subject</a>
-                                </div>
-                                <div class="box">
-                                    <div class="thumb">
-                                        <img src="images/thumb-1.png" alt="">
-                                        <span>10 videos</span>
-                                    </div>
-                                    <h3 class="title">complete HTML tutorial</h3>
-                                    <a href="playlist.html" class="inline-btn">Go to subject</a>
-                                </div>
-                                <div class="box">
-                                    <div class="thumb">
-                                        <img src="images/thumb-1.png" alt="">
-                                        <span>10 videos</span>
-                                    </div>
-                                    <h3 class="title">complete HTML tutorial</h3>
-                                    <a href="playlist.html" class="inline-btn">Go to subject</a>
-                                </div>
+                                </c:forEach>
                             </div>
                             <nav class="mt-3 pagination-area" aria-label="Page navigation example">
                                 <ul class="pagination">

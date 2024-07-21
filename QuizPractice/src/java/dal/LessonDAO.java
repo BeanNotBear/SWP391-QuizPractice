@@ -1,7 +1,9 @@
 package dal;
 
 import context.DBContext;
+import dto.CurrentLesson;
 import dto.LessonDTO;
+import dto.LessonLearning;
 import dto.LessonSubjectDTO;
 import dto.OwnerDTO;
 import java.sql.SQLException;
@@ -142,8 +144,6 @@ public class LessonDAO extends DBContext {
 
         return 0; // Default return value if no count retrieved
     }
-
-   
 
     public int getIdAddCurrent() {
         String sql = "SELECT @@IDENTITY AS LastInsertedId;";
@@ -350,25 +350,25 @@ public class LessonDAO extends DBContext {
             ps.setString(4, search);
             ps.setString(5, search);
             ps.setString(6, search);
-            
-           rs = ps.executeQuery();
-           if(rs.next()) {
-               totalPage = rs.getInt(1);
-           }
+
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                totalPage = rs.getInt(1);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return totalPage;
     }
-    
+
     public List<LessonDTO> getLessonsBySubjectId(String subjectId) throws SQLException {
         List<LessonDTO> lessons = new ArrayList<>();
-        String query = "SELECT l.id, l.name FROM lessons l " +
-                       "JOIN subject_has_lesson shl ON l.id = shl.lesson_id " +
-                       "WHERE shl.subject_id = ?";
-         ps = connection.prepareStatement(query);
+        String query = "SELECT l.id, l.name FROM lessons l "
+                + "JOIN subject_has_lesson shl ON l.id = shl.lesson_id "
+                + "WHERE shl.subject_id = ?";
+        ps = connection.prepareStatement(query);
         ps.setString(1, subjectId);
-         rs = ps.executeQuery();
+        rs = ps.executeQuery();
 
         while (rs.next()) {
             lessons.add(new LessonDTO(rs.getInt("id"), rs.getString("name")));
@@ -376,21 +376,6 @@ public class LessonDAO extends DBContext {
 
         return lessons;
     }
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-   
-
-   
 
     public boolean insertLesson(String name, String content, String media, int lessonIndex, String Type, int userId) {
         boolean updated = false;
@@ -414,21 +399,144 @@ public class LessonDAO extends DBContext {
         return updated;
     }
 
-    
-  
-   
-  
- 
-   
-    
-    
-    
+    public List<LessonLearning> getLessonLearning(int subjectId, int userId) {
+        List<LessonLearning> lessonLearnings = new ArrayList<>();
+        StringBuilder queryBuilder = new StringBuilder();
+        queryBuilder.append("SELECT sl.[lesson_id],\n")
+                .append("       l.LessonIndex,\n")
+                .append("       l.name,\n")
+                .append("       COALESCE(l.QuizId, '-1') AS QuizId,\n")
+                .append("       st.status\n")
+                .append("FROM [SWP391_G6].[dbo].[subject_has_lesson] AS sl\n")
+                .append("INNER JOIN [student_has_lesson] AS st ON st.lesson_id = sl.lesson_id\n")
+                .append("INNER JOIN [lessons] AS l ON st.lesson_id = l.id\n")
+                .append("INNER JOIN [subjects] AS s ON sl.subject_id = s.id\n")
+                .append("WHERE sl.subject_id = ? AND st.user_id = ?\n")
+                .append("ORDER BY l.LessonIndex;");
+
+        String query = queryBuilder.toString();
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, subjectId);
+            ps.setInt(2, userId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                lessonLearnings.add(
+                        new LessonLearning(rs.getInt(1),
+                                rs.getInt(2),
+                                rs.getString(3),
+                                rs.getInt(4),
+                                rs.getBoolean(5))
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return lessonLearnings;
+    }
+
+    public int getCurrentLessonIndex(int subjectId, int userId) {
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT TOP 1 l.LessonIndex,\n")
+                .append("             st.status\n")
+                .append("FROM [SWP391_G6].[dbo].[subject_has_lesson] AS sl\n")
+                .append("INNER JOIN [student_has_lesson] AS st ON st.lesson_id = sl.lesson_id\n")
+                .append("INNER JOIN [lessons] AS l ON st.lesson_id = l.id\n")
+                .append("INNER JOIN [subjects] AS s ON sl.subject_id = s.id\n")
+                .append("WHERE sl.subject_id = ? AND st.user_id = ?\n")
+                .append("ORDER BY st.status ASC;");
+        int result = -1;
+        try {
+            ps = connection.prepareStatement(query.toString());
+            ps.setInt(1, subjectId);
+            ps.setInt(2, userId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                result = rs.getInt(1);
+            }
+        } catch (Exception e) {
+        }
+        return result;
+    }
+
+    public CurrentLesson getCurrentLesson(int index) {
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT [id], ")
+                .append("[name], ")
+                .append("[content], ")
+                .append("[media], ")
+                .append("[LessonIndex], ")
+                .append("[Type], ")
+                .append("COALESCE([QuizId], -1) AS [QuizId] ")
+                .append("FROM [SWP391_G6].[dbo].[lessons] ")
+                .append("WHERE [LessonIndex] = ?")
+                .append(";");
+        CurrentLesson lesson = new CurrentLesson();
+        try {
+            ps = connection.prepareStatement(query.toString());
+            ps.setInt(1, index);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                lesson = new CurrentLesson(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getInt(5),
+                        rs.getString(6),
+                        rs.getInt(7));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return lesson;
+    }
+
+    public boolean checkLessonIsDone(int userId, int lessonId) {
+        String query = "IF EXISTS (\n"
+                + "    SELECT 1 \n"
+                + "    FROM [SWP391_G6].[dbo].[student_has_lesson]\n"
+                + "    WHERE user_id = ? AND lesson_id = ? AND status = 1\n"
+                + ")\n"
+                + "BEGIN\n"
+                + "    SELECT 'true' AS RecordExists;\n"
+                + "END\n"
+                + "ELSE\n"
+                + "BEGIN\n"
+                + "    SELECT 'false' AS RecordExists;\n"
+                + "END";
+        boolean isExisted = false;
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, userId);
+            ps.setInt(2, lessonId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                isExisted = rs.getBoolean(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return isExisted;
+    }
+
+    public void markLessonDone(int userId, int lessonId) {
+        String query = "UPDATE [dbo].[student_has_lesson]\n"
+                + "   SET [status] = 1\n"
+                + " WHERE user_id = ? AND lesson_id = ?";
+        try {
+            ps = connection.prepareStatement(query);
+            
+            ps.setInt(1, userId);
+            ps.setInt(2, lessonId);
+            
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         LessonDAO lessonDAO = new LessonDAO();
-        System.out.println(lessonDAO.getLessonsBySubjectWithPaging(2, 1, 5, null, null, "quiz"));
-        System.out.println(lessonDAO.getCount(2, "", null, ""));
-        //System.out.println(lessonDAO.insertLesson("fdsafsda", "fdsafdas", "fdasf", 3, "content", 1028));
-        System.out.println(lessonDAO.getIdAddCurrent());
-        System.out.println(lessonDAO.getLessonById(1));
+        System.out.println(lessonDAO.checkLessonIsDone(26, 1));
     }
 }

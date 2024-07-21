@@ -49,6 +49,9 @@
             nav {
                 margin-top: -25px;
             }
+            .passrate {
+                color: red;
+            }
         </style>
     </head>
     <body>
@@ -76,6 +79,14 @@
                             <input type="text" id="quizName" name="quizName" class="form-control" placeholder="Search by Quiz Name" value="${param.quizName}">
                         </div>
                         <div class="col-md-2">
+                            <select id="quizType" name="quizType" class="form-control">
+                                <option value="">Select Type</option>
+                                <option value="Muti-choice" ${param.quizType == 'Muti-choice' ? 'selected' : ''}>Muti-choice</option>
+                                <option value="Essay" ${param.quizType == 'Essay' ? 'selected' : ''}>Essay</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
                             <button style="margin: 0;" type="submit" class="btn btn-primary">Search</button>
                         </div>
                     </form>
@@ -99,6 +110,7 @@
                             <th>Total Questions</th>
                             <th>Duration (Minutes)</th>
                             <th>Type</th>
+                            <th>Passrate (%)</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -112,27 +124,27 @@
                                 <td>${quiz.numberQuestion}</td>
                                 <td>${quiz.duration}</td>
                                 <td>${quiz.type}</td>
+                                <td class="passrate">50%</td>
 
                                 <td class="row">
 
-                                    <a class="btn btn-info  col-md-3" href="quizdetail?id=${quiz.id}">Edit</a>
+                                    <a class="btn btn-info  col-md-4" href="quizdetail?id=${quiz.id}">Edit</a>
                                     <!--<button  data-id=""></button>-->
 
                                     <span class="col-md-1"></span>
-                                    <button class="btn btn-danger delete-quiz col-md-3" data-id="${quiz.id}">Delete</button>
+                                    <button class="btn btn-danger delete-quiz col-md-4" data-id="${quiz.id}">Delete</button>
                                 </td>
                             </tr>
                         </c:forEach>
                     </tbody>
                 </table>
 
-                <!-- Pagination -->
                 <nav aria-label="Page navigation" id="pagination">
                     <ul class="pagination">
                         <c:choose>
                             <c:when test="${currentPage > 1}">
                                 <li>
-                                    <a href="quizManager?page=${currentPage - 1}&subjectName=${param.subjectName}&quizName=${param.quizName}" aria-label="Previous">
+                                    <a href="quizManager?page=${currentPage - 1}&subjectId=${param.subjectId}&subjectName=${param.subjectName}&quizName=${param.quizName}&quizType=${param.quizType}" aria-label="Previous">
                                         <span aria-hidden="true">&laquo;</span>
                                     </a>
                                 </li>
@@ -145,7 +157,7 @@
                                     <li class="active"><a href="#">${i}</a></li>
                                     </c:when>
                                     <c:otherwise>
-                                    <li><a href="quizManager?page=${i}&subjectName=${param.subjectName}&quizName=${param.quizName}">${i}</a></li>
+                                    <li><a href="quizManager?page=${i}&subjectId=${param.subjectId}&subjectName=${param.subjectName}&quizName=${param.quizName}&quizType=${param.quizType}">${i}</a></li>
                                     </c:otherwise>
                                 </c:choose>
                             </c:forEach>
@@ -153,9 +165,8 @@
                         <c:choose>
                             <c:when test="${currentPage < totalPages}">
                                 <li>
-                                    <a href="quizManager?page=${currentPage + 1}&subjectName=${param.subjectName}&quizName=${param.quizName}" aria-label="Next">
-                                        <span
-                                            aria-hidden="true">&raquo;</span>
+                                    <a href="quizManager?page=${currentPage + 1}&subjectId=${param.subjectId}&subjectName=${param.subjectName}&quizName=${param.quizName}&quizType=${param.quizType}" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
                                     </a>
                                 </li>
                             </c:when>
@@ -216,7 +227,7 @@
         <script src="js/logout.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                <script>
+        <script>
 //            $(document).ready(function () {
 //                $('#searchForm').submit(function (event) {
 //                    event.preventDefault();

@@ -5,6 +5,8 @@
 
 package controller;
 
+import dal.SubjectDAO;
+import dto.SubjectLearning;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,6 +14,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+import model.User;
 
 
 @WebServlet(name="MyLearningController", urlPatterns={"/mylearning"})
@@ -26,8 +32,11 @@ public class MyLearningController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        request.setAttribute("name", "css");
-        request.setAttribute("percent", 30);
+        HttpSession session = request.getSession();
+        User user = (User)session.getAttribute("user");
+        int userId = user.getUserId();
+        List<SubjectLearning> subjectLearnings = SubjectDAO.getInstance().getAllSubjectInProgressByUserId(userId);
+        request.setAttribute("subjectInProgress", subjectLearnings);
         request.getRequestDispatcher("myLearning.jsp").forward(request, response);
     } 
 

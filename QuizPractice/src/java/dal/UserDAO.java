@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.User;
 import util.security.Security;
+import java.sql.PreparedStatement;
 
 // Data Access Object for User operations, extending DBContext to utilize database connections
 public class UserDAO extends DBContext {
@@ -182,6 +183,7 @@ public class UserDAO extends DBContext {
     }
 
     // Finds a user by email and password
+    @SuppressWarnings("all")
     public User findUserByEmailAndPassword(String email, String password) {
         String query = "SELECT *\n"
                 + "FROM users\n"
@@ -498,18 +500,86 @@ public class UserDAO extends DBContext {
             ps.setInt(6, start);
             ps.setInt(7, end);
             rs = ps.executeQuery();
-            while (rs.next()) {                
-                learners.add(new LearnerDTO(rs.getInt(1), 
-                    rs.getString(2), 
-                    rs.getString(3), 
-                    rs.getInt(4), 
-                    rs.getString(5), 
-                    rs.getString(6)));
+            while (rs.next()) {
+                learners.add(new LearnerDTO(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getInt(4),
+                        rs.getString(5),
+                        rs.getString(6)));
             }
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
         return learners;
+    }
+
+    public void ChangeStatusOfRegistartion(int userId, int subjectId, int duration) {
+        String query = "UPDATE [dbo].[Subject_Register]\n"
+                + "SET [CreatedAt] = GETDATE(),\n"
+                + "    [UpdatedAt] = DATEADD(month, ?, GETDATE()),\n"
+                + "    [Status] = 'done'\n"
+                + "WHERE [SubjectId] = ? AND [UserId] = ?;";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1, duration);    // Set duration in months
+            ps.setInt(2, subjectId);   // Set subjectId
+            ps.setInt(3, userId);      // Set userId
+
+            int result = ps.executeUpdate();
+            System.out.println("Rows affected: " + result);  // Optional: Print number of rows affected
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void AddStudentHasLesson(int userId, int subjectId) {
+        List<Integer> listOfLessonId = getListOfLessonIdBySubjectId(subjectId);
+        StringBuilder queryBuilder = new StringBuilder();
+        queryBuilder.append("INSERT INTO [dbo].[student_has_lesson]\n")
+                .append("           ([user_id]\n")
+                .append("           ,[lesson_id])\n")
+                .append("     VALUES\n")
+                .append("           (?, ?)");
+
+        String query = queryBuilder.toString();
+
+        try {
+            ps = connection.prepareStatement(query);
+            for (Integer lessonId : listOfLessonId) {
+                ps.setInt(1, userId);
+                ps.setInt(2, lessonId);
+                ps.executeUpdate();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<Integer> getListOfLessonIdBySubjectId(int subjectId) {
+        List<Integer> listOfLessonId = new ArrayList<>();
+        StringBuilder queryBuilder = new StringBuilder();
+        queryBuilder.append("SELECT [lesson_id]\n")
+                .append("FROM [SWP391_G6].[dbo].[subject_has_lesson]\n")
+                .append("WHERE [subject_id] = ?;");
+
+        String query = queryBuilder.toString();
+
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, subjectId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                listOfLessonId.add(rs.getInt(1));
+            }
+            ps.close();
+            rs.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listOfLessonId;
     }
 }

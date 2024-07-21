@@ -84,6 +84,57 @@ public class QuizDAO extends DBContext {
         return quizzes;
     }
 
+    public List<QuizDTO> searchQuizzes(String subjectName, String quizName, String quizType, int page, int recordsPerPage) throws SQLException {
+        List<QuizDTO> quizzes = new ArrayList<>();
+        StringBuilder query = new StringBuilder("SELECT q.id, q.name, s.name AS subject_name, q.level, q.numberQuestion, q.duration, q.type ");
+        query.append("FROM Quizs q ");
+        query.append("JOIN subjects s ON q.subjectId = s.id ");
+        query.append("WHERE q.DeleteFlag = 1 ");
+
+        if (subjectName != null && !subjectName.isEmpty()) {
+            query.append("AND s.name LIKE ? ");
+        }
+        if (quizName != null && !quizName.isEmpty()) {
+            query.append("AND q.name LIKE ? ");
+        }
+        if (quizType != null && !quizType.isEmpty()) {
+            query.append("AND q.type = ? ");
+        }
+        query.append("ORDER BY q.id OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+
+        try (PreparedStatement ps = connection.prepareStatement(query.toString())) {
+            int index = 1;
+
+            if (subjectName != null && !subjectName.isEmpty()) {
+                ps.setString(index++, "%" + subjectName + "%");
+            }
+            if (quizName != null && !quizName.isEmpty()) {
+                ps.setString(index++, "%" + quizName + "%");
+            }
+            if (quizType != null && !quizType.isEmpty()) {
+                ps.setString(index++, quizType);
+            }
+            ps.setInt(index++, (page - 1) * recordsPerPage);
+            ps.setInt(index, recordsPerPage);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    quizzes.add(new QuizDTO(
+                            rs.getInt("id"),
+                            rs.getString("name"),
+                            rs.getString("subject_name"),
+                            rs.getString("level"),
+                            rs.getInt("numberQuestion"),
+                            rs.getInt("duration"),
+                            rs.getString("type")
+                    ));
+                }
+            }
+        }
+
+        return quizzes;
+    }
+
     public int getTotalRecords(String subjectName, String quizName) throws SQLException {
         StringBuilder query = new StringBuilder("SELECT COUNT(*) FROM Quizs q ");
         query.append("JOIN subjects s ON q.subjectId = s.id ");
@@ -109,6 +160,42 @@ public class QuizDAO extends DBContext {
         rs = ps.executeQuery();
         if (rs.next()) {
             return rs.getInt(1);
+        }
+
+        return 0;
+    }
+
+    public int getTotalRecords(String subjectName, String quizName, String quizType) throws SQLException {
+        StringBuilder query = new StringBuilder("SELECT COUNT(*) FROM Quizs q JOIN subjects s ON q.subjectId = s.id WHERE q.DeleteFlag = 1 ");
+
+        if (subjectName != null && !subjectName.isEmpty()) {
+            query.append("AND s.name LIKE ? ");
+        }
+        if (quizName != null && !quizName.isEmpty()) {
+            query.append("AND q.name LIKE ? ");
+        }
+        if (quizType != null && !quizType.isEmpty()) {
+            query.append("AND q.type = ? ");
+        }
+
+        try (PreparedStatement ps = connection.prepareStatement(query.toString())) {
+            int index = 1;
+
+            if (subjectName != null && !subjectName.isEmpty()) {
+                ps.setString(index++, "%" + subjectName + "%");
+            }
+            if (quizName != null && !quizName.isEmpty()) {
+                ps.setString(index++, "%" + quizName + "%");
+            }
+            if (quizType != null && !quizType.isEmpty()) {
+                ps.setString(index++, quizType);
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
         }
 
         return 0;
@@ -446,7 +533,7 @@ public class QuizDAO extends DBContext {
         return 0;
     }
 
-    public List<QuizDTO> searchQuizzes(String subjectId, String subjectName, String quizName, int page, int recordsPerPage) throws SQLException {
+    public List<QuizDTO> searchQuizzes(String subjectId, String subjectName, String quizName, String quizType, int page, int recordsPerPage) throws SQLException {
         List<QuizDTO> quizzes = new ArrayList<>();
         StringBuilder query = new StringBuilder("SELECT q.id, q.name, s.name AS subject_name, q.level, q.numberQuestion, q.duration, q.type ");
         query.append("FROM Quizs q ");
@@ -462,6 +549,9 @@ public class QuizDAO extends DBContext {
         if (quizName != null && !quizName.isEmpty()) {
             query.append("AND q.name LIKE ? ");
         }
+        if (quizType != null && !quizType.isEmpty()) {
+            query.append("AND q.type = ? ");
+        }
         query.append("ORDER BY q.id OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
 
         try (PreparedStatement ps = connection.prepareStatement(query.toString())) {
@@ -475,6 +565,9 @@ public class QuizDAO extends DBContext {
             }
             if (quizName != null && !quizName.isEmpty()) {
                 ps.setString(index++, "%" + quizName + "%");
+            }
+            if (quizType != null && !quizType.isEmpty()) {
+                ps.setString(index++, quizType);
             }
             ps.setInt(index++, (page - 1) * recordsPerPage);
             ps.setInt(index, recordsPerPage);
@@ -497,7 +590,7 @@ public class QuizDAO extends DBContext {
         return quizzes;
     }
 
-    public int getTotalRecords(String subjectId, String subjectName, String quizName) throws SQLException {
+    public int getTotalRecords(String subjectId, String subjectName, String quizName, String quizType) throws SQLException {
         StringBuilder query = new StringBuilder("SELECT COUNT(*) FROM Quizs q JOIN subjects s ON q.subjectId = s.id WHERE q.DeleteFlag = 1 ");
 
         if (subjectId != null && !subjectId.isEmpty()) {
@@ -508,6 +601,9 @@ public class QuizDAO extends DBContext {
         }
         if (quizName != null && !quizName.isEmpty()) {
             query.append("AND q.name LIKE ? ");
+        }
+        if (quizType != null && !quizType.isEmpty()) {
+            query.append("AND q.type = ? ");
         }
 
         try (PreparedStatement ps = connection.prepareStatement(query.toString())) {
@@ -522,6 +618,9 @@ public class QuizDAO extends DBContext {
             if (quizName != null && !quizName.isEmpty()) {
                 ps.setString(index++, "%" + quizName + "%");
             }
+            if (quizType != null && !quizType.isEmpty()) {
+                ps.setString(index++, quizType);
+            }
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -533,6 +632,92 @@ public class QuizDAO extends DBContext {
         return 0;
     }
 
+//    public List<QuizDTO> searchQuizzes(String subjectId, String subjectName, String quizName, int page, int recordsPerPage) throws SQLException {
+//        List<QuizDTO> quizzes = new ArrayList<>();
+//        StringBuilder query = new StringBuilder("SELECT q.id, q.name, s.name AS subject_name, q.level, q.numberQuestion, q.duration, q.type ");
+//        query.append("FROM Quizs q ");
+//        query.append("JOIN subjects s ON q.subjectId = s.id ");
+//        query.append("WHERE q.DeleteFlag = 1 ");
+//
+//        if (subjectId != null && !subjectId.isEmpty()) {
+//            query.append("AND s.id = ? ");
+//        }
+//        if (subjectName != null && !subjectName.isEmpty()) {
+//            query.append("AND s.name LIKE ? ");
+//        }
+//        if (quizName != null && !quizName.isEmpty()) {
+//            query.append("AND q.name LIKE ? ");
+//        }
+//        query.append("ORDER BY q.id OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+//
+//        try (PreparedStatement ps = connection.prepareStatement(query.toString())) {
+//            int index = 1;
+//
+//            if (subjectId != null && !subjectId.isEmpty()) {
+//                ps.setString(index++, subjectId);
+//            }
+//            if (subjectName != null && !subjectName.isEmpty()) {
+//                ps.setString(index++, "%" + subjectName + "%");
+//            }
+//            if (quizName != null && !quizName.isEmpty()) {
+//                ps.setString(index++, "%" + quizName + "%");
+//            }
+//            ps.setInt(index++, (page - 1) * recordsPerPage);
+//            ps.setInt(index, recordsPerPage);
+//
+//            try (ResultSet rs = ps.executeQuery()) {
+//                while (rs.next()) {
+//                    quizzes.add(new QuizDTO(
+//                            rs.getInt("id"),
+//                            rs.getString("name"),
+//                            rs.getString("subject_name"),
+//                            rs.getString("level"),
+//                            rs.getInt("numberQuestion"),
+//                            rs.getInt("duration"),
+//                            rs.getString("type")
+//                    ));
+//                }
+//            }
+//        }
+//
+//        return quizzes;
+//    }
+//
+//    public int getTotalRecords(String subjectId, String subjectName, String quizName) throws SQLException {
+//        StringBuilder query = new StringBuilder("SELECT COUNT(*) FROM Quizs q JOIN subjects s ON q.subjectId = s.id WHERE q.DeleteFlag = 1 ");
+//
+//        if (subjectId != null && !subjectId.isEmpty()) {
+//            query.append("AND s.id = ? ");
+//        }
+//        if (subjectName != null && !subjectName.isEmpty()) {
+//            query.append("AND s.name LIKE ? ");
+//        }
+//        if (quizName != null && !quizName.isEmpty()) {
+//            query.append("AND q.name LIKE ? ");
+//        }
+//
+//        try (PreparedStatement ps = connection.prepareStatement(query.toString())) {
+//            int index = 1;
+//
+//            if (subjectId != null && !subjectId.isEmpty()) {
+//                ps.setString(index++, subjectId);
+//            }
+//            if (subjectName != null && !subjectName.isEmpty()) {
+//                ps.setString(index++, "%" + subjectName + "%");
+//            }
+//            if (quizName != null && !quizName.isEmpty()) {
+//                ps.setString(index++, "%" + quizName + "%");
+//            }
+//
+//            try (ResultSet rs = ps.executeQuery()) {
+//                if (rs.next()) {
+//                    return rs.getInt(1);
+//                }
+//            }
+//        }
+//
+//        return 0;
+//    }
     public StudentTakeQuiz getStudentTakeQuizById(int stqId) throws SQLException {
         String query = "SELECT * FROM Student_Take_Quiz WHERE Id = ?";
         ps = connection.prepareStatement(query);
@@ -572,7 +757,7 @@ public class QuizDAO extends DBContext {
         ps.setInt(2, quiz.getQuizId());
         ps.setObject(3, quiz.getNumberCorrect());
         ps.executeUpdate();
-        
+
         return getIdAddCurrent();
     }
 

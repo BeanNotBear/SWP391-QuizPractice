@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import dto.PricePackageDTO;
 import dto.SubjectDTO;
+import dto.SubjectLearning;
 import dto.SubjectLoadDTO;
 import dto.SubjectManagerDTO;
 import dto.SubjectPackagePriceDTO;
@@ -46,7 +47,7 @@ public class SubjectDAO extends DBContext {
         }
         return instance;
     }
-
+    
     public List<SubjectDTO> allSubjectsWithConditions(String searchParam, String sort) {
         List<SubjectDTO> subjects = new ArrayList<>();
         List<Object> list = new ArrayList<>();
@@ -74,7 +75,7 @@ public class SubjectDAO extends DBContext {
                 list.add("%" + searchParam + "%");
                 list.add("%" + searchParam + "%");
             }
-
+            
             if (sort != null && !sort.trim().isEmpty()) {
                 query.append(" ORDER BY [update_at] " + sort);
             }
@@ -116,10 +117,10 @@ public class SubjectDAO extends DBContext {
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
-
+        
         return subjects;
     }
-
+    
     public int countLessonsBySubjectId(int subjectId) {
         // count lesson with subject id in database
         int lessonCount = 0;
@@ -138,7 +139,7 @@ public class SubjectDAO extends DBContext {
         }
         return lessonCount;
     }
-
+    
     public void mapParams(PreparedStatement ps, List<Object> args) throws SQLException {
         // Khởi tạo biến chỉ số bắt đầu từ 1 (do chỉ số của PreparedStatement bắt đầu từ 1)
         int i = 1;
@@ -188,7 +189,7 @@ public class SubjectDAO extends DBContext {
         // Điều này sẽ trả về danh sách trống nếu fromIndex bằng với toIndex
         return subject.subList(fromIndex, toIndex);
     }
-
+    
     public SubjectDTO findSubjectById(int id) {
         String query = "SELECT [id]\n"
                 + ",[name]\n"
@@ -227,7 +228,7 @@ public class SubjectDAO extends DBContext {
         }
         return subject;
     }
-
+    
     public List<PricePackageDTO> findPricePackageBySubjectId(int id) {
         List<PricePackageDTO> pricePackages = new ArrayList<>();
         String query = "SELECT [id]\n"
@@ -256,7 +257,7 @@ public class SubjectDAO extends DBContext {
         }
         return pricePackages;
     }
-
+    
     public List<Tag> findTagsBySubjectId(int subjectId) {
         List<Tag> tags = new ArrayList<>();
         String query = "SELECT [id]\n"
@@ -281,12 +282,12 @@ public class SubjectDAO extends DBContext {
         }
         return tags;
     }
-
+    
     public List<SubjectDTO> listTop8Subject() {
         List<SubjectDTO> listSubject = new ArrayList<>();
         try {
             String query = "SELECT TOP 8 * FROM subjects WHERE [status] = 1 order by creater_at desc";
-
+            
             ps = connection.prepareStatement(query);
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -298,7 +299,7 @@ public class SubjectDAO extends DBContext {
                 int status = rs.getInt(6);
                 String img = rs.getString(7);
                 String description = rs.getString(8);
-
+                
                 SubjectDTO subject = new SubjectDTO();
                 subject.setId(id);
                 subject.setName(name);
@@ -313,16 +314,16 @@ public class SubjectDAO extends DBContext {
                 listSubject.add(subject);
             }
         } catch (SQLException ex) {
-
+            
         }
         return listSubject;
     }
-
+    
     public List<SubjectDTO> find3FeatureSubject() {
         List<SubjectDTO> listSubject = new ArrayList<>();
         try {
             String query = "SELECT TOP 3 * FROM subjects order by creater_at desc";
-
+            
             ps = connection.prepareStatement(query);
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -334,7 +335,7 @@ public class SubjectDAO extends DBContext {
                 int status = rs.getInt(6);
                 String img = rs.getString(7);
                 String description = rs.getString(8);
-
+                
                 SubjectDTO subject = new SubjectDTO();
                 subject.setId(id);
                 subject.setName(name);
@@ -352,7 +353,7 @@ public class SubjectDAO extends DBContext {
         }
         return listSubject;
     }
-
+    
     public List<PricePackage> getPricePackageBySubjectId(int subjectId) {
         List<PricePackage> listPricePackage = new ArrayList<>();
         try {
@@ -361,7 +362,7 @@ public class SubjectDAO extends DBContext {
                     + "where p.id in(\n"
                     + "select price_package_id from  subject_has_price_package \n"
                     + "where subject_id = ?)";
-
+            
             ps = connection.prepareStatement(query);
             ps.setInt(1, subjectId);
             rs = ps.executeQuery();
@@ -372,7 +373,7 @@ public class SubjectDAO extends DBContext {
                 double salePrice = rs.getDouble(4);
                 double price = rs.getDouble(5);
                 double originalPrice = rs.getDouble(6);
-
+                
                 PricePackage p = new PricePackage(id, name, duration, salePrice, price, originalPrice);
                 listPricePackage.add(p);
             }
@@ -388,12 +389,12 @@ public class SubjectDAO extends DBContext {
     public void addNewUser(String userName, String email, String phoneNumber, String gender) {
         String query = "insert into users(full_name, email, phone_number, password,gender,created_at,role_id,status_id) \n"
                 + "values(?,?,?,?,?,?,?,?);";
-
+        
         String password = "123";
         int role = 1;
         int status = 2;
         int gender2 = gender.equalsIgnoreCase("male") ? 1 : 0;
-
+        
         try {
             // Prepare the SQL query for execution
             ps = connection.prepareStatement(query);
@@ -407,39 +408,39 @@ public class SubjectDAO extends DBContext {
             ps.setDate(6, Date.valueOf(LocalDate.now()));
             ps.setInt(7, role);
             ps.setInt(8, status);
-
+            
             ps.executeUpdate();
-
+            
         } catch (SQLException e) {
             // Log the exception (if a logging framework is available)
             e.printStackTrace(); // Replace with logger in real application
         }
-
+        
     }
-
+    
     public int getLastUserId() {
         String query = "SELECT @@IDENTITY AS LastInsertedId";
         try {
             ps = connection.prepareStatement(query);
             rs = ps.executeQuery();
-
+            
             while (rs.next()) {
                 int id = rs.getInt(1);
                 return id;
             }
-
+            
         } catch (SQLException e) {
             // Log the exception (if a logging framework is available)
             e.printStackTrace(); // Replace with logger in real application
         }
         return 0;
     }
-
+    
     public List<MyRegisterDTO> getPaginationRegisterSubjectAll(int userId, int page, int recordsPerPage, Integer dimensionId, String subjectName, String description) {
         List<MyRegisterDTO> lst = new ArrayList<>();
         int start = (page - 1) * recordsPerPage + 1;
         int end = start + recordsPerPage - 1;
-
+        
         try {
             StringBuilder query = new StringBuilder("WITH PagedResults AS (")
                     .append("    SELECT r.id, s.name AS subject_name, r.CreatedAt, p.name AS package_name, p.original_price, r.Status,")
@@ -448,7 +449,7 @@ public class SubjectDAO extends DBContext {
                     .append("    LEFT JOIN subjects s ON r.SubjectId = s.id")
                     .append("    LEFT JOIN package_price p ON p.id = r.PackageId")
                     .append("    WHERE r.UserId = ?");
-
+            
             if (dimensionId != null && dimensionId != -1) {
                 query.append(" AND s.dimensionId = ?");
             }
@@ -458,18 +459,18 @@ public class SubjectDAO extends DBContext {
             if (description != null && !description.isEmpty()) {
                 query.append(" AND s.description LIKE ?");
             }
-
+            
             query.append(")")
                     .append("SELECT * ")
                     .append("FROM PagedResults ")
                     .append("WHERE row_num BETWEEN ? AND ? ")
                     .append("ORDER BY row_num;");
-
+            
             ps = connection.prepareStatement(query.toString());
             int paramIndex = 1;
             System.out.println("User ID: " + userId);
             ps.setInt(paramIndex++, userId);
-
+            
             if (dimensionId != null && dimensionId != -1) {
                 System.out.println("Dimension ID: " + dimensionId);
                 ps.setInt(paramIndex++, dimensionId);
@@ -482,13 +483,13 @@ public class SubjectDAO extends DBContext {
                 System.out.println("Description: " + description);
                 ps.setString(paramIndex++, "%" + description + "%");
             }
-
+            
             System.out.println("Start: " + start);
             ps.setInt(paramIndex++, start);
-
+            
             System.out.println("End: " + end);
             ps.setInt(paramIndex++, end);
-
+            
             rs = ps.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt(1);
@@ -497,7 +498,7 @@ public class SubjectDAO extends DBContext {
                 String packageName = rs.getString(4);
                 double originalPrice = rs.getDouble(5);
                 String status = rs.getString(6);
-
+                
                 MyRegisterDTO register = new MyRegisterDTO(id, subjectNameResult, createdAt, packageName, originalPrice, status);
                 lst.add(register);
             }
@@ -517,12 +518,12 @@ public class SubjectDAO extends DBContext {
         }
         return lst;
     }
-
+    
     public List<MyRegisterDTO> getPaginationRegisterSubject(int userId, int page, int recordsPerPage) {
         List<MyRegisterDTO> lst = new ArrayList<>();
         int start = (page - 1) * recordsPerPage + 1;
         int end = start + recordsPerPage - 1;
-
+        
         try {
             String query = "WITH PagedResults AS ("
                     + "    SELECT r.id,s.name AS subject_name, r.CreatedAt, p.name AS package_name, p.original_price, r.Status,"
@@ -536,13 +537,13 @@ public class SubjectDAO extends DBContext {
                     + "FROM PagedResults "
                     + "WHERE row_num BETWEEN ? AND ? "
                     + "ORDER BY row_num;";
-
+            
             ps = connection.prepareStatement(query);
             ps.setInt(1, userId); // Thay đổi UserId tương ứng
             ps.setInt(2, start);
             ps.setInt(3, end);
             rs = ps.executeQuery();
-
+            
             while (rs.next()) {
                 int id = rs.getInt(1);
                 String subjectName = rs.getString(2);
@@ -550,7 +551,7 @@ public class SubjectDAO extends DBContext {
                 String packageName = rs.getString(4);
                 double originalPrice = rs.getDouble(5);
                 String status = rs.getString(6);
-
+                
                 MyRegisterDTO p = new MyRegisterDTO(id, subjectName, duration, packageName, originalPrice, status);
                 lst.add(p);
             }
@@ -558,12 +559,12 @@ public class SubjectDAO extends DBContext {
         }
         return lst;
     }
-
+    
     public int getTotalRecords(int userId, Integer dimensionId, String subjectName, String description) {
         StringBuilder query = new StringBuilder("SELECT COUNT(*) FROM Subject_Register r ")
                 .append("LEFT JOIN subjects s ON r.SubjectId = s.id ")
                 .append("WHERE r.UserId = ?");
-
+        
         if (dimensionId != null) {
             query.append(" AND s.dimensionId = ?");
         }
@@ -573,12 +574,12 @@ public class SubjectDAO extends DBContext {
         if (description != null && !description.isEmpty()) {
             query.append(" AND s.description LIKE ?");
         }
-
+        
         try {
             ps = connection.prepareStatement(query.toString());
             int paramIndex = 1;
             ps.setInt(paramIndex++, userId);
-
+            
             if (dimensionId != null) {
                 ps.setInt(paramIndex++, dimensionId);
             }
@@ -588,13 +589,13 @@ public class SubjectDAO extends DBContext {
             if (description != null && !description.isEmpty()) {
                 ps.setString(paramIndex++, "%" + description + "%");
             }
-
+            
             rs = ps.executeQuery();
-
+            
             if (rs.next()) {
                 return rs.getInt(1);
             }
-
+            
         } catch (SQLException e) {
             // Log the exception (if a logging framework is available)
             e.printStackTrace(); // Replace with logger in real application
@@ -610,14 +611,14 @@ public class SubjectDAO extends DBContext {
                 e.printStackTrace();
             }
         }
-
+        
         return 0;
     }
-
+    
     public boolean deleteRegister(int id) {
         // SQL query with placeholders for parameterized input
         String query = "delete from Subject_Register where id = ?";
-
+        
         try {
             // Prepare the SQL query for execution
             ps = connection.prepareStatement(query);
@@ -632,25 +633,25 @@ public class SubjectDAO extends DBContext {
         }
         return false;
     }
-
+    
     public int getTotalRecordSubject() {
         String query = "SELECT COUNT(*) FROM subjects";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
-
+            
             while (resultSet.next()) {
                 int id = resultSet.getInt(1);
                 return id;
             }
-
+            
         } catch (SQLException e) {
             // Log the exception (if a logging framework is available)
             e.printStackTrace(); // Replace with logger in real application
         }
         return 0;
     }
-
+    
     public int getTotalRecordsExpertManagerSubjectSearchBySubjectName(int userId, String subjectName) {
         String query = "SELECT COUNT(*) FROM subjects WHERE creator_id = ? and name like ?";
         try {
@@ -658,19 +659,19 @@ public class SubjectDAO extends DBContext {
             ps.setInt(1, userId);
             ps.setString(2, "%" + subjectName + "%");
             rs = ps.executeQuery();
-
+            
             while (rs.next()) {
                 int id = rs.getInt(1);
                 return id;
             }
-
+            
         } catch (SQLException e) {
             // Log the exception (if a logging framework is available)
             e.printStackTrace(); // Replace with logger in real application
         }
         return 0;
     }
-
+    
     public List<SubjectPackagePriceDTO> getListSubjectPackagePriceDTO(int subjectId, int page, int recordsPerPage, String search) {
         List<SubjectPackagePriceDTO> lst = new ArrayList<>();
         int start = (page - 1) * recordsPerPage + 1;
@@ -716,7 +717,7 @@ public class SubjectDAO extends DBContext {
                     + "SELECT *\n"
                     + "FROM NumberedResult\n"
                     + "WHERE row_num BETWEEN ? AND ?;";
-
+            
             ps = connection.prepareStatement(query);
             ps.setInt(1, subjectId);
             ps.setString(2, searchCondition);
@@ -729,7 +730,7 @@ public class SubjectDAO extends DBContext {
             ps.setInt(9, start);
             ps.setInt(10, end);
             rs = ps.executeQuery();
-
+            
             while (rs.next()) {
                 int id = rs.getInt(1);
                 String name = rs.getString(2);
@@ -738,7 +739,7 @@ public class SubjectDAO extends DBContext {
                 double price = rs.getDouble(5);
                 double originalPrice = rs.getDouble(6);
                 String status = rs.getString(7);
-
+                
                 SubjectPackagePriceDTO s = new SubjectPackagePriceDTO(id, name, duration, salePrice, price, originalPrice, status);
                 lst.add(s);
             }
@@ -746,14 +747,14 @@ public class SubjectDAO extends DBContext {
         }
         return lst;
     }
-
+    
     public boolean deleteDimension(int id) {
         boolean updated = false;
         String query = "update Dimension set Status = 0 where DimensionId=?";
         try {
             ps = connection.prepareStatement(query);
             ps.setInt(1, id);
-
+            
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
                 updated = true;
@@ -763,7 +764,7 @@ public class SubjectDAO extends DBContext {
         }
         return updated;
     }
-
+    
     public boolean addDimension(String name, String type, String description) {
         boolean added = false;
         String query = "insert into Dimension (DimensionName, Type, Description,Status) values (?, ?, ?, 1)";
@@ -772,7 +773,7 @@ public class SubjectDAO extends DBContext {
             ps.setString(1, name);
             ps.setString(2, type);
             ps.setString(3, description);
-
+            
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
                 added = true;
@@ -782,7 +783,7 @@ public class SubjectDAO extends DBContext {
         }
         return added;
     }
-
+    
     public boolean updateDimension(int id, String name, String type, String description) {
         boolean updated = false;
         String query = "update Dimension set DimensionName=?, Type=?, Description=? where DimensionId=?";
@@ -792,7 +793,7 @@ public class SubjectDAO extends DBContext {
             ps.setString(2, type);
             ps.setString(3, description);
             ps.setInt(4, id);
-
+            
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
                 updated = true;
@@ -802,23 +803,23 @@ public class SubjectDAO extends DBContext {
         }
         return updated;
     }
-
+    
     public List<Dimension> getListDimension() {
         List<Dimension> lst = new ArrayList<>();
-
+        
         try {
             String query = "select * from Dimension where Status = 1";
-
+            
             ps = connection.prepareStatement(query);
-
+            
             rs = ps.executeQuery();
-
+            
             while (rs.next()) {
                 int id = rs.getInt(1);
                 String name = rs.getString(2);
                 String type = rs.getString(3);
                 String description = rs.getString(4);
-
+                
                 Dimension dimension = new Dimension(id, name, type, description);
                 lst.add(dimension);
             }
@@ -826,11 +827,11 @@ public class SubjectDAO extends DBContext {
         }
         return lst;
     }
-
+    
     public Dimension getDimensionById(int id) {
         String query = "select * from Dimension where DimensionId =?";
         Dimension dimension = null;
-
+        
         try {
             ps = connection.prepareStatement(query);
             ps.setInt(1, id);
@@ -840,7 +841,7 @@ public class SubjectDAO extends DBContext {
                 String Type = rs.getString(3);
                 String Description = rs.getString(4);
                 boolean Status = rs.getBoolean(5);
-
+                
                 dimension = new Dimension(id, DimensionName, Type, Description);
                 return dimension;
             }
@@ -849,11 +850,11 @@ public class SubjectDAO extends DBContext {
         }
         return dimension;
     }
-
+    
     public Subject getSubjectById(int id) {
         String query = "select * from subjects where id =?";
         Subject subject = null;
-
+        
         try {
             ps = connection.prepareStatement(query);
             ps.setInt(1, id);
@@ -867,7 +868,7 @@ public class SubjectDAO extends DBContext {
                 String img = rs.getString(7);
                 String description = rs.getString(8);
                 int dimensionId = rs.getInt(9);
-
+                
                 subject = new Subject(id, name, creator_id, creater_at, updated_at, status, img, description, dimensionId);
                 return subject;
             }
@@ -876,7 +877,7 @@ public class SubjectDAO extends DBContext {
         }
         return subject;
     }
-
+    
     public boolean updateSubject(int id, String name, int status, String img, int category, String description) {
         boolean updated = false;
         String query = "UPDATE [dbo].[subjects]\n"
@@ -904,7 +905,7 @@ public class SubjectDAO extends DBContext {
         }
         return updated;
     }
-
+    
     public boolean insert(String name, String img, int dimensionId, int creator_id, int status, boolean feature, String description) {
         boolean updated = false;
         String query = "INSERT INTO [dbo].[subjects]\n"
@@ -928,7 +929,7 @@ public class SubjectDAO extends DBContext {
             ps.setString(5, description);
             ps.setInt(6, dimensionId);
             ps.setBoolean(7, feature);
-
+            
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
                 updated = true;
@@ -938,21 +939,21 @@ public class SubjectDAO extends DBContext {
         }
         return updated;
     }
-
+    
     public List<DimensionDTO> getListDimensionDTO() {
         List<DimensionDTO> lst = new ArrayList<>();
-
+        
         try {
             String query = "select * from Dimension";
-
+            
             ps = connection.prepareStatement(query);
-
+            
             rs = ps.executeQuery();
-
+            
             while (rs.next()) {
                 int id = rs.getInt(1);
                 String name = rs.getString(2);
-
+                
                 DimensionDTO dimensionDTO = new DimensionDTO(id, name);
                 lst.add(dimensionDTO);
             }
@@ -960,12 +961,12 @@ public class SubjectDAO extends DBContext {
         }
         return lst;
     }
-
+    
     public void addNewSubjectRegister(int subjectId, int userId, int packageId) {
         // SQL query with placeholders for parameterized input
         String query = "insert into Subject_Register \n"
                 + "values(?,?,?,?,null,null,'pending')";
-
+        
         try {
             // Prepare the SQL query for execution
             ps = connection.prepareStatement(query);
@@ -975,15 +976,15 @@ public class SubjectDAO extends DBContext {
             ps.setInt(2, userId);
             ps.setInt(3, packageId);
             ps.setDate(4, Date.valueOf(LocalDate.now()));
-
+            
             ps.executeUpdate();
         } catch (SQLException e) {
             // Log the exception (if a logging framework is available)
             e.printStackTrace(); // Replace with logger in real application
         }
-
+        
     }
-
+    
     public boolean changeStatusSubjectBySubjectId(int id, int statusId) {
         String query = "UPDATE [dbo].[subjects]\n"
                 + "SET update_at = GETDATE(),\n"
@@ -1000,7 +1001,7 @@ public class SubjectDAO extends DBContext {
         }
         return isSuccess;
     }
-
+    
     public boolean checkSubjectRegisterById(int subId, int userId) {
         String query = "SELECT *\n"
                 + "FROM [dbo].[Subject_Register]\n"
@@ -1016,14 +1017,14 @@ public class SubjectDAO extends DBContext {
         }
         return false;
     }
-
+    
     public boolean checkEmailExists(String email) {
         String query = "SELECT COUNT(*) AS count FROM Users WHERE email = ?";
         try {
             ps = connection.prepareStatement(query);
             ps.setString(1, email);
             rs = ps.executeQuery();
-
+            
             if (rs.next()) {
                 int count = rs.getInt("count");
                 return count > 0;
@@ -1046,7 +1047,7 @@ public class SubjectDAO extends DBContext {
             }
         }
     }
-
+    
     public boolean checkExpertTeachSameSubject(String subjectName, int userId) {
         String query = "SELECT s.name, u.id\n"
                 + "FROM subjects AS s\n"
@@ -1063,16 +1064,16 @@ public class SubjectDAO extends DBContext {
         }
         return false;
     }
-
+    
     public void addNewUser(String userName, String email, String phoneNumber, String gender, String token) {
         String query = "insert into users(full_name, email, phone_number, password, gender, created_at, role_id, status_id, token) "
                 + "values(?, ?, ?, ?, ?, ?, ?, ?, ?);";
-
+        
         String password = "123";
         int role = 1;
         int status = 1;
         int genderValue = gender.equalsIgnoreCase("male") ? 1 : 0;
-
+        
         try {
             // Prepare the SQL query for execution
             ps = connection.prepareStatement(query);
@@ -1087,14 +1088,14 @@ public class SubjectDAO extends DBContext {
             ps.setInt(7, role);
             ps.setInt(8, status);
             ps.setString(9, token);
-
+            
             ps.executeUpdate();
         } catch (SQLException e) {
             // Log the exception (if a logging framework is available)
             e.printStackTrace(); // Replace with logger in real application
         }
     }
-
+    
     public List<SubjectManagerDTO> getSubjectsPagination(int roleId, int userId, int page, int recordsPerPage, String search, String categories, String statuses) {
         StringBuilder query = new StringBuilder();
         query.append("WITH PagedResults AS (\n")
@@ -1149,7 +1150,7 @@ public class SubjectDAO extends DBContext {
         List<SubjectManagerDTO> subjects = new ArrayList<>();
         try {
             ps = connection.prepareStatement(query.toString());
-
+            
             int start = (page - 1) * recordsPerPage + 1;
             int end = start + recordsPerPage - 1;
             ps.setInt(1, start);
@@ -1173,7 +1174,7 @@ public class SubjectDAO extends DBContext {
         }
         return subjects;
     }
-
+    
     public int geTotalRecords(int roleId, int userId, String search, String categories, String statuses) {
         StringBuilder query = new StringBuilder("SELECT COUNT(*) FROM subjects s ")
                 .append("LEFT JOIN Dimension d ON s.dimensionId = d.DimensionId ")
@@ -1203,7 +1204,7 @@ public class SubjectDAO extends DBContext {
         }
         return 0;
     }
-
+    
     public boolean assignExpertForSubject(int subjectId, int expertId) {
         boolean isSuccess = false;
         String query = "UPDATE [dbo].[subjects]\n"
@@ -1220,24 +1221,71 @@ public class SubjectDAO extends DBContext {
         }
         return isSuccess;
     }
-
+    
     public List<SubjectLoadDTO> getAllSubjects() throws SQLException {
         List<SubjectLoadDTO> subjects = new ArrayList<>();
         String query = "SELECT id, name FROM subjects";
         ps = connection.prepareStatement(query);
         rs = ps.executeQuery();
-
+        
         while (rs.next()) {
             subjects.add(new SubjectLoadDTO(rs.getInt("id"), rs.getString("name")));
         }
-
+        
         return subjects;
     }
-
+    
+    public List<SubjectLearning> getAllSubjectInProgressByUserId(int userId) {
+        StringBuilder queryBuilder = new StringBuilder();
+        queryBuilder.append("SELECT \n")
+                .append("    sr.SubjectId, \n")
+                .append("    s.name AS subjectName, \n")
+                .append("    s.img AS thumbnail,\n")
+                .append("    lesson_counts.numberOfLessons,\n")
+                .append("    COALESCE(done_lesson_counts.numberOfDoneLessons, 0) AS numberOfDoneLessons,\n")
+                .append("    ROUND((CAST(COALESCE(done_lesson_counts.numberOfDoneLessons, 0) AS float) / NULLIF(lesson_counts.numberOfLessons, 0)) * 100, 2) AS progress\n")
+                .append("FROM \n")
+                .append("    Subject_Register AS sr\n")
+                .append("INNER JOIN \n")
+                .append("    subjects AS s ON sr.SubjectId = s.id\n")
+                .append("LEFT JOIN \n")
+                .append("    (\n")
+                .append("        SELECT subject_id, COUNT(lesson_id) AS numberOfLessons\n")
+                .append("        FROM subject_has_lesson\n")
+                .append("        GROUP BY subject_id\n")
+                .append("    ) AS lesson_counts ON sr.SubjectId = lesson_counts.subject_id\n")
+                .append("LEFT JOIN \n")
+                .append("    (\n")
+                .append("        SELECT sl.subject_id, COUNT(st.lesson_id) AS numberOfDoneLessons\n")
+                .append("        FROM subject_has_lesson AS sl\n")
+                .append("        LEFT JOIN student_has_lesson AS st ON sl.lesson_id = st.lesson_id AND st.status = 1\n")
+                .append("        GROUP BY sl.subject_id\n")
+                .append("    ) AS done_lesson_counts ON sr.SubjectId = done_lesson_counts.subject_id\n")
+                .append("WHERE sr.UserId = ? AND ROUND((CAST(COALESCE(done_lesson_counts.numberOfDoneLessons, 0) AS float) / NULLIF(lesson_counts.numberOfLessons, 0)) * 100, 2) < 100;");
+        String query = queryBuilder.toString();
+        
+        List<SubjectLearning> subjectLearnings = new ArrayList<>();
+        
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, userId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                subjectLearnings.add(new SubjectLearning(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getDouble(6),
+                        rs.getInt(4)));
+            }
+        } catch (Exception e) {
+        }
+        return subjectLearnings;
+    }
+    
     public static void main(String[] args) {
         // view all subjects in database with status = 1
         SubjectDAO c = new SubjectDAO();
-
+        
         List<SubjectManagerDTO> subjects = SubjectDAO.getInstance().getSubjectsPagination(3, 28, 1, 5, "s", "1,2,3,4", "2");
         System.out.println(subjects.size());
         for (SubjectManagerDTO subject : subjects) {

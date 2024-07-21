@@ -38,35 +38,44 @@ public class QuizManagerController extends HttpServlet {
             return;
         }
 
-        String subjectName = request.getParameter("subjectName");
-        String quizName = request.getParameter("quizName");
-        String subjectId = request.getParameter("subjectId");
-        int currentPage = 1;
-        int recordsPerPage = 5;
-        if (request.getParameter("page") != null) {
-            currentPage = Integer.parseInt(request.getParameter("page"));
-        }
-
         try {
-            QuizDAO quizDAO = QuizDAO.getInstance();
-            List<QuizDTO> quizzes = quizDAO.searchQuizzes(subjectId, subjectName, quizName, currentPage, recordsPerPage); // Add subjectId as a parameter
-            int totalRecords = quizDAO.getTotalRecords(subjectId, subjectName, quizName); // Add subjectId as a parameter
-            int totalPages = (int) Math.ceil((double) totalRecords / recordsPerPage);
+            String subjectName = request.getParameter("subjectName");
+            String quizName = request.getParameter("quizName");
+            String subjectId = request.getParameter("subjectId");
+            String quizType = request.getParameter("quizType");
 
-            SubjectDAO subjectDAO = SubjectDAO.getInstance();
-            List<SubjectLoadDTO> subjects = subjectDAO.getAllSubjects();
+            int currentPage = 1;
+            int recordsPerPage = 5;
+            if (request.getParameter("page") != null) {
+                currentPage = Integer.parseInt(request.getParameter("page"));
+            }
 
-            request.setAttribute("quizzes", quizzes);
-            request.setAttribute("totalPages", totalPages);
-            request.setAttribute("currentPage", currentPage);
-            request.setAttribute("subjects", subjects);
-            request.setAttribute("subjectId", subjectId);
-            request.setAttribute("subjectName", subjectName);
-            request.setAttribute("quizName", quizName);
+            try {
+                QuizDAO quizDAO = QuizDAO.getInstance();
+                // Truyền tham số quizType vào các phương thức tìm kiếm
+                List<QuizDTO> quizzes = quizDAO.searchQuizzes(subjectId, subjectName, quizName, quizType, currentPage, recordsPerPage);
+                int totalRecords = quizDAO.getTotalRecords(subjectId, subjectName, quizName, quizType);
+                int totalPages = (int) Math.ceil((double) totalRecords / recordsPerPage);
 
-            request.getRequestDispatcher("/QuizManager.jsp").forward(request, response);
-        } catch (Exception e) {
-            throw new ServletException("Database access error.", e);
+                SubjectDAO subjectDAO = SubjectDAO.getInstance();
+                List<SubjectLoadDTO> subjects = subjectDAO.getAllSubjects();
+
+                request.setAttribute("quizzes", quizzes);
+                request.setAttribute("totalPages", totalPages);
+                request.setAttribute("currentPage", currentPage);
+                request.setAttribute("subjects", subjects);
+                request.setAttribute("subjectId", subjectId);
+                request.setAttribute("subjectName", subjectName);
+                request.setAttribute("quizName", quizName);
+                request.setAttribute("quizType", quizType);
+
+                request.getRequestDispatcher("/QuizManager.jsp").forward(request, response);
+            } catch (Exception e) {
+                throw new ServletException("Database access error.", e);
+            }
+        } catch (NumberFormatException ex) {
+            response.sendRedirect("quizManager");
+            return;
         }
     }
 }

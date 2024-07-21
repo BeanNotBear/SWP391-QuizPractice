@@ -158,7 +158,7 @@
                                 <c:when test="${sessionScope.user.roleId == 4}">
                                 <li><a href="<%=request.getContextPath()%>/home">Home</a></li>
                                 <li><a href="<%=request.getContextPath()%>/newmenu2">Dashboard</a></li>
-                                <li><a href="<%=request.getContextPath()%>/newmenu3">Register List</a></li>
+                                <li><a href="<%=request.getContextPath()%>/RegistrationList">Register List</a></li>
                             </c:when>
                                 <c:when test="${sessionScope.user.roleId == 5}">
                                 <li><a href="<%=request.getContextPath()%>/home">Home</a></li>
