@@ -94,6 +94,7 @@ public class LoginController extends HttpServlet {
                     jsonResponse.put("status", "unactive");
                 }
                 jsonResponse.put("message", "Login Successfully!");
+                jsonResponse.put("role", user.getRoleId());
             } else {
                 jsonResponse.put("status", "error");
                 jsonResponse.put("message", "Email or password is not correct!");

@@ -123,17 +123,32 @@
                     <label>Total Revenue</label>
                     <div class="format-number">${requestScope.totalRevenue} VND</div>
                 </div>
-
-                <div class="tag">
-                    <label>Number of Enrollments</label>
-                    <div class="format-number">${requestScope.numberOfEnrollments} users</div>
-                </div>
-
+                
                 <div class="tag">
                     <label>Total Profit</label>
                     <div class="format-number">${requestScope.totalProfit} VND</div>
                 </div>
+                
+                <div class="tag">
+                    <label>Revenue per Customer</label>
+                    <div class="format-number">${requestScope.revenuePerCustomer} VND/User</div>
+                </div>
+            </div>
+            <div class="flex">
+                <div class="tag">
+                    <label>Number of Enrollments</label>
+                    <div class="format-number">${requestScope.numberOfEnrollments} users</div>
+                </div>
+                
+                <div class="tag">
+                    <label>Unprocessed Enrollments</label>
+                    <div class="format-number">${requestScope.numberOfUnprocessedEnrollments} users</div>
+                </div>
 
+                <div class="tag">
+                    <label>Total Users</label>
+                    <div class="format-number">${requestScope.totalUser} Users</div>
+                </div>
             </div>
             <div class="flex area">
                 <div class="chart-area">
@@ -144,7 +159,7 @@
                 </div>
 
                 <div id="line-chart" class="chart-area">
-                    <div class="chart-name">Enrollments</div>
+                    <div class="chart-name">Subject Registers</div>
                     <div class="chart">
                         <canvas id="myChart2"></canvas>
                     </div>
@@ -195,14 +210,15 @@
                     });
 
                     const ctx2 = document.getElementById('myChart2');
-
+                    const registerJson = ${requestScope.registrationJson};
+                    const data2 = registerJson.map(e => e.RegisterCount);
                     new Chart(ctx2, {
-                        type: 'line',
+                        type: 'bar',
                         data: {
                             labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                             datasets: [{
-                                    label: 'Number of Enrollments',
-                                    data: [0, 0, 0, 5, 0, 3, 0, 0, 3, 4, 0, 3],
+                                    label: 'Number of Subject Registers',
+                                    data: data2,
                                     borderWidth: 1
                                 }]
                         },
@@ -214,16 +230,17 @@
                             }
                         }
                     });
-                    
-                    const ctx3 = document.getElementById('myChart3');
 
+                    const ctx3 = document.getElementById('myChart3');
+                    const profitJson = ${requestScope.profitJson};
+                    const data3 = profitJson.map(e => e.Profit);
                     new Chart(ctx3, {
                         type: 'bar',
                         data: {
                             labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                             datasets: [{
-                                    label: '# of Votes',
-                                    data: [1100000, 1911345, 1000000, 1000000, 1000000, 1000000, 1000000, 2000000, 2000000, 3000000, 2000000, 3000000],
+                                    label: 'Total profit',
+                                    data: data3,
                                     borderWidth: 1
                                 }]
                         },
@@ -237,14 +254,17 @@
                     });
 
                     const ctx4 = document.getElementById('myChart4');
-
+                    const revenueJson = ${requestScope.revenueJson};
+                    const data4 = revenueJson.map(e => e.Revenue);
+                    console.log("revenue: ");
+                    console.log(data4);
                     new Chart(ctx4, {
                         type: 'bar',
                         data: {
                             labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                             datasets: [{
-                                    label: '# of Votes',
-                                    data: [1200000, 1912345, 3000000, 5000000, 2000000, 3000000, 2000000, 3000000, 2000000, 3000000, 2000000, 3000000],
+                                    label: 'Total Revenue',
+                                    data: data4,
                                     borderWidth: 1
                                 }]
                         },
@@ -268,7 +288,7 @@
                         integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
                         // Format the number with a comma as the decimal separator
-                        if(decimalPart != 0) {
+                        if (decimalPart != 0) {
                             return integerPart + ',' + decimalPart;
                         }
                         return integerPart;

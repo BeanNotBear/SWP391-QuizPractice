@@ -37,6 +37,24 @@ public class DashboardController extends HttpServlet {
         List<EnrollmentCountDTO> ecdtos = StatisticDAO.getInstance().getEnrollments();
         String ecdtosJson = gson.toJson(ecdtos);
         request.setAttribute("ecdtosJson", ecdtosJson);
+        
+        String registerJson = StatisticDAO.getInstance().getNumberRegisterAsJson();
+        request.setAttribute("registrationJson", registerJson);
+        
+        String profitJson = StatisticDAO.getInstance().getProfitEachMonthAsJson();
+        request.setAttribute("profitJson", profitJson);
+        
+        String revenueJson = StatisticDAO.getInstance().getRevenueEachMonthAsJson();
+        request.setAttribute("revenueJson", revenueJson);
+        
+        double revenuePerCustomer = StatisticDAO.getInstance().getRevenuePerCustomer();
+        request.setAttribute("revenuePerCustomer", revenuePerCustomer);
+        
+        int numberOfUnprocessedEnrollments = StatisticDAO.getInstance().getNumberOfUnprocessedEnrollments();
+        request.setAttribute("numberOfUnprocessedEnrollments", numberOfUnprocessedEnrollments);
+        
+        int totalUser = StatisticDAO.getInstance().getNumberOfUser();
+        request.setAttribute("totalUser", totalUser);
         request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     } 
 

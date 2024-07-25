@@ -83,7 +83,13 @@ $("#login-form").submit(function (e) {
                     icon: "success"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.reload();
+                        if(data.role === 1) {
+                            window.location.reload();
+                        } else if(data.role === 3) {
+                            window.location.href = "subjectManager";
+                        } else {
+                            window.location.href = "dashboard";
+                        }
                     }
                 });
             } else if (data.status === "unactive") {

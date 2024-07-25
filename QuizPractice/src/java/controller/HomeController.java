@@ -15,6 +15,7 @@ import java.util.List;
 import model.Blog;
 import model.Slider;
 import dto.SubjectDTO;
+import model.User;
 
 // Servlet class for handling requests to the home page
 @WebServlet("/home")
@@ -24,6 +25,7 @@ public class HomeController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        HttpSession session = request.getSession();        
         // Forward the request to the home.jsp page
         BlogDAO blogDAO = BlogDAO.getInstance();
         SliderDAO sliderDAO = SliderDAO.getInstance();
@@ -33,8 +35,6 @@ public class HomeController extends HttpServlet {
         List<Slider> top8Slider = sliderDAO.listTop8Slider();
         List<SubjectDTO> top8Subject = subjectDAO.listTop8Subject();
         List<SubjectDTO> top3Subject = subjectDAO.find3FeatureSubject();
-        
-        HttpSession session = request.getSession();
         
          // Đặt các danh sách vào phạm vi request
         request.setAttribute("top8Blog", top8Blog);
