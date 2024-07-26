@@ -484,20 +484,20 @@ public class PracticeDAO extends DBContext {
     public Practice getPracticeById(int practiceId, Integer quizId) throws SQLException {
         String query;
         if (quizId != null && quizId > 0) {
-            query = "SELECT "
-                    + "stq.id AS id, "
-                    + "stq.UserId AS userId, "
-                    + "q.SubjectId AS subjectId, "
-                    + "l.name AS lessonName, "
-                    + "q.NumberQuestion AS numberQuestion, "
-                    + "stq.CreatedAt, "
-                    + "stq.NumberCorrect AS numberCorrect, "
-                    + "q.Duration AS duration "
-                    + "FROM "
-                    + "Student_Take_Quiz stq "
-                    + "JOIN Quizs q ON stq.QuizId = q.Id "
-                    + "JOIN lessons l ON q.LessonId = l.id "
-                    + "JOIN Subjects s ON q.SubjectId = s.id "
+            query = "SELECT \n"
+                    + "    stq.id AS id,\n"
+                    + "    stq.UserId AS userId,\n"
+                    + "    q.SubjectId AS subjectId,\n"
+                    + "    l.name AS lessonName,\n"
+                    + "    q.NumberQuestion AS numberQuestion,\n"
+                    + "    stq.CreatedAt,\n"
+                    + "    stq.NumberCorrect AS numberCorrect,\n"
+                    + "    q.Duration AS duration\n"
+                    + "FROM \n"
+                    + "    Student_Take_Quiz stq\n"
+                    + "JOIN Quizs q ON stq.QuizId = q.Id\n"
+                    + "JOIN lessons l ON q.LessonId = l.id\n"
+                    + "JOIN Subjects s ON q.SubjectId = s.id\n"
                     + "WHERE stq.id = ?";
         } else {
             query = "SELECT * FROM Practices WHERE id = ?";

@@ -726,8 +726,8 @@ public class QuizDAO extends DBContext {
         if (rs.next()) {
             return new StudentTakeQuiz(
                     rs.getInt("Id"),
-                    rs.getInt("UserId"),
                     rs.getInt("QuizId"),
+                    rs.getInt("UserId"),
                     rs.getInt("NumberCorrect")
             );
         }
@@ -735,10 +735,10 @@ public class QuizDAO extends DBContext {
     }
 
     public int getIdAddCurrent() {
-        String sql = "SELECT @@IDENTITY AS LastInsertedId;";
+        String sql = "SELECT IDENT_CURRENT('Student_Take_Quiz') AS LastInsertedID";
 
         try {
-            ps = connection.prepareStatement(sql.toString());
+            ps = connection.prepareStatement(sql);
             rs = ps.executeQuery();
             if (rs.next()) {
                 return rs.getInt(1);
@@ -751,30 +751,31 @@ public class QuizDAO extends DBContext {
     }
 
     public int createStudentTakeQuiz(StudentTakeQuiz quiz) throws SQLException {
-        String query = "INSERT INTO Student_Take_Quiz (UserId, QuizId, NumberCorrect,CreatedAt) VALUES (?, ?, ?, GETDATE())";
+        String query = "INSERT INTO Student_Take_Quiz (UserId, QuizId, Status, NumberCorrect,CreatedAt) VALUES (?, ?, ?, ?, GETDATE())";
         ps = connection.prepareStatement(query);
         ps.setInt(1, quiz.getUserId());
         ps.setInt(2, quiz.getQuizId());
-        ps.setObject(3, quiz.getNumberCorrect());
+        ps.setString(3, "pending");
+        ps.setObject(4, 0);
         ps.executeUpdate();
 
         return getIdAddCurrent();
     }
 
-    public List<StudentQuizQuestion> getStudentQuizQuestionsByQuizId(int stqId) throws SQLException {
-        String query = "SELECT * FROM Student_Quiz_Question WHERE StudentQuizId = ?";
-        ps = connection.prepareStatement(query);
-        ps.setInt(1, stqId);
-        rs = ps.executeQuery();
-        List<StudentQuizQuestion> questions = new ArrayList<>();
-        while (rs.next()) {
-            questions.add(new StudentQuizQuestion(
-                    rs.getInt("id"),
-                    rs.getInt("StudentQuizId"),
-                    rs.getInt("QuestionId"),
-                    rs.getInt("YourAnswer"),
-                    rs.getBoolean("IsMarked")
-            ));
+    public List<Integer> getStudentQuizQuestionsByQuizId(int quizId) {
+        String query = "SELECT QuestionId\n"
+                + "FROM Quiz_Has_Question\n"
+                + "WHERE QuizId = ?";
+        List<Integer> questions = new ArrayList<>();
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, quizId);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                questions.add(rs.getInt(1));
+            }
+        } catch (Exception e) {
         }
         return questions;
     }
@@ -787,6 +788,37 @@ public class QuizDAO extends DBContext {
         ps.setObject(3, question.getYourAnswer());
         ps.setObject(4, question.getIsMarked());
         ps.executeUpdate();
+    }
+
+    public String getQuizQuestionJson() {
+        String result = new String("");
+        String query = "SELECT \n"
+                + "    q.detail AS question,\n"
+                + "    q.Suggestion AS correctAnswer,\n"
+                + "    (\n"
+                + "        SELECT a.answer_detail\n"
+                + "        FROM question_has_answer qa\n"
+                + "        INNER JOIN answers a ON qa.answer_id = a.id\n"
+                + "        WHERE qa.question_id = q.id\n"
+                + "        FOR JSON PATH\n"
+                + "    ) AS options\n"
+                + "FROM \n"
+                + "    [SWP391_G6].[dbo].[Student_Quiz_Question] AS sqq\n"
+                + "INNER JOIN \n"
+                + "    questions AS q ON q.id = sqq.QuestionId\n"
+                + "GROUP BY \n"
+                + "    q.detail, q.Suggestion, q.id\n"
+                + "FOR JSON AUTO;";
+        try {
+            ps = connection.prepareStatement(query);
+            rs = ps.executeQuery();
+            if(rs.next()) {
+                result = rs.getString(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
 }

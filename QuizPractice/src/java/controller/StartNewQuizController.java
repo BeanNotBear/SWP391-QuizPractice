@@ -25,36 +25,33 @@ public class StartNewQuizController extends HttpServlet {
             return;
         }
 
-        int stqId = Integer.parseInt(request.getParameter("stqId"));
+        int quizId = Integer.parseInt(request.getParameter("quizId"));
         try {
             QuizDAO quizDAO = QuizDAO.getInstance();
-            StudentTakeQuiz originalQuiz = quizDAO.getStudentTakeQuizById(stqId);
-            if (originalQuiz == null) {
-                response.sendRedirect("quizDoneList");
-                return;
-            }
 
-            // Tạo bản sao mới của Student_Take_Quiz
-            StudentTakeQuiz newQuiz = new StudentTakeQuiz();
-            newQuiz.setUserId(user.getUserId());
-            newQuiz.setQuizId(originalQuiz.getQuizId());
-           // newQuiz.setNumberCorrect(-1); // Để null cho NumberCorrect
-            int newQuizId = quizDAO.createStudentTakeQuiz(newQuiz);
+            int newTakeQuizId = createNewQuiz(user, quizId, quizDAO);
+            createNewQuizQuestions(quizId, newTakeQuizId, quizDAO);
 
-            // Tạo các bản ghi mới cho Student_Quiz_Question
-            List<StudentQuizQuestion> originalQuestions = quizDAO.getStudentQuizQuestionsByQuizId(stqId);
-            for (StudentQuizQuestion originalQuestion : originalQuestions) {
-                StudentQuizQuestion newQuestion = new StudentQuizQuestion();
-                newQuestion.setStudentQuizId(newQuizId);
-                newQuestion.setQuestionId(originalQuestion.getQuestionId());
-                newQuestion.setYourAnswer(null); // Để null cho YourAnswer
-                newQuestion.setIsMarked(null); // Để null cho IsMarked
-                quizDAO.createStudentQuizQuestion(newQuestion);
-            }
-
-            response.sendRedirect("quizHandle?stqId=" + newQuizId);
+            response.sendRedirect("quizHandle?stqId=" + newTakeQuizId);
         } catch (SQLException e) {
             throw new ServletException("Database access error.", e);
+        }
+    }
+
+    private int createNewQuiz(User user, int quizId, QuizDAO quizDAO) throws SQLException {
+        StudentTakeQuiz newQuiz = new StudentTakeQuiz();
+        newQuiz.setUserId(user.getUserId());
+        newQuiz.setQuizId(quizId);
+        return quizDAO.createStudentTakeQuiz(newQuiz);
+    }
+
+    private void createNewQuizQuestions(int quizId, int newTakeQuizId, QuizDAO quizDAO) throws SQLException {
+        List<Integer> originalQuestions = quizDAO.getStudentQuizQuestionsByQuizId(quizId);
+        for (Integer questionId : originalQuestions) {
+            StudentQuizQuestion newQuestion = new StudentQuizQuestion();
+            newQuestion.setStudentQuizId(newTakeQuizId);
+            newQuestion.setQuestionId(questionId);
+            quizDAO.createStudentQuizQuestion(newQuestion);
         }
     }
 }

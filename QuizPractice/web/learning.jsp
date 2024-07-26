@@ -135,6 +135,10 @@
                     }
                 });
             }
+
+            function takeQuiz(quizId) {
+                window.location.href = "startNewQuiz?quizId=" + quizId;
+            }
         </script>
         <script src="js/script.js"></script>
 

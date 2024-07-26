@@ -55,7 +55,7 @@ public class LoadLessonDetailsController extends HttpServlet {
                     btn = "";
                 }
                 if(quizId != -1) {
-                    btn = "<button onclick=\"takeQuiz('<?= lesson.getLessonIndex() ?>', '<?= lesson.getId() ?>')\" class=\"inline-btn next\">Take Quiz</button>";
+                    btn = "<button onclick=\"takeQuiz("+ quizId +")\" class=\"inline-btn next\">Take Quiz</button>";
                 }
                 out.println( video
                         + "<div>\n"
