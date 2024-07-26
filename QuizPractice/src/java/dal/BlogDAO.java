@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dal;
 
 import context.DBContext;
@@ -44,45 +40,59 @@ public class BlogDAO extends DBContext {
         return instance;
     }
 
-    public List<Blog> searchPagingBlogs(String title, int index) {
-        List<Blog> listPage = new ArrayList<>();
-        try {
-            String query = "SELECT b.id, b.title, b.author_id, b.created_at,\n"
-                    + "       b.updated_at, b.content, b.thumbnail, b.briefinfo,\n"
-                    + "       c.name AS category_name, b.status\n"
-                    + "FROM blogs b\n"
-                    + "LEFT JOIN categories c ON b.CategoryId = c.id\n"
-                    + "JOIN users u ON b.author_id = u.id\n"
-                    + "WHERE b.title LIKE ?\n"
-                    + "ORDER BY b.created_at DESC\n"
-                    + "OFFSET ? ROWS FETCH NEXT 6 ROWS ONLY;";
-
-            ps = connection.prepareStatement(query);
-            ps.setString(1, "%" + title + "%");
-            ps.setInt(2, (index - 1) * 3);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                Blog blogs = new Blog(); // Tạo đối tượng Blogs mới
-                blogs.setBlog_id(rs.getInt(1));
-                blogs.setTitle(rs.getString(2));
-                blogs.setAuthor_id(rs.getInt(3));
-                blogs.setCreatedDate(rs.getDate(4));
-                blogs.setUpdatedDate(rs.getDate(5));
-                blogs.setContent(rs.getString(6));
-                blogs.setThumbnail(rs.getString(7));
-                blogs.setBrieinfo(rs.getString(8));
-                String category = rs.getString(9);
-                Category cat = new Category(category);
-                blogs.setCategory(cat);
-                blogs.setStatus(rs.getBoolean(10)); // Assuming status is a boolean
-
-                listPage.add(blogs);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+    public List<Blog> searchPagingBlogs(String title, String category, int index) {
+    List<Blog> listPage = new ArrayList<>();
+    try {
+        String query = "SELECT b.id, b.title, b.author_id, b.created_at,\n"
+                + "       b.updated_at, b.content, b.thumbnail, b.briefinfo,\n"
+                + "       c.name AS category_name, b.status\n"
+                + "FROM blogs b\n"
+                + "LEFT JOIN categories c ON b.CategoryId = c.id\n"
+                + "JOIN users u ON b.author_id = u.id\n"
+                + "WHERE b.title LIKE ?\n";
+        
+        if (category != null && !category.isEmpty()) {
+            query += "AND b.CategoryId = ?\n";
         }
-        return listPage;
+        
+        query += "ORDER BY b.created_at DESC\n"
+                + "OFFSET ? ROWS FETCH NEXT 6 ROWS ONLY;";
+
+        ps = connection.prepareStatement(query);
+        ps.setString(1, "%" + title + "%");
+
+        int parameterIndex = 2;
+        if (category != null && !category.isEmpty()) {
+            ps.setInt(parameterIndex++, Integer.parseInt(category)); // Chuyển đổi category thành số nguyên
+        }
+
+        ps.setInt(parameterIndex, (index - 1) * 6);
+        
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            Blog blogs = new Blog(); // Tạo đối tượng Blog mới
+            blogs.setBlog_id(rs.getInt(1));
+            blogs.setTitle(rs.getString(2));
+            blogs.setAuthor_id(rs.getInt(3));
+            blogs.setCreatedDate(rs.getDate(4));
+            blogs.setUpdatedDate(rs.getDate(5));
+            blogs.setContent(rs.getString(6));
+            blogs.setThumbnail(rs.getString(7));
+            blogs.setBrieinfo(rs.getString(8));
+            String categoryName = rs.getString(9);
+            Category cat = new Category();
+            cat.setCategory_Name(categoryName);
+            blogs.setCategory(cat);
+            blogs.setStatus(rs.getBoolean(10)); // Giả sử status là boolean
+
+            listPage.add(blogs);
+        }
+    } catch (SQLException ex) {
+        Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
     }
+    return listPage;
+}
+
 
     /**
      * Phương thức này dùng để đếm số lượng bài viết blog dựa trên tiêu đề.
@@ -90,20 +100,34 @@ public class BlogDAO extends DBContext {
      * @param title Tiêu đề cần đếm.
      * @return Số lượng bài viết blog có tiêu đề chứa từ khóa tìm kiếm.
      */
-    public int countBlogsByTitle(String title) {
-        try {
-            String query = "SELECT COUNT(*) FROM blogs WHERE title LIKE ?";
-            ps = connection.prepareStatement(query);
-            ps.setString(1, "%" + title + "%");
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+    public int countBlogsByTitleAndCategory(String title, String category) {
+    int count = 0;
+    try {
+        String query = "SELECT COUNT(*) FROM blogs b\n"
+                + "LEFT JOIN categories c ON b.CategoryId = c.id\n"
+                + "WHERE b.title LIKE ?";
+        
+        if (category != null && !category.isEmpty()) {
+            query += " AND b.CategoryId = ?";
         }
-        return 0;
+
+        ps = connection.prepareStatement(query);
+        ps.setString(1, "%" + title + "%");
+
+        if (category != null && !category.isEmpty()) {
+            ps.setInt(2, Integer.parseInt(category)); // Chuyển đổi category thành số nguyên
+        }
+
+        rs = ps.executeQuery();
+        if (rs.next()) {
+            count = rs.getInt(1);
+        }
+    } catch (SQLException ex) {
+        Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
     }
+    return count;
+}
+
 
     /**
      * Phương thức này dùng để lấy danh sách tất cả các danh mục.
@@ -132,6 +156,10 @@ public class BlogDAO extends DBContext {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return categories;
+    }
+    public static void main(String[] args) {
+        BlogDAO b = new BlogDAO();
+        System.out.println(b.getAllCategories());
     }
 
     /**
@@ -320,6 +348,7 @@ public class BlogDAO extends DBContext {
                     + "FROM blogs \n"
                     + "WHERE status = 1 \n"
                     + "ORDER BY created_at DESC";
+
             ps = connection.prepareStatement(query);
             rs = ps.executeQuery();
             while (rs.next()) {
