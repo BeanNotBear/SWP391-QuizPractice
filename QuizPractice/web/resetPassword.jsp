@@ -6,7 +6,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>login</title>
+        <title>Reset Password</title>
 
         <!-- font awesome cdn link  -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
@@ -14,33 +14,33 @@
         <!-- custom css file link  -->
         <link rel="stylesheet" href="css/style.css">
 
+        <style>
+            .password-container {
+                position: relative;
+                width: 100%;
+            }
+
+            .password-container input {
+                width: 100%;
+                padding-right: 40px;
+            }
+
+            .password-container .fas {
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                cursor: pointer;
+                color: #666;
+                font-size: 18px;
+            }
+
+            .password-container .fas:hover {
+                color: #333;
+            }
+        </style>
+
     </head>
-
-    <style>
-        .password-container {
-            position: relative;
-            width: 100%;
-        }
-
-        .password-container input {
-            width: 100%;
-            padding-right: 40px;
-        }
-
-        .password-container .fas {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: #666;
-            font-size: 18px;
-        }
-
-        .password-container .fas:hover {
-            color: #333;
-        }
-    </style>
     <body> 
         <!-- header -->
         <header class="header">
@@ -89,7 +89,7 @@
                 </div>
                 <%
                                  if(request.getAttribute("status")!=null){
-                                     out.print("<p class='text-danger ml-1'>"+request.getAttribute("status")+"</p>");
+                                     out.print("<p style=\"color: red;\" class='text-danger ml-1'>"+request.getAttribute("status")+"</p>");
                                  }
 		  
                 %>

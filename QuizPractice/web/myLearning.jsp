@@ -143,8 +143,7 @@
             <div class="container col-md-12" id="tabBar">
 
                 <ul class="nav nav-tabs">
-                    <li class="active"><a data-toggle="tab" href="#home">In Progress</a></li>
-                    <li><a data-toggle="tab" href="#menu1">Complete</a></li>
+                    <li class="active"><a data-toggle="tab" href="#home">Learning</a></li>
                 </ul>
                 <div class="tab-content">
                     <div id="home" class="tab-pane fade in active">
@@ -170,110 +169,8 @@
                                     </div>
                                 </c:forEach>
                             </div>
-                            <nav class="mt-3 pagination-area" aria-label="Page navigation example">
-                                <ul class="pagination">
-                                    <!-- Disable the "Previous" link if on the first page -->
-                                    <li class="page-item">
-                                        <a class="page-link"><i class="fa-solid fa-chevron-left"></i></a>
-                                    </li>
-
-                                    <!-- Display the page numbers as links -->
-                                    <li class="page-item">
-                                        <a class="page-link" href="">1</a>
-                                    </li>
-
-                                    <!-- Disable the "Next" link if on the last page -->
-                                    <li class="page-item">
-                                        <a class="page-link" href=""><i class="fa-solid fa-chevron-right"></i></a>
-                                    </li>
-                                </ul>
-                            </nav>
                         </div>
                     </div>
-                    <div id="menu1" class="tab-pane fade">
-                        <div style="width: 1130px" class="courses">
-                            <h3>Completed</h3>
-                            <div class="box-container">
-
-                                <div class="box">
-                                    <div class="thumb">
-                                        <img src="images/thumb-1.png" alt="">
-                                        <span>10 videos</span>
-                                    </div>
-                                    <h3 class="title">complete HTML tutorial</h3>
-                                    <a href="playlist.html" class="inline-btn">Go to subject</a>
-                                </div>
-                                <div class="box">
-                                    <div class="thumb">
-                                        <img src="images/thumb-1.png" alt="">
-                                        <span>10 videos</span>
-                                    </div>
-                                    <h3 class="title">complete HTML tutorial</h3>
-                                    <a href="playlist.html" class="inline-btn">Go to subject</a>
-                                </div>
-                                <div class="box">
-                                    <div class="thumb">
-                                        <img src="images/thumb-1.png" alt="">
-                                        <span>10 videos</span>
-                                    </div>
-                                    <h3 class="title">complete HTML tutorial</h3>
-                                    <a href="playlist.html" class="inline-btn">Go to subject</a>
-                                </div>
-                                <div class="box">
-                                    <div class="thumb">
-                                        <img src="images/thumb-1.png" alt="">
-                                        <span>10 videos</span>
-                                    </div>
-                                    <h3 class="title">complete HTML tutorial</h3>
-                                    <a href="playlist.html" class="inline-btn">Go to subject</a>
-                                </div>
-                                <div class="box">
-                                    <div class="thumb">
-                                        <img src="images/thumb-1.png" alt="">
-                                        <span>10 videos</span>
-                                    </div>
-                                    <h3 class="title">complete HTML tutorial</h3>
-                                    <a href="playlist.html" class="inline-btn">Go to subject</a>
-                                </div>
-                                <div class="box">
-                                    <div class="thumb">
-                                        <img src="images/thumb-1.png" alt="">
-                                        <span>10 videos</span>
-                                    </div>
-                                    <h3 class="title">complete HTML tutorial</h3>
-                                    <a href="playlist.html" class="inline-btn">Go to subject</a>
-                                </div>
-                                <div class="box">
-                                    <div class="thumb">
-                                        <img src="images/thumb-1.png" alt="">
-                                        <span>10 videos</span>
-                                    </div>
-                                    <h3 class="title">complete HTML tutorial</h3>
-                                    <a href="playlist.html" class="inline-btn">Go to subject</a>
-                                </div>
-                            </div>
-                            <nav class="mt-3 pagination-area" aria-label="Page navigation example">
-                                <ul class="pagination">
-                                    <!-- Disable the "Previous" link if on the first page -->
-                                    <li class="page-item">
-                                        <a class="page-link"><i class="fa-solid fa-chevron-left"></i></a>
-                                    </li>
-
-                                    <!-- Display the page numbers as links -->
-                                    <li class="page-item">
-                                        <a class="page-link" href="">1</a>
-                                    </li>
-
-                                    <!-- Disable the "Next" link if on the last page -->
-                                    <li class="page-item">
-                                        <a class="page-link" href=""><i class="fa-solid fa-chevron-right"></i></a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </section>
         <%@include file="layout/footer.jsp" %>
         <script src="js/script.js"></script>

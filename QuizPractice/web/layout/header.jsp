@@ -147,17 +147,16 @@
                             <li><a href="<%=request.getContextPath()%>/dashboard">Dashboard</a></li>
                             <li><a href="<%=request.getContextPath()%>/newSubject">New Subject</a></li>
                             <li><a href="<%=request.getContextPath()%>/subjectManager">Subject Manager</a></li>
-                            <li><a href="<%=request.getContextPath()%>/newmenu3">User List</a></li>
+                            <li><a href="<%=request.getContextPath()%>/userList">User List</a></li>
                             <li><a href="<%=request.getContextPath()%>/questionList">Question Manager</a></li>   
                             <li><a href="<%=request.getContextPath()%>/quizManager">Quiz Manager</a></li>   
-
                         </c:when>
                         <c:when test="${sessionScope.user.roleId == 4}">
-                            <li><a href="<%=request.getContextPath()%>/newmenu2">Dashboard</a></li>
+                            <li><a href="<%=request.getContextPath()%>/dashboard">Dashboard</a></li>
                             <li><a href="<%=request.getContextPath()%>/RegistrationList">Register List</a></li>
                             </c:when>
                             <c:when test="${sessionScope.user.roleId == 5}">
-                            <li><a href="<%=request.getContextPath()%>/newmenu2">Dashboard</a></li>
+                            <li><a href="<%=request.getContextPath()%>/dashboard">Dashboard</a></li>
                             <li><a href="<%=request.getContextPath()%>/blog">Blog Manager</a></li>
                             <li><a href="<%=request.getContextPath()%>/sliderManager">Slider Manager</a></li>
                             </c:when>

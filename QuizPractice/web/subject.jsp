@@ -65,7 +65,7 @@
                         <br/>
                         <a href="subject-details?id=${c.id}" class="inline-btn">Details</a>
                         <c:if test="${c.registered}">
-                            <a class="inline-btn">Registered</a>
+                            <a style="background-color: green" class="inline-btn">Registered</a>
                         </c:if>
                         <c:if test="${!c.registered}">
                             <a class="inline-btn registerNowBtn" data-subject-id="${c.id}" data-subject-name="${c.name}">Register</a>

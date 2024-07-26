@@ -95,34 +95,13 @@
 
         <!-- Custom JavaScript -->
         <script>
-            //        $(document).ready(function() {
-            //            // X? lý khi form submit
-            //            $('form').submit(function(event) {
-            //                event.preventDefault(); // Ng?n ch?n hành ??ng m?c ??nh c?a form
-            //                
-            //                // L?y giá tr? c?a các tr??ng input
-            //                var quizId = $('#id').val();
-            //                var quizName = $('#quizName').val();
-            //                var subjectId = $('#subjectId').val();
-            //                var level = $('#level').val();
-            //                var numberQuestion = $('#numberQuestion').val();
-            //                var duration = $('#duration').val();
-            //                var type = $('#type').val();
-            //                
-            //                // Th?c hi?n các x? lý l?u d? li?u ? ?ây (ví d?: g?i AJAX request)
-            //
-            //                // Hi?n th? thông báo thành công b?ng toastr
-            //                toastr.success('Update Succsesfully !!', 'Thông báo');
-            //
-            //                // N?u mu?n chuy?n h??ng sau khi l?u thành công, s? d?ng window.location.href = 'url_chuyen_huong';
-            //            });
-            //        });
 
             $(document).ready(function () {
+                // X? lý khi form submit
                 $('form').submit(function (event) {
                     event.preventDefault(); // Ng?n ch?n hành ??ng m?c ??nh c?a form
 
-                    // L?y giá tr? c?a các tr??ng nh?p li?u
+                    // L?y giá tr? c?a các tr??ng input
                     var quizId = $('#id').val();
                     var quizName = $('#quizName').val();
                     var subjectId = $('#subjectId').val();
@@ -130,21 +109,8 @@
                     var numberQuestion = $('#numberQuestion').val();
                     var duration = $('#duration').val();
                     var type = $('#type').val();
-                    var passRate = $('#passRate').val();
 
-                    // Ki?m tra các tr??ng không ???c ?? tr?ng
-                    if (!quizName || !subjectId || !level || !numberQuestion || !duration || !type || !passRate) {
-                        toastr.error('All fields are required!', 'Error');
-                        return;
-                    }
-
-                    // Ki?m tra các tr??ng nh?p s? ph?i l?n h?n 0
-                    if (numberQuestion <= 0 || duration <= 0 || passRate <= 0) {
-                        toastr.error('Number of Questions, Duration, and Pass Rate must be greater than 0!', 'Error');
-                        return;
-                    }
-
-                    // T?o object JSON ?? g?i lên server
+                    // T?o object JSON ?? g?i lên server (có th? s? d?ng FormData n?u c?n)
                     var formData = {
                         id: quizId,
                         quizName: quizName,
@@ -152,8 +118,7 @@
                         level: level,
                         numberQuestion: numberQuestion,
                         duration: duration,
-                        type: type,
-                        passRate: passRate
+                        type: type
                     };
 
                     // G?i AJAX request ?? l?u d? li?u vào c? s? d? li?u
@@ -162,10 +127,14 @@
                         url: 'quizdetail', // ???ng d?n x? lý d? li?u
                         data: formData, // D? li?u c?n g?i ?i
                         success: function (response) {
-                            toastr.success('Update Successfully!', 'Success');
+                            // X? lý khi g?i d? li?u thành công
+                            toastr.success('Update Successfully!', 'Thông báo');
+
+                            // N?u mu?n chuy?n h??ng sau khi l?u thành công, s? d?ng window.location.href = 'url_chuyen_huong';
                         },
                         error: function (error) {
-                            toastr.error('Failed to update!', 'Error');
+                            // X? lý khi g?i d? li?u th?t b?i
+                            toastr.error('Failed to update!', 'Thông báo');
                         }
                     });
                 });
@@ -216,12 +185,19 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="numberQuestion">Number of Questions</label>
-                                    <input type="number" class="form-control" id="numberQuestion" value="<c:out value='${quizID.numberQuestion}'/>" name="numberQuestion" required>
+                                    <input type="number" class="form-control" id="numberQuestion" value="<c:out value='${quizID.numberQuestion}'/>" name="numberQuestion" required min="1">
+                                <div id="numberQuestionError" class="invalid-feedback"></div>
                             </div>
+
                             <div class="form-group">
-                                <label for="duration">Duration (minutes)</label>
-                                <input type="number" class="form-control" id="duration" name="duration" required value="<c:out value='${quizID.duration}'/>">
+                                <label for="duration">Duration</label>
+                                <input type="number" class="form-control" id="duration" value="<c:out value='${quizID.duration}'/>" name="duration" required min="1">
+                                <span id="durationError" style="color: red; display: none;">Duration must be greater than or equal to 1!</span>
                             </div>
+
+
+
+
                             <div class="form-group">
                                 <label for="Type">Type</label>
                                 <select class="form-control" id="type" name="type" <c:if test="${not empty param.quizId}">disabled</c:if>>
@@ -229,12 +205,13 @@
                                     <option value="Essay" <c:if test="${quizID.type == 'Essay'}">selected</c:if>>Essay</option>
                                     </select>
                                 </div>
-                                <div class="form-group">
-                                    <label for="passrate">Passrate (%)</label>
-                                    <input type="number" class="form-control" id="passRate" name="passRate" value="50" required>
-                                </div>
+                                    
+
+                                
+                            </div>
                                 <button type="submit" class="btn btn-primary btn-sms">Save</button>
                             </div>
+                                    
                         </form>
                     </div>
                 </div>
@@ -243,11 +220,12 @@
             <br/>
 
         <%@include file="/layout/footer.jsp" %>
-        <script src="js/logout.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <!-- Include other scripts as needed -->
         <script src="js/ChangeStatusOfSubject.js"></script>
+
+
+
+
     </body>
 </html>

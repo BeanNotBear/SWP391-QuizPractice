@@ -64,8 +64,7 @@
                             <span class="card-text"><span class="badge badge-info">${i.tag}</span></span>
                             </c:forEach>
                         <br/>
-                        <a href="<%=contextPath%>/teacher?id=${subject.creator.userId}" class="inline-btn">view profile</a>
-                        <c:if test="${requestScope.status}"><a class="inline-btn">Registered</a></c:if>
+                        <c:if test="${requestScope.status}"><a class="inline-btn" style="background-color: green">Registered</a></c:if>
                         <c:if test="${!requestScope.status}"><a href="#" id="registerNowBtn" class="inline-btn">Register Now</a></c:if>
                         </div>
                     </div>

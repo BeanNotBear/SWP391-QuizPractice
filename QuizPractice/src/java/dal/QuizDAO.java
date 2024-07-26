@@ -790,7 +790,7 @@ public class QuizDAO extends DBContext {
         ps.executeUpdate();
     }
 
-    public String getQuizQuestionJson() {
+    public String getQuizQuestionJson(int quizId) {
         String result = new String("");
         String query = "SELECT \n"
                 + "    q.detail AS question,\n"
@@ -806,13 +806,17 @@ public class QuizDAO extends DBContext {
                 + "    [SWP391_G6].[dbo].[Student_Quiz_Question] AS sqq\n"
                 + "INNER JOIN \n"
                 + "    questions AS q ON q.id = sqq.QuestionId\n"
+                + "INNER JOIN\n"
+                + "	Quiz_Has_Question AS qhq ON qhq.QuestionId = sqq.QuestionId\n"
+                + "WHERE qhq.QuizId = ?\n"
                 + "GROUP BY \n"
                 + "    q.detail, q.Suggestion, q.id\n"
                 + "FOR JSON AUTO;";
         try {
             ps = connection.prepareStatement(query);
+            ps.setInt(1, quizId);
             rs = ps.executeQuery();
-            if(rs.next()) {
+            if (rs.next()) {
                 result = rs.getString(1);
             }
         } catch (Exception e) {

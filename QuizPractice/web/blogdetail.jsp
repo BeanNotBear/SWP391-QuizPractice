@@ -358,11 +358,7 @@
             </div>
         </section>
 
-        <div id="pagee">
-            <c:forEach begin="1" end="${endPage}" var="i">
-                <a class="${currentPage == i ? 'activee' : ''}" href="blog?search=${searchQuery}&index=${i}">${i}</a>
-            </c:forEach>
-        </div>
+        
         <%@include file="layout/footer.jsp" %>
         <!--pop js-->
         <script src="js/popup.js"></script>

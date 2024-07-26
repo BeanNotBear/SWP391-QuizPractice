@@ -32,14 +32,7 @@
                 padding: 0;
                 margin: 0;
             }
-            .footer {
-                background: #f8f9fa;
-                text-align: center;
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-                height: 15%;
-            }
+
             #topTable {
                 margin-bottom: 0.5%;
             }
@@ -91,11 +84,7 @@
                         </div>
                     </form>
 
-
-
-                    <div class="col-md-2 text-right">
-                        <a href="AddQuiz" >Add New Quiz</a>
-                    </div>
+                    <a href="AddQuiz" >Add New Quiz</a>
                 </div>
             </div>
 
@@ -110,7 +99,6 @@
                             <th>Total Questions</th>
                             <th>Duration (Minutes)</th>
                             <th>Type</th>
-                            <th>Passrate (%)</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -124,7 +112,6 @@
                                 <td>${quiz.numberQuestion}</td>
                                 <td>${quiz.duration}</td>
                                 <td>${quiz.type}</td>
-                                <td class="passrate">50%</td>
 
                                 <td class="row">
 
@@ -132,7 +119,7 @@
                                     <!--<button  data-id=""></button>-->
 
                                     <span class="col-md-1"></span>
-                                    <button class="btn btn-danger delete-quiz col-md-4" data-id="${quiz.id}">Delete</button>
+                                    <button style="width: 65.6px" class="btn btn-danger delete-quiz col-md-4" data-id="${quiz.id}">Delete</button>
                                 </td>
                             </tr>
                         </c:forEach>

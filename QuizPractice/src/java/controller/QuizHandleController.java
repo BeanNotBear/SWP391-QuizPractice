@@ -43,11 +43,11 @@ public class QuizHandleController extends HttpServlet {
         try {
             int practiceId = parseId(request.getParameter("practiceId"));
             int stqId = parseId(request.getParameter("stqId"));
-            int currentQuestionNumber = parseIdWithDefault(request.getParameter("questionNumber"), 1);
+            int quizId = parseId(request.getParameter("quizId"));
 
             PracticeDAO practiceDAO = PracticeDAO.getInstance();
             Practice practice = practiceDAO.getPracticeById(practiceId, stqId);
-
+            
             if (practice == null) {
                 response.sendRedirect(LOGIN_PAGE);
                 return;
@@ -59,7 +59,7 @@ public class QuizHandleController extends HttpServlet {
                 return;
             }
 
-            String quizJson = QuizDAO.getInstance().getQuizQuestionJson();
+            String quizJson = QuizDAO.getInstance().getQuizQuestionJson(quizId);
             request.setAttribute("quizData", quizJson);
             request.getRequestDispatcher("/quizHandle.jsp").forward(request, response);
         } catch (SQLException | NumberFormatException e) {

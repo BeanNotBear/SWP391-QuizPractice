@@ -28,14 +28,6 @@
             padding: 0;
             margin: 0;
         }
-        .footer {
-            background: #f8f9fa;
-            text-align: center;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            height: 15%;
-        }
         #topTable {
             margin-bottom: 0.5%;
         }
@@ -376,10 +368,6 @@
                 <option value="1" ${question.status == 1 ? 'selected' : ''}>Active</option>
                 <option value="0" ${question.status == 0 ? 'selected' : ''}>Deactive</option>
             </select>
-        </div>
-        <div class="form-group">
-            <label for="media">Media:</label>
-            <input type="text" class="form-control" id="media" name="media" value="${question.media}">
         </div>
     </form>
 </script>

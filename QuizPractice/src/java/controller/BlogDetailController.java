@@ -24,8 +24,42 @@ public class BlogDetailController extends HttpServlet {
 
         BlogDAO dao = BlogDAO.getInstance();
         Blog blog = null;
-        Blog blogHot = dao.findNewPost();
-        List<Category> listcate = dao.getAllCategories();
+      
+        String search = request.getParameter("search");
+    if (search == null) {
+        search = "";
+    }
+
+    // Lấy tham số category
+    String category = request.getParameter("category");
+    if (category == null) {
+        category = "";
+    }
+
+    // Lấy chỉ số trang
+    String indexPage = request.getParameter("index");
+    if (indexPage == null) {
+        indexPage = "1";
+    }
+    int index = Integer.parseInt(indexPage);
+
+    // Đếm tổng số blog phù hợp với tìm kiếm và category
+    int count = dao.countBlogsByTitleAndCategory(search, category);
+    int endPage = count / 6;
+    if (count % 6 != 0) {
+        endPage++;
+    }
+
+    // Lấy danh sách blog phù hợp với tìm kiếm và phân trang
+    List<Blog> list = dao.searchPagingBlogs(search, category, index);      
+    List<Category> listcate = dao.getAllCategories();
+    Blog blogHot = dao.findNewPost();
+        request.setAttribute("bloglist", list);
+       request.setAttribute("endPage", endPage);
+        request.setAttribute("selectedCategory", category);
+        request.setAttribute("currentPage", index);
+
+
         try {
             id = Integer.parseInt(idd);
             previous_Id = id;
@@ -34,6 +68,7 @@ public class BlogDetailController extends HttpServlet {
                 request.setAttribute("detail", blog);
                 request.setAttribute("nee", blogHot);
                 request.setAttribute("listcatego", listcate);
+                
                 request.getRequestDispatcher("/blogdetail.jsp")
                         .forward(request, response);
             } else {

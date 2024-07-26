@@ -64,7 +64,7 @@ public class NewPasswordController extends HttpServlet {
             }
         } else {
             request.setAttribute("status", "Please confirm password again!");
-                            response.sendRedirect("reset-password");
+            request.getRequestDispatcher("resetPassword.jsp").forward(request, response);
         }
     }
 

@@ -85,11 +85,7 @@
                                     </select>
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="passrate">Passrate (%)</label>
-                                    <input type="number" class="form-control" id="passRate" name="passRate" value="" required oninput="validatePassRate()">
-                                    <small id="passRateError" class="form-text text-danger" style="display:none;">Please enter a positive integer.</small>
-                                </div>
+                             
                             </div>
 
 
@@ -242,20 +238,6 @@
                 }
             }
 
-            function validatePassRate() {
-                var passRateInput = document.getElementById('passRate');
-                var passRateError = document.getElementById('passRateError');
-                var value = passRateInput.value;
-
-                // Check if the value is a positive integer
-                if (!Number.isInteger(Number(value)) || value <= 0) {
-                    passRateError.style.display = 'block';
-                    passRateInput.setCustomValidity('Invalid field.');
-                } else {
-                    passRateError.style.display = 'none';
-                    passRateInput.setCustomValidity('');
-                }
-            }
         </script>
     </body>
 </html>

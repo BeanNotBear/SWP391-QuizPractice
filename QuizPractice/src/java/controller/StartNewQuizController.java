@@ -32,7 +32,7 @@ public class StartNewQuizController extends HttpServlet {
             int newTakeQuizId = createNewQuiz(user, quizId, quizDAO);
             createNewQuizQuestions(quizId, newTakeQuizId, quizDAO);
 
-            response.sendRedirect("quizHandle?stqId=" + newTakeQuizId);
+            response.sendRedirect("quizHandle?stqId=" + newTakeQuizId + "&quizId=" + quizId);
         } catch (SQLException e) {
             throw new ServletException("Database access error.", e);
         }
