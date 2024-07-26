@@ -40,30 +40,40 @@ public class LoadLessonDetailsController extends HttpServlet {
                 String content = lesson.getContent();
                 String video = "";
                 int quizId = lesson.getQuizId();
-                System.out.println("Media "+ media);
-                if(!media.equals("")) {
+                System.out.println("Media " + media);
+                if (!media.equals("")) {
                     video = "<div style=\"width: 100%; height: 570px; border: 2px solid;\">\n"
-                    + "    <iframe style=\"width: 100%; height: 100%;\" src=\"" + media + "\" frameborder=\"0\" allowfullscreen></iframe>\n"
-                    + "</div>\n";
+                            + "    <iframe style=\"width: 100%; height: 100%;\" src=\"" + media + "\" frameborder=\"0\" allowfullscreen></iframe>\n"
+                            + "</div>\n";
                 } else {
                     video = "\n";
                 }
                 String btn = "";
-                if(!LessonDAO.getInstance().checkLessonIsDone(userId, lesson.getId())) {
-                    btn = "<button onclick=\"markdone("+ "\'" + userId + "\'" + ","+ "\'" + lesson.getId() + "\'" +")\" class=\"inline-btn next\">Mark done & Next Lesson</button>";
+                if (!LessonDAO.getInstance().checkLessonIsDone(userId, lesson.getId())) {
+                    btn = "<button onclick=\"markdone(" + "\'" + userId + "\'" + "," + "\'" + lesson.getId() + "\'" + ")\" class=\"inline-btn next\">Mark done & Next Lesson</button>";
                 } else {
                     btn = "";
                 }
-                if(quizId != -1) {
-                    btn = "<button onclick=\"takeQuiz("+ quizId +")\" class=\"inline-btn next\">Take Quiz</button>";
+                if (quizId != -1) {
+                    btn = "<button onclick=\"takeQuiz(" + quizId + ")\" class=\"inline-btn next\">Take Quiz</button>";
+                    out.println(video
+                            + "<div>\n"
+                            + "    <div class=\"course\">\n"
+                            + "        " + content + "\n"
+                            + "    </div>\n"
+                            + "</div>\n"
+                            + "<button onclick=\"markdone(" + "\'" + userId + "\'" + "," + "\'" + lesson.getId() + "\'" + ")\" class=\"inline-btn next\">Mark done & Next Lesson</button>"
+                            + "<br>"
+                            + btn);
+                } else {
+                    out.println(video
+                            + "<div>\n"
+                            + "    <div class=\"course\">\n"
+                            + "        " + content + "\n"
+                            + "    </div>\n"
+                            + "</div>\n"
+                            + btn);
                 }
-                out.println( video
-                        + "<div>\n"
-                        + "    <div class=\"course\">\n"
-                        + "        " + content + "\n"
-                        + "    </div>\n"
-                        + "</div>\n"
-                        + btn);
             } else {
                 out.println("<div>Lesson not found.</div>");
             }

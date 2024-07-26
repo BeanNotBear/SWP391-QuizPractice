@@ -1,17 +1,4 @@
 let pg = 0;
-//const quizData = [
-//    {
-//        "question": "Which is the most appropriate section for statements that are believed to be true in the absence of proof or definitive knowledge in a vision and scope template?",
-//        "options": [
-//            "Business requirements section",
-//            "Success metrics section",
-//            "Business opportunity section",
-//            "Business assumptions and dependencies section"
-//        ],
-//        "correctAnswer": "Business assumptions and dependencies section",
-//        "lesson": "The 'Business assumptions and dependencies section' is used for statements believed to be true without definitive proof in a vision and scope template."
-//    }
-//];
 let currentQuestionIndex = 0;
 let correctAnswers = 0;
 let incorrectAnswers = 0;

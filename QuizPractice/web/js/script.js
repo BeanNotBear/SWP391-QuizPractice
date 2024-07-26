@@ -28,7 +28,7 @@ document.querySelector('#user-btn').onclick = () => {
 let search = document.querySelector('.header .flex .search-form');
 
 document.querySelector('#search-btn').onclick = () => {
-    search.classList.toggle('active');
+//    search.classList.toggle('active');
 //    profile.classList.remove('active');
 }
 
@@ -45,7 +45,7 @@ document.querySelector('#close-btn').onclick = () => {
 }
 
 window.onscroll = () => {
-    profile.classList.remove('active');
+//    profile.classList.remove('active');
 //    search.classList.remove('active');
 
     if (window.innerWidth < 1200) {

@@ -4,6 +4,7 @@ import context.DBContext;
 import dto.ExpertDTO;
 import dto.LearnerDTO;
 import dto.OwnerDTO;
+import dto.UserManagement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -581,5 +582,111 @@ public class UserDAO extends DBContext {
             e.printStackTrace();
         }
         return listOfLessonId;
+    }
+
+    public List<UserManagement> getUsers(int page, int recordsPerPage, String search) {
+        List<UserManagement> users = new ArrayList<>();
+        String query = "WITH PageResult AS (\n"
+                + "	SELECT u.[id],\n"
+                + "	       u.[full_name],\n"
+                + "	       u.[email],\n"
+                + "	       u.[phone_number],\n"
+                + "	       u.[gender],\n"
+                + "	       u.[profile_img],\n"
+                + "	       s.[name] AS status_name,\n"
+                + "	       r.[name] AS role_name\n"
+                + "	  FROM [SWP391_G6].[dbo].[users] AS u\n"
+                + "	  INNER JOIN [status] AS s ON s.[id] = u.[status_id]\n"
+                + "	  INNER JOIN [roles] AS r ON r.[id] = u.[role_id]\n"
+                + "	  WHERE (\n"
+                + "		u.id LIKE '%' + ? + '%' OR\n"
+                + "		u.[full_name] LIKE '%' + ? + '%' OR\n"
+                + "		u.[email] LIKE '%' + ? + '%' OR\n"
+                + "		u.[phone_number] LIKE '%' + ? + '%' OR\n"
+                + "		u.[gender] LIKE '%' + ? + '%' OR\n"
+                + "		u.[profile_img] LIKE '%' + ? + '%' OR\n"
+                + "		s.[name] LIKE '%' + ? + '%' OR\n"
+                + "		r.[name] LIKE '%' + ? + '%'\n"
+                + "	 )\n"
+                + ")\n"
+                + "SELECT *\n"
+                + "FROM PageResult\n"
+                + "ORDER BY status_name\n"
+                + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;";
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, search);
+            ps.setString(2, search);
+            ps.setString(3, search);
+            ps.setString(4, search);
+            ps.setString(5, search);
+            ps.setString(6, search);
+            ps.setString(7, search);
+            ps.setString(8, search);
+            ps.setInt(9, page);
+            ps.setInt(10, recordsPerPage);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                users.add(new UserManagement(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(6),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(8),
+                        rs.getString(7)
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
+    public int getTotalUser(String search) {
+        int total = 0;
+        String query = "WITH PageResult AS (\n"
+                + "	SELECT u.[id],\n"
+                + "	       u.[full_name],\n"
+                + "	       u.[email],\n"
+                + "	       u.[phone_number],\n"
+                + "	       u.[gender],\n"
+                + "	       u.[profile_img],\n"
+                + "	       s.[name] AS status_name,\n"
+                + "	       r.[name] AS role_name\n"
+                + "	  FROM [SWP391_G6].[dbo].[users] AS u\n"
+                + "	  INNER JOIN [status] AS s ON s.[id] = u.[status_id]\n"
+                + "	  INNER JOIN [roles] AS r ON r.[id] = u.[role_id]\n"
+                + "	  WHERE (\n"
+                + "		u.id LIKE '%' + ? + '%' OR\n"
+                + "		u.[full_name] LIKE '%' + ? + '%' OR\n"
+                + "		u.[email] LIKE '%' + ? + '%' OR\n"
+                + "		u.[phone_number] LIKE '%' + ? + '%' OR\n"
+                + "		u.[gender] LIKE '%' + ? + '%' OR\n"
+                + "		u.[profile_img] LIKE '%' + ? + '%' OR\n"
+                + "		s.[name] LIKE '%' + ? + '%' OR\n"
+                + "		r.[name] LIKE '%' + ? + '%'\n"
+                + "	 )\n"
+                + ")\n"
+                + "SELECT COUNT(*)\n"
+                + "FROM PageResult";
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, search);
+            ps.setString(2, search);
+            ps.setString(3, search);
+            ps.setString(4, search);
+            ps.setString(5, search);
+            ps.setString(6, search);
+            ps.setString(7, search);
+            ps.setString(8, search);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                total = rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return total;
     }
 }

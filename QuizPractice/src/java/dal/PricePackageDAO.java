@@ -1,8 +1,6 @@
 package dal;
 
-import com.microsoft.sqlserver.jdbc.SQLServerException;
 import context.DBContext;
-import dto.PricePackageDTO;
 import dto.RegistrationDTO;
 import dto.SubjectPackagePriceDTO;
 import java.sql.SQLException;

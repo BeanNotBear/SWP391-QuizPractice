@@ -3,15 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/dal/SubjectDAO.java</file>
-            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/model/User.java</file>
-            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/model/Subject.java</file>
-            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/util/security/Security.java</file>
-            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/context/DBContext.java</file>
-            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/dto/ExpertDTO.java</file>
-            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/controller/HomeController.java</file>
-            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/controller/RegisterController.java</file>
-            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/controller/SubjectDetailsController.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/controller/StartNewQuizController.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/web/css/style.css</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/web/js/quizHandle.js</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/web/learning.jsp</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/controller/DashboardController.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/dal/QuizDAO.java</file>
+            <file>file:/D:/2_Learnspace/2_FPT/Semester%205/SWP391/code-base/summer2024-swp391.se1811-g6/QuizPractice/src/java/controller/QuizHandleController.java</file>
         </group>
     </open-files>
 </project-private>

@@ -1,8 +1,9 @@
 package controller;
 
-import dal.SubjectDAO;
-import dto.SubjectLearning;
+import dal.UserDAO;
+import dto.UserManagement;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -10,11 +11,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
-import model.User;
 
-
-@WebServlet(name="MyLearningController", urlPatterns={"/mylearning"})
-public class MyLearningController extends HttpServlet {
+@WebServlet(name="UserListController", urlPatterns={"/userList"})
+public class UserListController extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -26,11 +25,12 @@ public class MyLearningController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         HttpSession session = request.getSession();
-        User user = (User)session.getAttribute("user");
-        int userId = user.getUserId();
-        List<SubjectLearning> subjectLearnings = SubjectDAO.getInstance().getAllSubjectInProgressByUserId(userId);
-        request.setAttribute("subjectInProgress", subjectLearnings);
-        request.getRequestDispatcher("myLearning.jsp").forward(request, response);
+        session.setAttribute("pageUser", 1);
+        int page = 1;
+        int recordPerPage = 5;
+        List<UserManagement> users = UserDAO.getInstance().getUsers(page, recordPerPage, "");
+        request.setAttribute("users", users);
+        request.getRequestDispatcher("userList.jsp").forward(request, response);
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -67,7 +67,6 @@
                     selectedDiv.scrollIntoView({behavior: 'smooth'});
                 }
                 let index = '${requestScope.currentIndex}';
-                // Gửi yêu cầu Ajax khi trang được tải
                 $.ajax({
                     url: "loadLesson",
                     type: 'POST',
