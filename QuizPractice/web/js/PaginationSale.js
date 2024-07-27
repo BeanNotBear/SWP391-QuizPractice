@@ -25,7 +25,6 @@ $('a.btn-primary').on('click', function () {
         denyButtonText: `Don't change`
     }).then((result) => {
         if (result.isConfirmed) {
-            alert('duartion: ' + duration);
             $.ajax({
                 url: "ChangeSubjectRegistration",
                 type: 'POST',

@@ -59,7 +59,7 @@ public class QuizHandleController extends HttpServlet {
                 return;
             }
 
-            String quizJson = QuizDAO.getInstance().getQuizQuestionJson(quizId);
+            String quizJson = QuizDAO.getInstance().getQuizQuestionJson(stqId);
             request.setAttribute("quizData", quizJson);
             request.getRequestDispatcher("/quizHandle.jsp").forward(request, response);
         } catch (SQLException | NumberFormatException e) {

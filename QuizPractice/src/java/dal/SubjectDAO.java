@@ -1261,7 +1261,7 @@ public class SubjectDAO extends DBContext {
                 .append("        LEFT JOIN student_has_lesson AS st ON sl.lesson_id = st.lesson_id AND st.status = 1\n")
                 .append("        GROUP BY sl.subject_id\n")
                 .append("    ) AS done_lesson_counts ON sr.SubjectId = done_lesson_counts.subject_id\n")
-                .append("WHERE sr.UserId = ? AND ROUND((CAST(COALESCE(done_lesson_counts.numberOfDoneLessons, 0) AS float) / NULLIF(lesson_counts.numberOfLessons, 0)) * 100, 2) < 100;");
+                .append("WHERE sr.UserId = ? AND ROUND((CAST(COALESCE(done_lesson_counts.numberOfDoneLessons, 0) AS float) / NULLIF(lesson_counts.numberOfLessons, 0)) * 100, 2) <= 100;");
         String query = queryBuilder.toString();
         
         List<SubjectLearning> subjectLearnings = new ArrayList<>();

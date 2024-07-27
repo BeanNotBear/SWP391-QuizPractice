@@ -43,6 +43,23 @@
             .customer > div {
                 margin-left: 20px;
             }
+            .popup {
+                display: none;
+                position: fixed;
+                z-index: 1000;
+                left: 0;
+                top: 9;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+                /*    display: flex;*/
+                align-items: center;
+                justify-content: center;
+            }
+            .form-popup {
+                margin-top: 60px;
+            }
         </style>
     </head>
 
@@ -56,14 +73,13 @@
             <div id="topTable" class="container">
                 <div class="row">
                     <div class="col-md-3">
-
+                        <a onclick="openPopUpUser()" style="width: 100px;" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add User</a>
                     </div>
                     <div class="col-md-3">
 
                     </div>
-                    <div class="col-md-5"></div>
                     <form class="col-md-2">
-                        <input placeholder="Search" class="search-input" style="margin-left: 939px; margin-bottom: 10px; width: 200px;" type="text" name="search">
+                        <input placeholder="Search" class="search-input" style="margin-left: 350px; margin-bottom: 10px; width: 200px;" type="text" name="search">
                         <input type="hidden" name="page" value="${currentPage}">
                         <input type="submit" hidden>
                     </form>
@@ -97,7 +113,7 @@
                                 <td>${i.role}</td>
                                 <td>${i.status}</td>
                                 <td>
-                                    <a class="btn btn-primary"><i style="font-size: 20px; color: var(--orange)" class="fa-solid fa-pen-to-square"></i></a>
+                                    <a class="btn btn-primary"><i style="font-size: 20px; color: var(--orange)" class="fa-solid fa-lock"></i></a>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -106,7 +122,58 @@
             </div>
         </section>
         <br/>
-
+        <div id="modelPop" class="popup" role="dialog">
+            <div class="form-container">
+                <div>
+                    <div>
+                        <form class="form-popup">
+                            <button onclick="closePopUpUser()" type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4>Add User</h4>
+                            <input id="userId" type="hidden">
+                            <div class="form-group">
+                                <label for="fullName">Full Name: <span class="danger_msg">(require)</span></label>
+                                <input onkeyup="" type="text" id="fullName" name="fullName" class="form-control">
+                                <div id="fullNameMsg" class="msg danger_msg"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email: <span class="danger_msg">(require)</span></label>
+                                <input onkeyup="" type="email" id="email" name="email" class="form-control">
+                                <div id="emailMsg" class="msg danger_msg"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="phoneNumber">Phone Number: <span class="danger_msg">(not required)</span></label>
+                                <input onkeyup="" type="number" id="phoneNumber" name="phoneNumber" class="form-control">
+                                <div id="phoneNumberMsg" class="msg danger_msg"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="gender">Gender: <span class="danger_msg">(require)</span></label>
+                                <div>
+                                    <input value="1" type="radio" name="gender" checked> Male
+                                    <input value="2" type="radio" name="gender"> Female
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="role">Role: <span class="danger_msg">(require)</span></label>
+                                <div>
+                                    <select id="role" name="role" class="form-control">
+                                        <option selected value="1">Customer</option>
+                                        <option value="2">Admin</option>
+                                        <option value="5">Marketing</option>
+                                        <option value="3">Expert</option>
+                                        <option value="4">Sale</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password: <span class="danger_msg">(require)</span></label>
+                                <input readonly type="password" id="password" name="password" class="form-control" placeholder="Generated Password">
+                            </div>
+                            <button onclick="addNewUser()" type="button" class="btn btn-primary" id="addUser">Add New</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
         <%@include file="/layout/footer.jsp" %>
         <script src="js/logout.js"></script>
 
@@ -120,11 +187,11 @@
         <script src="js/script.js"></script>
         <script src="js/lazyLoad.js"></script>
         <script>
-           onunload = function() {
-               <%
+        onunload = function () {
+            <%
                    session.setAttribute("pageUser", null);
-               %>
-           };
+            %>
+        };
         </script>
 
     </body>

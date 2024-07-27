@@ -626,13 +626,19 @@ public class UserDAO extends DBContext {
             ps.setInt(9, page);
             ps.setInt(10, recordsPerPage);
             rs = ps.executeQuery();
+            String gender = "Male";
             while (rs.next()) {
+                if(rs.getInt(5) == 1) {
+                    gender = "Male";
+                } else {
+                    gender = "Female";
+                }
                 users.add(new UserManagement(rs.getInt(1),
                         rs.getString(2),
                         rs.getString(6),
                         rs.getString(3),
                         rs.getString(4),
-                        rs.getString(5),
+                        gender,
                         rs.getString(8),
                         rs.getString(7)
                 ));

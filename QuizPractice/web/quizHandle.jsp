@@ -112,8 +112,8 @@
         <section class="container">
             <div>
                 <div class="header-quiz">
-                    <h1>Learn</h1>
-                    <h2>SWR 302 - FE, PT</h2>
+                    <h1>Practice</h1>
+                    <h2>Practice Mode</h2>
                 </div>
                 <div class="progress-bar">
                     <div style="width: 0%" class="progress" id="progress"></div>
@@ -132,9 +132,10 @@
         <audio style="display: none;" id="correctSound" src="sound/Correct.mp3"></audio>
         <audio style="display: none;" id="incorrectSound" src="sound/Wrong.mp3"></audio>
         <script>
-            const quizData = ${requestScope.quizData}
+            var quizData = ${requestScope.quizData};
         </script>
-        <script src="js/quizHandle.js"></script>
+        <script src="js/quizHandle.js">
+        </script>
         <script src="js/script.js"></script>
     </body>
 </html>

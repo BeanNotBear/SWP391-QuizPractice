@@ -41,12 +41,12 @@
             <nav class="navbar">
                 <c:forEach var="i" items="${requestScope.lessons}">
                     <a onclick="loadLesson('${i.lessonIndex}')" id="lesson_${i.lessonIndex}"
-                       class="${i.lessonIndex > requestScope.currentIndex ? 'locked' : ''}">
+                       class="${i.lessonIndex > requestScope.currentIndex && !i.status ? 'locked' : ''}">
                         <span>${i.lessonIndex}. ${i.name} 
                             <c:if test="${i.status == true}">
                                 <i class="fa-solid fa-check"></i>
                             </c:if>
-                            <c:if test="${i.lessonIndex > requestScope.currentIndex}">
+                            <c:if test="${i.lessonIndex > requestScope.currentIndex && !i.status}">
                                 <i class="fa-solid fa-lock"></i>
                             </c:if>
                         </span>

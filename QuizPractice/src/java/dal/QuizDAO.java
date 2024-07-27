@@ -242,16 +242,6 @@ public class QuizDAO extends DBContext {
         return ps.executeUpdate() > 0;
     }
 
-    public static void main(String[] args) {
-        try {
-            QuizDAO q = new QuizDAO();
-
-            System.out.println(q.getQuizById(5));
-        } catch (SQLException ex) {
-            Logger.getLogger(QuizDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
     public boolean addQuiz(QuizDTO quiz) throws SQLException {
         String query = "INSERT INTO Quizs (name, level, numberQuestion, duration, subjectId, DeleteFlag,type) VALUES (?, ?, ?, ?, ?, 1,?)";
         ps = connection.prepareStatement(query);
@@ -791,7 +781,7 @@ public class QuizDAO extends DBContext {
     }
 
     public String getQuizQuestionJson(int quizId) {
-        String result = new String("");
+        StringBuilder builder = new StringBuilder();
         String query = "SELECT \n"
                 + "    q.detail AS question,\n"
                 + "    q.Suggestion AS correctAnswer,\n"
@@ -807,8 +797,8 @@ public class QuizDAO extends DBContext {
                 + "INNER JOIN \n"
                 + "    questions AS q ON q.id = sqq.QuestionId\n"
                 + "INNER JOIN\n"
-                + "	Quiz_Has_Question AS qhq ON qhq.QuestionId = sqq.QuestionId\n"
-                + "WHERE qhq.QuizId = ?\n"
+                + "    Quiz_Has_Question AS qhq ON qhq.QuestionId = sqq.QuestionId\n"
+                + "WHERE sqq.[StudentQuizId] = ?\n"
                 + "GROUP BY \n"
                 + "    q.detail, q.Suggestion, q.id\n"
                 + "FOR JSON AUTO;";
@@ -816,13 +806,29 @@ public class QuizDAO extends DBContext {
             ps = connection.prepareStatement(query);
             ps.setInt(1, quizId);
             rs = ps.executeQuery();
-            if (rs.next()) {
-                result = rs.getString(1);
+
+            while (rs.next()) {
+                builder.append(rs.getString(1));
             }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        return result;
+
+        return builder.toString();
     }
 
+    public static void main(String[] args) {
+        System.out.println(getInstance().getQuizQuestionJson(3));
+    }
 }
