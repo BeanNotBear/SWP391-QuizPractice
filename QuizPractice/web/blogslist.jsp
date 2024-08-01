@@ -309,6 +309,9 @@
         <section class="reviews">
             <div class="heading-container">
                 <h1 class="heading">Blogs</h1>
+                <c:if test="${sessionScope.user.roleId == 5}">
+                    <a href="addnewblog">Add New Blog</a>
+                </c:if>
             </div>
             <div class="box-container">
                 <c:forEach items="${bloglist}" var="li">

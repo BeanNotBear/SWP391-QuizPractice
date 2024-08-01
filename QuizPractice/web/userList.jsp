@@ -66,6 +66,7 @@
     <body>
         <%@include file="/layout/header.jsp"%>
         <%@include file="/layout/sidebar.jsp" %>
+        <%@include file="/layout/loader.jsp" %>
 
         <section class="practiceList">
             <h1 class="heading text-center">User Management</h1>
@@ -79,7 +80,7 @@
 
                     </div>
                     <form class="col-md-2">
-                        <input placeholder="Search" class="search-input" style="margin-left: 350px; margin-bottom: 10px; width: 200px;" type="text" name="search">
+                        <input onkeyup="searchUser(this)" placeholder="Search" class="search-input" style="margin-left: 350px; margin-bottom: 10px; width: 200px;" type="text" name="search">
                         <input type="hidden" name="page" value="${currentPage}">
                         <input type="submit" hidden>
                     </form>
@@ -132,17 +133,17 @@
                             <input id="userId" type="hidden">
                             <div class="form-group">
                                 <label for="fullName">Full Name: <span class="danger_msg">(require)</span></label>
-                                <input onkeyup="" type="text" id="fullName" name="fullName" class="form-control">
+                                <input onkeyup="validateFullName1(this)" type="text" id="fullName" name="fullName" class="form-control">
                                 <div id="fullNameMsg" class="msg danger_msg"></div>
                             </div>
                             <div class="form-group">
                                 <label for="email">Email: <span class="danger_msg">(require)</span></label>
-                                <input onkeyup="" type="email" id="email" name="email" class="form-control">
+                                <input onkeyup="validateEmail1(this)" type="email" id="email" name="email" class="form-control">
                                 <div id="emailMsg" class="msg danger_msg"></div>
                             </div>
                             <div class="form-group">
                                 <label for="phoneNumber">Phone Number: <span class="danger_msg">(not required)</span></label>
-                                <input onkeyup="" type="number" id="phoneNumber" name="phoneNumber" class="form-control">
+                                <input onkeyup="validatePhoneNumber1(this)" type="text" id="phoneNumber" name="phoneNumber" class="form-control">
                                 <div id="phoneNumberMsg" class="msg danger_msg"></div>
                             </div>
                             <div class="form-group">
@@ -168,7 +169,7 @@
                                 <label for="password">Password: <span class="danger_msg">(require)</span></label>
                                 <input readonly type="password" id="password" name="password" class="form-control" placeholder="Generated Password">
                             </div>
-                            <button onclick="addNewUser()" type="button" class="btn btn-primary" id="addUser">Add New</button>
+                            <button onmousemove="makeButton()" onclick="addNewUser()" type="button" class="btn btn-primary" id="addUser">Add New</button>
                         </form>
                     </div>
                 </div>
@@ -190,6 +191,7 @@
         onunload = function () {
             <%
                    session.setAttribute("pageUser", null);
+                   session.setAttribute("search", "");
             %>
         };
         </script>

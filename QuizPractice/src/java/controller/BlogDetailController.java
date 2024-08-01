@@ -28,6 +28,8 @@ public class BlogDetailController extends HttpServlet {
         String search = request.getParameter("search");
     if (search == null) {
         search = "";
+    }else{
+        search=search.trim();
     }
 
     // Lấy tham số category

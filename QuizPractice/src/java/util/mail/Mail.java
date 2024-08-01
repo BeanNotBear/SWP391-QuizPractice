@@ -51,6 +51,41 @@ public class Mail {
             return false; // Failed to send email
         }
     }
+    
+    public static boolean sendMailNewUser(String recipient, String code, String linkActive, String uPassword) {
+        // Properties : declare properties
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com"); // SMTP HOST
+        props.put("mail.smtp.port", "587"); // TLS 587 SSL 465
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+
+        // Create a session with authentication
+        Session session = Session.getInstance(props, new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(from, password);
+            }
+        });
+
+        try {
+            // Create a message
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(from));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
+            message.setSubject("Account Verification");
+
+            // Email content
+            String emailContent = buildEmailContentNewUser(code, linkActive, uPassword);
+            message.setContent(emailContent, "text/html");
+
+            // Send the message
+            Transport.send(message);
+            return true; // Email sent successfully
+        } catch (MessagingException e) {
+            e.printStackTrace(); // Replace with proper logging
+            return false; // Failed to send email
+        }
+    }
 
     public static boolean sendMailVerifyResetPassword(String recipient, String code, String linkActive) {
         // Properties : declare properties
@@ -128,6 +163,30 @@ public class Mail {
                 + "    <div class=\"container\">\n"
                 + "        <h1>Reset you password by link</h1>\n"
                 + "        <p>Thank you for use system! To complete your reset password, please click the link below to verify your account:</p>\n"
+                + "        <a href=\"" + linkActive + "?token=" + code + "&time=" + expiryTime +"\" class=\"btn\">Verify Account</a>\n"
+                + "        <p>If you did not create an account, you can safely ignore this email.</p>\n"
+                + "    </div>\n"
+                + "</body>\n"
+                + "</html>";
+    }
+    
+    private static String buildEmailContentNewUser(String code, String linkActive, String password) {
+        long expiryTime = System.currentTimeMillis() + (60 * 1000);
+        // Build the email content dynamically using the provided code and linkActive
+        return "<!DOCTYPE html>\n"
+                + "<html lang=\"en\">\n"
+                + "<head>\n"
+                + "    <meta charset=\"UTF-8\">\n"
+                + "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n"
+                + "    <title>Account Verification</title>\n"
+                + "    <style>\n"
+                + "        /* Your CSS styles */\n"
+                + "    </style>\n"
+                + "</head>\n"
+                + "<body>\n"
+                + "    <div class=\"container\">\n"
+                + "        <h1>You just was added to the quiz practice system</h1>\n"
+                + "        <p>Thank you for use system! To complete, please click the link below to verify your account: <br> Your password: " + password + "</p>\n"
                 + "        <a href=\"" + linkActive + "?token=" + code + "&time=" + expiryTime +"\" class=\"btn\">Verify Account</a>\n"
                 + "        <p>If you did not create an account, you can safely ignore this email.</p>\n"
                 + "    </div>\n"

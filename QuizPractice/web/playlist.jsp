@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -16,9 +17,6 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
-
-
     </head>
     <body>
 
@@ -35,9 +33,9 @@
 
             <div class="row">
                 <div class="column">
-                    <form action="" method="post" class="save-playlist">
+<!--                    <form action="" method="post" class="save-playlist">
                         <button type="submit"><i class="far fa-bookmark"></i> <span>save subject</span></button>
-                    </form>
+                    </form>-->
 
                     <div class="thumb">
                         <img src="<%=contextPath%>/${subject.img}" alt="">
@@ -57,8 +55,10 @@
                         <h3>${subject.name}</h3>
                         <p>${subject.description}</p>
                         <c:if test="${!empty subject.pricePackages}">
-                            <h4>Sale price: <span>${subject.pricePackages.get(0).salePrice} VND</span></h4>
-                            <h4>Origin price: <span style="text-decoration: line-through">${subject.pricePackages.get(0).price} VND</span></h4>
+                            <fmt:formatNumber var="fPrice" value="${subject.pricePackages.get(0).salePrice}" pattern="#,###.##"/>
+                            <h4>Sale price: ${fPrice} VND</h4>
+                            <fmt:formatNumber var="oPrice" value="${subject.pricePackages.get(0).price}" pattern="#,###.##"/>
+                            <h4>Origin price: <span style="text-decoration: line-through">${oPrice} VND</span></h4>
                         </c:if>
                         <c:forEach var="i" items="${subject.tags}">
                             <span class="card-text"><span class="badge badge-info">${i.tag}</span></span>

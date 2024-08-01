@@ -33,6 +33,12 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Retrieve the current session
+        HttpSession session = request.getSession();
+        if((User)session.getAttribute("user") != null) {
+            response.sendRedirect("/QuizPractice");
+            return;
+        }
         // Retrieve email and password parameters from the request
         String email = request.getParameter("email");
         String password = request.getParameter("password");
@@ -45,9 +51,6 @@ public class LoginController extends HttpServlet {
 
         System.out.println(email);
         System.out.println(password);
-
-        // Retrieve the current session
-        HttpSession session = request.getSession();
 
         // Get an instance of UserDAO
         UserDAO userDAO = UserDAO.getInstance();

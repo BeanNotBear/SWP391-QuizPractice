@@ -43,6 +43,7 @@ public class QuizHandleController extends HttpServlet {
         try {
             int practiceId = parseId(request.getParameter("practiceId"));
             int stqId = parseId(request.getParameter("stqId"));
+            request.setAttribute("stqId", stqId);
             int quizId = parseId(request.getParameter("quizId"));
 
             PracticeDAO practiceDAO = PracticeDAO.getInstance();

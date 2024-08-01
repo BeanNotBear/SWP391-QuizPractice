@@ -34,7 +34,9 @@ public class SubjectController extends HttpServlet {
         SubjectDAO subjectDAO = SubjectDAO.getInstance();
         User user = (User) session.getAttribute("user");
         
-
+        if(searchParam != null) {
+            searchParam = searchParam.trim();
+        }
         List<SubjectDTO> listSubject = subjectDAO.allSubjectsWithConditions(searchParam, sort);
         if (user != null) {
             int userId = user.getUserId();

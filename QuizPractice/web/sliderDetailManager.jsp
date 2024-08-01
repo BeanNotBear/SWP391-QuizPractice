@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -24,22 +25,15 @@
         <link rel="stylesheet" href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css">
         <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
-        <!-- Custom CSS to make the footer fixed -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
         <style>
             body {
                 padding: 0;
                 margin: 0;
             }
-            .footer {
-                background: #f8f9fa;
-                text-align: center;
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-                height: 15%;
-                z-index: 10; /* Giá trị z-index cao để đè lên sidebar */
-                padding-right: 20%;
-            }
+            
             .subjectList {
                 margin-bottom: 50px;
             }
@@ -125,13 +119,20 @@
 
         </style>
 
-
-
+        <script>
+            $(document).ready(function () {
+            <c:if test="${not empty successMessage}">
+            toastr.success('${successMessage}');
+            </c:if>
+            <c:if test="${not empty errorMessage}">
+            toastr.error('${errorMessage}');
+            </c:if>
+            });
+        </script>
     </head>
 
     <body>
         <%@include file="/layout/header.jsp"%>
-
         <section class="sliderList">
             <h1 class="heading text-center">Slider Detail</h1>
             <div class="container">
@@ -148,25 +149,25 @@
                     </div>
                     <div class="col-md-2"></div>
                     <div class="col-md-6">
-                        <form id="sliderForm" action="editSlider" method="POST">
+                        <form id="sliderForm" action="editSlider" method="POST" onsubmit="return validateForm()">
                             <input type="hidden" id="id" name="id" value="<c:out value='${slider.ID}'/>">
                             <input type="hidden" id="thumbnail" name="image" value="<c:out value='${slider.image}'/>">
 
                             <div class="form-group">
                                 <label for="title">Title:</label>
-                                <input type="text" class="form-control" id="title" name="title" value="<c:out value='${slider.title}'/>" placeholder="Enter title">
+                                <input type="text" class="form-control" id="title" name="title" value="<c:out value='${slider.title}'/>" placeholder="Enter title" required>
                             </div>
                             <div class="form-group">
                                 <label for="subTitle">Sub Title:</label>
-                                <input type="text" class="form-control" id="subTitle" name="subTitle" value="<c:out value='${slider.subTitle}'/>" placeholder="Enter sub title">
+                                <input type="text" class="form-control" id="subTitle" name="subTitle" value="<c:out value='${slider.subTitle}'/>" placeholder="Enter sub title" required>
                             </div>
                             <div class="form-group">
                                 <label for="content">Content:</label>
-                                <textarea class="form-control" id="content" name="content" rows="5" placeholder="Enter content"><c:out value='${slider.content}'/></textarea>
+                                <textarea class="form-control" id="content" name="content" rows="5" placeholder="Enter content" required><c:out value='${slider.content}'/></textarea>
                             </div>
                             <div class="form-group">
                                 <label for="linkUrl">Link URL:</label>
-                                <input type="text" class="form-control" id="linkUrl" name="linkUrl" value="<c:out value='${slider.linkUrl}'/>" placeholder="Enter link URL">
+                                <input type="text" class="form-control" id="linkUrl" name="linkUrl" value="<c:out value='${slider.linkUrl}'/>" placeholder="Enter link URL" required>
                             </div>
                             <div class="form-group">
                                 <label for="status">Status:</label>
@@ -187,31 +188,45 @@
 
         <!-- Script for handling image upload -->
         <script>
-            document.getElementById('uploadButton').addEventListener('click', function () {
-                document.getElementById('fileInput').click();
-            });
+                            document.getElementById('uploadButton').addEventListener('click', function () {
+                                document.getElementById('fileInput').click();
+                            });
 
-            document.getElementById('fileInput').addEventListener('change', function () {
-                var formData = new FormData();
-                formData.append('file', this.files[0]);
+                            document.getElementById('fileInput').addEventListener('change', function () {
+                                var formData = new FormData();
+                                formData.append('file', this.files[0]);
 
-                var xhr = new XMLHttpRequest();
-                xhr.open('POST', 'upload', true);
-                xhr.onload = function () {
-                    if (xhr.status === 200) {
-                        var response = JSON.parse(xhr.responseText);
-                        var fileName = response.fileName;
-                        var avatarImage = document.getElementById('avatarImage');
-                        avatarImage.src = 'images/' + fileName; // Update the src of avatarImage
-                        console.log(fileName);
+                                var xhr = new XMLHttpRequest();
+                                xhr.open('POST', 'upload', true);
+                                xhr.onload = function () {
+                                    if (xhr.status === 200) {
+                                        var response = JSON.parse(xhr.responseText);
+                                        var fileName = response.fileName;
+                                        var avatarImage = document.getElementById('avatarImage');
+                                        avatarImage.src = 'images/' + fileName; // Update the src of avatarImage
+                                        console.log(fileName);
 
-                        // Update the hidden input value to save to database
-                        document.getElementById('thumbnail').value = 'images/' + fileName;
-                    }
-                };
-                xhr.send(formData);
-            });
+                                        // Update the hidden input value to save to database
+                                        document.getElementById('thumbnail').value = 'images/' + fileName;
+                                    }
+                                };
+                                xhr.send(formData);
+                            });
+
+                            function validateForm() {
+                                var title = $('#title').val().trim();
+                                var subTitle = $('#subTitle').val().trim();
+                                var content = $('#content').val().trim();
+                                var image = $('#thumbnail').val();
+                                var linkUrl = $('#linkUrl').val().trim();
+
+                                if (title === '' || subTitle === '' || content === '' || linkUrl === '' || image === '') {
+                                    toastr.error('All fields must be filled and cannot be empty spaces.');
+                                    return false;
+                                }
+
+                                return true;
+                            }
         </script>
-        <script src="js/logout.js"></script>
     </body>
 </html>

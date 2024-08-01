@@ -54,12 +54,12 @@ public class LessonManagerController extends HttpServlet {
         // lay ra data search
         String name = "";
         if (request.getParameter("searchName") != null) {
-            name = request.getParameter("searchName");
+            name = request.getParameter("searchName").trim();
         }
 
         String type = "";
         if (request.getParameter("searchType") != null) {
-            type = request.getParameter("searchType");
+            type = request.getParameter("searchType").trim();
         }
 
         int status = -1;
@@ -132,7 +132,7 @@ public class LessonManagerController extends HttpServlet {
             int lessonId = lessonDAO.getIdAddCurrent();
             System.out.println(lessonId + "-------------------");
             boolean s = lessonDAO.insertSubjectLesson(subjectId, lessonId);
-
+            lessonDAO.insertLessonForStudent(subjectId, lessonId);
             request.setAttribute("subjectId", subjectId);
 
             if (s) {

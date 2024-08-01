@@ -12,39 +12,27 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
-@WebServlet(name = "LazyLoadUserController", urlPatterns = {"/lazyLoadUser"})
-public class LazyLoadUserController extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
+@WebServlet(name="SearchUserController", urlPatterns={"/SearchUser"})
+public class SearchUserController extends HttpServlet {
+   
+    /** 
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            int page;
-            int total = (int) Math.ceil(UserDAO.getInstance().getTotalUser(""));
             HttpSession session = request.getSession();
-            if (session.getAttribute("pageUser") == null) {
-                page = 6;
-            } else {
-                page = (int) session.getAttribute("pageUser");
-                if (page >= total) {
-                    return;
-                }
-            }
             String search = "";
-            if (session.getAttribute("search") != null) {
-                search = (String) session.getAttribute("search");
+            if(request.getParameter("search") != null) {
+                search = request.getParameter("search");
             }
-            session.setAttribute("pageUser", page + 5);
-            List<UserManagement> users = UserDAO.getInstance().getUsers(page, 5, search);
+            session.setAttribute(search, search);
+            List<UserManagement> users = UserDAO.getInstance().getUsers(0, 5, search);
             for (UserManagement user : users) {
                 out.println("<tr class=\"table-row\">\n"
                         + "    <td>" + user.getId() + "</td>\n"
@@ -61,12 +49,11 @@ public class LazyLoadUserController extends HttpServlet {
                         + "                            </tr>");
             }
         }
-    }
+    } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
+    /** 
      * Handles the HTTP <code>GET</code> method.
-     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -74,13 +61,12 @@ public class LazyLoadUserController extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    throws ServletException, IOException {
         processRequest(request, response);
-    }
+    } 
 
-    /**
+    /** 
      * Handles the HTTP <code>POST</code> method.
-     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -88,13 +74,12 @@ public class LazyLoadUserController extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
+    /** 
      * Returns a short description of the servlet.
-     *
      * @return a String containing servlet description
      */
     @Override

@@ -125,7 +125,7 @@ public class UserDAO extends DBContext {
                 + "           ,[password]\n"
                 + "           ,[created_at]\n"
                 + "           ,[updated_at]\n"
-                + "           ,[role_id]role\n"
+                + "           ,[role_id]\n"
                 + "           ,[status_id]\n"
                 + "           ,[token])\n"
                 + "     VALUES\n"
@@ -603,7 +603,6 @@ public class UserDAO extends DBContext {
                 + "		u.[full_name] LIKE '%' + ? + '%' OR\n"
                 + "		u.[email] LIKE '%' + ? + '%' OR\n"
                 + "		u.[phone_number] LIKE '%' + ? + '%' OR\n"
-                + "		u.[gender] LIKE '%' + ? + '%' OR\n"
                 + "		u.[profile_img] LIKE '%' + ? + '%' OR\n"
                 + "		s.[name] LIKE '%' + ? + '%' OR\n"
                 + "		r.[name] LIKE '%' + ? + '%'\n"
@@ -622,13 +621,12 @@ public class UserDAO extends DBContext {
             ps.setString(5, search);
             ps.setString(6, search);
             ps.setString(7, search);
-            ps.setString(8, search);
-            ps.setInt(9, page);
-            ps.setInt(10, recordsPerPage);
+            ps.setInt(8, page);
+            ps.setInt(9, recordsPerPage);
             rs = ps.executeQuery();
             String gender = "Male";
             while (rs.next()) {
-                if(rs.getInt(5) == 1) {
+                if (rs.getInt(5) == 1) {
                     gender = "Male";
                 } else {
                     gender = "Female";
@@ -647,6 +645,13 @@ public class UserDAO extends DBContext {
             e.printStackTrace();
         }
         return users;
+    }
+
+    public static void main(String[] args) {
+        List<UserManagement> users = getInstance().getUsers(2, 100, "Jane");
+        for (UserManagement user : users) {
+            System.out.println(user.toString());
+        }
     }
 
     public int getTotalUser(String search) {

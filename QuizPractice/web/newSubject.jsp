@@ -216,7 +216,7 @@
                                         var allowedTypes = ['image/jpeg', 'image/png'];
                                         if (allowedTypes.indexOf(file.type) === -1) {
                                             Swal.fire({
-                                                title: "Only allowed to upload image formats: JPEG, PNG, GIF",
+                                                title: "Only allowed to upload image formats: JPEG, PNG",
                                                 icon: "error"
                                             }).then(() => {
                                                 // Reset giá trị của input file để người dùng có thể chọn tệp khác

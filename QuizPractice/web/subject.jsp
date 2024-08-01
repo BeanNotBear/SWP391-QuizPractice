@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -54,14 +55,12 @@
                         </div>
                         <c:if test="${!empty c.pricePackages}">
                             <h3 class="title">${c.name}</h3>
-                            <h4>Sale price: ${c.pricePackages.get(0).salePrice}VND</h4>
-                            <h4>Origin price: <span style="text-decoration: line-through">${c.pricePackages.get(0).price}VND</span></h4>
+                            <fmt:formatNumber var="fPrice" value="${c.pricePackages.get(0).salePrice}" pattern="#,###.##"/>
+                            <h4>Sale price: ${fPrice} VND</h4>
+                            <fmt:formatNumber var="oPrice" value="${c.pricePackages.get(0).price}" pattern="#,###.##"/>
+                            <h4>Origin price: <span style="text-decoration: line-through">${oPrice} VND</span></h4>
                         </c:if>
-                        <c:if test="${!empty c.tags}">
-                            <c:forEach var="i" items="${c.tags}">
-                                <span class="card-text"><span class="badge badge-info">${i.tag}</span></span>
-                                </c:forEach>
-                            </c:if>
+                        
                         <br/>
                         <a href="subject-details?id=${c.id}" class="inline-btn">Details</a>
                         <c:if test="${c.registered}">

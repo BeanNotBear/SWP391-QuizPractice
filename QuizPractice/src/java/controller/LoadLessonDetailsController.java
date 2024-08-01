@@ -30,7 +30,8 @@ public class LoadLessonDetailsController extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             String txtIndex = request.getParameter("index");
             int index = Integer.parseInt(txtIndex);
-            CurrentLesson lesson = LessonDAO.getInstance().getCurrentLesson(index);
+            String name = request.getParameter("name"); // lesson name
+            CurrentLesson lesson = LessonDAO.getInstance().getCurrentLesson(index, name);
             HttpSession session = request.getSession();
             User user = (User) session.getAttribute("user");
             int userId = user.getUserId();
@@ -41,7 +42,7 @@ public class LoadLessonDetailsController extends HttpServlet {
                 String video = "";
                 int quizId = lesson.getQuizId();
                 System.out.println("Media " + media);
-                if (!media.equals("")) {
+                if (media != null && !media.equals("")) {
                     video = "<div style=\"width: 100%; height: 570px; border: 2px solid;\">\n"
                             + "    <iframe style=\"width: 100%; height: 100%;\" src=\"" + media + "\" frameborder=\"0\" allowfullscreen></iframe>\n"
                             + "</div>\n";

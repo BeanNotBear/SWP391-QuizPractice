@@ -18,53 +18,41 @@ public class AddSliderController extends HttpServlet {
     private final SliderDAO sliderDAO = SliderDAO.getInstance();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        // Implement if needed, currently not used in this example
-    }
-
-    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Set the response content type to JSON
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-//      id: id,
-//                                        title: title,
-//                                        subTitle: subTitle,
-//                                        content: content,
-//                                        image: image,
-//                                        linkUrl: linkUrl
-        String title = request.getParameter("title");
-        String subTitle = request.getParameter("subTitle");
-        String content = request.getParameter("content");
+        String title = request.getParameter("title").trim();
+        String subTitle = request.getParameter("subTitle").trim();
+        String content = request.getParameter("content").trim();
         String image = request.getParameter("image");
-        String linkUrl = request.getParameter("linkUrl");
+        String linkUrl = request.getParameter("linkUrl").trim();
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
+
         if (user == null) {
             response.getWriter().write(gson.toJson(new ResponseMessage("User not logged in!")));
             return;
         }
 
-        //  public boolean addSlider(String title, String subTitle, String content, String image, String linkUrl, int userId) {
-        // Toggle the slider status in the database
-       
+        if (title.isEmpty() || subTitle.isEmpty() || content.isEmpty() || image.isEmpty() || linkUrl.isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write(gson.toJson(new ResponseMessage("All fields must be filled and cannot be empty spaces.")));
+            return;
+        }
+
         boolean success = sliderDAO.addSlider(title, subTitle, content, image, linkUrl, user.getUserId());
 
         if (success) {
-            response.getWriter().write(gson.toJson(new ResponseMessage("Status changed successfully")));
+            response.getWriter().write(gson.toJson(new ResponseMessage("Slider added successfully")));
         } else {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write(gson.toJson(new ResponseMessage("Failed to change status")));
+            response.getWriter().write(gson.toJson(new ResponseMessage("Failed to add slider")));
         }
-
     }
 
-    // Helper class for JSON response
     private static class ResponseMessage {
-
         private final String message;
 
         public ResponseMessage(String message) {

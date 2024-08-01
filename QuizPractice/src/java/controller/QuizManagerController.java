@@ -39,10 +39,11 @@ public class QuizManagerController extends HttpServlet {
         }
 
         try {
-            String subjectName = request.getParameter("subjectName");
-            String quizName = request.getParameter("quizName");
-            String subjectId = request.getParameter("subjectId");
-            String quizType = request.getParameter("quizType");
+            // Trim các tham số tìm kiếm để loại bỏ khoảng trắng ở đầu và cuối
+            String subjectName = request.getParameter("subjectName") != null ? request.getParameter("subjectName").trim() : null;
+            String quizName = request.getParameter("quizName") != null ? request.getParameter("quizName").trim() : null;
+            String subjectId = request.getParameter("subjectId") != null ? request.getParameter("subjectId").trim() : null;
+            String quizType = request.getParameter("quizType") != null ? request.getParameter("quizType").trim() : null;
 
             int currentPage = 1;
             int recordsPerPage = 5;
@@ -52,7 +53,6 @@ public class QuizManagerController extends HttpServlet {
 
             try {
                 QuizDAO quizDAO = QuizDAO.getInstance();
-                // Truyền tham số quizType vào các phương thức tìm kiếm
                 List<QuizDTO> quizzes = quizDAO.searchQuizzes(subjectId, subjectName, quizName, quizType, currentPage, recordsPerPage);
                 int totalRecords = quizDAO.getTotalRecords(subjectId, subjectName, quizName, quizType);
                 int totalPages = (int) Math.ceil((double) totalRecords / recordsPerPage);

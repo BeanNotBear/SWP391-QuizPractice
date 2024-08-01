@@ -10,7 +10,7 @@
         <link rel="stylesheet" href="css/style.css">
         <style>
             .container {
-                margin-top: 100px;
+                margin-top: 50px;
                 width: 90%;
                 background-color: white;
                 border-radius: 10px;
@@ -104,9 +104,10 @@
                 cursor: pointer;
                 border-radius: 5px;
             }
+            
         </style>
     </head>
-    <body >
+    <body style="overflow-y: auto" >
         <c:import url="layout/header.jsp" />
         <c:import url="layout/sidebar.jsp" />
         <section class="container">
@@ -123,6 +124,7 @@
                     <div class="options" id="options"></div>
                     <div class="dont-know" id="dontKnow">Don't know?</div>
                     <div class="feedback" id="feedback"></div>
+                    <div style="width: 200px; margin-left: 410px" class="nextQuestion"><a onclick="nextQues()" id="next" style="display: none" class="btn btn-primary">Next</a></div>
                 </div>
                 <div class="results" id="results"></div>
             </div>
@@ -133,6 +135,7 @@
         <audio style="display: none;" id="incorrectSound" src="sound/Wrong.mp3"></audio>
         <script>
             var quizData = ${requestScope.quizData};
+            var stdId = ${requestScope.stqId};
         </script>
         <script src="js/quizHandle.js">
         </script>

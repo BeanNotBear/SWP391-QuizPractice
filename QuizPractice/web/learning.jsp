@@ -40,7 +40,10 @@
             <h4 class="feature-subject">The lessons of subject</h4>
             <nav class="navbar">
                 <c:forEach var="i" items="${requestScope.lessons}">
-                    <a onclick="loadLesson('${i.lessonIndex}')" id="lesson_${i.lessonIndex}"
+                    <c:if test="${requestScope.currentIndex == i.lessonIndex}">
+                        <c:set var="currentName" value="${i.name}" />
+                    </c:if>
+                    <a onclick="loadLesson('${i.lessonIndex}', '${i.name}')" id="lesson_${i.lessonIndex}"
                        class="${i.lessonIndex > requestScope.currentIndex && !i.status ? 'locked' : ''}">
                         <span>${i.lessonIndex}. ${i.name} 
                             <c:if test="${i.status == true}">
@@ -71,7 +74,8 @@
                     url: "loadLesson",
                     type: 'POST',
                     data: {
-                        index: '${requestScope.currentIndex}'
+                        index: '${requestScope.currentIndex}',
+                        name: '${currentName}'
                     },
                     success: function (data) {
                         let row = document.getElementById("lessonContent");
@@ -93,13 +97,14 @@
                 });
             });
 
-            function loadLesson(index) {
+            function loadLesson(index, name) {
                 // Gửi yêu cầu Ajax khi người dùng chọn bài học
                 $.ajax({
                     url: "loadLesson",
                     type: 'POST',
                     data: {
-                        index: index
+                        index: index,
+                        name: name
                     },
                     success: function (data) {
                         let row = document.getElementById("lessonContent");

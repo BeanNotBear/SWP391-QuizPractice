@@ -2,19 +2,25 @@ let pg = 0;
 let currentQuestionIndex = 0;
 let correctAnswers = 0;
 let incorrectAnswers = 0;
+let correctQuestions = [];
+let incorrectQuestions = [];
 const questionElement = document.getElementById('question');
 const optionsElement = document.getElementById('options');
 const progressElement = document.getElementById('progress');
 const feedbackElement = document.getElementById('feedback');
 const dontKnowElement = document.getElementById('dontKnow');
+const nextQuestionElement = document.getElementById('next');
 const resultsElement = document.getElementById('results');
 const correctSound = document.getElementById('correctSound');
 const incorrectSound = document.getElementById('incorrectSound');
+
 function initializeQuiz() {
+    pg = 0;
     currentQuestionIndex = 0;
     correctAnswers = 0;
     incorrectAnswers = 0;
-    pg = 0;
+    correctQuestions = [];
+    incorrectQuestions = [];
     resultsElement.innerHTML = '';
     resetDontKnowButton();
     loadQuestion();
@@ -28,11 +34,12 @@ function loadQuestion() {
     feedbackElement.innerHTML = '';
     feedbackElement.className = 'feedback';
     dontKnowElement.style.display = 'block';
+    nextQuestionElement.style.display='none';
 
     currentQuestion.options.forEach((option, index) => {
         const button = document.createElement('button');
         button.className = 'option';
-        button.textContent = `${index + 1}.  ${option.answer_detail}`;  // Changed this line
+        button.textContent = `${index + 1}. ${option.answer_detail}`;
         button.addEventListener('click', () => checkAnswer(option));
         optionsElement.appendChild(button);
     });
@@ -41,24 +48,27 @@ function loadQuestion() {
 }
 
 function checkAnswer(selectedAnswer) {
-    console.log(selectedAnswer.answer_detail);
     const currentQuestion = quizData[currentQuestionIndex];
-    console.log(currentQuestion.correctAnswer);
     if (selectedAnswer.answer_detail === currentQuestion.correctAnswer) {
         correctSound.play();
         feedbackElement.textContent = "Correct!";
         feedbackElement.className = 'feedback correct';
         correctAnswers++;
+        correctQuestions.push(currentQuestion.question); // Store the question number
     } else {
         incorrectSound.play();
         feedbackElement.textContent = `Incorrect. The correct answer is: ${currentQuestion.correctAnswer}`;
         feedbackElement.className = 'feedback incorrect';
         incorrectAnswers++;
+        incorrectQuestions.push(currentQuestion.question); // Store the question number
     }
-
+    nextQuestionElement.style.display = 'block';
     disableOptions();
     updateProgress();
-    setTimeout(nextQuestion, 4000);
+}
+
+function nextQues() {
+    setTimeout(nextQuestion, 100);
 }
 
 function showCorrectAnswer() {
@@ -69,7 +79,7 @@ function showCorrectAnswer() {
     incorrectAnswers++;
     disableOptions();
     updateProgress();
-    setTimeout(nextQuestion, 4000);
+    nextQuestionElement.style.display = 'block';
 }
 
 function disableOptions() {
@@ -106,18 +116,16 @@ function showResults() {
     optionsElement.innerHTML = '';
     dontKnowElement.style.display = 'none';
     feedbackElement.style.display = 'none';
+    nextQuestionElement.style.display = 'none';
     resultsElement.innerHTML = `
-            <h2>Quiz Results</h2>
-            <p>Correct Answers: ${correctAnswers}</p>
-            <p>Incorrect Answers: ${incorrectAnswers}</p>
-            <p>Total Questions: ${quizData.length}</p>
-            <button class="try-again" onclick="reload()">Try Again</button>
-        `;
+        <h2>Quiz Results</h2>
+        <p>Correct Answers: ${correctAnswers}</p>
+        <p>Incorrect Answers: ${incorrectAnswers}</p>
+        <p>Total Questions: ${quizData.length}</p>
+        
+        <button class="try-again" onclick="initializeQuiz()">Try Again</button>
+    `;
     progressElement.style.width = '100%';
-}
-
-function reload() {
-    window.location.reload();
 }
 
 // Start the quiz

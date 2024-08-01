@@ -4,6 +4,8 @@ import context.DBContext;
 import dto.BlogManagerDetailDTO;
 import java.sql.SQLException;
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -40,7 +42,7 @@ public class BlogDAO extends DBContext {
         return instance;
     }
 
-    public List<Blog> searchPagingBlogs(String title, String category, int index) {
+public List<Blog> searchPagingBlogs(String title, String category, int index) {
     List<Blog> listPage = new ArrayList<>();
     try {
         String query = "SELECT b.id, b.title, b.author_id, b.created_at,\n"
@@ -48,14 +50,14 @@ public class BlogDAO extends DBContext {
                 + "       c.name AS category_name, b.status\n"
                 + "FROM blogs b\n"
                 + "LEFT JOIN categories c ON b.CategoryId = c.id\n"
-                + "JOIN users u ON b.author_id = u.id\n"
                 + "WHERE b.title LIKE ?\n";
-        
+
         if (category != null && !category.isEmpty()) {
             query += "AND b.CategoryId = ?\n";
         }
-        
-        query += "ORDER BY b.created_at DESC\n"
+
+        query += "AND b.status = 1\n"  // Chỉ lấy các blog có status = 1
+                + "ORDER BY b.created_at DESC\n"
                 + "OFFSET ? ROWS FETCH NEXT 6 ROWS ONLY;";
 
         ps = connection.prepareStatement(query);
@@ -67,10 +69,10 @@ public class BlogDAO extends DBContext {
         }
 
         ps.setInt(parameterIndex, (index - 1) * 6);
-        
+
         rs = ps.executeQuery();
         while (rs.next()) {
-            Blog blogs = new Blog(); // Tạo đối tượng Blog mới
+            Blog blogs = new Blog();
             blogs.setBlog_id(rs.getInt(1));
             blogs.setTitle(rs.getString(2));
             blogs.setAuthor_id(rs.getInt(3));
@@ -88,25 +90,70 @@ public class BlogDAO extends DBContext {
             listPage.add(blogs);
         }
     } catch (SQLException ex) {
-        Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, ex);
     }
     return listPage;
 }
 
+public List<Blog> searchPagingAllBlogs(String title, String category, int index) {
+    List<Blog> listPage = new ArrayList<>();
+    try {
+        String query = "SELECT b.id, b.title, b.author_id, b.created_at,\n"
+                + "       b.updated_at, b.content, b.thumbnail, b.briefinfo,\n"
+                + "       c.name AS category_name, b.status\n"
+                + "FROM blogs b\n"
+                + "LEFT JOIN categories c ON b.CategoryId = c.id\n"
+                + "WHERE b.title LIKE ?\n";
 
-    /**
-     * Phương thức này dùng để đếm số lượng bài viết blog dựa trên tiêu đề.
-     *
-     * @param title Tiêu đề cần đếm.
-     * @return Số lượng bài viết blog có tiêu đề chứa từ khóa tìm kiếm.
-     */
-    public int countBlogsByTitleAndCategory(String title, String category) {
+        if (category != null && !category.isEmpty()) {
+            query += "AND b.CategoryId = ?\n";
+        }
+
+        query += "ORDER BY b.created_at DESC\n"
+                + "OFFSET ? ROWS FETCH NEXT 6 ROWS ONLY;";
+
+        ps = connection.prepareStatement(query);
+        ps.setString(1, "%" + title + "%");
+
+        int parameterIndex = 2;
+        if (category != null && !category.isEmpty()) {
+            ps.setInt(parameterIndex++, Integer.parseInt(category)); // Chuyển đổi category thành số nguyên
+        }
+
+        ps.setInt(parameterIndex, (index - 1) * 6);
+
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            Blog blogs = new Blog();
+            blogs.setBlog_id(rs.getInt(1));
+            blogs.setTitle(rs.getString(2));
+            blogs.setAuthor_id(rs.getInt(3));
+            blogs.setCreatedDate(rs.getDate(4));
+            blogs.setUpdatedDate(rs.getDate(5));
+            blogs.setContent(rs.getString(6));
+            blogs.setThumbnail(rs.getString(7));
+            blogs.setBrieinfo(rs.getString(8));
+            String categoryName = rs.getString(9);
+            Category cat = new Category();
+            cat.setCategory_Name(categoryName);
+            blogs.setCategory(cat);
+            blogs.setStatus(rs.getBoolean(10)); // Giả sử status là boolean
+
+            listPage.add(blogs);
+        }
+    } catch (SQLException ex) {
+        Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return listPage;
+}
+
+public int countAllBlogsByTitleAndCategory(String title, String category) {
     int count = 0;
     try {
         String query = "SELECT COUNT(*) FROM blogs b\n"
                 + "LEFT JOIN categories c ON b.CategoryId = c.id\n"
                 + "WHERE b.title LIKE ?";
-        
+
         if (category != null && !category.isEmpty()) {
             query += " AND b.CategoryId = ?";
         }
@@ -114,8 +161,9 @@ public class BlogDAO extends DBContext {
         ps = connection.prepareStatement(query);
         ps.setString(1, "%" + title + "%");
 
+        int parameterIndex = 2;
         if (category != null && !category.isEmpty()) {
-            ps.setInt(2, Integer.parseInt(category)); // Chuyển đổi category thành số nguyên
+            ps.setInt(parameterIndex, Integer.parseInt(category)); // Chuyển đổi category thành số nguyên
         }
 
         rs = ps.executeQuery();
@@ -123,7 +171,7 @@ public class BlogDAO extends DBContext {
             count = rs.getInt(1);
         }
     } catch (SQLException ex) {
-        Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, ex);
     }
     return count;
 }
@@ -156,10 +204,6 @@ public class BlogDAO extends DBContext {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return categories;
-    }
-    public static void main(String[] args) {
-        BlogDAO b = new BlogDAO();
-        System.out.println(b.getAllCategories());
     }
 
     /**
@@ -237,7 +281,7 @@ public class BlogDAO extends DBContext {
 
         Blog blogs = new Blog(); // Tạo đối tượng Blogs mới
         try {
-            String query = "SELECT TOP 1 * FROM blogs ORDER BY created_at desc";
+            String query = "SELECT TOP 1 * FROM blogs where status='1' ORDER BY created_at desc ";
             ps = connection.prepareStatement(query);
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -431,5 +475,78 @@ public class BlogDAO extends DBContext {
         }
         return blogs;
     }
+
+    public boolean addBlog(String title, String briefinfo, String content, boolean status, String thumbnail, int categoryId, int authorId) {
+        String query = "INSERT INTO [dbo].[blogs] "
+                + "([title], [author_id], [created_at], [updated_at], [content], [status], [thumbnail], [briefinfo], [CategoryId]) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, title);
+            ps.setInt(2, authorId); // Thêm giá trị cho cột author_id
+            ps.setDate(3, new Date(System.currentTimeMillis()));
+            ps.setDate(4, new Date(System.currentTimeMillis()));
+            ps.setString(5, content);
+            ps.setInt(6, status ? 1 : 0); // Chuyển đổi boolean thành int (1 cho true, 0 cho false)
+            ps.setString(7, thumbnail);
+            ps.setString(8, briefinfo);
+            ps.setInt(9, categoryId);
+
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, e);
+            return false;
+        }
+    }
+
+    public int getCategoryIdByName(String categoryName) {
+        int categoryId = -1;
+        String query = "SELECT id FROM categories WHERE name = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, categoryName);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    categoryId = rs.getInt("id");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return categoryId;
+    }
+    
+      public static void main(String[] args) {
+        BlogDAO b = new BlogDAO();
+        System.out.println(b.addBlog("abc", "abc", "abc", true, "null", 1, 3));
+    }
+
+public int countBlogsByTitleAndCategory(String title, String category) {
+    int count = 0;
+    try {
+        String query = "SELECT COUNT(*) FROM blogs b\n"
+                + "LEFT JOIN categories c ON b.CategoryId = c.id\n"
+                + "WHERE b.title LIKE ?\n"
+                + "AND b.status = 1"; // Only count blogs with status = 1
+
+        if (category != null && !category.isEmpty()) {
+            query += " AND b.CategoryId = ?";
+        }
+
+        ps = connection.prepareStatement(query);
+        ps.setString(1, "%" + title + "%");
+
+        if (category != null && !category.isEmpty()) {
+            ps.setInt(2, Integer.parseInt(category)); // Convert category to integer if it's not empty
+        }
+
+        rs = ps.executeQuery();
+        if (rs.next()) {
+            count = rs.getInt(1);
+        }
+    } catch (SQLException ex) {
+        Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return count;
+}
 
 }

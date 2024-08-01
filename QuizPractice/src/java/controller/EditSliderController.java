@@ -30,26 +30,30 @@ public class EditSliderController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String title = request.getParameter("title");
-        String subTitle = request.getParameter("subTitle");
-        String content = request.getParameter("content");
+        String title = request.getParameter("title").trim();
+        String subTitle = request.getParameter("subTitle").trim();
+        String content = request.getParameter("content").trim();
         String image = request.getParameter("image");
-        String linkUrl = request.getParameter("linkUrl");
+        String linkUrl = request.getParameter("linkUrl").trim();
         int status = Integer.parseInt(request.getParameter("status"));
         int id = Integer.parseInt(request.getParameter("id"));
 
-        //  public boolean editSlider(String title, String subTitle, String content, String image, String linkUrl, int status, int sliderId) {
+        HttpSession session = request.getSession();
+
+        if (title.isEmpty() || subTitle.isEmpty() || content.isEmpty() || linkUrl.isEmpty() || image.isEmpty()) {
+            session.setAttribute("errorMessage", "All fields must be filled and cannot be empty spaces.");
+            response.sendRedirect("editSlider?id=" + id);
+            return;
+        }
+
         SliderDAO sliderDAO = SliderDAO.getInstance();
         boolean s = sliderDAO.editSlider(title, subTitle, content, image, linkUrl, status, id);
-        
-        HttpSession session = request.getSession();
+
         if (s) {
             session.setAttribute("successMessage", "Slider edited successfully.");
         } else {
             session.setAttribute("errorMessage", "Failed to edit the slider.");
         }
-//        request.getRequestDispatcher("/sliderManager").forward(request, response);
-         response.sendRedirect("sliderManager");
+        response.sendRedirect("sliderManager");
     }
-
 }

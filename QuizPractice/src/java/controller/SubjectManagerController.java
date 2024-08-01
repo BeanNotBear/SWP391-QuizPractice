@@ -54,7 +54,7 @@ public class SubjectManagerController extends HttpServlet {
             }
             if (request.getParameter("subjectName") != null) {
                 search = request.getParameter("subjectName");
-                this.search = search;
+                this.search = search.trim();
             }
             if(request.getParameter("categories") != null && !request.getParameter("categories").trim().isEmpty()) {
                 String cates = request.getParameter("categories");

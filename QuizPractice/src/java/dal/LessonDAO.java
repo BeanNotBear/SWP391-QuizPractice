@@ -399,6 +399,38 @@ public class LessonDAO extends DBContext {
         return updated;
     }
 
+    public void insertLessonForStudent(int subjectId, int lessonId) {
+        String query = "DECLARE @UserId INT\n"
+                + "\n"
+                + "DECLARE UserCursor CURSOR FOR\n"
+                + "SELECT [UserId]\n"
+                + "FROM [SWP391_G6].[dbo].[Subject_Register]\n"
+                + "WHERE SubjectId = ? AND [Status] = 'done'\n"
+                + "\n"
+                + "OPEN UserCursor\n"
+                + "\n"
+                + "FETCH NEXT FROM UserCursor INTO @UserId\n"
+                + "\n"
+                + "WHILE @@FETCH_STATUS = 0\n"
+                + "BEGIN\n"
+                + "    INSERT INTO [dbo].[student_has_lesson] ([user_id], [lesson_id], [status])\n"
+                + "    VALUES (@UserId, ?, 0)\n"
+                + "\n"
+                + "    FETCH NEXT FROM UserCursor INTO @UserId\n"
+                + "END\n"
+                + "\n"
+                + "CLOSE UserCursor\n"
+                + "DEALLOCATE UserCursor";
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, subjectId);
+            ps.setInt(2, lessonId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public List<LessonLearning> getLessonLearning(int subjectId, int userId) {
         List<LessonLearning> lessonLearnings = new ArrayList<>();
         StringBuilder queryBuilder = new StringBuilder();
@@ -459,7 +491,7 @@ public class LessonDAO extends DBContext {
         return result;
     }
 
-    public CurrentLesson getCurrentLesson(int index) {
+    public CurrentLesson getCurrentLesson(int index, String name) {
         StringBuilder query = new StringBuilder();
         query.append("SELECT [id], ")
                 .append("[name], ")
@@ -469,12 +501,13 @@ public class LessonDAO extends DBContext {
                 .append("[Type], ")
                 .append("COALESCE([QuizId], -1) AS [QuizId] ")
                 .append("FROM [SWP391_G6].[dbo].[lessons] ")
-                .append("WHERE [LessonIndex] = ?")
+                .append("WHERE [LessonIndex] = ? AND name = ?")
                 .append(";");
         CurrentLesson lesson = new CurrentLesson();
         try {
             ps = connection.prepareStatement(query.toString());
             ps.setInt(1, index);
+            ps.setString(2, name);
             rs = ps.executeQuery();
             if (rs.next()) {
                 lesson = new CurrentLesson(rs.getInt(1),
@@ -525,10 +558,10 @@ public class LessonDAO extends DBContext {
                 + " WHERE user_id = ? AND lesson_id = ?";
         try {
             ps = connection.prepareStatement(query);
-            
+
             ps.setInt(1, userId);
             ps.setInt(2, lessonId);
-            
+
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();

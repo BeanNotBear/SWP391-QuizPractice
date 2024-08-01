@@ -229,10 +229,9 @@
 </section>
 <br/>
 
-<!-- Modal -->
+<!-- Modal for Adding Slider -->
 <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
-
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
@@ -242,7 +241,6 @@
             <div class="modal-body">
                 <img src="images/slider2.jpg" alt="Slider Image" class="img-responsive" id="avatarImage" width="200px">
                 <br>
-
                 <div class="row">
                     <div class="col-sm-5"></div>
                     <button type="button" class="btn btn-primary btn-sm col-sm-3" id="uploadButton">
@@ -250,74 +248,85 @@
                     </button>
                     <div class="col-sm-5"></div>
                 </div>
-
                 <input type="file" id="fileInput" style="display: none;" accept="image/*">
-
                 <form id="addSliderForm">
                     <input type="hidden" id="thumbnail" name="image" />
 
                     <div class="form-group">
                         <label for="title">Title:</label>
-                        <input required type="text" class="form-control" id="title" name="title"  placeholder="Enter title">
+                        <input type="text" class="form-control" id="title" name="title" placeholder="Enter title" required>
                     </div>
                     <div class="form-group">
                         <label for="subTitle">Sub Title:</label>
-                        <input required type="text" class="form-control" id="subTitle" name="subTitle"  placeholder="Enter sub title">
+                        <input type="text" class="form-control" id="subTitle" name="subTitle" placeholder="Enter sub title" required>
                     </div>
                     <div class="form-group">
                         <label for="content">Content:</label>
-                        <textarea required class="form-control" id="content" name="content" rows="5" placeholder="Enter content"></textarea>
+                        <textarea class="form-control" id="content" name="content" rows="5" placeholder="Enter content" required></textarea>
                     </div>
                     <div class="form-group">
                         <label for="linkUrl">Link URL:</label>
-                        <input required type="text" class="form-control" id="linkUrl" name="linkUrl" placeholder="Enter link URL">
+                        <input type="text" class="form-control" id="linkUrl" name="linkUrl" placeholder="Enter link URL" required>
                     </div>
                 </form>
-
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" onclick="addSlider()">Add</button>
             </div>
         </div>
-
     </div>
 </div>
 
-
 <%@include file="/layout/footer.jsp"%>
 
-<!-- side bar có thể thu nhỏ khi màn hình nhỏ  -->
-<script src="js/script.js"></script>
-
 <script>
-                    document.getElementById('uploadButton').addEventListener('click', function () {
-                        document.getElementById('fileInput').click();
-                    });
+    $(document).ready(function () {
+    <c:if test="${not empty successMessage}">
+        toastr.success('${successMessage}');
+    </c:if>
+    <c:if test="${not empty errorMessage}">
+        toastr.error('${errorMessage}');
+    </c:if>
+    });
 
-                    document.getElementById('fileInput').addEventListener('change', function () {
-                        var formData = new FormData();
-                        formData.append('file', this.files[0]);
+    document.getElementById('uploadButton').addEventListener('click', function () {
+        document.getElementById('fileInput').click();
+    });
 
-                        var xhr = new XMLHttpRequest();
-                        xhr.open('POST', 'upload', true);
-                        xhr.onload = function () {
-                            if (xhr.status === 200) {
-                                var response = JSON.parse(xhr.responseText);
-                                var fileName = response.fileName;
-                                var avatarImage = document.getElementById('avatarImage');
-                                avatarImage.src = 'images/' + fileName; // Update the src of avatarImage
-                                console.log(fileName);
+    document.getElementById('fileInput').addEventListener('change', function () {
+        var formData = new FormData();
+        formData.append('file', this.files[0]);
 
-                                // Update the hidden input value to save to database
-                                document.getElementById('thumbnail').value = 'images/' + fileName;
-                            }
-                        };
-                        xhr.send(formData);
-                    });
-</script>
-<script>
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'upload', true);
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                var fileName = response.fileName;
+                var avatarImage = document.getElementById('avatarImage');
+                avatarImage.src = 'images/' + fileName;
+                document.getElementById('thumbnail').value = 'images/' + fileName;
+            }
+        };
+        xhr.send(formData);
+    });
+
+    function validateForm() {
+        var title = $('#title').val().trim();
+        var subTitle = $('#subTitle').val().trim();
+        var content = $('#content').val().trim();
+        var image = $('#thumbnail').val();
+        var linkUrl = $('#linkUrl').val().trim();
+
+        if (title === '' || subTitle === '' || content === '' || linkUrl === '' || image === '') {
+            toastr.error('All fields must be filled and cannot be empty spaces.');
+            return false;
+        }
+
+        return true;
+    }
+
     function toggleStatus(id) {
         $.ajax({
             url: 'changeSlider',
@@ -332,19 +341,10 @@
         });
     }
 
-    function confirmDelete(id) {
-        if (confirm('Are you sure you want to delete this slider?')) {
-            // Uncomment the next line to actually delete
-            // window.location.href = 'deleteSlider?id=' + id;
-        }
-    }
-
-    $(document).ready(function () {
-        $('.status-toggle').bootstrapToggle();
-    });
-
-
     function addSlider() {
+        if (!validateForm()) {
+            return;
+        }
 
         var title = $('#title').val();
         var subTitle = $('#subTitle').val();
@@ -352,12 +352,10 @@
         var image = $('#thumbnail').val();
         var linkUrl = $('#linkUrl').val();
 
-        // Perform AJAX POST request to servlet
         $.ajax({
-            url: 'addSlider', // Đổi thành URL của servlet xử lý thêm slider
+            url: 'addSlider',
             type: 'POST',
             data: {
-
                 title: title,
                 subTitle: subTitle,
                 content: content,
@@ -366,8 +364,7 @@
             },
             success: function (response) {
                 toastr.success('Slider added successfully');
-                $('#myModal').modal('hide');  // Close the modal after successful addition
-                // Reload the slider list or update the UI as needed
+                $('#myModal').modal('hide');
             },
             error: function (error) {
                 toastr.error('Failed to add slider');
@@ -375,8 +372,6 @@
             }
         });
     }
-
 </script>
-<script src="js/logout.js"></script>
 </body>
 </html>

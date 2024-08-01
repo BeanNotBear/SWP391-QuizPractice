@@ -30,7 +30,7 @@ public class LearningController extends HttpServlet {
         String txtSubject = request.getParameter("subjectId");
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute("user");
-
+        
         try {
             int subjectId = Integer.parseInt(txtSubject);
             int userId = user.getUserId();
