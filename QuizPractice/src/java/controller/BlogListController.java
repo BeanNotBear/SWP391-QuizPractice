@@ -29,7 +29,7 @@ public class BlogListController extends HttpServlet {
         if (search == null) {
             search = "";
         } else {
-            search = search.trim();
+            search = search.trim().replaceAll("\\s+", " ");
         }
 
         String category = request.getParameter("category");

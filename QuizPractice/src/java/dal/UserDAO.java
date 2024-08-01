@@ -39,6 +39,20 @@ public class UserDAO extends DBContext {
         return instance;
     }
 
+    public void ChangeStatusAccount(int id, int statusId) {
+        String query = "UPDATE [dbo].[users]\n"
+                + "   SET [status_id] = ?\n"
+                + " WHERE id = ?";
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, statusId);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public boolean checkExistByEmail(String email) {
         boolean isDuplicate = true;
         String sql = "Select 1 From users where email =?";

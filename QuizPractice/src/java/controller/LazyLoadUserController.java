@@ -46,19 +46,25 @@ public class LazyLoadUserController extends HttpServlet {
             session.setAttribute("pageUser", page + 5);
             List<UserManagement> users = UserDAO.getInstance().getUsers(page, 5, search);
             for (UserManagement user : users) {
+                String statusButton = user.getStatus().equals("Block")
+                        ? "<a onclick=\"unlockAccount('" + user.getId() + "')\" class=\"btn btn-primary\">"
+                        + "<i style=\"font-size: 20px; color: var(--orange)\" class=\"fa-solid fa-unlock\"></i></a>"
+                        : "<a onclick=\"lockAccount('" + user.getId() + "')\" class=\"btn btn-primary\">"
+                        + "<i style=\"font-size: 20px; color: var(--orange)\" class=\"fa-solid fa-lock\"></i></a>";
+
                 out.println("<tr class=\"table-row\">\n"
                         + "    <td>" + user.getId() + "</td>\n"
                         + "    <td>" + user.getFullName() + "</td>\n"
-                        + "    <td><img src=\"" + user.getProfileImg() + "\" alt=\"alt\"/></td>\n"
+                        + "    <td><img src=\"" + user.getProfileImg() + "\" alt=\"Profile Image\"/></td>\n"
                         + "    <td>" + user.getEmail() + "</td>\n"
                         + "    <td>" + user.getPhoneNumber() + "</td>\n"
                         + "    <td>" + user.getGender() + "</td>\n"
                         + "    <td>" + user.getRole() + "</td>\n"
                         + "    <td>" + user.getStatus() + "</td>\n"
-                        + "                                <td>\n"
-                        + "                                    <a class=\"btn btn-primary\"><i style=\"font-size: 20px; color: var(--orange)\" class=\"fa-solid fa-lock\"></i></a>\n"
-                        + "                                </td>\n"
-                        + "                            </tr>");
+                        + "    <td>\n"
+                        + "        " + statusButton + "\n"
+                        + "    </td>\n"
+                        + "</tr>");
             }
         }
     }

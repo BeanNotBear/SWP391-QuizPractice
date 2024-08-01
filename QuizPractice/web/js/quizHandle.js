@@ -27,6 +27,10 @@ function initializeQuiz() {
     updateProgress();
 }
 
+function tryAgain() {
+    window.location.reload();
+}
+
 function loadQuestion() {
     const currentQuestion = quizData[currentQuestionIndex];
     questionElement.textContent = currentQuestion.question;
@@ -123,7 +127,7 @@ function showResults() {
         <p>Incorrect Answers: ${incorrectAnswers}</p>
         <p>Total Questions: ${quizData.length}</p>
         
-        <button class="try-again" onclick="initializeQuiz()">Try Again</button>
+        <button class="try-again" onclick="tryAgain()">Try Again</button>
     `;
     progressElement.style.width = '100%';
 }

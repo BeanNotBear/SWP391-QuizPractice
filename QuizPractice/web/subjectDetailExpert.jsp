@@ -524,6 +524,7 @@
         </div>
 
         <script>
+            var numberOfStudent = '${requestScope.noOfStudents}';
             document.getElementById('uploadButton').addEventListener('click', function () {
                 document.getElementById('fileInput').click();
             });

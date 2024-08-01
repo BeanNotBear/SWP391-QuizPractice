@@ -6,7 +6,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Quản lý blog</title>
+        <title>Blog Detail Management</title>
 
         <!-- font awesome cdn link  -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
@@ -97,6 +97,7 @@
 
     <body>
         <%@include file="/layout/header.jsp"%>
+        <%@include file="/layout/login.jsp" %>
 
 
         <section class="postDetail">
@@ -122,12 +123,12 @@
                             <input type="hidden" id="thumbnail" name="thumbnail" value="<c:out value='${blog.thumbnail}'/>">
                             <div class="form-group">
                                 <label for="title">Title:</label>
-                                <input type="text" id="title" required name="title" class="form-control" value="<c:out value='${blog.title}'/>" placeholder="Nhập tiêu đề">
+                                <input type="text" id="title" required name="title" class="form-control" value="<c:out value='${blog.title}'/>" placeholder="Enter title">
                             </div>
 
                             <div class="form-group">
                                 <label for="brief">Brie Info:</label>
-                                <textarea id="brief" name="briefinfo" required class="form-control" rows="3" placeholder="Nhập thông tin ngắn gọn"><c:out value='${blog.briefinfo}'/></textarea>
+                                <textarea id="brief" name="briefinfo" required class="form-control" rows="3" placeholder="Enter brief information"><c:out value='${blog.briefinfo}'/></textarea>
                             </div>
 
                             <div class="form-group">
@@ -142,7 +143,7 @@
 
                             <div class="form-group">
                                 <label for="content">Content:</label>
-                                <textarea id="content" name="content" required class="form-control" rows="5" placeholder="Nhập nội dung"><c:out value='${blog.content}'/></textarea>
+                                <textarea id="content" name="content" required class="form-control" rows="5" placeholder="Enter content"><c:out value='${blog.content}'/></textarea>
                             </div>
 
                             <div class="form-group">

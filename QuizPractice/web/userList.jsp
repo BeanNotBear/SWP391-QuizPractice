@@ -114,7 +114,12 @@
                                 <td>${i.role}</td>
                                 <td>${i.status}</td>
                                 <td>
-                                    <a class="btn btn-primary"><i style="font-size: 20px; color: var(--orange)" class="fa-solid fa-lock"></i></a>
+                                    <c:if test="${i.status == 'Block'}">
+                                        <a onclick="unlockAccount('${i.id}')" class="btn btn-primary"><i style="font-size: 20px; color: var(--orange)" class="fa-solid fa-unlock"></i></a>
+                                    </c:if>
+                                    <c:if test="${i.status != 'Block'}">
+                                        <a onclick="lockAccount('${i.id}')" class="btn btn-primary"><i style="font-size: 20px; color: var(--orange)" class="fa-solid fa-lock"></i></a>
+                                    </c:if>
                                 </td>
                             </tr>
                         </c:forEach>

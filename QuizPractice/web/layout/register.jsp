@@ -27,14 +27,12 @@
             <div class="group-pass">
                 <p>Enter your password <span>*</span></p>
                 <input onkeyup="validatePassword(this)" id="password-rg-1" type="password" name="password" placeholder="Password" required maxlength="20" class="box password" value="${requestScope.password}">
-                <span id="show-pass" class="show-password">Show password</span>
                 <div id="passwordMsg-rg" class="danger_msg"></div>
             </div>
 
             <div class="group-cf-pass">
                 <p>Enter your password again<span>*</span></p>
                 <input onkeyup="checkPasswordAndCfPassword(this)" id="cfPasssword-rg-1" type="password" name="cf-password" placeholder="Confirm password" required maxlength="20" class="box cf-password" value="${requestScope.cfPassowrd}">
-                <span id="show-cf-pass" class="show-password">Show password</span>
                 <div id="cfPassowrdMsg-rg" class="danger_msg"></div>
             </div>
             <button onmouseover="isAllowSendData(this)" type="submit" name="submit" class="option-btn">register new</button>

@@ -119,7 +119,7 @@
                         </div>
                         <div class="form-group">
                             <label for="brief">Brief Info:</label>
-                            <textarea id="brief" name="briefinfo" required class="form-control" rows="3" placeholder="Input information..."></textarea>
+                            <textarea id="brief" name="briefinfo" required class="form-control" rows="3" placeholder="Input brief information..."></textarea>
                         </div>
                         <div class="form-group">
                             <label for="category">Category:</label>
@@ -259,7 +259,6 @@
         });
     </script>
     <%@include file="layout/script.jsp" %>
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js" integrity="sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </body>

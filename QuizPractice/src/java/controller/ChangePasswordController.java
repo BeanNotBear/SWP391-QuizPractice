@@ -57,48 +57,32 @@ public class ChangePasswordController extends HttpServlet {
         String confirmPassword = request.getParameter("confirm-password");
 
         UserDAO userDAO = UserDAO.getInstance();
-
         User user = (User) session.getAttribute("user");
-
         Validation validation = Validation.getInstance();
 
         JSONObject jsonResponse = new JSONObject();
 
-        boolean isValidInformation = true; // Flag to check if the information is valid
         try {
-            if (!validation.CheckFormatPassword(newPassword)) {
-                isValidInformation = false;
-                jsonResponse.put("err",
-                        "Your input must contain at least one uppercase letter,"
-                        + " one lowercase letter, one digit, "
-                        + "one special character, "
-                        + "and be at least 8 characters long.");
-            }
 
-            // Validate if passwords match
-            if (!newPassword.equals(confirmPassword)) {
-                isValidInformation = false;
-                jsonResponse.put("err", "Password and Confirm password do not match");
-            }
-
-            if (isValidInformation && Security.encryptToSHA512(oldPassword).equals(user.getPassword()) 
-                    && oldPassword != null 
-                    && newPassword != null 
-                    && confirmPassword != null 
-                    && newPassword.equals(confirmPassword) 
-                    && validation.CheckFormatPassword(newPassword)) {
+            if (validation.CheckFormatPassword(newPassword) && newPassword.equals(confirmPassword) && Security.encryptToSHA512(oldPassword).equals(user.getPassword())) {
                 jsonResponse.put("status", "success");
                 userDAO.updatePassword(newPassword, user.getEmail());
+            } else if (!validation.CheckFormatPassword(newPassword)) {
+                jsonResponse.put("status", "error");
+                jsonResponse.put("error", "Your input must contain at least one uppercase letter, one lowercase letter, one digit, one special character, and be at least 8 characters long.");
+            } else if (!newPassword.equals(confirmPassword)) {
+                jsonResponse.put("status", "error");
+                jsonResponse.put("error", "Password and Confirm password do not match");
             } else {
                 jsonResponse.put("status", "error");
+                jsonResponse.put("error", "Old password is incorrect or other validation errors occurred");
             }
         } catch (JSONException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         response.setContentType("application/json");
         response.getWriter().write(jsonResponse.toString());
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.sendRedirect("home");
     }
 
     /**

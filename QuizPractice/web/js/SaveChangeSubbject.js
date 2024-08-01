@@ -1,8 +1,12 @@
 function saveChangeSubject(e) {
     const regex = /^[A-Za-z0-9\s!@#\$%\^\&*\)\(+=._-]{3,50}$/;
+    let msg = "Do you want to save the changes?";
+    if(numberOfStudent > 0) {
+        msg = "This course has "+ numberOfStudent +" students are you sure you want to change it?"
+    }
     if (regex.test($("#name").val().trim()) && $("#categorySelect").val() !== "" &&  tinymce.get('description').getContent() != "") {
         Swal.fire({
-            title: "Do you want to save the changes?",
+            title: msg,
             showDenyButton: true,
             showCancelButton: true,
             confirmButtonText: "Save",

@@ -55,7 +55,6 @@ function openPopUp3() {
         profilePopUp.style.display = "none";
     }
 }
-
 $("#login-form").submit(function (e) {
     e.preventDefault();
     const  email = $("#email").val();
@@ -83,9 +82,9 @@ $("#login-form").submit(function (e) {
                     icon: "success"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        if(data.role === 1) {
+                        if (data.role === 1) {
                             window.location.reload();
-                        } else if(data.role === 3) {
+                        } else if (data.role === 3) {
                             window.location.href = "subjectManager";
                         } else {
                             window.location.href = "dashboard";
@@ -155,12 +154,29 @@ $("#register-form").submit(function (e) {
     });
 });
 
+function validateFullName(input) {
+    const fullName = input.value.trim();
+    const messageElement = document.getElementById("fullName");
+    if (fullName === '') {
+        messageElement.textContent = "Full name cannot be empty or whitespace.";
+    } else {
+        messageElement.textContent = "";
+    }
+}
+
 $("#profile-form").submit(function (e) {
     e.preventDefault();
-    const fullName = $("#full-name-pf").val();
+
+    const fullName = $("#full-name-pf").val().trim();
     const email = $("#email-pf").val();
     const phoneNumber = $("#phone-pf").val();
-    const gender = $("input[name=gender]").val();
+    const gender = $("input[name=gender]:checked").val();
+
+    if (fullName === '') {
+        $("#fullName").text("Full name cannot be empty or whitespace.");
+        return;
+    }
+
     const formData = {
         fullName: fullName,
         email: email,
@@ -201,14 +217,15 @@ $("#profile-form").submit(function (e) {
     });
 });
 
-function changePassword() {
-    const oldPassword = $(":old-password-cd").val();
-    const newPassword = $(":new-password").val();
-    const confirmPassword = $("#confirm-passsword").val();
+function changePassword(event) {
+    event.preventDefault();
+    const oldPassword = $("#old-password-cd").val();
+    const newPassword = $("#password-ch").val();
+    const confirmPassword = $("#cfPasssword-ch").val();
     const formData = {
-        oldPassword: oldPassword,
-        newPassword: newPassword,
-        confirmPassword: confirmPassword
+        "old-password": oldPassword,
+        "new-password": newPassword,
+        "confirm-password": confirmPassword
     };
 
     const actionUrl = "change-password";
@@ -224,7 +241,6 @@ function changePassword() {
             $("#loading").css('display', 'none');
         },
         success: function (data) {
-            console.log("ok");
             if (data.status === "success") {
                 Swal.fire({
                     title: "Change password successfully!",
@@ -237,9 +253,17 @@ function changePassword() {
             } else {
                 Swal.fire({
                     title: "Change password fail!",
+                    text: data.error || "An error occurred, please try again.",
                     icon: "error"
                 });
             }
+        },
+        error: function (xhr, status, error) {
+            Swal.fire({
+                title: "Change password fail!",
+                text: xhr.responseText || "An error occurred, please try again.",
+                icon: "error"
+            });
         }
     });
 }

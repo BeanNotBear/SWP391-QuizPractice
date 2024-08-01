@@ -13,7 +13,6 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
         <!-- Custom CSS file link -->
         <link rel="stylesheet" href="css/style.css">
-
         <link rel="stylesheet" href="css/popup.css"/>
 
         <!-- Bootstrap file link  -->
@@ -21,9 +20,6 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <style>
-            .side-bar{
-                margin-top: 100px;
-            }
             .side-bar #close-btn {
                 text-align: right;
                 margin-bottom: 20px;
@@ -245,7 +241,7 @@
     </head>
     <body>
         <%@include file="layout/header.jsp" %>
-
+        <%@include file="layout/login.jsp" %>
         <div class="side-bar">
             <div id="close-btn">
                 <i class="fas fa-times"></i>
@@ -387,8 +383,6 @@
 
 
         <%@include file="layout/footer.jsp" %>
-        <!--pop js-->
-        <script src="js/popup.js"></script>
 
         <!--jquery-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -397,6 +391,7 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="js/script.js"></script>
+        <%@include file="/layout/script.jsp" %>
         <!--        <script src="js/rightsidebar.js"></script>-->
     </body>
 </html>

@@ -35,7 +35,7 @@ public class LoginController extends HttpServlet {
             throws ServletException, IOException {
         // Retrieve the current session
         HttpSession session = request.getSession();
-        if((User)session.getAttribute("user") != null) {
+        if ((User) session.getAttribute("user") != null) {
             response.sendRedirect("/QuizPractice");
             return;
         }
@@ -57,7 +57,7 @@ public class LoginController extends HttpServlet {
 
         // Find the user by email and encrypted password
         User user = userDAO.findUserByEmailAndPassword(email, password);
-
+        boolean isBlock = false;
         // Check if the user exists
         if (user == null) {
             isSuccess = false;
@@ -84,6 +84,9 @@ public class LoginController extends HttpServlet {
 
                 // Send a verification email to the user
                 Mail.sendMailVerify(email, token, activeLink);
+            } else if (user.getStatusID() == 3) {
+                isSuccess = false;
+                isBlock = true;
             } else {
                 // If user is found, set the user object in the session
                 session.setAttribute("user", user);
@@ -99,8 +102,13 @@ public class LoginController extends HttpServlet {
                 jsonResponse.put("message", "Login Successfully!");
                 jsonResponse.put("role", user.getRoleId());
             } else {
-                jsonResponse.put("status", "error");
-                jsonResponse.put("message", "Email or password is not correct!");
+                if (isBlock) {
+                    jsonResponse.put("status", "error");
+                    jsonResponse.put("message", "You are blocked!");
+                } else {
+                    jsonResponse.put("status", "error");
+                    jsonResponse.put("message", "Email or password is not correct!");
+                }
             }
         } catch (JSONException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);

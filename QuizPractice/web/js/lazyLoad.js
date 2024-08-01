@@ -155,3 +155,43 @@ function validatePhoneNumber1(phone) {
         phoneNumber.innerHTML = "";
     }
 }
+
+function lockAccount(id) {
+    $.ajax({
+        url: "LockAccount",
+        type: 'POST',
+        data: {
+            id: id
+        },
+        success: function (data) {
+            Swal.fire({
+                title: "Lock account success!",
+                icon: "success"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.reload();
+                }
+            });
+        }
+    });
+}
+
+function unlockAccount(id) {
+    $.ajax({
+        url: "LockAccount",
+        type: 'GET',
+        data: {
+            id: id
+        },
+        success: function (data) {
+            Swal.fire({
+                title: "Unlock account success!",
+                icon: "success"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.reload();
+                }
+            });
+        }
+    });
+}
