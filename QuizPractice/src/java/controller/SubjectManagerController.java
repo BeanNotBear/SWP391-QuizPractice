@@ -53,7 +53,7 @@ public class SubjectManagerController extends HttpServlet {
                 this.page = page;
             }
             if (request.getParameter("subjectName") != null) {
-                search = request.getParameter("subjectName");
+                search = request.getParameter("subjectName").trim().replaceAll("\\s+"," ");
                 this.search = search.trim();
             }
             if(request.getParameter("categories") != null && !request.getParameter("categories").trim().isEmpty()) {

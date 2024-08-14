@@ -154,7 +154,7 @@
                                     <div style="width: 367.6px" class="box">
                                         <div class="thumb">
                                             <img style="width: 325.062px" src="${s.thumbnail}" alt="">
-                                            <span>${s.numberOfLessons} Lessons</span>
+                                            
                                         </div>
                                         <h3 class="title">${s.subjectName}</h3>
                                         <div class="skill-box">

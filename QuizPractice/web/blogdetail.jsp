@@ -20,8 +20,8 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-<style>
-            
+        <style>
+
             .side-bar #close-btn {
                 text-align: right;
                 margin-bottom: 20px;
@@ -237,7 +237,21 @@
                 color: #888;
                 font-size: 14px;
             }
+            .header-container {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
 
+            .heading {
+                margin: 0;
+            }
+
+            .update-link {
+                text-decoration: none;
+                color: #007BFF; /* Màu xanh cho đường link */
+                font-weight: bold;
+            }
         </style>
 
 
@@ -253,7 +267,7 @@
 
         <!--change password pop-up-->
         <%@include file="layout/changePassword.jsp" %>
-  <div class="side-bar">
+        <div class="side-bar">
             <div id="close-btn">
                 <i class="fas fa-times"></i>
             </div>
@@ -312,8 +326,12 @@
         </div>
         <!-- Hiển thị tất cả blogs có trong database -->
         <section class="reviews">
-
-            <h1 class="heading">Pots detail </h1>
+            <div class="header-container">
+                <h1 class="heading">Pots detail</h1>
+                <c:if test="${sessionScope.user.roleId == 5}">
+                    <a class="update-link" href="postdetail?id=${detail.blog_id}">Update</a>
+                </c:if>
+            </div>
             <c:if test="${not empty successMessage}">
                 <div class="alert alert-success" role="alert">
                     ${successMessage}
@@ -322,7 +340,7 @@
             <div class="box-container">
 
                 <div class="box">
-                    <img src="${detail.getThumbnail()}" id="detailImg"/>
+                    <img src="${detail.getThumbnail()}" id="detailImg" style="width: 50%"/>
                     <div class="student">
                         <div>
                             <h3>${detail.getTitle()}</h3>
@@ -356,7 +374,7 @@
             </div>
         </section>
 
-        
+
         <%@include file="layout/footer.jsp" %>
         <!--pop js-->
         <script src="js/popup.js"></script>

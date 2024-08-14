@@ -40,7 +40,7 @@ public class SliderManagerController extends HttpServlet {
         // lay ra data search
         String title = "";
         if (request.getParameter("searchTitle") != null) {
-            title = request.getParameter("searchTitle");
+            title = request.getParameter("searchTitle").trim().replaceAll("\\s+"," ");
         }
 
         int status = -1;

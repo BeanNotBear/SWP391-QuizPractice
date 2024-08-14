@@ -54,12 +54,12 @@ public class LessonManagerController extends HttpServlet {
         // lay ra data search
         String name = "";
         if (request.getParameter("searchName") != null) {
-            name = request.getParameter("searchName").trim();
+            name = request.getParameter("searchName").trim().replaceAll("\\s+"," ");
         }
 
         String type = "";
         if (request.getParameter("searchType") != null) {
-            type = request.getParameter("searchType").trim();
+            type = request.getParameter("searchType");
         }
 
         int status = -1;
